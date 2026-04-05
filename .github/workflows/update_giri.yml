@@ -1,0 +1,35 @@
+name: Aggiorna GirettiMap
+
+on:
+  schedule:
+      - cron: "0 0 * * *"    
+  workflow_dispatch:          # avvio manuale
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install beautifulsoup4 requests
+
+    - name: Run script aggiorna-giri.py
+      run: |
+        python3 aggiorna-giri.py
+
+    - name: Commit JSON aggiornato
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add giri.json
+        git commit -m "Aggiornamento automatico giri.json" || echo "Nessuna modifica"
+        git push
