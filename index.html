@@ -4,17 +4,87 @@
   <meta charset="UTF-8">
   <title>Ti Sbatuffolo</title>
   <link rel="stylesheet" href="stile.css">
+  <style>
+    /* Layout per far rimanere il footer in basso */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
+    main {
+      flex: 1;
+    }
+
+    /* Slider "io&te" */
+    .ioete-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .ioete-slider {
+      width: 80%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .ioete-slider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .ioete-slider img.active {
+      opacity: 1;
+    }
+
+    /* Griglia 3x3 */
+    .grid-riquadri {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      padding: 0 20px 20px 20px;
+    }
+    .riquadro {
+      text-align: center;
+    }
+    .riquadro img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1 style="text-align:center;">
-      <a href="index.html" class="home-link">❤ Blog ❤</a>
+      <a href="index.html" class="home-link">❤ Ti SbatuffoBlog ❤</a>
     </h1>
     <nav>
       <!-- In futuro puoi aggiungere altre pagine qui -->
     </nav>
   </header>
-    <main>
+
+  <main>
+    <!-- Sezione "io&te" con slider -->
+    <section class="ioete-container">
+      <h2>io&te</h2>
+      <div class="ioete-slider">
+        <img src="img/ioete1.jpg" alt="io&te 1" class="active">
+        <img src="img/ioete2.jpg" alt="io&te 2">
+        <img src="img/ioete3.jpg" alt="io&te 3">
+        <img src="img/ioete4.jpg" alt="io&te 4">
+      </div>
+    </section>
+
+    <!-- Card 3x3 -->
     <section class="grid-riquadri">
       <div class="riquadro">
         <a href="fotopuzzle.html" class="riquadro-link">
@@ -25,8 +95,8 @@
       <div class="riquadro">
         <a href="girettimap.html" class="riquadro-link">
           <div class="riquadro-titolo">GirettiMap</div>
-        <img src="img/girettimap.jpg" alt="GirettiMap">
         </a>
+        <img src="img/girettimap.jpg" alt="GirettiMap">
       </div>
       <div class="riquadro">
         <a href="pandaccessori.html" class="riquadro-link">
@@ -34,6 +104,7 @@
         </a>
         <img src="img/pandaccessori.jpg" alt="Pandaccessori">
       </div>
+
       <div class="riquadro">
         <a href="pandosita.html" class="riquadro-link">
           <div class="riquadro-titolo">Pandosità</div>
@@ -52,10 +123,41 @@
         </a>
         <img src="img/doccelunghe.jpg" alt="Doccelunghe">
       </div>
+
+      <div class="riquadro">
+        <a href="fotoalbum.html" class="riquadro-link">
+          <div class="riquadro-titolo">Fotoalbum</div>
+        </a>
+        <img src="img/fotoalbum.jpg" alt="Fotoalbum">
+      </div>
+      <div class="riquadro">
+        <a href="test8.html" class="riquadro-link">
+          <div class="riquadro-titolo">Test8</div>
+        </a>
+        <img src="img/test8.jpg" alt="Test8">
+      </div>
+      <div class="riquadro">
+        <a href="test9.html" class="riquadro-link">
+          <div class="riquadro-titolo">Test9</div>
+        </a>
+        <img src="img/test9.jpg" alt="Test9">
+      </div>
     </section>
   </main>
+
   <footer>
     © 2026 Il Panda Blog  
   </footer>
+
+  <script>
+    // Script slider "io&te"
+    const slides = document.querySelectorAll('.ioete-slider img');
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 3000); // cambia immagine ogni 3 secondi
+  </script>
 </body>
 </html>
