@@ -1,11 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
   <title>Pandagenda</title>
   <link rel="stylesheet" href="stile.css">
+
   <style>
-    /* Stili come prima... */
     header h1 { text-align:center; margin-top:20px; font-family:'Segoe UI', Arial, sans-serif; color:#2332bb; font-size:2.3em; font-weight:bold; }
     header h1 a, header h1 span { color:#2332bb; text-decoration:none; }
     header h1 a:hover, header h1 span:hover { color:#547bfc; }
@@ -25,6 +26,7 @@
     #save-github:hover { background:#547bfc; }
   </style>
 </head>
+
 <body>
   <header>
     <h1><a href="../index.html">SbatuffoBlog</a> - <span>Pandagenda</span></h1>
@@ -37,13 +39,20 @@
         <span id="month-year"></span>
         <button id="next-month">&gt;</button>
       </div>
+
       <table class="calendar">
         <thead>
-          <tr><th>Lun</th><th>Mar</th><th>Mer</th><th>Gio</th><th>Ven</th><th>Sab</th><th>Dom</th></tr>
+          <tr>
+            <th>Lun</th><th>Mar</th><th>Mer</th>
+            <th>Gio</th><th>Ven</th><th>Sab</th><th>Dom</th>
+          </tr>
         </thead>
         <tbody id="calendar-body"></tbody>
       </table>
-      <button id="save-github">Inserisci eventi nel calendario e poi clicca qui per salvare la Pandagenda</button>
+
+      <button id="save-github">
+        Inserisci eventi nel calendario e poi clicca qui per salvare la Pandagenda
+      </button>
     </div>
 
     <div class="activities-container">
@@ -54,47 +63,73 @@
 
   <footer>© 2026 Il Panda Blog</footer>
 
+  <!-- ✅ opzionale: dati iniziali manuali -->
   <script src="agenda.js"></script>
 
   <script>
     const today = new Date();
     let year = today.getFullYear();
     let month = today.getMonth();
+
     const calendarBody = document.getElementById('calendar-body');
     const monthYearLabel = document.getElementById('month-year');
     const activitiesList = document.getElementById('activities-list');
+
+    // ✅ SOURCE OF TRUTH
+    let events = typeof events === "object" ? events : {};
+
+    // ✅ carica agenda.json (sync globale)
+    async function loadAgendaFromJson() {
+      try {
+        const res = await fetch('agenda.json', { cache: 'no-store' });
+        if (res.ok) {
+          const jsonEvents = await res.json();
+          events = { ...events, ...jsonEvents }; // agenda.js + agenda.json
+        }
+      } catch (e) {
+        console.warn("agenda.json non disponibile, uso dati locali");
+      }
+    }
 
     function generateCalendar(year, month) {
       calendarBody.innerHTML = '';
       const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-      monthYearLabel.textContent = new Date(year, month).toLocaleString('it-IT', { month: 'long', year: 'numeric' });
+      monthYearLabel.textContent = new Date(year, month)
+        .toLocaleString('it-IT', { month: 'long', year: 'numeric' });
 
-      const savedEvents = JSON.parse(localStorage.getItem('pandagendaEvents') || '{}');
       let date = 1;
-      for(let i=0;i<6;i++){
-        const row=document.createElement('tr');
-        for(let j=0;j<7;j++){
-          const cell=document.createElement('td');
-          if(i===0 && j<firstDay || date>daysInMonth){ cell.innerHTML=''; }
-          else{
-            const key = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
-            const dayNumber = document.createElement('div'); dayNumber.textContent=date; dayNumber.style.fontWeight='bold'; cell.appendChild(dayNumber);
+      for (let i = 0; i < 6; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+          const cell = document.createElement('td');
+
+          if (i === 0 && j < firstDay || date > daysInMonth) {
+            cell.innerHTML = '';
+          } else {
+            const key = `${year}-${String(month + 1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
+
+            const dayNumber = document.createElement('div');
+            dayNumber.textContent = date;
+            dayNumber.style.fontWeight = 'bold';
 
             const eventDiv = document.createElement('div');
             eventDiv.contentEditable = "true";
-            eventDiv.style.fontSize="0.8em"; eventDiv.style.color="#2366c6"; eventDiv.style.marginTop="4px";
-            if(savedEvents[key]) eventDiv.textContent = savedEvents[key];
-            else if(events[key]) eventDiv.textContent = events[key];
+            eventDiv.style.fontSize = "0.8em";
+            eventDiv.style.color = "#2366c6";
+            eventDiv.style.marginTop = "4px";
+            eventDiv.textContent = events[key] || "";
 
-            eventDiv.addEventListener('input',()=>{
-              savedEvents[key]=eventDiv.textContent;
-              localStorage.setItem('pandagendaEvents', JSON.stringify(savedEvents));
+            eventDiv.addEventListener('input', () => {
+              events[key] = eventDiv.textContent;
               updateActivities();
             });
 
-            cell.appendChild(eventDiv); date++;
+            cell.appendChild(dayNumber);
+            cell.appendChild(eventDiv);
+            date++;
           }
+
           row.appendChild(cell);
         }
         calendarBody.appendChild(row);
@@ -102,51 +137,60 @@
       updateActivities();
     }
 
-    function updateActivities(){
-      activitiesList.innerHTML='';
-      const daysInMonth = new Date(year, month+1, 0).getDate();
-      const savedEvents = JSON.parse(localStorage.getItem('pandagendaEvents') || '{}');
-      const isCurrentMonth = (year===today.getFullYear() && month===today.getMonth());
-      let hasActivities=false;
-      for(let d=1;d<=daysInMonth;d++){
-        const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const value = savedEvents[key] || events[key];
-        if(value){
-          if(!isCurrentMonth || d>=today.getDate()){
-            const li=document.createElement('li');
-            li.textContent = `${d} ${new Date(year, month).toLocaleString('it-IT',{month:'long'})}: ${value}`;
-            activitiesList.appendChild(li);
-            hasActivities=true;
-          }
+    function updateActivities() {
+      activitiesList.innerHTML = '';
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      let hasActivities = false;
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = `${year}-${String(month + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        if (events[key]) {
+          const li = document.createElement('li');
+          li.textContent = `${d} ${new Date(year, month).toLocaleString('it-IT',{month:'long'})}: ${events[key]}`;
+          activitiesList.appendChild(li);
+          hasActivities = true;
         }
       }
-      if(!hasActivities){ const li=document.createElement('li'); li.textContent="Nessuna"; activitiesList.appendChild(li);}
+
+      if (!hasActivities) {
+        const li = document.createElement('li');
+        li.textContent = "Nessuna";
+        activitiesList.appendChild(li);
+      }
     }
 
-    document.getElementById('prev-month').addEventListener('click',()=>{ month--; if(month<0){month=11; year--;} generateCalendar(year,month); });
-    document.getElementById('next-month').addEventListener('click',()=>{ month++; if(month>11){month=0; year++;} generateCalendar(year,month); });
+    document.getElementById('prev-month').onclick = () => {
+      month--; if (month < 0) {month = 11; year--;}
+      generateCalendar(year, month);
+    };
 
-    generateCalendar(year,month);
+    document.getElementById('next-month').onclick = () => {
+      month++; if (month > 11) {month = 0; year++;}
+      generateCalendar(year, month);
+    };
 
-    // Pulsante salva su GitHub sicuro
-    document.getElementById('save-github').addEventListener('click', async () => {
-      const savedEvents = JSON.parse(localStorage.getItem('pandagendaEvents') || '{}');
-      try {
-        const response = await fetch('https://tisbatuffoblog.vercel.app/api/update_agendaAPI', {
-          method:'POST',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify(savedEvents)
-        });
-        if(response.ok){
-          alert('Eventi salvati con successo!');
-        } else {
-          const errText = await response.text();
-          alert('Errore nel salvataggio: ' + errText);
+    // ✅ init
+    (async () => {
+      await loadAgendaFromJson();
+      generateCalendar(year, month);
+    })();
+
+    // ✅ salva su GitHub
+    document.getElementById('save-github').onclick = async () => {
+      const response = await fetch(
+        'https://tisbatuffoblog.vercel.app/api/update_agendaAPI',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(events)
         }
-      } catch(err){
-        alert('Errore invio dati: '+err);
-      }
-    });
+      );
+
+      alert(response.ok
+        ? 'Eventi salvati con successo!'
+        : 'Errore nel salvataggio'
+      );
+    };
   </script>
 </body>
 </html>
