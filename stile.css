@@ -1,3 +1,7 @@
+/* =======================================================
+   GirettiMap CSS completo aggiornato
+   ======================================================= */
+
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
   background: #f9fafd;
@@ -11,7 +15,6 @@ body {
 main {
   flex: 1;
 }
-
 
 header {
   background: #e2eaff;
@@ -37,6 +40,9 @@ footer {
   margin: 16px 0 8px 0;
 }
 
+/* =======================================================
+   Grid card
+   ======================================================= */
 .grid-riquadri {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -47,21 +53,19 @@ footer {
   justify-items: center;
 }
 
+/* =======================================================
+   Singola card
+   ======================================================= */
 .riquadro {
+  position: relative; /* per overlay titolo */
+  width: 310px;
+  height: 240px;
   background: #fff;
   border: 3px solid #2366c6;
   border-radius: 25px;
-  box-shadow: 0 4px 18px rgba(26,50,120,0.08);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 310px;
-  height: 240px;
-  transition: transform 0.15s, box-shadow 0.15s;
-  justify-content: flex-start;
-  box-sizing: border-box;
-  /* evitare overflow di titolo o immagine */
   overflow: hidden;
+  box-shadow: 0 4px 18px rgba(26,50,120,0.08);
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .riquadro:hover {
@@ -69,15 +73,9 @@ footer {
   box-shadow: 0 6px 24px rgba(26,50,120,0.16);
 }
 
-.riquadro-titolo {
-  font-size: 1.23em;
-  font-weight: bold;
-  text-align: center;
-  padding: 12px 8px 8px 8px;
-  color: #1b2566;
-  letter-spacing: 1px;
-}
-
+/* =======================================================
+   Link della card
+   ======================================================= */
 .riquadro-link {
   text-decoration: none;
   color: #1b2566;
@@ -87,19 +85,45 @@ footer {
   flex-direction: column;
 }
 
-.riquadro-link:hover .riquadro-titolo {
-  color: #547bfc;
-  text-decoration: underline;
-}
-
+/* =======================================================
+   Immagine della card
+   ======================================================= */
 .riquadro img {
-  flex: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
+/* =======================================================
+   Titolo della card: overlay sempre visibile
+   ======================================================= */
+.riquadro-titolo {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 8px;
+  font-size: 1.23em;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(0,0,0,0.5); /* overlay scuro semi-trasparente */
+  text-align: center;
+  letter-spacing: 1px;
+  box-sizing: border-box;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.riquadro-link:hover .riquadro-titolo {
+  color: #ffeb3b;
+  text-decoration: underline;
+}
+
+/* =======================================================
+   Media Queries
+   ======================================================= */
 @media (max-width: 1200px) {
   .grid-riquadri {
     max-width: 980px;
@@ -108,39 +132,27 @@ footer {
     width: 260px;
     height: 200px;
   }
-  .riquadro img {
-    height: 100px;
-  }
 }
 
 @media (max-width: 900px) {
   .grid-riquadri {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
     max-width: 660px;
-    height: unset;
   }
   .riquadro {
     width: 260px;
     height: 180px;
-  }
-  .riquadro img {
-    height: 90px;
   }
 }
 
 @media (max-width: 600px) {
   .grid-riquadri {
     grid-template-columns: 1fr;
-    max-width: 340px;
+    max-width: 95vw;
     padding: 0 2vw;
   }
   .riquadro {
     width: 95vw;
-    max-width: 320px;
-    height: 120px;
-  }
-  .riquadro img {
-    height: 50px;
+    height: 150px;
   }
 }

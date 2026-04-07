@@ -132,13 +132,20 @@
     document.getElementById('save-github').addEventListener('click', async () => {
       const savedEvents = JSON.parse(localStorage.getItem('pandagendaEvents') || '{}');
       try {
-        const response = await fetch('/.github/workflows/update_agenda_dispatch.json', {
+        const response = await fetch('https://tisbatuffoblog.vercel.app/api/update_agendaAPI', {
           method:'POST',
           headers: { 'Content-Type':'application/json' },
           body: JSON.stringify(savedEvents)
         });
-        alert('Eventi salvati!');
-      } catch(err){ alert('Errore invio dati: '+err); }
+        if(response.ok){
+          alert('Eventi salvati con successo!');
+        } else {
+          const errText = await response.text();
+          alert('Errore nel salvataggio: ' + errText);
+        }
+      } catch(err){
+        alert('Errore invio dati: '+err);
+      }
     });
   </script>
 </body>
