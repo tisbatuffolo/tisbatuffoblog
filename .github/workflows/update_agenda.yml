@@ -1,7 +1,6 @@
-name: Aggiorna Agenda
+name: Aggiorna Pandagenda
 
 on:
-  workflow_dispatch:
   repository_dispatch:
     types: [update_agenda]
 
@@ -9,25 +8,17 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Recupera eventi dall’input
-        id: events
+      - name: Scrive agenda.json
         run: |
-          echo "EVENTS_JSON=$(jq -c '.client_payload.events // {}' <<< '${{ toJson(github.event) }}')" >> $GITHUB_ENV
-
-      - name: Scrivi agenda.js
-        run: |
-          echo "// Questo file è aggiornato automaticamente tramite GitHub Action" > pandagenda/agenda.js
-          echo "const events = $EVENTS_JSON;" >> pandagenda/agenda.js
+          echo '${{ toJSON(github.event.client_payload.events) }}' > pandagenda/agenda.json
 
       - name: Commit e push
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pandagenda/agenda.js
-          git commit -m "Aggiornamento agenda tramite GitHub Action"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add pandagenda/agenda.json
+          git commit -m "Aggiornamento Pandagenda automatico"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
