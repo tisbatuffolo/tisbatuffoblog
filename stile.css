@@ -1,5 +1,5 @@
 /* =======================================================
-   GirettiMap CSS completo aggiornato
+   CSS completo aggiornato
    ======================================================= */
 
 body {
@@ -57,7 +57,7 @@ footer {
    Singola card
    ======================================================= */
 .riquadro {
-  position: relative; /* per overlay titolo */
+  position: relative;
   width: 310px;
   height: 240px;
   background: #fff;
@@ -66,6 +66,9 @@ footer {
   overflow: hidden;
   box-shadow: 0 4px 18px rgba(26,50,120,0.08);
   transition: transform 0.15s, box-shadow 0.15s;
+
+  display: flex;              /* ✅ reso flex */
+  flex-direction: column;     /* ✅ titolo sopra, immagine sotto */
 }
 
 .riquadro:hover {
@@ -86,39 +89,41 @@ footer {
 }
 
 /* =======================================================
-   Immagine della card
-   ======================================================= */
-.riquadro img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* =======================================================
-   Titolo della card: overlay sempre visibile
+   Titolo della card (ORA IN ALTO)
    ======================================================= */
 .riquadro-titolo {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: relative;         /* ✅ non più absolute */
   width: 100%;
   padding: 10px 8px;
   font-size: 1.23em;
   font-weight: bold;
   color: #fff;
-  background: rgba(0,0,0,0.5); /* overlay scuro semi-trasparente */
+  background: rgba(0,0,0,0.5); /* ✅ stesso sfondo grigio */
   text-align: center;
   letter-spacing: 1px;
   box-sizing: border-box;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
+
+  flex-shrink: 0;             /* ✅ altezza fissa del titolo */
 }
 
 .riquadro-link:hover .riquadro-titolo {
   color: #ffeb3b;
   text-decoration: underline;
+}
+
+/* =======================================================
+   Immagine della card (SOTTO)
+   ======================================================= */
+.riquadro img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  flex: 1 1 auto;             /* ✅ riempie lo spazio restante */
 }
 
 /* =======================================================
