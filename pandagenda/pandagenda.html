@@ -1,17 +1,66 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Pandagenda</title>
-  <style>
-    body { font-family: Arial, sans-serif; }
-    header h1 { text-align:center; color:#2332bb; }
-    .calendar-container { max-width:900px; margin:30px auto; }
-    table { width:100%; border-collapse:collapse; }
-    th, td { border:1px solid #ccc; height:80px; vertical-align:top; padding:4px; text-align:center; }
-    th { background:#2366c6; color:white; }
-    button { padding:6px 12px; margin:6px; }
-  </style>
+<meta charset="UTF-8">
+<title>Pandagenda</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  header h1 {
+    text-align: center;
+    color: #2332bb;
+  }
+
+  .calendar-container {
+    max-width: 900px;
+    margin: 30px auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* ✅ BLOCCA LE COLONNE */
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    vertical-align: top;
+    padding: 4px;
+    text-align: center;
+  }
+
+  th {
+    background: #2366c6;
+    color: white;
+  }
+
+  .day-number {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  textarea {
+    width: 100%;
+    height: 50px;
+    resize: none;
+    box-sizing: border-box;
+    font-size: 0.85em;
+  }
+
+  button {
+    padding: 6px 12px;
+    margin: 6px;
+  }
+
+  #loading {
+    text-align: center;
+    font-style: italic;
+    margin: 10px 0;
+  }
+</style>
 </head>
 
 <body>
@@ -20,11 +69,13 @@
 </header>
 
 <main class="calendar-container">
-  <div>
+  <div style="text-align:center">
     <button id="prev-month">&lt;</button>
     <span id="month-year"></span>
     <button id="next-month">&gt;</button>
   </div>
+
+  <div id="loading">Caricamento agenda…</div>
 
   <table>
     <thead>
@@ -42,7 +93,7 @@
   <ul id="activities-list"></ul>
 </main>
 
-<footer>© 2026 Il Panda Blog</footer>
+<footer style="text-align:center">© 2026 Il Panda Blog</footer>
 
 <script>
   const today = new Date();
@@ -52,15 +103,19 @@
   const calendarBody = document.getElementById("calendar-body");
   const monthYear = document.getElementById("month-year");
   const activities = document.getElementById("activities-list");
+  const loading = document.getElementById("loading");
 
-  // ✅ UNICA fonte dati in memoria
   let events = {};
 
-  // ✅ carica agenda.json (source of truth)
+  /* ✅ CARICAMENTO ROBUSTO agenda.json */
   async function loadAgenda() {
     try {
       const res = await fetch("agenda.json", { cache: "no-store" });
-      events = res.ok ? await res.json() : {};
+      if (res.ok) {
+        events = await res.json();
+      } else {
+        events = {};
+      }
     } catch {
       events = {};
     }
@@ -77,8 +132,10 @@
       new Date(y, m).toLocaleString("it-IT", { month: "long", year: "numeric" });
 
     let date = 1;
+
     for (let i = 0; i < 6; i++) {
       const row = document.createElement("tr");
+
       for (let j = 0; j < 7; j++) {
         const cell = document.createElement("td");
 
@@ -87,42 +144,47 @@
         } else {
           const key = `${y}-${String(m+1).padStart(2,"0")}-${String(date).padStart(2,"0")}`;
 
-          const d = document.createElement("div");
-          d.textContent = date;
-          d.style.fontWeight = "bold";
+          const num = document.createElement("div");
+          num.className = "day-number";
+          num.textContent = date;
 
-          const ev = document.createElement("div");
-          ev.contentEditable = true;
-          ev.textContent = events[key] || "";
+          const input = document.createElement("textarea");
+          input.value = events[key] || "";
 
-          ev.oninput = () => {
-            events[key] = ev.textContent;
+          input.oninput = () => {
+            events[key] = input.value;
             updateActivities();
           };
 
-          cell.append(d, ev);
+          cell.append(num, input);
           date++;
         }
+
         row.appendChild(cell);
       }
+
       calendarBody.appendChild(row);
     }
+
     updateActivities();
   }
 
   function updateActivities() {
     activities.innerHTML = "";
-    let any = false;
+    let has = false;
 
     for (const k in events) {
-      if (events[k]) {
+      if (events[k] && events[k].trim() !== "") {
         const li = document.createElement("li");
         li.textContent = `${k}: ${events[k]}`;
         activities.appendChild(li);
-        any = true;
+        has = true;
       }
     }
-    if (!any) activities.innerHTML = "<li>Nessuna</li>";
+
+    if (!has) {
+      activities.innerHTML = "<li>Nessuna</li>";
+    }
   }
 
   document.getElementById("prev-month").onclick = () => {
@@ -136,20 +198,18 @@
   };
 
   document.getElementById("save-github").onclick = async () => {
-    await fetch(
-      "https://tisbatuffoblog.vercel.app/api/update_agendaAPI",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(events)
-      }
-    );
+    await fetch("https://tisbatuffoblog.vercel.app/api/update_agendaAPI", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(events)
+    });
     alert("Agenda salvata");
   };
 
-  // ✅ INIT SICURO
+  /* ✅ INIT GARANTITO */
   (async () => {
     await loadAgenda();
+    loading.style.display = "none";
     generateCalendar(year, month);
   })();
 </script>

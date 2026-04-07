@@ -1,10 +1,10 @@
+
 name: Aggiorna Pandagenda
 
 on:
   repository_dispatch:
     types: [update_agenda]
 
-# ✅ PERMESSI ESPLICITI (R I S O L V E IL 403)
 permissions:
   contents: write
 
