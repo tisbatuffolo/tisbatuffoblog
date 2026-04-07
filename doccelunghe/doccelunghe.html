@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Doccelunghe</title>
+  <link rel="stylesheet" href="stile.css">
+  <style>
+    header h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #2332bb;
+      font-size: 2.3em;
+      font-weight: bold;
+    }
+    header h1 a, header h1 span { color: #2332bb; text-decoration: none; }
+    header h1 a:hover, header h1 span:hover { color: #547bfc; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafd;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main { flex: 1; }
+
+    footer {
+      color: #888;
+      text-align: center;
+      margin: 16px 0 8px 0;
+    }
+
+    .counter-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      border: 3px solid #2366c6;
+      box-shadow: 0 4px 18px rgba(26,50,120,0.08);
+      font-size: 1.3em;
+      text-align: center;
+    }
+    .counter-container p { margin: 12px 0; font-weight: bold; color: #2366c6; }
+
+    .sezione-docce { max-width: 1100px; margin: 50px auto; padding: 0 10px; }
+    .sezione-docce h2 { text-align: center; font-size: 1.7em; color: #1b2566; margin-bottom: 24px; }
+
+    .grid-riquadri {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 550px;
+      justify-items: center;
+    }
+    .riquadro {
+      background: #fff;
+      border: 3px solid #2366c6;
+      border-radius: 25px;
+      box-shadow: 0 4px 18px rgba(26,50,120,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 150px;
+      height: 180px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    .riquadro:hover { transform: scale(1.03); box-shadow: 0 6px 24px rgba(26,50,120,0.16); }
+    .riquadro-titolo { font-size: 1.2em; font-weight: bold; text-align: center; padding: 12px 8px 8px 8px; color: #1b2566; letter-spacing: 1px; }
+
+    /* Stile immagine trend grande come il canvas */
+    #trend-image { 
+      margin-top: 20px; 
+      width: 400px; 
+      height: auto; 
+      display: block; 
+      border-radius: 15px;
+      box-shadow: 0 4px 18px rgba(26,50,120,0.08);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>
+      <a class="home-link" href="../index.html">SbatuffoBlog</a>
+      <span> - Doccelunghe</span>
+    </h1>
+  </header>
+
+  <main>
+    <div class="counter-container">
+      <p id="docce-anno">Docce da inizio anno: 0</p>
+      <p id="docce-mese">Docce in questo mese: 0</p>
+    </div>
+
+    <div class="sezione-docce">
+      <h2>Docce Insieme</h2>
+      <div style="display:flex; flex-wrap:wrap; justify-content: center; gap: 40px;">
+        <div class="grid-riquadri" id="docce-grid" style="flex:1; min-width: 320px;"></div>
+
+        <div style="flex:1; min-width: 320px; display:flex; flex-direction:column; align-items:center;">
+          <canvas id="docce-trend" width="400" height="240" style="background:#fff; border:3px solid #2366c6; border-radius:20px; box-shadow:0 4px 18px rgba(26,50,120,0.08);"></canvas>
+          <div style="margin-top:10px; font-weight:bold; color:#2366c6;">Trend docce mese per mese</div>
+          <img id="trend-image" src="" alt="Trend docce">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2026 Il Panda Blog</footer>
+
+  <script src="docce.js"></script>
+  <script>
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+
+    const annoData = docceData[year] || {};
+    const docceMese = annoData[month] || 0;
+
+    let docceAnno = 0;
+    for(let m=1;m<=12;m++) docceAnno += annoData[m]||0;
+
+    document.getElementById('docce-anno').textContent = `Docce da inizio anno: ${docceAnno}`;
+    document.getElementById('docce-mese').textContent = `Docce in questo mese: ${docceMese}`;
+
+    // Riquadri mese per mese
+    const grid = document.getElementById('docce-grid');
+    const mesi = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+    mesi.forEach((nome,i)=>{
+      const m = i+1;
+      const count = annoData[m]||0;
+      const riquadro = document.createElement('div');
+      riquadro.className='riquadro';
+      const titolo = document.createElement('div');
+      titolo.className='riquadro-titolo';
+      titolo.textContent=nome;
+      const numero = document.createElement('div');
+      numero.style.fontSize='2.2em';
+      numero.style.fontWeight='bold';
+      numero.style.color='#2366c6';
+      numero.style.marginTop='20px';
+      numero.textContent=count;
+      riquadro.appendChild(titolo);
+      riquadro.appendChild(numero);
+      grid.appendChild(riquadro);
+    });
+
+    // Grafico trend
+    const canvas=document.getElementById('docce-trend');
+    const ctx=canvas.getContext('2d');
+    const padding=30;
+    const w=canvas.width-padding*2;
+    const h=canvas.height-padding*2;
+    const values=mesi.map((_,i)=>annoData[i+1]||0);
+    const maxVal=Math.max(...values,1);
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    ctx.strokeStyle="#2366c6"; ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(padding,padding);
+    ctx.lineTo(padding,h+padding);
+    ctx.lineTo(w+padding,h+padding);
+    ctx.stroke();
+
+    ctx.strokeStyle="#547bfc"; ctx.lineWidth=3;
+    ctx.beginPath();
+    values.forEach((v,i)=>{
+      const x=padding+(i/(values.length-1))*w;
+      const y=padding+h-(v/maxVal)*h;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+
+    ctx.fillStyle="#2366c6";
+    values.forEach((v,i)=>{
+      const x=padding+(i/(values.length-1))*w;
+      const y=padding+h-(v/maxVal)*h;
+      ctx.beginPath();
+      ctx.arc(x,y,5,0,Math.PI*2);
+      ctx.fill();
+    });
+
+    ctx.fillStyle="#1b2566";
+    ctx.font="12px Arial";
+    values.forEach((_,i)=>{
+      const x=padding+(i/(values.length-1))*w;
+      const y=h+padding+15;
+      ctx.fillText(mesi[i].substring(0,3),x-10,y);
+    });
+
+    ctx.fillStyle="#1b2566";
+    ctx.font="12px Arial";
+    const step=Math.ceil(maxVal/5);
+    for(let s=0;s<=maxVal;s+=step){
+      const y=padding+h-(s/maxVal)*h;
+      ctx.fillText(s,2,y+3);
+    }
+
+    // Immagine trend grande
+    const trendImg = document.getElementById('trend-image');
+    const primo = values[0];
+    const ultimo = values[values.length-1];
+    if(ultimo >= primo) trendImg.src = "img/docciafelice.png";
+    else trendImg.src = "img/docciatriste.png";
+  </script>
+</body>
+</html>

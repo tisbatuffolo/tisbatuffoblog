@@ -5,62 +5,29 @@
   <title>Pandagenda</title>
   <link rel="stylesheet" href="stile.css">
   <style>
-    /* Titolo pagina identico a index.html */
-    header h1 {
-      text-align: center;
-      margin-top: 20px;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: #2332bb;
-      font-size: 2.3em;
-      font-weight: bold;
-    }
-
-    header h1 a, header h1 span {
-      color: #2332bb;
-      text-decoration: none;
-    }
-
-    header h1 a:hover, header h1 span:hover {
-      color: #547bfc;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-    }
-
-    .calendar-container {
-      max-width: 900px;
-      margin: 30px auto 20px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 20px;
-      border: 3px solid #2366c6;
-      box-shadow: 0 4px 18px rgba(26,50,120,0.08);
-    }
-    table.calendar { width: 100%; border-collapse: collapse; text-align: center; }
-    table.calendar th { background: #2366c6; color: #fff; padding: 10px; }
-    table.calendar td { border: 1px solid #ddd; height: 80px; vertical-align: top; padding: 4px; }
-    .calendar-nav { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; font-size: 1.2em; align-items: center; }
-    .calendar-nav button {
-      background: #2366c6; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;
-    }
-    .calendar-nav button:hover { background: #547bfc; }
-    .activities-container {
-      max-width: 900px; margin: 20px auto 50px auto;
-      background: #fff; padding: 15px 20px; border-radius: 20px;
-      border: 3px solid #2366c6; box-shadow: 0 4px 18px rgba(26,50,120,0.08);
-    }
-    .activities-container h3 { text-align: center; margin-bottom: 12px; }
-    .activities-list { list-style: none; padding: 0; margin: 0; }
-    .activities-list li { padding: 6px 8px; border-bottom: 1px solid #ddd; }
+    /* Stili come prima... */
+    header h1 { text-align:center; margin-top:20px; font-family:'Segoe UI', Arial, sans-serif; color:#2332bb; font-size:2.3em; font-weight:bold; }
+    header h1 a, header h1 span { color:#2332bb; text-decoration:none; }
+    header h1 a:hover, header h1 span:hover { color:#547bfc; }
+    body { font-family: Arial, sans-serif; }
+    .calendar-container { max-width:900px; margin:30px auto 20px auto; background:#fff; padding:20px; border-radius:20px; border:3px solid #2366c6; box-shadow:0 4px 18px rgba(26,50,120,0.08); }
+    table.calendar { width:100%; border-collapse:collapse; text-align:center; }
+    table.calendar th { background:#2366c6; color:#fff; padding:10px; }
+    table.calendar td { border:1px solid #ddd; height:80px; vertical-align:top; padding:4px; }
+    .calendar-nav { display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold; font-size:1.2em; align-items:center; }
+    .calendar-nav button { background:#2366c6; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; }
+    .calendar-nav button:hover { background:#547bfc; }
+    .activities-container { max-width:900px; margin:20px auto 50px auto; background:#fff; padding:15px 20px; border-radius:20px; border:3px solid #2366c6; box-shadow:0 4px 18px rgba(26,50,120,0.08); }
+    .activities-container h3 { text-align:center; margin-bottom:12px; }
+    .activities-list { list-style:none; padding:0; margin:0; }
+    .activities-list li { padding:6px 8px; border-bottom:1px solid #ddd; }
+    #save-github { margin-top:15px; background:#2366c6; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; }
+    #save-github:hover { background:#547bfc; }
   </style>
 </head>
 <body>
   <header>
-   <h1>
-     <a href="../index.html">SbatuffoBlog</a>
-     <span> - Pandagenda</span>
-   </h1>
+    <h1><a href="../index.html">SbatuffoBlog</a> - <span>Pandagenda</span></h1>
   </header>
 
   <main>
@@ -72,12 +39,11 @@
       </div>
       <table class="calendar">
         <thead>
-          <tr>
-            <th>Lun</th><th>Mar</th><th>Mer</th><th>Gio</th><th>Ven</th><th>Sab</th><th>Dom</th>
-          </tr>
+          <tr><th>Lun</th><th>Mar</th><th>Mer</th><th>Gio</th><th>Ven</th><th>Sab</th><th>Dom</th></tr>
         </thead>
         <tbody id="calendar-body"></tbody>
       </table>
+      <button id="save-github">Inserisci eventi nel calendario e poi clicca qui per salvare la Pandagenda</button>
     </div>
 
     <div class="activities-container">
@@ -93,78 +59,87 @@
   <script>
     const today = new Date();
     let year = today.getFullYear();
-    let month = today.getMonth(); // 0-based
-
+    let month = today.getMonth();
     const calendarBody = document.getElementById('calendar-body');
     const monthYearLabel = document.getElementById('month-year');
     const activitiesList = document.getElementById('activities-list');
 
     function generateCalendar(year, month) {
       calendarBody.innerHTML = '';
-      const firstDay = (new Date(year, month, 1).getDay() + 6) % 7; // lunedì=0
+      const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-
       monthYearLabel.textContent = new Date(year, month).toLocaleString('it-IT', { month: 'long', year: 'numeric' });
 
+      const savedEvents = JSON.parse(localStorage.getItem('pandagendaEvents') || '{}');
       let date = 1;
-      for (let i = 0; i < 6; i++) {
-        const row = document.createElement('tr');
-        for (let j = 0; j < 7; j++) {
-          const cell = document.createElement('td');
-          if (i === 0 && j < firstDay) { cell.innerHTML = ''; }
-          else if (date > daysInMonth) { cell.innerHTML = ''; }
-          else {
-            const key = `${year}-${String(month + 1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
-            cell.textContent = date;
-            if (events[key]) {
-              const span = document.createElement('div');
-              span.textContent = events[key];
-              span.style.fontSize = "0.8em";
-              span.style.color = "#2366c6";
-              cell.appendChild(span);
-            }
-            date++;
+      for(let i=0;i<6;i++){
+        const row=document.createElement('tr');
+        for(let j=0;j<7;j++){
+          const cell=document.createElement('td');
+          if(i===0 && j<firstDay || date>daysInMonth){ cell.innerHTML=''; }
+          else{
+            const key = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
+            const dayNumber = document.createElement('div'); dayNumber.textContent=date; dayNumber.style.fontWeight='bold'; cell.appendChild(dayNumber);
+
+            const eventDiv = document.createElement('div');
+            eventDiv.contentEditable = "true";
+            eventDiv.style.fontSize="0.8em"; eventDiv.style.color="#2366c6"; eventDiv.style.marginTop="4px";
+            if(savedEvents[key]) eventDiv.textContent = savedEvents[key];
+            else if(events[key]) eventDiv.textContent = events[key];
+
+            eventDiv.addEventListener('input',()=>{
+              savedEvents[key]=eventDiv.textContent;
+              localStorage.setItem('pandagendaEvents', JSON.stringify(savedEvents));
+              updateActivities();
+            });
+
+            cell.appendChild(eventDiv); date++;
           }
           row.appendChild(cell);
         }
         calendarBody.appendChild(row);
       }
-
       updateActivities();
     }
 
-    function updateActivities() {
-      activitiesList.innerHTML = '';
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const isCurrentMonth = (year === today.getFullYear() && month === today.getMonth());
-      for (let d = 1; d <= daysInMonth; d++) {
-        const key = `${year}-${String(month + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const value = events[key];
-        if (value) {
-          if (!isCurrentMonth || d >= today.getDate()) { // mostra tutti se mese diverso, altrimenti solo giorni futuri
-            const li = document.createElement('li');
-            li.textContent = `${d} ${new Date(year, month).toLocaleString('it-IT', { month: 'long' })}: ${value}`;
+    function updateActivities(){
+      activitiesList.innerHTML='';
+      const daysInMonth = new Date(year, month+1, 0).getDate();
+      const savedEvents = JSON.parse(localStorage.getItem('pandagendaEvents') || '{}');
+      const isCurrentMonth = (year===today.getFullYear() && month===today.getMonth());
+      let hasActivities=false;
+      for(let d=1;d<=daysInMonth;d++){
+        const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const value = savedEvents[key] || events[key];
+        if(value){
+          if(!isCurrentMonth || d>=today.getDate()){
+            const li=document.createElement('li');
+            li.textContent = `${d} ${new Date(year, month).toLocaleString('it-IT',{month:'long'})}: ${value}`;
             activitiesList.appendChild(li);
+            hasActivities=true;
           }
         }
       }
-    }
-    if (!activitiesList.hasChildNodes()) {
-    const li = document.createElement('li');
-    li.textContent = "Nessuna";
-    activitiesList.appendChild(li);
+      if(!hasActivities){ const li=document.createElement('li'); li.textContent="Nessuna"; activitiesList.appendChild(li);}
     }
 
-    document.getElementById('prev-month').addEventListener('click', () => {
-      month--; if (month < 0) { month = 11; year--; }
-      generateCalendar(year, month);
-    });
-    document.getElementById('next-month').addEventListener('click', () => {
-      month++; if (month > 11) { month = 0; year++; }
-      generateCalendar(year, month);
-    });
+    document.getElementById('prev-month').addEventListener('click',()=>{ month--; if(month<0){month=11; year--;} generateCalendar(year,month); });
+    document.getElementById('next-month').addEventListener('click',()=>{ month++; if(month>11){month=0; year++;} generateCalendar(year,month); });
 
-    generateCalendar(year, month);
+    generateCalendar(year,month);
+
+    // Pulsante salva su GitHub sicuro
+    document.getElementById('save-github').addEventListener('click', async () => {
+      const savedEvents = JSON.parse(localStorage.getItem('pandagendaEvents') || '{}');
+      try {
+        const response = await fetch('/.github/workflows/update_agenda_dispatch.json', {
+          method:'POST',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify(savedEvents)
+        });
+        alert('Eventi salvati!');
+      } catch(err){ alert('Errore invio dati: '+err); }
+    });
   </script>
 </body>
 </html>
