@@ -1,163 +1,244 @@
 /* =======================================================
-   CSS completo aggiornato
-   ======================================================= */
+CSS Generale
+======================================================= */
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f9fafd;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+font-family: 'Segoe UI', Arial, sans-serif;
+background: #f9fafd;
+margin: 0;
+padding: 0;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
 }
 
 main {
-  flex: 1;
+flex: 1;
 }
 
 header {
-  background: #e2eaff;
-  padding: 20px 0 10px 0;
-  text-align: center;
+background: #e2eaff;
+padding: 20px 0 10px 0;
+text-align: center;
 }
 
+/* =======================================================
+HEADER FIX
+======================================================= */
+
 h1 .home-link {
-  text-decoration: none;
-  color: #2332bb;
-  font-size: 2.3em;
-  font-weight: bold;
-  transition: color 0.2s;
+text-decoration: none;
+color: #2332bb;
+font-size: 2.3em;
+font-weight: bold;
+transition: color 0.2s;
 }
 
 h1 .home-link:hover {
-  color: #547bfc;
+color: #547bfc;
+text-decoration: none; /* ❌ niente underline */
+}
+
+header h1 span {
+color: #2332bb; /* stesso blu */
+}
+
+/* =======================================================
+Titoli sezioni
+======================================================= */
+
+main h2 {
+text-align: center;
+margin-top: 40px;
+margin-bottom: 20px;
+color: #000000;
+font-family: 'Segoe UI', Arial, sans-serif;
+font-size: 2em;
+font-weight: bold;
 }
 
 footer {
-  color: #888;
-  text-align: center;
-  margin: 16px 0 8px 0;
+color: #888;
+text-align: center;
+margin: 16px 0 8px 0;
 }
 
 /* =======================================================
-   Grid card
-   ======================================================= */
+Grid card
+======================================================= */
+
 .grid-riquadri {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  max-width: 1100px;
-  margin: 36px auto 10px auto;
-  padding: 0 10px;
-  justify-items: center;
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 24px;
+max-width: 1100px;
+margin: 10px auto 10px auto;
+padding: 0 10px;
+justify-items: center;
 }
 
 /* =======================================================
-   Singola card
-   ======================================================= */
-.riquadro {
-  position: relative;
-  width: 310px;
-  height: 240px;
-  background: #fff;
-  border: 3px solid #2366c6;
-  border-radius: 25px;
-  overflow: hidden;
-  box-shadow: 0 4px 18px rgba(26,50,120,0.08);
-  transition: transform 0.15s, box-shadow 0.15s;
+Card
+======================================================= */
 
-  display: flex;              /* ✅ reso flex */
-  flex-direction: column;     /* ✅ titolo sopra, immagine sotto */
+.riquadro {
+position: relative;
+width: 310px;
+height: 240px;
+background: #fff;
+border: 3px solid #2366c6;
+border-radius: 25px;
+overflow: hidden;
+box-shadow: 0 4px 18px rgba(26,50,120,0.08);
+transition: transform 0.15s, box-shadow 0.15s;
+display: flex;
+flex-direction: column;
 }
 
 .riquadro:hover {
-  transform: scale(1.03);
-  box-shadow: 0 6px 24px rgba(26,50,120,0.16);
+transform: scale(1.03);
+box-shadow: 0 6px 24px rgba(26,50,120,0.16);
 }
 
-/* =======================================================
-   Link della card
-   ======================================================= */
 .riquadro-link {
-  text-decoration: none;
-  color: #1b2566;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+text-decoration: none;
+color: #1b2566;
+width: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
 }
 
-/* =======================================================
-   Titolo della card (ORA IN ALTO)
-   ======================================================= */
 .riquadro-titolo {
-  position: relative;         /* ✅ non più absolute */
-  width: 100%;
-  padding: 10px 8px;
-  font-size: 1.23em;
-  font-weight: bold;
-  color: #fff;
-  background: rgba(0,0,0,0.5); /* ✅ stesso sfondo grigio */
-  text-align: center;
-  letter-spacing: 1px;
-  box-sizing: border-box;
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-
-  flex-shrink: 0;             /* ✅ altezza fissa del titolo */
+width: 100%;
+padding: 10px 8px;
+font-size: 1.23em;
+font-weight: bold;
+color: #fff;
+background: rgba(0,0,0,0.5);
+text-align: center;
+letter-spacing: 1px;
+box-sizing: border-box;
+word-wrap: break-word;
+flex-shrink: 0;
 }
 
 .riquadro-link:hover .riquadro-titolo {
-  color: #ffeb3b;
-  text-decoration: underline;
+color: #ffeb3b;
+text-decoration: underline;
 }
 
-/* =======================================================
-   Immagine della card (SOTTO)
-   ======================================================= */
 .riquadro img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-
-  flex: 1 1 auto;             /* ✅ riempie lo spazio restante */
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+flex: 1 1 auto;
 }
 
 /* =======================================================
-   Media Queries
-   ======================================================= */
+CONTAGIRI + GRAFICO
+======================================================= */
+
+#contagiri {
+max-width: 1100px;
+margin: 40px auto;
+padding: 0 10px;
+text-align: center;
+}
+
+#frase-giri {
+font-size: 1.2em;
+font-weight: bold;
+margin-bottom: 25px;
+color: #d32f2f;
+}
+
+/* contenitore grafico */
+.chart-wrapper {
+width: 100%;
+margin-top: 30px;
+height: 420px;
+}
+
+/* =======================================================
+TABELLA
+======================================================= */
+
+#tabella-giri {
+width: 100%;
+border-collapse: collapse;
+border-radius: 15px;
+overflow: hidden;
+box-shadow: 0 10px 25px rgba(26,50,120,0.15);
+font-size: 1.1em;
+background: white;
+margin-bottom: 20px;
+}
+
+#tabella-giri thead {
+background: linear-gradient(135deg, #2332bb, #547bfc);
+color: white;
+}
+
+#tabella-giri th {
+padding: 14px;
+text-transform: uppercase;
+letter-spacing: 0.6px;
+font-size: 0.85em;
+}
+
+#tabella-giri td {
+padding: 12px;
+color: #222;
+border-bottom: 1px solid #ddd;
+}
+
+#tabella-giri tbody tr:nth-child(even) {
+background-color: #f4f6ff;
+}
+
+#tabella-giri tbody tr:hover {
+background-color: #e0e7ff;
+transition: background 0.2s ease; /* fix glitch */
+}
+
+/* =======================================================
+Media Queries
+======================================================= */
+
 @media (max-width: 1200px) {
-  .grid-riquadri {
-    max-width: 980px;
-  }
-  .riquadro {
-    width: 260px;
-    height: 200px;
-  }
+.grid-riquadri,
+#contagiri,
+.chart-wrapper {
+max-width: 980px;
+}
+
+.riquadro {
+width: 260px;
+height: 200px;
+}
 }
 
 @media (max-width: 900px) {
-  .grid-riquadri {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 660px;
-  }
-  .riquadro {
-    width: 260px;
-    height: 180px;
-  }
+.grid-riquadri {
+grid-template-columns: repeat(2, 1fr);
+max-width: 660px;
+}
 }
 
 @media (max-width: 600px) {
-  .grid-riquadri {
-    grid-template-columns: 1fr;
-    max-width: 95vw;
-    padding: 0 2vw;
-  }
-  .riquadro {
-    width: 95vw;
-    height: 150px;
-  }
+.grid-riquadri {
+grid-template-columns: 1fr;
+max-width: 95vw;
+}
+
+.riquadro {
+width: 95vw;
+height: 180px;
+}
+
+.chart-wrapper {
+height: 320px;
+}
 }

@@ -4,80 +4,68 @@
   <meta charset="UTF-8">
   <title>GirettiMap</title>
   <link rel="stylesheet" href="../stile.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* Titolo pagina identico a index.html */
-    header h1 {
+    /* 🔥 Modifiche specifiche solo per questa pagina */
+    
+    /* 1. SbatuffoBlog blu, stessa dimensione di GirettiMap e SENZA sottolineatura */
+    header h1 a {
+      font-size: 1em !important; 
+      color: #2332bb !important;
+      text-decoration: none !important; /* Rimuove la sottolineatura di base */
+    }
+
+    /* 2. Ripristina la sottolineatura solo al passaggio del mouse (hover) */
+    header h1 a:hover {
+      text-decoration: underline !important;
+    }
+
+    /* Stile per i titoli delle sezioni nel main */
+    main h2 {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      color: #000000; 
       font-family: 'Segoe UI', Arial, sans-serif;
-      color: #2332bb;
-      font-size: 2.3em;
+      font-size: 2em;
       font-weight: bold;
     }
 
-    header h1 a, header h1 span {
-      color: #2332bb;
-      text-decoration: none;
-    }
-
-    header h1 a:hover, header h1 span:hover {
-      color: #547bfc;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-    }
-
-    .grid-riquadri {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 1000px;
+    .top-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      max-width: 1100px;
       margin: 20px auto;
+      padding: 0 10px;
     }
 
-    .riquadro {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-
-    .riquadro:hover {
-      transform: scale(1.03);
-    }
-
-    .riquadro-link {
-      text-decoration: none;
-      color: black;
-      display: block;
-    }
-
-    .riquadro img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      background: #ddd;
-    }
-
-    .riquadro-titolo {
-      padding: 10px;
-      font-weight: bold;
+    .link-box {
       text-align: center;
+      width: 45%;
     }
 
-    @media (max-width: 800px) {
-      .grid-riquadri {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .link-box a {
+      text-decoration: none;
+      color: #2332bb;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
     }
 
-    @media (max-width: 500px) {
-      .grid-riquadri {
-        grid-template-columns: 1fr;
-      }
+    .link-box img {
+      width: 150px;
+      height: auto;
+    }
+
+    .chart-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      margin: 30px auto;
+      height: 500px;
     }
   </style>
 </head>
@@ -86,54 +74,148 @@
 
 <header>
   <h1>
-    <a href="../index.html">SbatuffoBlog</a>
-    <span> - GirettiMap</span>
+    <a href="../index.html">SbatuffoBlog</a><span> - GirettiMap</span>
   </h1>
-
-  <p style="text-align:center;">
-    <a href="https://www.outdooractive.com/it/list/girettimap/240115709" target="_blank">
-      guarda tutti i giretti nella GirettiMap!
-    </a>
-  </p>
 </header>
 
 <main>
+  <section class="top-links">
+    <div class="link-box">
+      <a href="https://www.outdooractive.com/it/list/girettimap/240115709" target="_blank">
+        <span>Accedi alla GirettiMap</span>
+        <img src="img/pandamappa.png" alt="Mappa">
+      </a>
+    </div>
 
-  <h2 style="text-align: center; margin-top: 20px;">
-    Ultimi Giri
-  </h2>
+    <div class="link-box">
+      <a href="https://docs.google.com/spreadsheets/d/15UmyRWaW0getdRevefWd1xHUEjXKS36IUtUXFqK_0ds/edit?usp=drivesdk" target="_blank">
+        <span>Accedi alla GirettiList</span>
+        <img src="img/pandalista.png" alt="Lista">
+      </a>
+    </div>
+  </section>
+
+  <h2>Ultimi Giri</h2>
 
   <div class="grid-riquadri" id="contenitore-giri"></div>
 
+  <section id="contagiri">
+    <h2>ContaGiri</h2>
+    <p id="frase-giri" style="font-size: 1.2em; font-weight: bold; color: #d32f2f; text-align: center;"></p>
+
+    <table id="tabella-giri">
+      <thead>
+        <tr>
+          <th>Anno</th>
+          <th>Numero giri</th>
+          <th>Giretti</th>
+          <th>Girilunghi</th>
+          <th>Giri amici</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="chart-wrapper">
+      <canvas id="chartTrend"></canvas>
+    </div>
+  </section>
 </main>
 
-<footer style="text-align:center; margin-top: 40px;">
-  © 2026 Panda Blog
-</footer>
-
-<!-- 🔥 IMPORTANTE: carica il file JS -->
 <script src="giri.js"></script>
 
 <script>
+/* Logica card "Ultimi Giri" */
 const container = document.getElementById("contenitore-giri");
+if (typeof GIRI !== 'undefined') {
+  GIRI.slice(0, 9).forEach(giro => {
+    const card = document.createElement("div");
+    card.className = "riquadro";
+    const imgSrc = giro.img && giro.img !== "" ? giro.img : "https://via.placeholder.com/800x600?text=No+Image";
+    card.innerHTML = `
+      <a href="${giro.link}" target="_blank" class="riquadro-link">
+        <div class="riquadro-titolo">${giro.titolo}</div>
+        <img src="${imgSrc}" alt="${giro.titolo}">
+      </a>
+    `;
+    container.appendChild(card);
+  });
+}
 
-GIRI.slice(0, 9).forEach(giro => {
-  const card = document.createElement("div");
-  card.className = "riquadro";
+/* Logica CSV e Grafico */
+const BASE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS25gFAneadaRaQQHKaNq-dZLFD0dx1mQw5nxZj7fHc2XWZH6zxHn8A4rRgPJ_XH5eujTrhTr6x36vq/pub?output=csv&gid=";
+const SHEETS = { 2018: 0, 2019: 1139420899, 2020: 2024853702, 2021: 1564840008, 2022: 1211406438, 2023: 47473263, 2024: 203674235, 2025: 1106825116, 2026: 232828694 };
 
-  const imgSrc = giro.img && giro.img !== "" 
-    ? giro.img 
-    : "https://via.placeholder.com/800x600?text=No+Image";
+function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
+function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
 
-  card.innerHTML = `
-    <a href="${giro.link}" target="_blank" class="riquadro-link">
-      <img src="${imgSrc}" alt="${giro.titolo}">
-      <div class="riquadro-titolo">${giro.titolo}</div>
-    </a>
-  `;
+async function contaGiri() {
+  const tbody = document.querySelector("#tabella-giri tbody");
+  let ultimaData = null;
+  const dataGrafico = { anni: [], totali: [], giretti: [], lunghi: [], amici: [] };
+  const anni = Object.keys(SHEETS).sort((a, b) => a - b);
 
-  container.appendChild(card);
-});
+  for (const anno of anni) {
+    try {
+      const res = await fetch(BASE_CSV + SHEETS[anno]);
+      const csv = await res.text();
+      const rows = parseCSV(csv).slice(1);
+      let tot = rows.length, giretti = 0, girilunghi = 0, amici = 0;
+
+      rows.forEach(r => {
+        const giorni = r[2], amiciCol = (r[3] || "").toUpperCase();
+        if (giorni === "1" || giorni === "1/2") giretti++;
+        else if (parseFloat(giorni) > 1) girilunghi++;
+        if (amiciCol === "SI") amici++;
+        if (r[0]) {
+          const d = parseDate(r[0]);
+          if (!ultimaData || d > ultimaData) ultimaData = d;
+        }
+      });
+
+      dataGrafico.anni.push(anno);
+      dataGrafico.totali.push(tot);
+      dataGrafico.giretti.push(giretti);
+      dataGrafico.lunghi.push(girilunghi);
+      dataGrafico.amici.push(amici);
+
+      tbody.insertAdjacentHTML('afterbegin', `<tr><td>${anno}</td><td>${tot}</td><td>${giretti}</td><td>${girilunghi}</td><td>${amici}</td></tr>`);
+    } catch (e) { console.error(e); }
+  }
+
+  const ctx = document.getElementById('chartTrend').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dataGrafico.anni,
+      datasets: [
+        { label: 'Giri Totali', data: dataGrafico.totali, borderColor: '#2332bb', tension: 0.2, borderWidth: 4 },
+        { label: 'Giretti', data: dataGrafico.giretti, borderColor: '#4caf50', tension: 0.2, borderWidth: 3 },
+        { label: 'Giri Lunghi', data: dataGrafico.lunghi, borderColor: '#ff9800', tension: 0.2, borderWidth: 3 },
+        { label: 'Giri Amici', data: dataGrafico.amici, borderColor: '#e91e63', tension: 0.2, borderWidth: 3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 16, weight: 'bold' }, padding: 20 } },
+        title: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { font: { size: 14, weight: 'bold' } }, title: { display: true, text: 'Quantità', font: { size: 16, weight: 'bold' } } },
+        x: { ticks: { font: { size: 14, weight: 'bold' } }, title: { display: false } }
+      }
+    }
+  });
+
+  if (ultimaData) {
+    const diff = Math.floor((new Date() - ultimaData) / 86400000);
+    document.getElementById("frase-giri").innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`;
+  }
+}
+
+contaGiri();
 </script>
 
 </body>

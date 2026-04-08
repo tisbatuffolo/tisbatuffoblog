@@ -2,9 +2,9 @@
 // Struttura dati: un oggetto con anni e mesi, valori numerici
 const docceData = {
   "2026": {
-    "1": 12,   // Gennaio
-    "2": 8,    // Febbraio
-    "3": 6,    // Marzo
+    "1": 10,   // Gennaio
+    "2": 10,    // Febbraio
+    "3": 10,    // Marzo
     "4": 2,    // Aprile
     "5": 0,    // Maggio
     "6": 0,    // Giugno
