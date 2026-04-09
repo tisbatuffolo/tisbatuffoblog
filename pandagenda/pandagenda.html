@@ -134,7 +134,7 @@
   <ul id="activities-list"></ul>
 </main>
 
-<footer style="text-align:center">© 2026 Ti SbatuffoBlog</footer>
+<!-- <footer style="text-align:center">© 2026 Ti SbatuffoBlog</footer> -->
 
 <script>
   const today = new Date();
@@ -210,21 +210,36 @@
     updateActivities();
   }
 
-  function updateActivities() {
-    activities.innerHTML = "";
-    let has = false;
+function updateActivities() {
+  activities.innerHTML = "";
+  let has = false;
 
-    for (const k in events) {
-      if (events[k] && events[k].trim() !== "") {
-        const li = document.createElement("li");
-        li.textContent = `${k}: ${events[k]}`;
-        activities.appendChild(li);
-        has = true;
-      }
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const currentDay = now.getDate();
+
+  for (const k in events) {
+    if (!events[k] || events[k].trim() === "") continue;
+
+    const [y, m, d] = k.split("-").map(Number);
+
+    // ✅ filtro: stesso mese e anno visualizzati
+    if (y !== year || (m - 1) !== month) continue;
+
+    // ✅ se è il mese attuale → mostra solo da oggi in poi
+    if (year === currentYear && month === currentMonth) {
+      if (d < currentDay) continue;
     }
 
-    if (!has) activities.innerHTML = "<li>Nessuna</li>";
+    const li = document.createElement("li");
+    li.textContent = `${k}: ${events[k]}`;
+    activities.appendChild(li);
+    has = true;
   }
+
+  if (!has) activities.innerHTML = "<li>Nessuna</li>";
+}
 
   document.getElementById("prev-month").onclick = () => {
     month--; if (month < 0) { month = 11; year--; }
