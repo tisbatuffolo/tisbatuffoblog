@@ -132,6 +132,11 @@
           <canvas id="docce-trend" width="400" height="240" style="background:#fff; border:3px solid #2366c6; border-radius:20px; box-shadow:0 4px 18px rgba(26,50,120,0.08);"></canvas>
           <div style="margin-top:10px; font-weight:bold; color:#2366c6;">Trend docce mese per mese</div>
           <img id="trend-image" src="" alt="Trend docce">
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
           <button id="btn-aggiungi">Aggiungi Doccia 🚿</button>
         </div>
       </div>
@@ -262,8 +267,9 @@
       docceData[year][month]++;
       renderizzaPagina();
 
-      // Chiamata all'API Vercel per triggerare GitHub Action
-      fetch('/api/update_docceAPI', { 
+      // Chiamata all'API Vercel
+      const API_URL = 'https://tisbatuffoblog.vercel.app/api/update_docceAPI';
+      fetch(API_URL, { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
