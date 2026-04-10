@@ -1,11 +1,38 @@
 {
-  "2026-01-22": "Compleanno Sbatuffolone \nBudapest ",
-  "2026-01-23": "Budapest ",
-  "2026-01-24": "Budapest ",
-  "2026-01-25": "Budapest ",
-  "2026-04-24": "",
-  "2026-04-25": "Sarajevo",
-  "2026-04-26": "Sarajevo",
-  "2026-04-27": "Sarajevo",
-  "2026-04-28": "Sarajevo"
+  "2026-01-22": {
+    "nome": "Compleanno Sbatuffolone \nBudapest ",
+    "tipo": ""
+  },
+  "2026-01-23": {
+    "nome": "Budapest ",
+    "tipo": ""
+  },
+  "2026-01-24": {
+    "nome": "Budapest ",
+    "tipo": ""
+  },
+  "2026-01-25": {
+    "nome": "Budapest ",
+    "tipo": ""
+  },
+  "2026-04-24": {
+    "nome": "",
+    "tipo": ""
+  },
+  "2026-04-25": {
+    "nome": "Sarajevo",
+    "tipo": "girolungo"
+  },
+  "2026-04-26": {
+    "nome": "Sarajevo",
+    "tipo": ""
+  },
+  "2026-04-27": {
+    "nome": "Sarajevo",
+    "tipo": ""
+  },
+  "2026-04-28": {
+    "nome": "Sarajevo",
+    "tipo": ""
+  }
 }
