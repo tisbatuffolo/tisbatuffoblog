@@ -7,21 +7,14 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* 🔥 Modifiche specifiche solo per questa pagina */
-    
-    /* 1. SbatuffoBlog blu, stessa dimensione di GirettiMap e SENZA sottolineatura */
     header h1 a {
       font-size: 1em !important; 
       color: #2332bb !important;
-      text-decoration: none !important; /* Rimuove la sottolineatura di base */
+      text-decoration: none !important;
     }
 
-    /* 2. Ripristina la sottolineatura solo al passaggio del mouse (hover) */
-    header h1 a:hover {
-      text-decoration: underline !important;
-    }
+    header h1 a:hover { text-decoration: underline !important; }
 
-    /* Stile per i titoli delle sezioni nel main */
     main h2 {
       text-align: center;
       margin-top: 40px;
@@ -41,11 +34,7 @@
       padding: 0 10px;
     }
 
-    .link-box {
-      text-align: center;
-      width: 45%;
-    }
-
+    .link-box { text-align: center; width: 45%; }
     .link-box a {
       text-decoration: none;
       color: #2332bb;
@@ -55,17 +44,94 @@
       align-items: center;
       gap: 8px;
     }
+    .link-box img { width: 150px; height: auto; }
 
-    .link-box img {
-      width: 150px;
-      height: auto;
+    /* Layout con Sidebar per la Torta */
+    .dashboard-container {
+      display: flex;
+      max-width: 1200px;
+      margin: 30px auto;
+      gap: 20px;
     }
 
-    .chart-wrapper {
+    /* Sidebar Anni */
+    #sidebar-anni {
+      width: 180px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+
+    .anno-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Contenitore Grafico e Legenda */
+    .main-chart-area { flex: 1; }
+
+    .torta-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .torta-wrapper {
+      width: 350px;
+      height: 350px;
+      margin-bottom: 30px;
+    }
+
+    /* Legenda a Griglia */
+    #grid-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
       width: 100%;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9em;
+    }
+
+    .color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+
+    .charts-vertical-stack {
       max-width: 1100px;
       margin: 30px auto;
-      height: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    .chart-wrapper { width: 100%; height: 400px; }
+
+    hr.separator {
+      max-width: 1100px;
+      margin: 50px auto;
+      border: 0;
+      border-top: 2px solid #eee;
     }
   </style>
 </head>
@@ -73,9 +139,7 @@
 <body>
 
 <header>
-  <h1>
-    <a href="../index.html">SbatuffoBlog</a><span> - Giretti</span>
-  </h1>
+  <h1><a href="../index.html">SbatuffoBlog</a><span> - Giretti</span></h1>
 </header>
 
 <main>
@@ -86,7 +150,6 @@
         <img src="img/pandamappa.png" alt="Mappa">
       </a>
     </div>
-
     <div class="link-box">
       <a href="https://docs.google.com/spreadsheets/d/15UmyRWaW0getdRevefWd1xHUEjXKS36IUtUXFqK_0ds/edit?usp=drivesdk" target="_blank">
         <span>Accedi alla GirettiList</span>
@@ -96,20 +159,11 @@
   </section>
 
   <h2>Ultimi Giri</h2>
-
   <div class="grid-riquadri" id="contenitore-giri"></div>
 
   <section id="contagiri">
     <h2>Conta Giri</h2>
     <p id="frase-giri" style="font-size: 1.2em; font-weight: bold; color: #d32f2f; text-align: center;"></p>
-
-    <div class="icone-tabella">
-      <div></div>
-      <div><img src="img/giriinsieme.png" alt="Giri insieme"></div>
-      <div><img src="img/giretti.png" alt="Giretti"></div>
-      <div><img src="img/girilunghi.png" alt="Giri lunghi"></div>
-      <div><img src="img/giriamici.png" alt="Giri amici"></div>
-    </div>
 
     <table id="tabella-giri">
       <thead>
@@ -124,69 +178,89 @@
       <tbody></tbody>
     </table>
 
-    <div class="chart-wrapper">
-      <canvas id="chartTrend"></canvas>
+    <div class="charts-vertical-stack">
+      <div class="chart-wrapper">
+        <canvas id="chartTrend"></canvas>
+      </div>
+    </div>
+
+    <div class="dashboard-container">
+      <aside id="sidebar-anni">
+        <div class="anno-item">
+          <input type="checkbox" id="selectAll" checked>
+          <label for="selectAll">TUTTI</label>
+        </div>
+        <hr>
+        <div id="lista-checkbox-anni"></div>
+      </aside>
+
+      <div class="main-chart-area">
+        <div class="torta-container">
+          <h3>Torta dei Giretti 🍰</h3>
+          <div class="torta-wrapper">
+            <canvas id="chartTorta"></canvas>
+          </div>
+          <div id="grid-legend"></div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <h2>Solo giri nuovi e tutti giri belli!</h2>
-
+  <hr class="separator">
+  <h2 style="text-align: center; margin-bottom: 50px;">Solo giri nuovi e tutti giri belli!</h2>
 </main>
 
 <script src="giri.js"></script>
 
 <script>
-/* Logica card "Ultimi Giri" */
 const container = document.getElementById("contenitore-giri");
 if (typeof GIRI !== 'undefined') {
   GIRI.slice(0, 9).forEach(giro => {
     const card = document.createElement("div");
     card.className = "riquadro";
     const imgSrc = giro.img && giro.img !== "" ? giro.img : "https://via.placeholder.com/800x600?text=No+Image";
-    card.innerHTML = `
-      <a href="${giro.link}" target="_blank" class="riquadro-link">
-        <div class="riquadro-titolo">${giro.titolo}</div>
-        <img src="${imgSrc}" alt="${giro.titolo}">
-      </a>
-    `;
+    card.innerHTML = `<a href="${giro.link}" target="_blank" class="riquadro-link"><div class="riquadro-titolo">${giro.titolo}</div><img src="${imgSrc}" alt="${giro.titolo}"></a>`;
     container.appendChild(card);
   });
 }
 
-/* Logica CSV e Grafico */
 const BASE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS25gFAneadaRaQQHKaNq-dZLFD0dx1mQw5nxZj7fHc2XWZH6zxHn8A4rRgPJ_XH5eujTrhTr6x36vq/pub?output=csv&gid=";
 const SHEETS = { 2018: 0, 2019: 1139420899, 2020: 2024853702, 2021: 1564840008, 2022: 1211406438, 2023: 47473263, 2024: 203674235, 2025: 1106825116, 2026: 232828694 };
+
+let datiPerAnno = {}; 
+let chartTortaObj = null;
+
+const paletteColori = [
+  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', 
+  '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'
+];
 
 function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
 function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
 
-async function contaGiri() {
-  const tbody = document.querySelector("#tabella-giri tbody");
+async function init() {
+  const anniOrdinati = Object.keys(SHEETS).sort((a, b) => a - b);
+  const sidebar = document.getElementById("lista-checkbox-anni");
   let ultimaData = null;
 
-  const dataGrafico = { anni: [], totali: [], giretti: [], lunghi: [], amici: [] };
-  const anni = Object.keys(SHEETS).sort((a, b) => a - b);
-
-  try {
-    // 🔥 tutte le fetch insieme
-    const promises = anni.map(anno =>
-      fetch(BASE_CSV + SHEETS[anno])
-        .then(res => res.text())
-        .then(csv => ({ anno, rows: parseCSV(csv).slice(1) }))
-    );
-
-    const risultati = await Promise.all(promises);
-
-    // 🔥 elaborazione dati
-    risultati.forEach(({ anno, rows }) => {
-      let tot = rows.length, giretti = 0, girilunghi = 0, amici = 0;
+  // Aspettiamo che TUTTI i fetch siano completati prima di toccare il DOM
+  const fetchPromises = anniOrdinati.map(async (anno) => {
+    try {
+      const res = await fetch(BASE_CSV + SHEETS[anno]);
+      const csv = await res.text();
+      const rows = parseCSV(csv).slice(1);
+      
+      let tot = rows.length, giretti = 0, lunghi = 0, amici = 0;
+      let tipi = {};
 
       rows.forEach(r => {
         const giorni = r[2];
         const amiciCol = (r[3] || "").toUpperCase();
+        const tipo = (r[6] || "Altro").trim() || "Altro";
 
+        tipi[tipo] = (tipi[tipo] || 0) + 1;
         if (giorni === "1" || giorni === "1/2") giretti++;
-        else if (parseFloat(giorni) > 1) girilunghi++;
+        else if (parseFloat(giorni) > 1) lunghi++;
         if (amiciCol === "SI") amici++;
 
         if (r[0]) {
@@ -195,54 +269,116 @@ async function contaGiri() {
         }
       });
 
-      dataGrafico.anni.push(anno);
-      dataGrafico.totali.push(tot);
-      dataGrafico.giretti.push(giretti);
-      dataGrafico.lunghi.push(girilunghi);
-      dataGrafico.amici.push(amici);
-    });
+      datiPerAnno[anno] = { tot, giretti, lunghi, amici, tipi };
+    } catch (e) { console.error(`Errore anno ${anno}:`, e); }
+  });
 
-    // 🔥 aggiorna tabella TUTTA INSIEME (molto più veloce)
-    const html = risultati.map(({ anno }, i) => `
-      <tr>
-        <td>${anno}</td>
-        <td>${dataGrafico.totali[i]}</td>
-        <td>${dataGrafico.giretti[i]}</td>
-        <td>${dataGrafico.lunghi[i]}</td>
-        <td>${dataGrafico.amici[i]}</td>
-      </tr>
-    `).reverse().join("");
+  await Promise.all(fetchPromises);
 
-    tbody.innerHTML = html;
+  // ORA che i dati sono tutti in datiPerAnno, popoliamo la sidebar in ordine
+  anniOrdinati.forEach(anno => {
+    if(datiPerAnno[anno]) {
+      const item = document.createElement("div");
+      item.className = "anno-item";
+      item.innerHTML = `<input type="checkbox" class="anno-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
+      sidebar.appendChild(item);
+    }
+  });
 
-  } catch (e) {
-    console.error(e);
-  }
+  // Popola tabella (ordine decrescente per la tabella)
+  const tbody = document.querySelector("#tabella-giri tbody");
+  const summary = { anni: [], totali: [], giretti: [], lunghi: [], amici: [] };
+  
+  [...anniOrdinati].reverse().forEach(anno => {
+    const d = datiPerAnno[anno];
+    if(d) {
+      summary.anni.push(anno);
+      summary.totali.push(d.tot);
+      summary.giretti.push(d.giretti);
+      summary.lunghi.push(d.lunghi);
+      summary.amici.push(d.amici);
+      tbody.innerHTML += `<tr><td>${anno}</td><td>${d.tot}</td><td>${d.giretti}</td><td>${d.lunghi}</td><td>${d.amici}</td></tr>`;
+    }
+  });
 
-  // grafico (uguale al tuo)
-  const ctx = document.getElementById('chartTrend').getContext('2d');
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: dataGrafico.anni,
-      datasets: [
-        { label: 'Giri Insieme', data: dataGrafico.totali, borderColor: '#2332bb', tension: 0.2, borderWidth: 4 },
-        { label: 'Giretti', data: dataGrafico.giretti, borderColor: '#4caf50', tension: 0.2, borderWidth: 3 },
-        { label: 'Giri Lunghi', data: dataGrafico.lunghi, borderColor: '#ff9800', tension: 0.2, borderWidth: 3 },
-        { label: 'Giri Amici', data: dataGrafico.amici, borderColor: '#e91e63', tension: 0.2, borderWidth: 3 }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
+  renderTrend(summary);
+  updateTorta(); 
+
+  // Event Listeners
+  document.querySelectorAll('.anno-cb').forEach(cb => cb.addEventListener('change', updateTorta));
+  document.getElementById('selectAll').addEventListener('change', (e) => {
+    document.querySelectorAll('.anno-cb').forEach(cb => cb.checked = e.target.checked);
+    updateTorta();
   });
 
   if (ultimaData) {
     const diff = Math.floor((new Date() - ultimaData) / 86400000);
-    document.getElementById("frase-giri").innerText =
-      `Sono ben ${diff} giorni che non facciamo un giro insieme!`;
+    document.getElementById("frase-giri").innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`;
   }
 }
 
-contaGiri();
+function updateTorta() {
+  const selectedAnni = Array.from(document.querySelectorAll('.anno-cb:checked')).map(cb => cb.value);
+  let aggregatoTipi = {};
+
+  selectedAnni.forEach(anno => {
+    const tipi = datiPerAnno[anno].tipi;
+    for (let t in tipi) { aggregatoTipi[t] = (aggregatoTipi[t] || 0) + tipi[t]; }
+  });
+
+  const labels = Object.keys(aggregatoTipi);
+  const valori = Object.values(aggregatoTipi);
+
+  const ctx = document.getElementById('chartTorta').getContext('2d');
+  if (chartTortaObj) chartTortaObj.destroy();
+
+  chartTortaObj = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: valori,
+        backgroundColor: paletteColori,
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  const legendGrid = document.getElementById('grid-legend');
+  legendGrid.innerHTML = '';
+  labels.forEach((l, i) => {
+    legendGrid.innerHTML += `
+      <div class="legend-item">
+        <div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div>
+        <span>${l}: <strong>${valori[i]}</strong></span>
+      </div>`;
+  });
+}
+
+function renderTrend(data) {
+  const ctxTrend = document.getElementById('chartTrend').getContext('2d');
+  new Chart(ctxTrend, {
+    type: 'line',
+    data: {
+      labels: data.anni.slice().reverse(),
+      datasets: [
+        { label: 'Giri Insieme', data: data.totali.slice().reverse(), borderColor: '#2332bb', tension: 0.3, borderWidth: 4 },
+        { label: 'Giretti', data: data.giretti.slice().reverse(), borderColor: '#4caf50', tension: 0.3 },
+        { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), borderColor: '#ff9800', tension: 0.3 },
+        { label: 'Giri Amici', data: data.amici.slice().reverse(), borderColor: '#e91e63', tension: 0.3 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+}
+
+init();
 </script>
 
 </body>
