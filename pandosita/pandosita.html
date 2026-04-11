@@ -10,8 +10,8 @@
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 0;
-    background-color: #f9fbff;
-    padding-bottom: 50px; /* Spazio in fondo alla pagina */
+    background-color: #f0f2f5;
+    padding-bottom: 80px;
   }
 
   header {
@@ -25,120 +25,186 @@
     margin: 0;
   }
 
-  header h1 a {
-    color: #2332bb;
-    text-decoration: none;
-  }
+  header h1 a { color: #2332bb; text-decoration: none; }
+  header h1 a:hover { color: #547bfc; }
 
-  header h1 a:hover {
-    color: #547bfc;
-  }
+  /* --- STILI COMUNI --- */
+  .section-title { color: #000000; margin-bottom: 20px; font-size: 1.8em; margin-top: 40px; }
+  .section-subtitle { color: #667; font-size: 0.9em; margin-bottom: 20px; }
 
-  /* --- STILI COMUNI SEZIONI --- */
-  .section-title {
-    color: #000000; /* Titolo Nero come richiesto */
-    margin-bottom: 5px;
-    font-size: 1.8em;
-    margin-top: 40px;
-  }
-
-  .section-subtitle {
-    color: #667;
-    font-size: 0.9em;
-    margin-top: 0;
-    margin-bottom: 20px;
-  }
-
-  /* Contenitore principale per lo scroll (comune) */
   .scroll-wrapper {
     overflow-x: auto;
     padding: 20px;
-    -webkit-overflow-scrolling: touch; /* Scroll fluido su mobile */
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* Stile scrollbar personalizzato (12px come richiesto) */
-  .scroll-wrapper::-webkit-scrollbar {
-    height: 12px;
-  }
-  .scroll-wrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-  .scroll-wrapper::-webkit-scrollbar-thumb {
-    background: #2332bb;
-    border-radius: 10px;
-  }
-  .scroll-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #1a258c;
-  }
+  .scroll-wrapper::-webkit-scrollbar { height: 12px; }
+  .scroll-wrapper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+  .scroll-wrapper::-webkit-scrollbar-thumb { background: #2332bb; border-radius: 10px; }
 
-  /* Stile item base (comune) */
-  .media-item {
-    background: #ffffff;
-    border: 1px solid #e2eaff;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    overflow: hidden; /* Taglia i contenuti che escono dai bordi arrotondati */
-  }
-
-  .media-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-  }
-
-
-  /* --- SPECIFICO STICKERS (Griglia a 2 righe) --- */
-  .stickers-section {
-    background: #fff;
-    padding: 20px 0;
-  }
-
+  /* --- STICKERS & GIF --- */
+  .stickers-section { background: #fff; padding: 20px 0; }
   .stickers-grid {
     display: grid;
-    grid-template-rows: repeat(2, 150px); /* Due righe */
+    grid-template-rows: repeat(2, 150px);
     grid-auto-flow: column;
     grid-auto-columns: 150px; 
     gap: 15px;
     width: max-content;
-    padding-bottom: 10px;
+  }
+  .stickers-grid img { max-width: 85%; max-height: 85%; object-fit: contain; }
+
+  .gif-flex { display: flex; gap: 15px; width: max-content; }
+  .gif-item { width: 250px; height: 180px; background: #fff; border-radius: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #e2eaff;}
+  .gif-item video { width: 100%; height: 100%; object-fit: cover; }
+
+  /* --- SEZIONE LULU: IL LIBRO --- */
+  .lulu-section { margin-top: 60px; padding: 40px 0; }
+  .book-wrapper { position: relative; max-width: 950px; margin: 0 auto; padding: 20px; }
+  .book-cover { background: #4e342e; padding: 12px; border-radius: 10px 25px 25px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4), 20px 0 0 -10px #3e2723; position: relative; }
+  .book-body { display: flex; background: #fff5e6; min-height: 600px; position: relative; overflow: hidden; box-shadow: inset -15px 0 20px -10px rgba(0,0,0,0.1); }
+  .bookmark { position: absolute; top: -12px; right: 50px; width: 25px; height: 100px; background: #c62828; z-index: 20; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); border-radius: 0 0 5px 5px; }
+  .book-spine { position: absolute; left: 50%; top: 0; bottom: 0; width: 50px; transform: translateX(-50%); background: linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 15%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.2) 100%); z-index: 10; }
+  .book-pages-container { display: flex; width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+  .book-spread { display: flex; min-width: 100%; height: 100%; }
+  .page { width: 50%; padding: 40px; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; gap: 30px; box-sizing: border-box; position: relative; align-items: center; }
+  .page-left { background: linear-gradient(to right, #fdf5e6 95%, #e0d6c5 100%); }
+  .page-right { background: linear-gradient(to left, #fdf5e6 95%, #e0d6c5 100%); }
+  .book-title-page { grid-row: span 2; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .book-title-page h3 { font-family: 'Georgia', serif; font-size: 2.5em; color: #4e342e; margin: 0; font-style: italic; border-bottom: 2px solid #4e342e; padding-bottom: 10px; }
+  .page-number { position: absolute; bottom: 15px; font-style: italic; font-size: 0.8em; color: #8d6e63; }
+  .page-left .page-number { left: 20px; }
+  .page-right .page-number { right: 20px; }
+  .photo-frame { position: relative; padding: 10px 10px 35px 10px; box-shadow: 2px 4px 8px rgba(0,0,0,0.15); transform: rotate(var(--rotation)); transition: all 0.3s ease; height: 220px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,0,0,0.05); }
+  .photo-frame:hover { transform: rotate(0deg) scale(1.08); z-index: 30; }
+  .photo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  .scotch { position: absolute; width: 60px; height: 20px; background: rgba(255, 252, 210, 0.4); backdrop-filter: blur(1px); box-shadow: 1px 1px 3px rgba(0,0,0,0.1); z-index: 2; }
+  .graffetta { position: absolute; width: 10px; height: 40px; background: #aaa; border-radius: 5px; box-shadow: 1px 1px 2px rgba(0,0,0,0.3); z-index: 2; }
+  .puntina { position: absolute; width: 15px; height: 15px; background: #c62828; border-radius: 50%; box-shadow: 1px 2px 3px rgba(0,0,0,0.3); z-index: 2; }
+  .puntina::after { content: ''; position: absolute; top: 5px; left: 5px; width: 5px; height: 5px; background: rgba(255,255,255,0.5); border-radius: 50%; }
+  .angolo { position: absolute; width: 0; height: 0; border-style: solid; z-index: 2; }
+  .book-btn { position: absolute; top: 50%; transform: translateY(-50%); background: #3e2723; color: #fff; border: 2px solid #fff5e6; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; font-size: 1.4em; z-index: 100; transition: opacity 0.3s ease, visibility 0.3s; }
+  .book-btn.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .btn-l { left: -30px; }
+  .btn-r { right: -30px; }
+
+  /* --- NUOVA SEZIONE: TV CINEMA SFIGATINI --- */
+  .sfigatini-section {
+    padding: 60px 0;
+    background: #1a1a1a;
+    color: white;
+    overflow: hidden;
+  }
+  
+  .tv-container {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #443322; /* Legno TV */
+    padding: 40px;
+    border-radius: 50px;
+    border: 10px solid #2b1d0e;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
   }
 
-  .stickers-grid .sticker-item img {
-    max-width: 80%;
-    max-height: 80%;
-    object-fit: contain;
-  }
-
-
-  /* --- SPECIFICO GIF (Riga singola) --- */
-  .gif-section {
-    padding: 20px 0;
-  }
-
-  .gif-flex {
+  /* Lo schermo della TV */
+  .tv-screen {
+    position: relative;
+    background: #000;
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 15px solid #333;
     display: flex;
-    flex-direction: row; /* Riga singola */
-    gap: 15px;
-    width: max-content;
-    padding-bottom: 10px;
+    align-items: center;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
   }
 
-  .gif-item {
-    width: 250px; /* Più larghe per i video */
-    height: 180px;
+  /* Effetto vetro curvo e riflesso */
+  .tv-screen::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%);
+    pointer-events: none;
+    z-index: 5;
   }
 
-  .gif-item video {
+  /* La pellicola che scorre */
+  .film-strip {
+    display: flex;
+    gap: 0;
+    padding: 10px 0;
+    animation: movieScroll 60s linear infinite;
+    cursor: grab;
+  }
+  
+  .film-strip:hover { animation-play-state: paused; }
+
+  .film-frame {
+    flex: 0 0 300px;
+    height: 250px;
+    background: #222;
+    margin: 0 10px;
+    border-left: 15px solid #000;
+    border-right: 15px solid #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Buchi della pellicola */
+  }
+
+  .film-frame::before, .film-frame::after {
+    content: "■ ■ ■ ■ ■ ■ ■ ■";
+    position: absolute;
+    color: #555;
+    font-size: 10px;
+    letter-spacing: 12px;
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* Copre l'area senza deformarsi, tagliando i bordi se necessario */
+    text-align: center;
+    left: 0;
+  }
+  .film-frame::before { top: -20px; }
+  .film-frame::after { bottom: -20px; }
+
+  .film-frame img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    filter: sepia(0.3) contrast(1.1);
   }
 
+  /* Manopole TV */
+  .tv-knobs {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .knob {
+    width: 40px;
+    height: 40px;
+    background: #222;
+    border-radius: 50%;
+    border: 3px solid #555;
+  }
+
+  @keyframes movieScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-5000px); }
+  }
+
+  @media (max-width: 850px) {
+    .tv-container { padding: 20px; border-radius: 30px; }
+    .tv-screen { height: 250px; }
+    .film-frame { flex: 0 0 200px; height: 150px; }
+    .tv-knobs { display: none; }
+  }
 </style>
 </head>
 
@@ -154,80 +220,210 @@
 <section class="stickers-section">
   <h2 class="section-title">Panda Stickers</h2>
   <p class="section-subtitle">Scorri lateralmente i nostri panda stickers per scoprirli tutti!</p>
-  
   <div class="scroll-wrapper">
-    <div class="stickers-grid" id="sticker-gallery">
-      </div>
+    <div class="stickers-grid" id="sticker-gallery"></div>
   </div>
 </section>
 
 <section class="gif-section">
   <h2 class="section-title">Panda Gif</h2>
   <p class="section-subtitle">Ti sbatuffolo animatamente!</p>
-  
   <div class="scroll-wrapper">
-    <div class="gif-flex" id="gif-gallery">
-      </div>
+    <div class="gif-flex" id="gif-gallery"></div>
   </div>
 </section>
 
+<section class="lulu-section">
+  <h2 class="section-title">Lulu meno male che ci sei tu</h2>
+  <div class="book-wrapper">
+    <button id="btn-prev" class="book-btn btn-l hidden" onclick="changePage(-1)">&#10094;</button>
+    <button id="btn-next" class="book-btn btn-r" onclick="changePage(1)">&#10095;</button>
+    
+    <div class="book-cover">
+      <div class="bookmark"></div>
+      <div class="book-body">
+        <div class="book-spine"></div>
+        <div class="book-pages-container" id="lulu-book-engine"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sfigatini-section">
+    <h2 class="section-title" style="color: white;">Gli Sfigatini</h2>
+    <p class="section-subtitle" style="color: #aaa;">In onda ora sul canale Sfigat-TV</p>
+    
+    <div class="tv-container">
+        <div class="tv-knobs">
+            <div class="knob"></div>
+            <div class="knob"></div>
+        </div>
+        <div class="tv-screen">
+            <div class="film-strip" id="sfigatini-engine">
+                </div>
+        </div>
+    </div>
+</section>
+
 <script>
-  // Configurazione
-  const MAX_CHECK = 500; // Limite massimo di tentativi per file sequenziali
+  const MAX_CHECK = 500;
+  const MAX_SFIGATINI = 53;
 
-  // --- CARICAMENTO DINAMICO STICKERS (.webp img) ---
-  const stickerContainer = document.getElementById('sticker-gallery');
-  const stickerPath = 'img/sticker/';
-
-  for (let i = 1; i <= MAX_CHECK; i++) {
-    const div = document.createElement('div');
-    div.className = 'media-item sticker-item';
-    
-    const img = document.createElement('img');
-    img.src = `${stickerPath}sticker (${i}).webp`;
-    img.alt = `Panda Sticker ${i}`;
-    img.loading = "lazy";
-
-    // Gestione errore: se l'immagine non esiste, rimuovi il div
-    img.onerror = function() {
-      div.remove();
-    };
-
-    div.appendChild(img);
-    stickerContainer.appendChild(div);
+  // --- CARICAMENTO STICKERS & GIF ---
+  function loadMedia(containerId, path, prefix, ext, isVideo = false) {
+    const container = document.getElementById(containerId);
+    for (let i = 1; i <= MAX_CHECK; i++) {
+      const div = document.createElement('div');
+      div.className = `media-item ${isVideo ? 'gif-item' : 'sticker-item'}`;
+      if(isVideo) {
+        const video = document.createElement('video');
+        video.autoplay = video.loop = video.muted = video.playsinline = true;
+        const source = document.createElement('source');
+        source.src = `${path}${prefix} (${i}).mp4`;
+        source.type = 'video/mp4';
+        source.onerror = () => div.remove();
+        video.appendChild(source);
+        div.appendChild(video);
+      } else {
+        const img = document.createElement('img');
+        img.src = `${path}${prefix} (${i}).${ext}`;
+        img.onerror = () => div.remove();
+        div.appendChild(img);
+      }
+      container.appendChild(div);
+    }
   }
 
+  loadMedia('sticker-gallery', 'img/sticker/', 'sticker', 'webp');
+  loadMedia('gif-gallery', 'img/gif/', 'pandagif', 'mp4', true);
 
-  // --- CARICAMENTO DINAMICO GIF (.mp4 video) ---
-  const gifContainer = document.getElementById('gif-gallery');
-  const gifPath = 'img/gif/';
+  // --- LOGICA LIBRO LULU ---
+  const bookEngine = document.getElementById('lulu-book-engine');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const pastelColors = ['#FFF9C4', '#C8E6C9', '#B3E5FC', '#FFFFFF', '#F5F5DC', '#FFE0B2', '#E0F2F1'];
 
-  for (let i = 1; i <= MAX_CHECK; i++) {
-    const div = document.createElement('div');
-    div.className = 'media-item gif-item';
-    
-    // Creazione elemento video
-    const video = document.createElement('video');
-    video.autoplay = true;   // Parte da solo
-    video.loop = true;       // Riparte all'infinito
-    video.muted = true;      // Necessario per l'autoplay nella maggior parte dei browser
-    video.playsinline = true; // Necessario per autoplay su mobile iOS
-    video.setAttribute('webkit-playsinline', 'true'); // Supporto extra iOS vecchio
+  async function buildBook() {
+    let images = [];
+    for (let i = 1; i <= MAX_CHECK; i++) {
+      const src = `img/lulu/lulu (${i}).jpg`;
+      const exists = await new Promise(res => {
+        const img = new Image();
+        img.onload = () => res(true);
+        img.onerror = () => res(false);
+        img.src = src;
+      });
+      if (!exists) break;
+      images.push(src);
+    }
 
-    // Creazione del source tag per gestire l'errore di caricamento
-    const source = document.createElement('source');
-    source.src = `${gifPath}pandagif (${i}).mp4`;
-    source.type = 'video/mp4';
+    const firstSpread = document.createElement('div');
+    firstSpread.className = 'book-spread';
+    const p1 = document.createElement('div');
+    p1.className = 'page page-left';
+    p1.innerHTML = `<div class="book-title-page"><h3>Il grande libro della Lulu</h3></div><span class="page-number">pag. 1</span>`;
+    const p2 = document.createElement('div');
+    p2.className = 'page page-right';
+    p2.innerHTML = `<span class="page-number">pag. 2</span>`;
+    fillPage(p2, images.slice(0, 2));
+    firstSpread.appendChild(p1);
+    firstSpread.appendChild(p2);
+    bookEngine.appendChild(firstSpread);
 
-    // Gestione errore sul source: se il video non esiste, rimuovi il div
-    source.onerror = function() {
-      div.remove();
-    };
-
-    video.appendChild(source);
-    div.appendChild(video);
-    gifContainer.appendChild(div);
+    let pageNum = 3;
+    for (let i = 2; i < images.length; i += 4) {
+      const spread = document.createElement('div');
+      spread.className = 'book-spread';
+      const pLeft = document.createElement('div');
+      pLeft.className = 'page page-left';
+      pLeft.innerHTML = `<span class="page-number">pag. ${pageNum++}</span>`;
+      fillPage(pLeft, images.slice(i, i + 2));
+      const pRight = document.createElement('div');
+      pRight.className = 'page page-right';
+      pRight.innerHTML = `<span class="page-number">pag. ${pageNum++}</span>`;
+      fillPage(pRight, images.slice(i + 2, i + 4));
+      spread.appendChild(pLeft);
+      spread.appendChild(pRight);
+      bookEngine.appendChild(spread);
+    }
+    updateFrecce();
   }
+
+  function fillPage(pageDiv, imgs) {
+    imgs.forEach(src => {
+      const frame = document.createElement('div');
+      frame.className = 'photo-frame';
+      const randRot = (Math.random() * 6 - 3).toFixed(2);
+      frame.style.setProperty('--rotation', `${randRot}deg`);
+      frame.style.backgroundColor = pastelColors[Math.floor(Math.random() * pastelColors.length)];
+      const img = document.createElement('img');
+      img.src = src;
+      frame.appendChild(img);
+      addRandomAccessory(frame);
+      pageDiv.appendChild(frame);
+    });
+  }
+
+  function addRandomAccessory(frame) {
+    const type = Math.floor(Math.random() * 4);
+    const el = document.createElement('div');
+    switch(type) {
+      case 0: el.className = 'scotch'; el.style.top = '-5px'; el.style.left = `${Math.random() * 60 + 20}%`; el.style.transform = `rotate(${Math.random() * 20 - 10}deg)`; break;
+      case 1: el.className = 'graffetta'; el.style.top = '-15px'; el.style.left = `${Math.random() * 20 + 10}px`; el.style.transform = `rotate(${Math.random() * 10 - 5}deg)`; break;
+      case 2: el.className = 'puntina'; el.style.top = '10px'; el.style.left = '10px'; break;
+      case 3: 
+        const a1 = document.createElement('div'); a1.className = 'angolo'; a1.style.top = '0'; a1.style.left = '0'; a1.style.borderWidth = '15px 15px 0 0'; a1.style.borderColor = '#333 transparent transparent transparent'; frame.appendChild(a1);
+        const a2 = document.createElement('div'); a2.className = 'angolo'; a2.style.bottom = '25px'; a2.style.right = '0'; a2.style.borderWidth = '0 0 15px 15px'; a2.style.borderColor = 'transparent transparent #333 transparent'; frame.appendChild(a2);
+        return;
+    }
+    frame.appendChild(el);
+  }
+
+  function changePage(dir) {
+    const width = bookEngine.offsetWidth;
+    bookEngine.scrollBy({ left: dir * width, behavior: 'smooth' });
+  }
+
+  function updateFrecce() {
+    const scrollLeft = bookEngine.scrollLeft;
+    const maxScroll = bookEngine.scrollWidth - bookEngine.clientWidth;
+    btnPrev.classList.toggle('hidden', scrollLeft <= 10);
+    btnNext.classList.toggle('hidden', scrollLeft >= maxScroll - 10);
+  }
+
+  // --- LOGICA SFIGATINI CINEMA ---
+  async function buildSfigatini() {
+    const engine = document.getElementById('sfigatini-engine');
+    
+    // Carichiamo le immagini (fino a 53 o più se esistono)
+    for (let i = 1; i <= MAX_CHECK; i++) {
+        const src = `img/sfigatini/sfigatini (${i}).jpg`;
+        const exists = await new Promise(res => {
+            const img = new Image();
+            img.onload = () => res(true);
+            img.onerror = () => res(false);
+            img.src = src;
+        });
+        
+        if (!exists && i > MAX_SFIGATINI) break;
+        if (!exists) continue;
+
+        const frame = document.createElement('div');
+        frame.className = 'film-frame';
+        const img = document.createElement('img');
+        img.src = src;
+        frame.appendChild(img);
+        engine.appendChild(frame);
+    }
+    
+    // Cloniamo le immagini alla fine per l'effetto loop infinito
+    const clone = engine.innerHTML;
+    engine.innerHTML += clone;
+  }
+
+  bookEngine.addEventListener('scroll', updateFrecce);
+  buildBook();
+  buildSfigatini();
 </script>
 
 </body>
