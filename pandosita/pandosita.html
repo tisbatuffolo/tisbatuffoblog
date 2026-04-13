@@ -42,236 +42,84 @@
   .scroll-wrapper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
   .scroll-wrapper::-webkit-scrollbar-thumb { background: #2332bb; border-radius: 10px; }
 
-  /* --- CELLULARE MAGICO PANDA STICKERS --- */
-  .stickers-section { 
-    background: #fff; 
-    padding: 80px 0; 
-    position: relative; 
-    overflow: hidden;
-  }
-  
-  .phone-wrapper {
-    position: relative;
-    display: inline-block;
-    margin: 0 auto;
-  }
-
-  /* Animazioni distanziate dal cellulare */
-  .floating-heart, .pulsing-star {
-    position: absolute;
-    pointer-events: none;
-    z-index: 1;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-  }
-
-  .floating-heart {
-    color: #ff8fab;
-    font-size: 35px;
-    animation: floatHeart 4s infinite ease-in-out;
-  }
-
-  .pulsing-star {
-    color: #ffd700;
-    font-size: 22px;
-    animation: pulseStar 2s infinite ease-in-out;
-  }
-
-  @keyframes floatHeart {
-    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; }
-    50% { transform: translateY(-25px) scale(1.1) rotate(10deg); opacity: 1; }
-  }
-
-  @keyframes pulseStar {
-    0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 8px #ffd700); }
-  }
-
-  .phone-container {
-    width: 310px;
-    height: 580px;
-    background: #333639;
-    border-radius: 55px;
-    border: 8px solid #b1b4b8;
-    box-shadow: 0 12px 0 #8a8d91, 0 30px 60px rgba(0,0,0,0.2);
-    position: relative;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 2;
-  }
-
-  .phone-top-sensors {
-    width: 120px;
-    height: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  .camera-lens {
-    width: 10px;
-    height: 10px;
-    background: #1a1a1a;
-    border-radius: 50%;
-    border: 2px solid #222;
-    box-shadow: inset 0 0 3px #444;
-  }
-
-  .speaker-grill {
-    width: 50px;
-    height: 6px;
-    background: #222;
-    border-radius: 10px;
-  }
-
-  .phone-screen {
-    width: 100%;
-    height: 465px;
-    background: #e0f7fa;
-    border-radius: 38px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    border: 3px solid #1a1a1a;
-    margin-top: 10px;
-  }
-
-  /* Effetto riflesso realistico sullo schermo */
-  .phone-screen::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 100%;
-    background: linear-gradient(
-      115deg, 
-      rgba(255,255,255,0.3) 0%, 
-      rgba(255,255,255,0.1) 15%, 
-      transparent 20%, 
-      transparent 100%
-    );
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .stickers-display {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 15px;
-    overflow-y: auto;
-    gap: 30px;
-    background-image: radial-gradient(rgba(255,255,255,0.4) 2px, transparent 2px);
-    background-size: 30px 30px;
-  }
-
+  /* --- CELLULARE MAGICO PANDA STICKERS (FREEZE) --- */
+  .stickers-section { background: #fff; padding: 80px 0; position: relative; overflow: hidden; }
+  .phone-wrapper { position: relative; display: inline-block; margin: 0 auto; }
+  .floating-heart, .pulsing-star { position: absolute; pointer-events: none; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+  .floating-heart { color: #ff8fab; font-size: 35px; animation: floatHeart 4s infinite ease-in-out; }
+  .pulsing-star { color: #ffd700; font-size: 22px; animation: pulseStar 2s infinite ease-in-out; }
+  @keyframes floatHeart { 0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; } 50% { transform: translateY(-25px) scale(1.1) rotate(10deg); opacity: 1; } }
+  @keyframes pulseStar { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 8px #ffd700); } }
+  .phone-container { width: 310px; height: 580px; background: #333639; border-radius: 55px; border: 8px solid #b1b4b8; box-shadow: 0 12px 0 #8a8d91, 0 30px 60px rgba(0,0,0,0.2); position: relative; padding: 12px; display: flex; flex-direction: column; align-items: center; z-index: 2; }
+  .phone-top-sensors { width: 120px; height: 25px; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px; }
+  .camera-lens { width: 10px; height: 10px; background: #1a1a1a; border-radius: 50%; border: 2px solid #222; box-shadow: inset 0 0 3px #444; }
+  .speaker-grill { width: 50px; height: 6px; background: #222; border-radius: 10px; }
+  .phone-screen { width: 100%; height: 465px; background: #e0f7fa; border-radius: 38px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 3px solid #1a1a1a; margin-top: 10px; }
+  .phone-screen::before { content: ""; position: absolute; top: 10px; right: 15px; width: 60px; height: 120px; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%); transform: rotate(-10deg); border-radius: 15px; z-index: 10; pointer-events: none; }
+  .stickers-display { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; overflow-y: auto; gap: 30px; background-image: radial-gradient(rgba(255,255,255,0.4) 2px, transparent 2px); background-size: 30px 30px; }
   .stickers-display::-webkit-scrollbar { width: 5px; }
-  .stickers-display::-webkit-scrollbar-thumb { 
-    background: #ff8fab; 
-    border-radius: 10px;
-  }
-
-  .sticker-item-phone {
-    width: 155px;
-    flex-shrink: 0;
-    filter: drop-shadow(0 5px 12px rgba(0,0,0,0.12));
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
+  .stickers-display::-webkit-scrollbar-thumb { background: #ff8fab; border-radius: 10px; }
+  .sticker-item-phone { width: 155px; flex-shrink: 0; filter: drop-shadow(0 5px 12px rgba(0,0,0,0.12)); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .sticker-item-phone:hover { transform: scale(1.1) rotate(-3deg); }
   .sticker-item-phone img { width: 100%; height: auto; display: block; }
+  .phone-button { width: 44px; height: 44px; background: transparent; border: 3px solid #b1b4b8; border-radius: 50%; margin-top: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
 
-  .phone-button {
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    border: 3px solid #b1b4b8;
-    border-radius: 50%;
-    margin-top: 15px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-  }
-
-  /* --- PANDA GIF & LULU --- */
+  /* --- PANDA GIF (FREEZE) --- */
   .gif-section { padding: 20px 0; }
   .gif-flex { display: flex; gap: 15px; width: max-content; }
   .gif-item { width: 250px; height: 180px; background: #fff; border-radius: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #e2eaff;}
   .gif-item video { width: 100%; height: 100%; object-fit: cover; }
 
+  /* --- LULU SECTION (MODIFICATA RANDOM) --- */
   .lulu-section { margin-top: 60px; padding: 40px 0; }
   .book-wrapper { position: relative; max-width: 950px; margin: 0 auto; padding: 20px; }
   .book-cover { background: #4e342e; padding: 12px; border-radius: 10px 25px 25px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4), 20px 0 0 -10px #3e2723; position: relative; }
+  .bookmark { position: absolute; top: -15px; right: 50px; width: 25px; height: 70px; background: #d32f2f; z-index: 15; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%); }
   .book-body { display: flex; background: #fff5e6; min-height: 600px; position: relative; overflow: hidden; box-shadow: inset -15px 0 20px -10px rgba(0,0,0,0.1); }
   .book-spine { position: absolute; left: 50%; top: 0; bottom: 0; width: 50px; transform: translateX(-50%); background: linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 15%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.2) 100%); z-index: 10; }
   .book-pages-container { display: flex; width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
   .book-spread { display: flex; min-width: 100%; height: 100%; }
   .page { width: 50%; padding: 40px; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; gap: 30px; box-sizing: border-box; position: relative; align-items: center; }
-
   .page-left { background: linear-gradient(to right, #fdf5e6 95%, #e0d6c5 100%); }
   .page-right { background: linear-gradient(to left, #fdf5e6 95%, #e0d6c5 100%); }
   .book-title-page { grid-row: span 2; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
   .book-title-page h3 { font-family: 'Georgia', serif; font-size: 2.2em; color: #4e342e; margin: 0; font-style: italic; border-bottom: 2px solid #4e342e; padding-bottom: 10px; }
-  
-  /* --- MODIFICA NUMERI DI PAGINA --- */
   .page-number { position: absolute; bottom: 15px; font-style: italic; font-size: 0.8em; color: #8d6e63; }
   .page-left .page-number { left: 10px; }
   .page-right .page-number { right: 10px; }
-  /* ---------------------------------- */
 
+  /* Elementi Polaroid */
   .photo-frame { position: relative; padding: 10px 10px 35px 10px; box-shadow: 2px 4px 8px rgba(0,0,0,0.15); transform: rotate(var(--rotation)); transition: all 0.3s ease; height: 220px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,0,0,0.05); }
+  
+  /* Classi specifiche per i dettagli (ora gestite via JS) */
+  .has-clip::after { content: ""; position: absolute; top: -12px; left: 15px; width: 15px; height: 35px; border: 3px solid #999; border-radius: 10px; background: transparent; z-index: 5; }
+  .has-pin::before { content: ""; position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #f44336; border-radius: 50%; box-shadow: 0 2px 2px rgba(0,0,0,0.3); z-index: 5; }
+  .has-tape .tape-element { position: absolute; top: -15px; right: 15px; width: 60px; height: 25px; background: rgba(230, 230, 200, 0.5); transform: rotate(15deg); box-shadow: 1px 1px 3px rgba(0,0,0,0.1); z-index: 6; }
+  .cut-corners { clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); border: none !important; }
+
   .photo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
   .book-btn { position: absolute; top: 50%; transform: translateY(-50%); background: #3e2723; color: #fff; border: 2px solid #fff5e6; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; font-size: 1.4em; z-index: 100; transition: opacity 0.3s; }
   .book-btn.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   .btn-l { left: -30px; }
   .btn-r { right: -30px; }
 
-  /* --- SEZIONE GLI SFIGATINI (HORROR COMPLETO) --- */
+  /* --- SEZIONE GLI SFIGATINI (FREEZE) --- */
   .sfigatini-section { padding: 80px 0; background: #000; color: white; overflow: hidden; position: relative; }
   .horror-title-wrapper { display: inline-flex; align-items: center; justify-content: center; position: relative; gap: 20px; }
-  
   .ghost-icon { font-size: 60px; animation: floatGhost 3s infinite ease-in-out; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
   @keyframes floatGhost { 0%, 100% { transform: translateY(0) rotate(5deg); } 50% { transform: translateY(-15px) rotate(-5deg); } }
-  
-
   .cinema-container { position: relative; width: 95%; max-width: 1000px; margin: 40px auto 0; background: #000; border: 8px solid #1a1a1a; box-shadow: 0 0 50px rgba(255,0,0,0.2); }
-  
-  /* Ragnatela fedele */
-  .web-corner {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 200px;
-    height: 200px;
-    background: 
-      radial-gradient(circle at top right, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px, transparent 21px),
-      radial-gradient(circle at top right, transparent 40px, rgba(255,255,255,0.1) 40px, rgba(255,255,255,0.1) 41px, transparent 41px),
-      radial-gradient(circle at top right, transparent 60px, rgba(255,255,255,0.1) 60px, rgba(255,255,255,0.1) 61px, transparent 61px),
-      radial-gradient(circle at top right, transparent 80px, rgba(255,255,255,0.1) 80px, rgba(255,255,255,0.1) 81px, transparent 81px),
-      radial-gradient(circle at top right, transparent 100px, rgba(255,255,255,0.1) 100px, rgba(255,255,255,0.1) 101px, transparent 101px),
-      linear-gradient(45deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%),
-      linear-gradient(15deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%),
-      linear-gradient(75deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%),
-      linear-gradient(to bottom, transparent 49.5%, rgba(255,255,255,0.1) 50%, transparent 50.5%) 100% 0 / 100% 200%,
-      linear-gradient(to left, transparent 49.5%, rgba(255,255,255,0.1) 50%, transparent 50.5%) 0 100% / 200% 100%;
-    z-index: 15;
-    pointer-events: none;
-  }
-
+  .web-corner { position: absolute; top: -10px; right: -10px; width: 200px; height: 200px; background: radial-gradient(circle at top right, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px, transparent 21px), radial-gradient(circle at top right, transparent 40px, rgba(255,255,255,0.1) 40px, rgba(255,255,255,0.1) 41px, transparent 41px), radial-gradient(circle at top right, transparent 60px, rgba(255,255,255,0.1) 60px, rgba(255,255,255,0.1) 61px, transparent 61px), radial-gradient(circle at top right, transparent 80px, rgba(255,255,255,0.1) 80px, rgba(255,255,255,0.1) 81px, transparent 81px), radial-gradient(circle at top right, transparent 100px, rgba(255,255,255,0.1) 100px, rgba(255,255,255,0.1) 101px, transparent 101px), linear-gradient(45deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%), linear-gradient(15deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%), linear-gradient(75deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%), linear-gradient(to bottom, transparent 49.5%, rgba(255,255,255,0.1) 50%, transparent 50.5%) 100% 0 / 100% 200%, linear-gradient(to left, transparent 49.5%, rgba(255,255,255,0.1) 50%, transparent 50.5%) 0 100% / 200% 100%; z-index: 15; pointer-events: none; }
   .spider-hanging { position: absolute; top: 85px; right: 90px; width: 1px; height: 0; background: rgba(255,255,255,0.4); z-index: 16; animation: spiderMove 8s infinite; }
   .spider-hanging::after { content: "🕷️"; position: absolute; bottom: -15px; left: -10px; font-size: 20px; }
   @keyframes spiderMove { 0%, 100% { height: 20px; } 50% { height: 180px; } }
-
-  .cinema-curtains { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to right, #400 2%, transparent 15%, transparent 85%, #400 98%), linear-gradient(to bottom, #400 0%, transparent 12%); pointer-events: none; z-index: 4; }
   .cinema-screen { position: relative; background: #000; height: 450px; overflow: hidden; display: flex; align-items: center; }
   .film-strip { display: flex; gap: 0; will-change: transform; }
-  .film-frame { flex: 0 0 350px; height: 280px; margin: 0 20px; position: relative; display: flex; align-items: center; justify-content: center; border: 2px solid #222; }
-  .film-frame img { max-width: 80%; max-height: 80%; object-fit: contain; filter: sepia(0.3) contrast(1.1); }
-
-  /* Cimitero zombie fedele */
+  .film-frame { flex: 0 0 350px; height: 280px; margin: 0 10px; position: relative; display: flex; align-items: center; justify-content: center; background: #111; border-top: 25px solid #222; border-bottom: 25px solid #222; }
+  .film-frame::before, .film-frame::after { content: ""; position: absolute; left: 0; width: 100%; height: 15px; background-image: radial-gradient(circle, #000 50%, transparent 50%); background-size: 30px 30px; background-repeat: repeat-x; }
+  .film-frame::before { top: -20px; }
+  .film-frame::after { bottom: -20px; }
+  .film-frame img { max-width: 90%; max-height: 90%; object-fit: contain; filter: sepia(0.3) contrast(1.1); border: 1px solid #333; }
   .zombie-fallback { position: absolute; bottom: -10px; width: 100%; display: flex; justify-content: space-around; align-items: flex-end; pointer-events: none; z-index: 20; padding: 0 20px; box-sizing: border-box; }
   .zombie-container { display: flex; flex-direction: column; align-items: center; position: relative; }
   .zombie-head { width: 50px; height: 70px; background: #1a1e12; border-radius: 40% 40% 10% 10%; position: relative; box-shadow: 0 0 15px black; transform-origin: bottom; animation: zombieSway 3s infinite ease-in-out alternate; z-index: 2; }
@@ -279,6 +127,7 @@
   .tombstone { width: 40px; height: 50px; background: #333; border-radius: 15px 15px 0 0; border: 1px solid #444; position: relative; z-index: 1; }
   .cross { width: 10px; height: 45px; background: #222; position: relative; z-index: 1; }
   .cross::after { content: ""; width: 30px; height: 10px; background: #222; position: absolute; top: 12px; left: -10px; }
+  @keyframes zombieSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
 
   @media (max-width: 768px) {
     .book-body { min-height: 500px; }
@@ -292,13 +141,11 @@
 <body>
 
 <header>
-  <h1><a class="home-link" href="../index.html">SbatuffoBlog</a> - Pandosita</h1>
+  <h1><a href="../index.html">SbatuffoBlog</a> - Pandosita</h1>
 </header>
 
 <section class="stickers-section">
   <h2 class="section-title">Panda Stickers</h2>
-  <p class="section-subtitle">Scorri verso il basso nel cellulare magico per vedere tutti i nostri panda stickers!</p>
-  
   <div class="phone-wrapper">
     <div class="floating-heart" style="top: 10%; left: -110px; animation-delay: 0s;">❤️</div>
     <div class="floating-heart" style="top: 50%; left: -130px; animation-delay: 1.2s;">💖</div>
@@ -306,15 +153,9 @@
     <div class="floating-heart" style="top: 20%; right: -115px; animation-delay: 2s;">❤️</div>
     <div class="pulsing-star" style="top: 30%; left: -80px; animation-delay: 0.3s;">⭐</div>
     <div class="pulsing-star" style="bottom: 25%; right: -85px; animation-delay: 1.5s;">✨</div>
-
     <div class="phone-container">
-      <div class="phone-top-sensors">
-        <div class="speaker-grill"></div>
-        <div class="camera-lens"></div>
-      </div>
-      <div class="phone-screen">
-        <div class="stickers-display" id="sticker-phone-gallery"></div>
-      </div>
+      <div class="phone-top-sensors"><div class="speaker-grill"></div><div class="camera-lens"></div></div>
+      <div class="phone-screen"><div class="stickers-display" id="sticker-phone-gallery"></div></div>
       <div class="phone-button"></div>
     </div>
   </div>
@@ -322,7 +163,6 @@
 
 <section class="gif-section">
   <h2 class="section-title">Panda Gif</h2>
-  <p class="section-subtitle">Ti sbatuffolo animatamente!</p>
   <div class="scroll-wrapper"><div class="gif-flex" id="gif-gallery"></div></div>
 </section>
 
@@ -343,17 +183,13 @@
 
 <section class="sfigatini-section">
     <div class="horror-title-wrapper">
-        <h2 class="section-title" style="color: #900; font-family: 'Courier New', Courier, monospace; margin: 0;">GLI SFIGATINI</h2>
+        <h2 class="section-title" style="color: #900; font-family: 'Courier New', Courier;">GLI SFIGATINI</h2>
         <div class="ghost-icon">👻</div>
     </div>
-    <p class="section-subtitle">Ricordi da cinema dell'orrore!</p>
-    
     <div class="cinema-container">
         <div class="web-corner"></div>
         <div class="spider-hanging"></div>
-        <div class="cinema-curtains"></div>
         <div class="cinema-screen"><div class="film-strip" id="sfigatini-engine"></div></div>
-        
         <div class="zombie-fallback">
           <div class="zombie-container"><div class="zombie-head"></div></div>
           <div class="zombie-container" style="transform:translateY(-10px)"><div class="cross"></div></div>
@@ -370,6 +206,7 @@
 </section>
 
 <script>
+  // PANDA STICKERS (FREEZE)
   function loadPhoneStickers() {
     const container = document.getElementById('sticker-phone-gallery');
     for (let i = 1; i <= 116; i++) {
@@ -380,13 +217,14 @@
     }
   }
 
+  // PANDA GIF (FREEZE)
   function loadMedia(containerId, path, prefix, ext, isVideo = false) {
     const container = document.getElementById(containerId);
-    for (let i = 1; i <= 30; i++) {
+    for (let i = 1; i <= 100; i++) {
       const div = document.createElement('div');
       div.className = isVideo ? 'gif-item' : 'sticker-item';
       if(isVideo) {
-        div.innerHTML = `<video autoplay loop muted playsinline><source src="${path}${prefix} (${i}).mp4" type="video/mp4"></video>`;
+        div.innerHTML = `<video autoplay loop muted playsinline onerror="this.parentElement.remove()"><source src="${path}${prefix} (${i}).mp4" type="video/mp4"></video>`;
       } else {
         div.innerHTML = `<img src="${path}${prefix} (${i}).${ext}" onerror="this.parentElement.remove()">`;
       }
@@ -394,19 +232,18 @@
     }
   }
 
+  // LULU BOOK ENGINE (RANDOM DECOR)
   const bookEngine = document.getElementById('lulu-book-engine');
   const pastelColors = ['#FFF9C4', '#C8E6C9', '#B3E5FC', '#FFFFFF', '#F5F5DC', '#FFE0B2'];
 
   async function buildBook() {
     let images = [];
     for (let i = 1; i <= 40; i++) images.push(`img/lulu/lulu (${i}).jpg`);
-
     const firstSpread = document.createElement('div');
     firstSpread.className = 'book-spread';
     firstSpread.innerHTML = `<div class="page page-left"><div class="book-title-page"><h3>Fra un pisolo e un altro</h3></div><span class="page-number">pag. 1</span></div><div class="page page-right" id="p2"></div>`;
     bookEngine.appendChild(firstSpread);
     fillPage(document.getElementById('p2'), images.slice(0, 2), 2);
-
     for (let i = 2, p = 3; i < images.length; i += 4) {
       const spread = document.createElement('div');
       spread.className = 'book-spread';
@@ -421,16 +258,31 @@
     div.innerHTML += `<span class="page-number">pag. ${num}</span>`;
     imgs.forEach(src => {
       const frame = document.createElement('div');
-      frame.className = 'photo-frame';
+      frame.className = `photo-frame`;
       frame.style.setProperty('--rotation', `${Math.random()*6-3}deg`);
       frame.style.backgroundColor = pastelColors[Math.floor(Math.random()*pastelColors.length)];
-      frame.innerHTML = `<img src="${src}" onerror="this.parentElement.remove()">`;
+      
+      // LOGICA RANDOM INDIPENDENTE
+      if (Math.random() < 0.4) frame.classList.add('has-clip'); // Graffetta (40% prob)
+      if (Math.random() < 0.4) frame.classList.add('has-pin');  // Puntina (40% prob)
+      if (Math.random() < 0.4) {                                // Scotch (40% prob)
+          frame.classList.add('has-tape');
+          frame.innerHTML += `<div class="tape-element"></div>`;
+      }
+      
+      // Angoli tagliati (Solo alcune - 25% prob)
+      if (Math.random() < 0.25) {
+        frame.classList.add('cut-corners');
+      }
+
+      frame.innerHTML += `<img src="${src}" onerror="this.parentElement.remove()">`;
       div.appendChild(frame);
     });
   }
 
   function changePage(dir) { bookEngine.scrollBy({ left: dir * bookEngine.offsetWidth, behavior: 'smooth' }); }
 
+  // SFIGATINI (FREEZE)
   async function buildSfigatini() {
     const engine = document.getElementById('sfigatini-engine');
     for (let i = 1; i <= 53; i++) {
