@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Caltena",
+    "link": "https://www.outdooractive.com/it/route/escursione/san-martino-di-castrozza-primiero-vanoi/caltena/338654801/",
+    "img": "https://img2.oastatic.com/img2/627434203/800x600/variant.webp?revbust=19d82733135"
+  },
+  {
     "titolo": "Malga Fratte",
     "link": "https://www.outdooractive.com/it/route/slittino/val-di-sole-pejo-e-rabbi/malga-fratte/335620094/",
     "img": "https://img0.oastatic.com/img2/625561416/800x600/variant.webp"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Monte San Vigilio",
     "link": "https://www.outdooractive.com/it/route/escursione-invernale/merano-e-dintorni/monte-san-vigilio/331537036/",
     "img": "https://img.oastatic.com/img2/622602385/800x600/variant.webp"
-  },
-  {
-    "titolo": "Castel Penede",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/garda-trentino/castel-penede/331252714/",
-    "img": "https://img0.oastatic.com/img2/622448106/800x600/variant.jpg"
   }
 ]
