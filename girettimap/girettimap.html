@@ -20,47 +20,44 @@
       font-weight: bold;
     }
 
-    /* --- TOP LINKS AGGIORNATI --- */
+    /* --- TOP LINKS --- */
     .top-links {
       display: flex;
       justify-content: center;
-      max-width: 1000px; /* Leggermente più largo per ospitare blocchi più grandi */
+      max-width: 1100px;
       margin: 10px auto 30px auto;
-      padding: 0 10px;
-      gap: 20px; /* Più spazio tra i blocchi */
+      padding: 0 15px;
+      gap: 15px;
     }
 
     .link-box {
       flex: 1;
-      padding: 20px 15px; /* Più grande (padding aumentato) */
+      padding: 20px 10px;
       border-radius: 15px;
       text-align: center;
       transition: transform 0.2s;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 160px; 
     }
     .link-box:hover { transform: translateY(-5px); }
-    
-    /* Colore Verde Pastello per Map */
     .link-box.map-box { background-color: #d4edda; } 
-    /* Colore Rosso Pastello per List */
     .link-box.list-box { background-color: #f8d7da; }
 
     .link-box a {
       text-decoration: none;
-      color: #000000; /* Scritta Nera */
+      color: #000000;
       font-weight: bold;
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: clamp(0.95em, 4vw, 1.1em); /* Testo più grande */
+      white-space: nowrap; 
+      font-size: clamp(0.75em, 3.2vw, 1.05em); 
     }
 
-    .link-box img {
-      width: 100%;
-      max-width: 130px; /* Immagini più grandi */
-      height: auto;
-      margin-bottom: 10px;
-    }
+    .link-box img { width: 100%; max-width: 110px; height: auto; margin-bottom: 12px; }
 
     /* --- ULTIMI GIRI --- */
     .grid-riquadri {
@@ -77,48 +74,31 @@
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease;
     }
-    
-    .riquadro:hover { 
-      transform: translateY(-5px); 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-    }
-
-    .riquadro img { 
-      width: 100%; 
-      height: 200px; 
-      object-fit: cover; 
-      display: block; 
-    }
-
-    .riquadro-titolo {
-      padding: 15px;
-      font-weight: bold;
-      text-align: center;
-      color: #2332bb;
-      background: #f8faff;
-      font-size: 1.1em;
-    }
-
+    .riquadro img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .riquadro-titolo { padding: 15px; font-weight: bold; text-align: center; color: #2332bb; background: #f8faff; font-size: 1.1em; }
     .riquadro-link { text-decoration: none; color: inherit; display: block; }
 
-    /* --- FRASE CONTAGIRI --- */
+    /* --- CONTAGIRI SECTION --- */
+    #contagiri {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
     #frase-giri {
       font-size: clamp(1em, 4vw, 1.25em);
       line-height: 1.4;
       font-weight: bold;
       text-align: center;
-      margin: 20px auto 30px auto;
-      padding: 0 15px;
-      max-width: 800px;
+      margin-bottom: 30px;
     }
 
-    /* --- TABELLA CON ICONE INTEGRATE --- */
+    /* --- TABELLA OTTIMIZZATA --- */
     .table-container-wrapper {
-      max-width: 1000px;
+      width: 100%;
       margin: 0 auto;
-      padding: 0 8px;
     }
 
     table#tabella-giri {
@@ -128,8 +108,9 @@
       background: #fff;
     }
 
+    /* SFONDO BIANCO PER LE ICONE */
     .icon-row td {
-      background-color: #ffffff !important;
+      background-color: #ffffff !important; /* Forza lo sfondo bianco */
       border: none !important;
       padding: 20px 5px 10px 5px !important;
       vertical-align: bottom;
@@ -137,18 +118,17 @@
 
     .icon-row img {
       width: 100%;
-      max-width: 130px;
+      max-width: 120px;
       height: auto;
       display: block;
       margin: 0 auto;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
     }
 
     .header-row th {
       background-color: #2332bb;
       color: white;
       padding: 15px 2px;
-      font-size: clamp(0.7em, 2.5vw, 1em);
+      font-size: clamp(0.7em, 2.5vw, 0.9em);
       text-transform: uppercase;
       border: 1px solid #1a27a0;
     }
@@ -158,33 +138,85 @@
       text-align: center;
       border: 1px solid #eee;
       font-size: clamp(0.9em, 3vw, 1.1em);
-      font-weight: 500;
     }
 
-    .w-anno { width: 16%; }
-    .w-data { width: 21%; }
+    /* --- TREND  */
+    /* Container Legenda Trend - Compatto e su una riga */
+    #trend-legend-custom {
+      display: flex;
+      flex-wrap: nowrap; /* Forza su una riga sola */
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      overflow-x: auto; /* Permette lo scroll se lo schermo è mini */
+      padding: 5px 0;
+    }
 
-    /* --- DASHBOARD TORTA & FILTRI --- */
+    /* Badge più piccoli e sottili */
+    .legend-badge {
+      padding: 4px 10px; /* Ridotto */
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      font-size: 0.75em; /* Testo più piccolo */
+      white-space: nowrap; /* Evita che il testo vada a capo nel badge */
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0; /* Impedisce ai badge di restringersi troppo */
+    }
+
+    .legend-badge.hidden {
+      opacity: 0.2;
+      background-color: #ddd !important;
+      color: #888;
+    }
+
+    /* Fix per il contenitore del grafico per evitare sovrapposizioni */
+    .charts-vertical-stack { 
+      margin-bottom: 20px; 
+    }
+    
+    .chart-wrapper { 
+      height: 300px; /* Leggermente ridotto per dare respiro */
+      margin-bottom: 60px; /* Spazio extra per i badge sotto */
+    }
+
+    /* --- TORTA --- */
+
     .torta-container {
       background: #fff;
       padding: 25px 15px;
       border-radius: 20px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-      margin: 30px 10px;
+      width: 100%;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-top: 30px;
     }
+
+    .torta-wrapper { width: 100%; max-width: 320px; height: 320px; }
+
+    #grid-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      width: 100%;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .legend-item { font-size: 0.85em; display: flex; align-items: center; gap: 8px; }
+    .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
     .filter-area {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
-      padding-bottom: 20px;
+      gap: 10px;
       margin-bottom: 20px;
-      border-bottom: 1px solid #f0f0f0;
-      width: 100%;
     }
 
     .anno-item {
@@ -193,46 +225,28 @@
       border-radius: 15px;
       font-size: 0.9em;
       font-weight: bold;
-      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 5px;
+      cursor: pointer;
     }
-
-    .torta-wrapper { width: 100%; max-width: 320px; height: 320px; }
-
-    #grid-legend {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      width: 100%;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #eee;
-    }
-
-    .legend-item { font-size: 0.85em; display: flex; align-items: center; gap: 8px; }
-    .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
     .footer-banner {
       background-color: #e3f2fd;
-      padding: 20px;
-      border-radius: 12px;
-      margin: 40px 15px;
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 1100px;
+      margin: 40px auto;
       text-align: center;
-      font-size: 1em;
     }
 
     @media (max-width: 600px) {
-      .icon-row img { max-width: 80px; }
-      .icon-row td { padding: 10px 2px 5px 2px !important; }
-      #grid-legend { grid-template-columns: repeat(2, 1fr); }
-      .top-links { gap: 10px; }
-      .link-box { padding: 15px 10px; }
-    }
-    
-    @media (min-width: 768px) {
-      #grid-legend { grid-template-columns: repeat(4, 1fr); }
+      .grid-riquadri, #contagiri, .top-links {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+      }
+      .icon-row img { max-width: 75px; }
+      #grid-legend { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
     }
   </style>
 </head>
@@ -270,27 +284,28 @@
       <table id="tabella-giri">
         <thead>
           <tr class="icon-row">
-            <td class="w-anno"></td>
-            <td class="w-data"><img src="img/giriinsieme.png" alt=""></td>
-            <td class="w-data"><img src="img/giretti.png" alt=""></td>
-            <td class="w-data"><img src="img/girilunghi.png" alt=""></td>
-            <td class="w-data"><img src="img/giriamici.png" alt=""></td>
+            <td style="width: 16%"></td>
+            <td><img src="img/giriinsieme.png" alt=""></td>
+            <td><img src="img/giretti.png" alt=""></td>
+            <td><img src="img/girilunghi.png" alt=""></td>
+            <td><img src="img/giriamici.png" alt=""></td>
           </tr>
           <tr class="header-row">
-            <th class="w-anno">Anno</th>
-            <th class="w-data">Insieme</th>
-            <th class="w-data">Giretti</th>
-            <th class="w-data">Lunghi</th>
-            <th class="w-data">Amici</th>
+            <th>Anno</th>
+            <th>Insieme</th>
+            <th>Giretti</th>
+            <th>Lunghi</th>
+            <th>Amici</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
 
-    <div class="charts-vertical-stack" style="padding: 0 10px; margin-top: 30px;">
-      <div class="chart-wrapper" style="height: 300px;">
+    <div class="charts-vertical-stack">
+      <div class="chart-wrapper">
         <canvas id="chartTrend"></canvas>
+        <div id="trend-legend-custom"></div>
       </div>
     </div>
 
@@ -318,6 +333,7 @@
 <script src="giri.js"></script>
 
 <script>
+
 const container = document.getElementById("contenitore-giri");
 if (typeof GIRI !== 'undefined') {
   GIRI.slice(0, 9).forEach(giro => {
@@ -425,19 +441,66 @@ function updateTorta() {
 
 function renderTrend(data) {
   const ctxTrend = document.getElementById('chartTrend').getContext('2d');
-  new Chart(ctxTrend, {
+  
+  const datasets = [
+    { label: 'Insieme', data: data.totali.slice().reverse(), color: '#2332bb', width: 3 },
+    { label: 'Giretti', data: data.giretti.slice().reverse(), color: '#4caf50', width: 2 },
+    { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), color: '#ff9800', width: 2 },
+    { label: 'Amici', data: data.amici.slice().reverse(), color: '#e91e63', width: 2 }
+  ];
+
+  const chartTrend = new Chart(ctxTrend, {
     type: 'line',
     data: {
       labels: data.anni.slice().reverse(),
-      datasets: [
-        { label: 'Insieme', data: data.totali.slice().reverse(), borderColor: '#2332bb', tension: 0.3, borderWidth: 3 },
-        { label: 'Giretti', data: data.giretti.slice().reverse(), borderColor: '#4caf50', tension: 0.3, borderWidth: 2 },
-        { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), borderColor: '#ff9800', tension: 0.3, borderWidth: 2 }
-      ]
+      datasets: datasets.map(d => ({
+        label: d.label,
+        data: d.data,
+        borderColor: d.color,
+        backgroundColor: d.color,
+        tension: 0.3,
+        borderWidth: d.width,
+        pointRadius: 3
+      }))
     },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 12 } } } } }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: { bottom: 10 } // Spazio interno al canvas
+      },
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  const legendContainer = document.getElementById('trend-legend-custom');
+  legendContainer.innerHTML = ''; 
+
+  datasets.forEach((d, index) => {
+    const badge = document.createElement('div');
+    badge.className = 'legend-badge';
+    badge.style.backgroundColor = d.color;
+    badge.innerText = d.label;
+
+    badge.onclick = () => {
+      const isVisible = chartTrend.isDatasetVisible(index);
+      if (isVisible) {
+        chartTrend.hide(index);
+        badge.classList.add('hidden');
+      } else {
+        chartTrend.show(index);
+        badge.classList.remove('hidden');
+      }
+    };
+    legendContainer.appendChild(badge);
   });
 }
+
 init();
 </script>
 
