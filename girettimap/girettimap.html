@@ -2,167 +2,237 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GirettiMap</title>
   <link rel="stylesheet" href="../stile.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    header h1 a {
-      font-size: 1em !important; 
-      color: #2332bb !important;
-      text-decoration: none !important;
-    }
-
-    header h1 a:hover { text-decoration: underline !important; }
+    /* --- RESET & BASE --- */
+    header h1 a { font-size: 1em !important; color: #2332bb !important; text-decoration: none !important; }
 
     main h2 {
       text-align: center;
-      margin-top: 40px;
-      margin-bottom: 20px;
-      color: #000000; 
+      margin: 35px 0 20px;
+      color: #000;
       font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 2em;
+      font-size: clamp(1.5em, 5vw, 2.2em);
       font-weight: bold;
     }
 
+    /* --- TOP LINKS AGGIORNATI --- */
     .top-links {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      max-width: 1100px;
-      margin: 20px auto;
+      justify-content: center;
+      max-width: 1000px; /* Leggermente più largo per ospitare blocchi più grandi */
+      margin: 10px auto 30px auto;
       padding: 0 10px;
+      gap: 20px; /* Più spazio tra i blocchi */
     }
 
-    .link-box { text-align: center; width: 45%; }
+    .link-box {
+      flex: 1;
+      padding: 20px 15px; /* Più grande (padding aumentato) */
+      border-radius: 15px;
+      text-align: center;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .link-box:hover { transform: translateY(-5px); }
+    
+    /* Colore Verde Pastello per Map */
+    .link-box.map-box { background-color: #d4edda; } 
+    /* Colore Rosso Pastello per List */
+    .link-box.list-box { background-color: #f8d7da; }
+
     .link-box a {
       text-decoration: none;
-      color: #2332bb;
+      color: #000000; /* Scritta Nera */
       font-weight: bold;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      font-size: clamp(0.95em, 4vw, 1.1em); /* Testo più grande */
     }
-    .link-box img { width: 150px; height: auto; }
 
-    /* Layout con Sidebar per la Torta */
-    .dashboard-container {
-      display: flex;
-      max-width: 1200px;
-      margin: 30px auto;
+    .link-box img {
+      width: 100%;
+      max-width: 130px; /* Immagini più grandi */
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    /* --- ULTIMI GIRI --- */
+    .grid-riquadri {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto 40px auto;
+      padding: 0 15px;
     }
 
-    /* Sidebar Anni */
-    #sidebar-anni {
-      width: 180px;
+    .riquadro {
       background: #fff;
-      padding: 20px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .riquadro:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .riquadro img { 
+      width: 100%; 
+      height: 200px; 
+      object-fit: cover; 
+      display: block; 
+    }
+
+    .riquadro-titolo {
+      padding: 15px;
+      font-weight: bold;
+      text-align: center;
+      color: #2332bb;
+      background: #f8faff;
+      font-size: 1.1em;
+    }
+
+    .riquadro-link { text-decoration: none; color: inherit; display: block; }
+
+    /* --- FRASE CONTAGIRI --- */
+    #frase-giri {
+      font-size: clamp(1em, 4vw, 1.25em);
+      line-height: 1.4;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px auto 30px auto;
+      padding: 0 15px;
+      max-width: 800px;
+    }
+
+    /* --- TABELLA CON ICONE INTEGRATE --- */
+    .table-container-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 8px;
+    }
+
+    table#tabella-giri {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+    }
+
+    .icon-row td {
+      background-color: #ffffff !important;
+      border: none !important;
+      padding: 20px 5px 10px 5px !important;
+      vertical-align: bottom;
+    }
+
+    .icon-row img {
+      width: 100%;
+      max-width: 130px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .header-row th {
+      background-color: #2332bb;
+      color: white;
+      padding: 15px 2px;
+      font-size: clamp(0.7em, 2.5vw, 1em);
+      text-transform: uppercase;
+      border: 1px solid #1a27a0;
+    }
+
+    #tabella-giri td {
+      padding: 12px 2px;
+      text-align: center;
+      border: 1px solid #eee;
+      font-size: clamp(0.9em, 3vw, 1.1em);
+      font-weight: 500;
+    }
+
+    .w-anno { width: 16%; }
+    .w-data { width: 21%; }
+
+    /* --- DASHBOARD TORTA & FILTRI --- */
+    .torta-container {
+      background: #fff;
+      padding: 25px 15px;
       border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      height: fit-content;
-      position: sticky;
-      top: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      margin: 30px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .filter-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #f0f0f0;
+      width: 100%;
     }
 
     .anno-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      background: #f0f4ff;
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 0.9em;
       font-weight: bold;
       cursor: pointer;
-    }
-
-    /* Contenitore Grafico e Legenda */
-    .main-chart-area { flex: 1; }
-
-    .torta-container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       display: flex;
-      flex-direction: column;
       align-items: center;
+      gap: 5px;
     }
 
-    .torta-wrapper {
-      width: 350px;
-      height: 350px;
-      margin-bottom: 30px;
-    }
+    .torta-wrapper { width: 100%; max-width: 320px; height: 320px; }
 
-    /* Legenda a Griglia */
     #grid-legend {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
       width: 100%;
-      border-top: 1px solid #eee;
+      margin-top: 20px;
       padding-top: 20px;
+      border-top: 1px solid #eee;
     }
 
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.9em;
+    .legend-item { font-size: 0.85em; display: flex; align-items: center; gap: 8px; }
+    .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    .footer-banner {
+      background-color: #e3f2fd;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 40px 15px;
+      text-align: center;
+      font-size: 1em;
     }
 
-    .color-box {
-      width: 14px;
-      height: 14px;
-      border-radius: 3px;
-    }
-
-    .charts-vertical-stack {
-      max-width: 1100px;
-      margin: 30px auto;
-      display: flex;
-      flex-direction: column;
-      gap: 50px;
-    }
-
-    .chart-wrapper { width: 100%; height: 400px; }
-
-    hr.separator {
-      max-width: 1100px;
-      margin: 50px auto;
-      border: 0;
-      border-top: 2px solid #eee;
-    }
-
-    /* Allineamento icone sopra la tabella */
-    .table-icons-container {
-      display: flex;
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 0;
-      justify-content: center;
+    @media (max-width: 600px) {
+      .icon-row img { max-width: 80px; }
+      .icon-row td { padding: 10px 2px 5px 2px !important; }
+      #grid-legend { grid-template-columns: repeat(2, 1fr); }
+      .top-links { gap: 10px; }
+      .link-box { padding: 15px 10px; }
     }
     
-    .icon-wrapper {
-      flex: 1;
-      text-align: center;
-    }
-
-    .icon-wrapper img {
-      width: 140px; 
-      height: auto;
-    }
-
-    .icon-spacer { flex: 1; }
-
-    /* Nuovo stile per il footer banner */
-    .footer-banner {
-      background-color: #e3f2fd; /* Azzurrino coordinato con il brand */
-      padding: 20px;
-      border-radius: 15px;
-      max-width: 1100px;
-      margin: 0 auto 50px auto;
-      text-align: center;
+    @media (min-width: 768px) {
+      #grid-legend { grid-template-columns: repeat(4, 1fr); }
     }
   </style>
 </head>
@@ -175,16 +245,16 @@
 
 <main>
   <section class="top-links">
-    <div class="link-box">
+    <div class="link-box map-box">
       <a href="https://www.outdooractive.com/it/list/girettimap/240115709" target="_blank">
-        <span>Accedi alla GirettiMap</span>
         <img src="img/pandamappa.png" alt="Mappa">
+        <span>Accedi alla GirettiMap</span>
       </a>
     </div>
-    <div class="link-box">
+    <div class="link-box list-box">
       <a href="https://docs.google.com/spreadsheets/d/15UmyRWaW0getdRevefWd1xHUEjXKS36IUtUXFqK_0ds/edit?usp=drivesdk" target="_blank">
-        <span>Accedi alla GirettiList</span>
         <img src="img/pandalista.png" alt="Lista">
+        <span>Accedi alla GirettiList</span>
       </a>
     </div>
   </section>
@@ -194,59 +264,52 @@
 
   <section id="contagiri">
     <h2>Conta Giri</h2>
-    <p id="frase-giri" style="font-size: 1.2em; font-weight: bold; text-align: center;"></p>
+    <p id="frase-giri"></p>
 
-    <div class="table-icons-container">
-      <div class="icon-spacer"></div> 
-      <div class="icon-wrapper"><img src="img/giriinsieme.png" alt=""></div>
-      <div class="icon-wrapper"><img src="img/giretti.png" alt=""></div>
-      <div class="icon-wrapper"><img src="img/girilunghi.png" alt=""></div>
-      <div class="icon-wrapper"><img src="img/giriamici.png" alt=""></div>
+    <div class="table-container-wrapper">
+      <table id="tabella-giri">
+        <thead>
+          <tr class="icon-row">
+            <td class="w-anno"></td>
+            <td class="w-data"><img src="img/giriinsieme.png" alt=""></td>
+            <td class="w-data"><img src="img/giretti.png" alt=""></td>
+            <td class="w-data"><img src="img/girilunghi.png" alt=""></td>
+            <td class="w-data"><img src="img/giriamici.png" alt=""></td>
+          </tr>
+          <tr class="header-row">
+            <th class="w-anno">Anno</th>
+            <th class="w-data">Insieme</th>
+            <th class="w-data">Giretti</th>
+            <th class="w-data">Lunghi</th>
+            <th class="w-data">Amici</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
 
-    <table id="tabella-giri">
-      <thead>
-        <tr>
-          <th>Anno</th>
-          <th>Giri insieme</th>
-          <th>Giretti</th>
-          <th>Girilunghi</th>
-          <th>Giri amici</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <div class="charts-vertical-stack">
-      <div class="chart-wrapper">
+    <div class="charts-vertical-stack" style="padding: 0 10px; margin-top: 30px;">
+      <div class="chart-wrapper" style="height: 300px;">
         <canvas id="chartTrend"></canvas>
       </div>
     </div>
 
-    <div class="dashboard-container">
-      <aside id="sidebar-anni">
+    <div class="torta-container">
+      <h3>Torta dei Giretti 🍰</h3>
+      <div class="filter-area">
         <div class="anno-item">
           <input type="checkbox" id="selectAll" checked>
           <label for="selectAll">TUTTI</label>
         </div>
-        <hr>
-        <div id="lista-checkbox-anni"></div>
-      </aside>
-
-      <div class="main-chart-area">
-        <div class="torta-container">
-          <h3>Torta dei Giretti 🍰</h3>
-          <div class="torta-wrapper">
-            <canvas id="chartTorta"></canvas>
-          </div>
-          <div id="grid-legend"></div>
-        </div>
+        <div id="lista-checkbox-anni" style="display: contents;"></div>
       </div>
+      <div class="torta-wrapper">
+        <canvas id="chartTorta"></canvas>
+      </div>
+      <div id="grid-legend"></div>
     </div>
   </section>
 
-  <hr class="separator">
-  
   <div class="footer-banner">
     <h2 style="margin: 0;">Solo posti nuovi e tutti giri belli!</h2>
   </div>
@@ -271,79 +334,55 @@ const SHEETS = { 2018: 0, 2019: 1139420899, 2020: 2024853702, 2021: 1564840008, 
 
 let datiPerAnno = {}; 
 let chartTortaObj = null;
-
-const paletteColori = [
-  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', 
-  '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'
-];
+const paletteColori = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'];
 
 function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
 function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
 
 async function init() {
   const anniOrdinati = Object.keys(SHEETS).sort((a, b) => a - b);
-  const sidebar = document.getElementById("lista-checkbox-anni");
+  const containerAnni = document.getElementById("lista-checkbox-anni");
   let ultimaData = null;
 
-  const fetchPromises = anniOrdinati.map(async (anno) => {
+  await Promise.all(anniOrdinati.map(async (anno) => {
     try {
       const res = await fetch(BASE_CSV + SHEETS[anno]);
       const csv = await res.text();
       const rows = parseCSV(csv).slice(1);
-      
-      let tot = rows.length, giretti = 0, lunghi = 0, amici = 0;
-      let tipi = {};
-
+      let tot = rows.length, giretti = 0, lunghi = 0, amici = 0, tipi = {};
       rows.forEach(r => {
-        const giorni = r[2];
-        const amiciCol = (r[3] || "").toUpperCase();
-        const tipo = (r[6] || "Altro").trim() || "Altro";
-
+        const giorni = r[2], amiciCol = (r[3] || "").toUpperCase(), tipo = (r[6] || "Altro").trim() || "Altro";
         tipi[tipo] = (tipi[tipo] || 0) + 1;
-        if (giorni === "1" || giorni === "1/2") giretti++;
-        else if (parseFloat(giorni) > 1) lunghi++;
+        if (giorni === "1" || giorni === "1/2") giretti++; else if (parseFloat(giorni) > 1) lunghi++;
         if (amiciCol === "SI") amici++;
-
-        if (r[0]) {
-          const d = parseDate(r[0]);
-          if (!ultimaData || d > ultimaData) ultimaData = d;
-        }
+        if (r[0]) { const d = parseDate(r[0]); if (!ultimaData || d > ultimaData) ultimaData = d; }
       });
-
       datiPerAnno[anno] = { tot, giretti, lunghi, amici, tipi };
-    } catch (e) { console.error(`Errore anno ${anno}:`, e); }
-  });
+    } catch (e) { console.error(e); }
+  }));
 
-  await Promise.all(fetchPromises);
-
-  // INVERSIONE ORDINE QUI: aggiunto .slice().reverse() per mostrare dal 2026 al 2018
   anniOrdinati.slice().reverse().forEach(anno => {
     if(datiPerAnno[anno]) {
       const item = document.createElement("div");
       item.className = "anno-item";
       item.innerHTML = `<input type="checkbox" class="anno-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
-      sidebar.appendChild(item);
+      containerAnni.appendChild(item);
     }
   });
 
   const tbody = document.querySelector("#tabella-giri tbody");
   const summary = { anni: [], totali: [], giretti: [], lunghi: [], amici: [] };
-  
   [...anniOrdinati].reverse().forEach(anno => {
     const d = datiPerAnno[anno];
     if(d) {
-      summary.anni.push(anno);
-      summary.totali.push(d.tot);
-      summary.giretti.push(d.giretti);
-      summary.lunghi.push(d.lunghi);
-      summary.amici.push(d.amici);
+      summary.anni.push(anno); summary.totali.push(d.tot); summary.giretti.push(d.giretti); summary.lunghi.push(d.lunghi); summary.amici.push(d.amici);
       tbody.innerHTML += `<tr><td>${anno}</td><td>${d.tot}</td><td>${d.giretti}</td><td>${d.lunghi}</td><td>${d.amici}</td></tr>`;
     }
   });
 
   renderTrend(summary);
-  updateTorta(); 
-
+  updateTorta();
+  
   document.querySelectorAll('.anno-cb').forEach(cb => cb.addEventListener('change', updateTorta));
   document.getElementById('selectAll').addEventListener('change', (e) => {
     document.querySelectorAll('.anno-cb').forEach(cb => cb.checked = e.target.checked);
@@ -351,71 +390,36 @@ async function init() {
   });
 
   if (ultimaData) {
-    const oggi = new Date();
-    oggi.setHours(0, 0, 0, 0);
-    const ultimaDataGiro = new Date(ultimaData);
-    ultimaDataGiro.setHours(0, 0, 0, 0);
-    
-    const diff = Math.floor((oggi - ultimaDataGiro) / 86400000);
-    const fraseElement = document.getElementById("frase-giri");
-    
-    if (diff === 0) {
-      fraseElement.innerText = "Che bello oggi abbiamo fatto un giro insieme!";
-      fraseElement.style.color = "green";
-    } else if (diff === 1) {
-      fraseElement.innerText = "Che bello ieri abbiamo fatto un giro insieme!";
-      fraseElement.style.color = "green";
-    } else if (diff >= 2 && diff <= 6) {
-      fraseElement.innerText = "Che bello questa settimana abbiamo fatto un giro insieme!";
-      fraseElement.style.color = "green";
-    } else {
-      fraseElement.innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`;
-      fraseElement.style.color = "#d32f2f"; // Rosso
-    }
+    const diff = Math.floor((new Date().setHours(0,0,0,0) - new Date(ultimaData).setHours(0,0,0,0)) / 86400000);
+    const el = document.getElementById("frase-giri");
+    if (diff === 0) { el.innerText = "Che bello oggi abbiamo fatto un giro insieme!"; el.style.color = "green"; }
+    else if (diff === 1) { el.innerText = "Che bello ieri abbiamo fatto un giro insieme!"; el.style.color = "green"; }
+    else if (diff <= 6) { el.innerText = "Che bello questa settimana abbiamo fatto un giro insieme!"; el.style.color = "green"; }
+    else { el.innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`; el.style.color = "#d32f2f"; }
   }
 }
 
 function updateTorta() {
   const selectedAnni = Array.from(document.querySelectorAll('.anno-cb:checked')).map(cb => cb.value);
   let aggregatoTipi = {};
-
   selectedAnni.forEach(anno => {
-    const tipi = datiPerAnno[anno].tipi;
-    for (let t in tipi) { aggregatoTipi[t] = (aggregatoTipi[t] || 0) + tipi[t]; }
-  });
-
-  const labels = Object.keys(aggregatoTipi);
-  const valori = Object.values(aggregatoTipi);
-
-  const ctx = document.getElementById('chartTorta').getContext('2d');
-  if (chartTortaObj) chartTortaObj.destroy();
-
-  chartTortaObj = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: valori,
-        backgroundColor: paletteColori,
-        borderWidth: 2,
-        borderColor: '#fff'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
+    if(datiPerAnno[anno]) {
+      const tipi = datiPerAnno[anno].tipi;
+      for (let t in tipi) { aggregatoTipi[t] = (aggregatoTipi[t] || 0) + tipi[t]; }
     }
   });
-
+  const labels = Object.keys(aggregatoTipi), valori = Object.values(aggregatoTipi);
+  const ctx = document.getElementById('chartTorta').getContext('2d');
+  if (chartTortaObj) chartTortaObj.destroy();
+  chartTortaObj = new Chart(ctx, {
+    type: 'pie',
+    data: { labels: labels, datasets: [{ data: valori, backgroundColor: paletteColori, borderWidth: 1 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
   const legendGrid = document.getElementById('grid-legend');
   legendGrid.innerHTML = '';
   labels.forEach((l, i) => {
-    legendGrid.innerHTML += `
-      <div class="legend-item">
-        <div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div>
-        <span>${l}: <strong>${valori[i]}</strong></span>
-      </div>`;
+    legendGrid.innerHTML += `<div class="legend-item"><div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div><span>${l}: <strong>${valori[i]}</strong></span></div>`;
   });
 }
 
@@ -426,16 +430,14 @@ function renderTrend(data) {
     data: {
       labels: data.anni.slice().reverse(),
       datasets: [
-        { label: 'Giri Insieme', data: data.totali.slice().reverse(), borderColor: '#2332bb', tension: 0.3, borderWidth: 4 },
-        { label: 'Giretti', data: data.giretti.slice().reverse(), borderColor: '#4caf50', tension: 0.3 },
-        { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), borderColor: '#ff9800', tension: 0.3 },
-        { label: 'Giri Amici', data: data.amici.slice().reverse(), borderColor: '#e91e63', tension: 0.3 }
+        { label: 'Insieme', data: data.totali.slice().reverse(), borderColor: '#2332bb', tension: 0.3, borderWidth: 3 },
+        { label: 'Giretti', data: data.giretti.slice().reverse(), borderColor: '#4caf50', tension: 0.3, borderWidth: 2 },
+        { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), borderColor: '#ff9800', tension: 0.3, borderWidth: 2 }
       ]
     },
-    options: { responsive: true, maintainAspectRatio: false }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 12 } } } } }
   });
 }
-
 init();
 </script>
 
