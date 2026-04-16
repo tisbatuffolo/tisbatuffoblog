@@ -25,6 +25,11 @@ const GIRI = [
     "img": "https://img3.oastatic.com/img2/624546094/800x600/variant.webp"
   },
   {
+    "titolo": "Budapest",
+    "link": "https://www.outdooractive.com/it/route/strada-panoramica/dunazug-hegyvidek/budapest/338840491/",
+    "img": "https://img2.oastatic.com/img2/627617808/800x600/variant.webp?revbust=19d9247a1e9"
+  },
+  {
     "titolo": "Monte Finonchio",
     "link": "https://www.outdooractive.com/it/route/escursione-invernale/altopiano-di-folgaria-lavarone-luserna-e-vigolana/monte-finonchio/333322619/",
     "img": "https://img2.oastatic.com/img2/623993058/800x600/variant.jpg"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Lana",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/merano-e-dintorni/lana/331537395/",
     "img": "https://img3.oastatic.com/img2/622602399/800x600/variant.jpg"
-  },
-  {
-    "titolo": "Monte San Vigilio",
-    "link": "https://www.outdooractive.com/it/route/escursione-invernale/merano-e-dintorni/monte-san-vigilio/331537036/",
-    "img": "https://img.oastatic.com/img2/622602385/800x600/variant.webp"
   }
 ]
