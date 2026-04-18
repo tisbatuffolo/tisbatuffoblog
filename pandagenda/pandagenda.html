@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PandAgenda – Mobile Updated</title>
+<title>SbatuffoBlog - PandAgenda</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -13,23 +13,25 @@
   --bg: #f4f7fa;
   --text: #1a1a1a;
   --stroke: #1a1a1a;
-  /* Nuovi Colori Richiesti */
+  /* Colori Categorie */
   --c-cibo: #ffd32a; 
-  --c-giretto: #ff8c00;     /* Arancio vivo */
+  --c-giretto: #ff8c00; 
   --c-girolungo: #05c46b;
   --c-evento: #575fcf; 
-  --c-compleanno: #008b8b;  /* Verde acqua scuro (Dark Cyan) */
-  --c-festa: #8e44ad;       /* Viola */
+  --c-compleanno: #008b8b;
+  --c-festa: #ff00ff; /* Fucsia Acceso */
   --c-nessuna: #95a5a6; 
 }
 
 body { font-family: 'Fredoka', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
 
 header { background: #fff; padding: 15px; text-align: center; border-bottom: 3px solid var(--stroke); }
-header h1 { margin: 0; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--primary); }
+header h1 { margin: 0; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.6rem; }
+header h1 a { color: var(--primary); text-decoration: none; }
 
 .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
 
+/* Navigazione */
 .nav-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
 .nav-btn {
   background: var(--primary); color: white; border: 2.5px solid var(--stroke);
@@ -48,6 +50,9 @@ table { width: 100%; border-collapse: separate; border-spacing: 3px; table-layou
 th { color: #888; font-size: 0.7rem; padding-bottom: 5px; text-transform: uppercase; }
 td { height: 75px; vertical-align: top; border-radius: 8px; border: 2px solid #f0f0f0; transition: 0.2s; cursor: pointer; }
 
+/* EVIDENZIAZIONE GIORNO SELEZIONATO */
+.active-day { border: 3px solid var(--primary) !important; background: #fff !important; transform: scale(1.02); z-index: 10; position: relative; }
+
 .day-box { display: flex; flex-direction: column; height: 100%; padding: 4px; box-sizing: border-box; position: relative; }
 .day-num { font-size: 1rem; font-weight: 800; }
 .day-label { 
@@ -56,71 +61,59 @@ td { height: 75px; vertical-align: top; border-radius: 8px; border: 2px solid #f
     border: 1.5px solid var(--stroke); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* Evidenzia giorno di oggi */
-.today-highlight {
-    border: 3px solid var(--accent) !important;
-    background-color: #fff5f5 !important;
-}
+.today-highlight { border: 3px solid var(--accent) !important; background-color: #fff5f5 !important; }
 
-/* Colori sfondi celle (Opacity 15%) */
+/* Background Celle */
 .bg-cibo { background-color: rgba(255, 211, 42, 0.15); }
 .bg-giretto { background-color: rgba(255, 140, 0, 0.15); }
 .bg-girolungo { background-color: rgba(5, 196, 107, 0.15); }
 .bg-evento { background-color: rgba(87, 95, 207, 0.15); }
 .bg-compleanno { background-color: rgba(0, 139, 139, 0.15); }
-.bg-festa { background-color: rgba(142, 68, 173, 0.15); }
-.bg-nessuna { background-color: #e9ecef; }
+.bg-festa { background-color: rgba(255, 0, 255, 0.15); } /* Sfondo fucsia light */
 
-/* Label colorate */
+/* Label */
 .lbl-cibo { background: var(--c-cibo); color: #000; }
 .lbl-giretto { background: var(--c-giretto); color: #fff; }
 .lbl-girolungo { background: var(--c-girolungo); color: #fff; }
 .lbl-evento { background: var(--c-evento); color: #fff; }
 .lbl-compleanno { background: var(--c-compleanno); color: #fff; }
 .lbl-festa { background: var(--c-festa); color: #fff; }
-.lbl-nessuna { background: var(--c-nessuna); color: #fff; }
 
-.active-day { border: 3px solid var(--primary) !important; background: #fff !important; }
-
-/* Salva PandAgenda */
+/* Bottone Salva */
 #save-github {
-  background: var(--accent); color: white; border: 3px solid var(--stroke); padding: 10px 25px;
+  background: var(--accent); color: white; border: 3px solid var(--stroke); padding: 12px 25px;
   border-radius: 12px; font-weight: 800; display: block; margin: 0 auto 25px auto;
   box-shadow: 4px 4px 0 var(--stroke); cursor: pointer; font-size: 1.05rem;
 }
-#save-github:disabled { background: #ccc; cursor: not-allowed; }
-
-.section-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; margin-bottom: 15px; border-left: 5px solid var(--primary); padding-left: 10px; }
 
 /* Activity Card */
 .activity-card {
   background: #fff; border: 2.5px solid var(--stroke); 
-  border-radius: 18px; margin-bottom: 15px; position: relative; transition: 0.2s;
-  display: flex; align-items: center; min-height: 95px; height: auto;
+  border-radius: 18px; margin-bottom: 15px; position: relative;
+  display: flex; align-items: center; min-height: 95px; cursor: pointer; transition: 0.2s;
 }
-.activity-card.selected { border-color: var(--primary); box-shadow: 4px 4px 0 rgba(35, 50, 187, 0.1); }
+/* EVIDENZIAZIONE CARD SELEZIONATA */
+.activity-card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(35, 50, 187, 0.2); transform: translateX(5px); }
 
 .day-square { 
   width: 65px; align-self: stretch; border-right: 2.5px solid var(--stroke);
   border-top-left-radius: 15px; border-bottom-left-radius: 15px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: #fff; flex-shrink: 0; overflow: hidden; 
+  color: #fff; flex-shrink: 0;
 }
 .day-square b { font-size: 1.4rem; line-height: 1; }
-.day-square span { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; margin-top: 2px; }
+.day-square span { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; }
 
 .activity-img { height: 90px; width: 130px; object-fit: contain; padding: 5px; flex-shrink: 0; }
-.activity-info { flex-grow: 1; padding: 10px 40px 10px 8px; display: flex; flex-direction: column; justify-content: center; }
-.activity-info b { font-size: 1.1rem; color: var(--text); line-height: 1.2; word-break: break-word; }
-.activity-info span { font-size: 0.8rem; color: #888; font-weight: 600; margin-top: 3px; }
+.activity-info { flex-grow: 1; padding: 10px 40px 10px 8px; }
+.activity-info b { font-size: 1.1rem; display: block; }
 
 .edit-pencil {
     position: absolute; top: -10px; right: -5px;
     background: var(--stroke); color: #ffd32a; 
     width: 36px; height: 36px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.15rem; cursor: pointer; border: 2px solid white;
-    box-shadow: 3px 3px 0 rgba(0,0,0,0.1); z-index: 20;
+    font-size: 1.15rem; border: 2px solid white; z-index: 20;
 }
 
 /* Modale */
@@ -130,21 +123,21 @@ td { height: 75px; vertical-align: top; border-radius: 8px; border: 2px solid #f
 }
 .sheet {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 85%; max-width: 380px; background: white; border-radius: 20px; overflow: hidden; border: 3px solid var(--stroke);
+  width: 85%; max-width: 380px; background: white; border-radius: 20px; border: 3px solid var(--stroke); overflow: hidden;
 }
-.modal-img-container { width: 100%; height: 180px; background: #f9f9f9; border-bottom: 2.5px solid var(--stroke); display: flex; align-items: center; justify-content: center;}
+.modal-img-container { width: 100%; height: 160px; background: #f9f9f9; border-bottom: 2.5px solid var(--stroke); display: flex; align-items: center; justify-content: center;}
 #modal-img { max-height: 90%; max-width: 90%; object-fit: contain; }
 .modal-content { padding: 15px; }
 .form-group label { display: block; font-weight: 700; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; }
-.form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; margin-bottom: 10px; font-family: inherit; box-sizing: border-box; }
+.form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; margin-bottom: 12px; font-family: inherit; box-sizing: border-box; }
 .modal-btns { display: flex; gap: 8px; }
-.modal-btns button { flex: 1; padding: 12px; border-radius: 10px; font-weight: 800; border: 2.5 solid var(--stroke); cursor: pointer; }
+.modal-btns button { flex: 1; padding: 14px; border-radius: 10px; font-weight: 800; border: 2.5px solid var(--stroke); cursor: pointer; }
 #btn-confirm { background: var(--primary); color: white; }
 </style>
 </head>
 
 <body>
-<header><h1>PandAgenda</h1></header>
+<header><h1><a href="../index.html">SbatuffoBlog - PandAgenda</a></h1></header>
 <main class="container">
   <div class="nav-bar">
     <button id="prev-m" class="nav-btn">‹</button>
@@ -161,7 +154,7 @@ td { height: 75px; vertical-align: top; border-radius: 8px; border: 2px solid #f
 
   <button id="save-github">Salva la PandAgenda 🚀</button>
   
-  <div class="section-title">Prossime Attività del Mese</div>
+  <div class="section-title" style="font-weight: 800; margin-bottom: 10px; border-left: 4px solid var(--primary); padding-left: 8px;">Prossime Attività</div>
   <div id="act-list"></div>
 </main>
 
@@ -183,11 +176,11 @@ td { height: 75px; vertical-align: top; border-radius: 8px; border: 2px solid #f
         </div>
         <div class="form-group">
             <label>Nome Evento</label>
-            <input id="in-name" type="text" placeholder="Scrivi qui...">
+            <input id="in-name" type="text" placeholder="Cosa facciamo?">
         </div>
         <div class="modal-btns">
-          <button id="btn-cancel">CHIUDI</button>
-          <button id="btn-confirm">CONFERMA</button>
+          <button id="btn-cancel">ANNULLA</button>
+          <button id="btn-confirm">SALVA</button>
         </div>
     </div>
   </div>
@@ -196,13 +189,11 @@ td { height: 75px; vertical-align: top; border-radius: 8px; border: 2px solid #f
 <script>
 const today = new Date();
 today.setHours(0,0,0,0);
-
 let year = today.getFullYear();
 let month = today.getMonth();
 let events = {};
 let selectedKey = null;
 
-// Miniature mappate correttamente (le immagini cambiano in base alla selezione)
 const imgMap = {
     "": "img/nessuna.png", cibo: "img/cibo.png", giretto: "img/giretto.png", 
     girolungo: "img/girolungo.png", evento: "img/evento.png", compleanno: "img/compleanno.png", festa: "img/festa.png"
@@ -230,30 +221,27 @@ function render() {
   const last = new Date(year, month + 1, 0).getDate();
   document.getElementById("month-year").textContent = `${mesiNomi[month]} ${year}`;
 
-  const currentDay = new Date().getDate();
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-
   let d = 1;
   for (let i = 0; i < 6; i++) {
     const row = document.createElement("tr");
     for (let j = 0; j < 7; j++) {
       const cell = document.createElement("td");
-      if (i === 0 && j < first || d > last) { cell.style.border="none"; cell.style.background="transparent"; }
+      if (i === 0 && j < first || d > last) { cell.style.border="none"; }
       else {
         const key = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
         cell.id = `td-${key}`;
-        cell.onclick = () => openModal(key);
+        cell.onclick = () => { 
+            highlightDay(key);
+            openModal(key); 
+        };
         
         const ev = events[key] || { nome: "", tipo: "" };
         const lblClass = ev.tipo ? `lbl-${ev.tipo}` : "lbl-nessuna";
         const bgClass = ev.nome ? (ev.tipo ? `bg-${ev.tipo}` : "bg-nessuna") : "";
-        
-        const isToday = (d === currentDay && month === currentMonth && year === currentYear);
-        const todayClass = isToday ? "today-highlight" : "";
+        const isToday = (d === today.getDate() && month === today.getMonth() && year === today.getFullYear());
 
         cell.innerHTML = `
-          <div class="day-box ${bgClass} ${todayClass}">
+          <div class="day-box ${bgClass} ${isToday ? 'today-highlight' : ''}">
             <span class="day-num">${d}</span>
             ${ev.nome ? `<span class="day-label ${lblClass}">${ev.nome}</span>` : ''}
           </div>`;
@@ -267,10 +255,15 @@ function render() {
   renderList();
 }
 
+function highlightDay(key) {
+    document.querySelectorAll('td').forEach(t => t.classList.remove('active-day'));
+    document.getElementById(`td-${key}`)?.classList.add('active-day');
+}
+
 function renderList() {
   const list = document.getElementById("act-list");
   list.innerHTML = "";
-  const todayStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   const keys = Object.keys(events).filter(k => {
     const [y, m] = k.split("-").map(Number);
@@ -282,6 +275,7 @@ function renderList() {
     const day = k.split("-")[2];
     const card = document.createElement("div");
     card.className = "activity-card";
+    card.id = `card-${k}`;
     const cardColor = colorMap[ev.tipo] || "var(--c-nessuna)";
     
     card.innerHTML = `
@@ -292,10 +286,19 @@ function renderList() {
       <img src="${imgMap[ev.tipo]}" class="activity-img">
       <div class="activity-info">
         <b>${ev.nome}</b>
-        <span>${ev.tipo || ''}</span>
+        <span>${ev.tipo || 'attività'}</span>
       </div>
       <div class="edit-pencil" onclick="event.stopPropagation(); openModal('${k}')">✎</div>
     `;
+
+    card.onclick = () => {
+        document.querySelectorAll('.activity-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        highlightDay(k);
+        const targetCell = document.getElementById(`td-${k}`);
+        if(targetCell) targetCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
     list.appendChild(card);
   });
 }
@@ -309,7 +312,6 @@ function openModal(key) {
   document.getElementById("modal-overlay").style.display = "block";
 }
 
-// Aggiorna la miniatura quando si cambia categoria
 document.getElementById("in-type").onchange = (e) => {
     document.getElementById("modal-img").src = imgMap[e.target.value];
 };
@@ -330,23 +332,16 @@ document.getElementById("next-m").onclick = () => { month++; if(month>11){month=
 document.getElementById("save-github").onclick = async () => {
   const btn = document.getElementById("save-github");
   btn.disabled = true;
-  const originalText = btn.innerHTML;
   btn.innerHTML = "Salvataggio...";
-
   try {
       const res = await fetch("https://tisbatuffoblog.vercel.app/api/update_agendaAPI", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(events)
       });
-      if (res.ok) alert("Agenda salvata correttamente! 🚀");
-      else throw new Error("Errore server");
-  } catch(e) {
-      alert("Errore durante il salvataggio.");
-  } finally {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-  }
+      if (res.ok) alert("PandAgenda salvata! 🐼🚀");
+      else throw new Error();
+  } catch(e) { alert("Errore di connessione."); }
+  finally { btn.disabled = false; btn.innerHTML = "Salva la PandAgenda 🚀"; }
 };
 
 init();
