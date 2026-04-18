@@ -2,144 +2,214 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ti Sbatuffolo</title>
-  <link rel="stylesheet" href="stile.css">
   <style>
-    /* Layout per far rimanere il footer in basso */
     body {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
     }
-    main {
-      flex: 1;
-    }
+    main { flex: 1; }
 
-    /* Slider "io&te" */
-    .ioete-container {
-      text-align: center;
+    /* Header Blu su Azzurro */
+    header {
+      background-color: #add8e6; 
+      padding: 20px 0;
+      border-bottom: 2px solid #0000ff;
       margin-bottom: 20px;
     }
+    header h1 { margin: 0; text-align: center; }
+    .home-link {
+      color: #0000ff; 
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Slider io&te - Senza bordo */
+    .ioete-container { text-align: center; margin-bottom: 20px; }
     .ioete-slider {
-      width: 80%;
+      width: 100%;
       max-width: 800px;
       aspect-ratio: 16 / 9;
       margin: 0 auto;
       overflow: hidden;
       position: relative;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
     .ioete-slider img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       opacity: 0;
       transition: opacity 1s ease-in-out;
     }
-    .ioete-slider img.active {
-      opacity: 1;
+    .ioete-slider img.active { opacity: 1; }
+
+    /* Griglia 3x3 - Ottimizzata Desktop */
+    .grid-riquadri {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 10px;
+      gap: 10px;
+      justify-content: center;
+      /* Limita la larghezza su PC per non far diventare le card enormi */
+      max-width: 900px; 
+      margin: 0 auto;
     }
 
-    /* Griglia 3x3 */
-    .grid-riquadri {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      padding: 0 20px 20px 20px;
-    }
     .riquadro {
-      text-align: center;
-    }
-    .riquadro img {
-      width: 100%;
-      height: auto;
+      /* Base Mobile: 3 per riga */
+      width: calc((100% / 3) - 10px); 
+      box-sizing: border-box;
+      border: 1px solid #0000ff; /* Bordo blu sottile */
       border-radius: 8px;
+      padding: 5px;
+      background-color: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+    }
+
+    /* Effetto al passaggio del mouse su PC */
+    .riquadro:hover { transform: translateY(-3px); }
+
+    .riquadro-link {
+      text-decoration: none;
+      color: #333;
+      display: block;
+    }
+
+    /* Titoli: Piccoli su mobile, Grandi su PC */
+    .riquadro-titolo {
+      font-size: 0.75rem; 
+      font-weight: bold;
+      margin: 6px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Immagini: Centrate e quadrate */
+    .img-wrapper {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      background-color: #eee;
+    }
+
+    .img-wrapper img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* --- MEDIA QUERIES PER WEB (DESKTOP) --- */
+    @media (min-width: 768px) {
+      .riquadro-titolo {
+        font-size: 1.1rem; /* Titolo più grande su web */
+        margin: 10px 0;
+      }
+      .grid-riquadri {
+        gap: 20px; /* Più spazio tra le card su web */
+      }
+      .riquadro {
+        width: calc((100% / 3) - 20px);
+        padding: 10px;
+      }
+    }
+
+    footer { 
+      text-align: center; 
+      padding: 20px; 
+      font-size: 0.9rem; 
+      background: #eee; 
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1 style="text-align:center;">
-      <a href="index.html" class="home-link">❤ Ti SbatuffoBlog ❤</a>
-    </h1>
-    <nav>
-      <!-- In futuro puoi aggiungere altre pagine qui -->
-    </nav>
+    <h1><a href="index.html" class="home-link">❤ Ti SbatuffoBlog ❤</a></h1>
   </header>
 
   <main>
-    <!-- Sezione "io&te" con slider -->
     <section class="ioete-container">
-      <h2>io&te</h2>
       <div class="ioete-slider">
-        <img src="img/ioete1.jpg" alt="io&te 1" class="active">
-        <img src="img/ioete2.jpg" alt="io&te 2">
-        <img src="img/ioete3.jpg" alt="io&te 3">
-        <img src="img/ioete4.jpg" alt="io&te 4">
+        <img src="img/ioete1.jpg" alt="1" class="active">
+        <img src="img/ioete2.jpg" alt="2">
+        <img src="img/ioete3.jpg" alt="3">
       </div>
     </section>
 
-    <!-- Card 3x3 -->
     <section class="grid-riquadri">
       <div class="riquadro">
         <a href="fotopuzzle/fotopuzzle.html" class="riquadro-link">
           <div class="riquadro-titolo">Fotopuzzle</div>
-          <img src="img/fotopuzzle.jpg" alt="Fotopuzzle">
+          <div class="img-wrapper"><img src="img/fotopuzzle.jpg" alt="1"></div>
         </a>
       </div>
       <div class="riquadro">
         <a href="girettimap/girettimap.html" class="riquadro-link">
           <div class="riquadro-titolo">Giretti</div>
-          <img src="img/girettimap.jpg" alt="GirettiMap">
+          <div class="img-wrapper"><img src="img/girettimap.jpg" alt="2"></div>
         </a>
       </div>
       <div class="riquadro">
         <a href="pandaccessori/pandaccessori.html" class="riquadro-link">
           <div class="riquadro-titolo">Pandaccessori</div>
-          <img src="img/pandaccessori.jpg" alt="Pandaccessori">
+          <div class="img-wrapper"><img src="img/pandaccessori.jpg" alt="3"></div>
         </a>
       </div>
-
       <div class="riquadro">
         <a href="pandosita/pandosita.html" class="riquadro-link">
           <div class="riquadro-titolo">Pandosità</div>
-          <img src="img/pandosita.jpg" alt="Pandosità">
+          <div class="img-wrapper"><img src="img/pandosita.jpg" alt="4"></div>
         </a>
       </div>
       <div class="riquadro">
         <a href="pandagenda/pandagenda.html" class="riquadro-link">
           <div class="riquadro-titolo">PandAgenda</div>
-          <img src="img/pandagenda.jpg" alt="Pandagenda">
+          <div class="img-wrapper"><img src="img/pandagenda.jpg" alt="5"></div>
         </a>
       </div>
       <div class="riquadro">
         <a href="doccelunghe/doccelunghe.html" class="riquadro-link">
           <div class="riquadro-titolo">Doccelunghe</div>
-          <img src="img/doccelunghe.jpg" alt="Doccelunghe">
+          <div class="img-wrapper"><img src="img/doccelunghe.jpg" alt="6"></div>
         </a>
       </div>
-
       <div class="riquadro">
         <a href="fotoalbum/fotoalbum.html" class="riquadro-link">
           <div class="riquadro-titolo">Fotoalbum</div>
-          <img src="img/fotoalbum.jpg" alt="Fotoalbum">
+          <div class="img-wrapper"><img src="img/fotoalbum.jpg" alt="7"></div>
         </a>
       </div>
       <div class="riquadro">
         <a href="pandavideo/pandavideo.html" class="riquadro-link">
           <div class="riquadro-titolo">Pandavideo</div>
-          <img src="img/pandavideo.jpg" alt="Test8">
+          <div class="img-wrapper"><img src="img/pandavideo.jpg" alt="8"></div>
         </a>
       </div>
       <div class="riquadro">
-        <a href="test9/test9.html" class="riquadro-link">
-          <div class="riquadro-titolo">Test9</div>
-          <img src="img/test9.jpg" alt="Test9">
+        <a href="Pandamusic/pandamusic.html" class="riquadro-link">
+          <div class="riquadro-titolo">Pandamusic</div>
+          <div class="img-wrapper"><img src="img/pandamusic.jpg" alt="9"></div>
         </a>
       </div>
     </section>
@@ -150,14 +220,15 @@
   </footer>
 
   <script>
-    // Script slider "io&te"
     const slides = document.querySelectorAll('.ioete-slider img');
     let current = 0;
     setInterval(() => {
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }, 3000); // cambia immagine ogni 3 secondi
+      if(slides.length > 0){
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      }
+    }, 3000);
   </script>
 </body>
 </html>

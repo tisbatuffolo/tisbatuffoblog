@@ -5,44 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fotopuzzle - SbatuffoBlog</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Luckiest+Guy&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
   :root {
     --cartoon-yellow: #ffdf00;
     --cartoon-border-dark: #1a1a1a;
+    --header-bg: #e2eaff;
+    --header-blue: #2332bb;
   }
 
+  * { box-sizing: border-box; }
+
   body {
-    font-family: 'Fredoka One', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     text-align: center;
     margin: 0;
     background-color: #f8f9fa;
     color: #333;
+    overflow-x: hidden;
   }
 
+  /* Header stile PandaVideo */
   header {
-    background: #ffffff;
-    padding: 20px 0;
-    border-bottom: 6px solid var(--cartoon-border-dark);
+    background: var(--header-bg);
+    padding: 20px 0 10px 0;
+    border-bottom: 1px solid #d0d9f0;
   }
 
   header h1 {
-    font-family: 'Luckiest Guy', cursive;
-    color: #2332bb;
-    font-size: 2.5em;
+    color: var(--header-blue);
+    font-size: 2.2em;
     margin: 0;
-    letter-spacing: 2px;
+    font-weight: 600;
   }
 
   header h1 a {
-    color: #2332bb;
+    color: var(--header-blue);
     text-decoration: none;
   }
 
-  #puzzles-container {
-    padding-bottom: 100px;
-  }
+  #puzzles-container { padding-bottom: 100px; }
 
   .puzzle-section {
     padding: 60px 15px;
@@ -51,48 +54,40 @@
     border-bottom: 4px dashed #ddd;
   }
 
-  /* Titolo con lo stesso colore della cornice */
+  /* Titolo Sezioni: Boogaloo (Dinamico e di classe) */
   .puzzle-title {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: 3.5em;
-    text-transform: uppercase;
+    font-family: 'Boogaloo', cursive;
+    font-size: 4.5em;
     margin-bottom: 35px;
-    letter-spacing: 3px;
-    /* Contorno nero per leggibilità */
-    -webkit-text-stroke: 1.5px var(--cartoon-border-dark);
+    letter-spacing: 2px;
+    -webkit-text-stroke: 1px var(--cartoon-border-dark);
     paint-order: stroke fill;
     filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1));
   }
 
+  /* Stile Bordi Originali (10px) */
   .collage-container {
     position: relative;
     display: inline-block;
-    /* Il colore del bordo verrà impostato via JS */
     border: 10px solid; 
     border-radius: 30px;
     background: #fff;
     line-height: 0;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
+    max-width: 95%;
   }
 
-  .collage-container:hover {
-    transform: scale(1.02) rotate(0.5deg);
-  }
+  .collage-container:hover { transform: scale(1.02) rotate(0.5deg); }
 
   .collage-img {
     display: block;
     max-width: 100%;
     height: auto;
-    border-radius: 18px; /* Leggermente meno del contenitore per incastro perfetto */
+    border-radius: 18px;
   }
 
-  area {
-    cursor: pointer;
-    outline: none;
-  }
-
-  /* Modale */
+  /* Modale Slider (Bellissimo e Scuro) */
   .modal {
     display: none;
     position: fixed;
@@ -134,15 +129,30 @@
     border-radius: 25px;
   }
 
+  /* Titolo DENTRO lo slider: RIPRISTINATO LUCKIEST GUY */
   .modal-title {
     font-family: 'Luckiest Guy', cursive;
-    margin: 20px 15px;
+    margin: 20px 15px 10px;
     font-size: 2.2em;
     color: #000;
+    letter-spacing: 1px;
+    line-height: 1.1;
     -webkit-text-stroke: 1px #000;
   }
 
-  /* Pulsanti */
+  /* Sottotitolo elegante */
+  .modal-caption {
+    display: block;
+    font-size: 0.6em;
+    font-family: 'Fredoka', sans-serif;
+    color: #555;
+    margin-top: 8px;
+    font-weight: 400;
+    letter-spacing: 0;
+    -webkit-text-stroke: 0; /* Rimuove lo stroke per chiarezza */
+  }
+
+  /* Pulsanti Originali Luckiest Guy */
   .nav-btn, .close-btn {
     position: absolute;
     background: var(--cartoon-yellow);
@@ -157,23 +167,16 @@
   }
 
   .close-btn {
-    top: -25px;
-    right: -10px;
-    background: #ff4747;
-    color: white;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    font-size: 32px;
+    top: -25px; right: -10px;
+    background: #ff4747; color: white;
+    width: 55px; height: 55px;
+    border-radius: 50%; font-size: 32px;
   }
 
   .nav-btn {
-    top: 50%;
-    transform: translateY(-50%);
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    font-size: 40px;
+    top: 50%; transform: translateY(-50%);
+    width: 70px; height: 70px;
+    border-radius: 50%; font-size: 40px;
     font-family: 'Luckiest Guy', cursive;
   }
 
@@ -182,12 +185,18 @@
 
   .hidden { visibility: hidden; pointer-events: none; }
 
+  /* Ottimizzazione Mobile */
   @media (max-width: 850px) {
-    .nav-btn { width: 55px; height: 55px; font-size: 25px; }
-    .prev-btn { left: 10px; }
-    .next-btn { right: 10px; }
-    .puzzle-title { font-size: 2.2em; }
+    .nav-btn { 
+      width: 55px; height: 55px; font-size: 25px; 
+      bottom: -75px; top: auto; transform: none; 
+    }
+    .prev-btn { left: 20%; }
+    .next-btn { right: 20%; }
+    .puzzle-title { font-size: 2.8em; }
     .collage-container { border-width: 6px; }
+    .modal-content { border-width: 5px; margin-top: -40px; }
+    .modal-title { font-size: 1.6em; }
   }
 </style>
 </head>
@@ -204,7 +213,7 @@
 <div id="puzzles-container"></div>
 
 <div id="photo-modal" class="modal" onclick="if(event.target == this) closeModal()">
-  <div class="modal-content">
+  <div class="modal-content" id="modal-content-box">
     <div class="close-btn" onclick="closeModal()">&times;</div>
     <div id="prev-btn" class="nav-btn prev-btn" onclick="navigate(-1)">&#10094;</div>
     <div id="next-btn" class="nav-btn next-btn" onclick="navigate(1)">&#10095;</div>
@@ -217,20 +226,15 @@
 <script>
   const puzzlesContainer = document.getElementById('puzzles-container');
   const modal = document.getElementById('photo-modal');
+  const modalBox = document.getElementById('modal-content-box');
   const modalImg = document.getElementById('modal-img');
   const modalTitle = document.getElementById('modal-title');
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
 
-  // Mappa colori basata sulle cornici reali delle immagini
   const puzzleColors = {
-    1: '#2332bb', // Blu (Fotopuzzle 1)
-    2: '#28a745', // Verde (Fotopuzzle 2)
-    3: '#ff9800', // Arancione (Fotopuzzle 3)
-    4: '#e91e63', // Magenta (Fotopuzzle 4)
-    5: '#673ab7', // Viola (Fotopuzzle 5)
-    6: '#00bcd4', // Ciano/Azzurro (Inventato per Fotopuzzle 6)
-    7: '#ff4747'  // Rosso (Fotopuzzle 7)
+    1: '#2332bb', 2: '#28a745', 3: '#ff9800', 
+    4: '#e91e63', 5: '#673ab7', 6: '#00bcd4', 7: '#ff4747'
   };
 
   const puzzleIds = [1, 2, 3, 4, 5, 6, 7];
@@ -241,7 +245,6 @@
   function createPuzzleSections() {
     puzzleIds.forEach((id) => {
       const color = puzzleColors[id];
-      
       const section = document.createElement('section');
       section.className = 'puzzle-section';
       section.innerHTML = `
@@ -252,7 +255,6 @@
         </div>
       `;
       puzzlesContainer.appendChild(section);
-      
       allPuzzlesData[id] = { photos: [], originalCoords: [] };
       loadMapData(id);
     });
@@ -269,25 +271,21 @@
       const imgElement = document.getElementById(`img-puzzle-${id}`);
 
       areas.forEach((area, index) => {
-        const photoNumber = area.getAttribute('href').replace('#', '');
-        const photoTitle = area.getAttribute('title');
-        
-        allPuzzlesData[id].photos.push({ number: photoNumber, title: photoTitle });
+        allPuzzlesData[id].photos.push({ 
+            number: area.getAttribute('href').replace('#', ''), 
+            title: area.getAttribute('title') 
+        });
         allPuzzlesData[id].originalCoords.push(area.coords);
 
         const newArea = document.createElement('area');
         newArea.shape = area.shape;
         newArea.coords = area.coords;
-        newArea.onclick = (e) => {
-          e.preventDefault();
-          openModal(id, index);
-        };
+        newArea.onclick = (e) => { e.preventDefault(); openModal(id, index); };
         mapElement.appendChild(newArea);
       });
 
       imgElement.onload = () => makeResponsive(id);
       if (imgElement.complete) makeResponsive(id);
-
     } catch (e) { console.error(e); }
   }
 
@@ -304,11 +302,16 @@
     const photo = data.photos[currentIndex];
     const color = puzzleColors[currentPuzzleId];
 
-    // Applica il colore del puzzle anche all'ombra del modale
-    document.querySelector('.modal-content').style.boxShadow = `20px 20px 0px ${color}`;
-
+    modalBox.style.boxShadow = `20px 20px 0px ${color}`;
     modalImg.src = `imm/fotopuzzle${currentPuzzleId}/${photo.number}_${photo.title}.jpg`;
-    modalTitle.innerText = photo.title;
+    
+    let rawTitle = photo.title;
+    if (rawTitle.includes('(')) {
+        const parts = rawTitle.split('(');
+        modalTitle.innerHTML = `${parts[0].trim()}<span class="modal-caption">(${parts[1].replace(')', '').trim()})</span>`;
+    } else {
+        modalTitle.innerText = rawTitle;
+    }
 
     prevBtn.classList.toggle('hidden', currentIndex === 0);
     nextBtn.classList.toggle('hidden', currentIndex === data.photos.length - 1);

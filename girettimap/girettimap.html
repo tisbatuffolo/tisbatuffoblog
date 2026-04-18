@@ -4,13 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GirettiMap</title>
-  <link rel="stylesheet" href="../stile.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* --- RESET & BASE --- */
-    header h1 a { font-size: 1em !important; color: #2332bb !important; text-decoration: none !important; }
+    /* =======================================================
+       CSS GENERALE (da stile.css)
+       ======================================================= */
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f9fafd;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
+    main {
+      flex: 1;
+    }
+
+    header {
+      background: #e2eaff;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 2.3em;
+      font-weight: bold;
+    }
+
+    /* Link SbatuffoBlog */
+    header h1 a { 
+      font-size: 1em !important; 
+      color: #2332bb !important; 
+      text-decoration: none !important; 
+      transition: color 0.2s;
+    }
+
+    header h1 a:hover {
+      color: #547bfc !important;
+      text-decoration: underline !important;
+    }
+
+    header h1 span {
+      color: #2332bb;
+    }
+
+    footer {
+      color: #888;
+      text-align: center;
+      margin: 16px 0 8px 0;
+    }
+
+    /* =======================================================
+       STILI SPECIFICI GIRETTI MAP (Ottimizzati)
+       ======================================================= */
     main h2 {
       text-align: center;
       margin: 35px 0 20px;
@@ -59,7 +111,7 @@
 
     .link-box img { width: 100%; max-width: 110px; height: auto; margin-bottom: 12px; }
 
-    /* --- ULTIMI GIRI --- */
+    /* --- GRID CARD --- */
     .grid-riquadri {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -71,20 +123,42 @@
 
     .riquadro {
       background: #fff;
+      border: 3px solid #2366c6;
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease;
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      flex-direction: column;
     }
-    .riquadro img { width: 100%; height: 200px; object-fit: cover; display: block; }
-    .riquadro-titolo { padding: 15px; font-weight: bold; text-align: center; color: #2332bb; background: #f8faff; font-size: 1.1em; }
-    .riquadro-link { text-decoration: none; color: inherit; display: block; }
+
+    .riquadro:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 24px rgba(26,50,120,0.16);
+    }
+
+    .riquadro img { width: 100%; height: 200px; object-fit: cover; display: block; flex: 1 1 auto; }
+    
+    .riquadro-titolo { 
+      padding: 15px; 
+      font-weight: bold; 
+      text-align: center; 
+      color: #fff; 
+      background: rgba(0,0,0,0.5); 
+      font-size: 1.1em;
+      letter-spacing: 1px;
+      word-wrap: break-word;
+    }
+
+    .riquadro-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; }
+    .riquadro-link:hover .riquadro-titolo { color: #ffeb3b; text-decoration: underline; }
 
     /* --- CONTAGIRI SECTION --- */
     #contagiri {
       max-width: 1100px;
-      margin: 0 auto;
+      margin: 40px auto;
       padding: 0 15px;
+      text-align: center;
     }
 
     #frase-giri {
@@ -93,9 +167,10 @@
       font-weight: bold;
       text-align: center;
       margin-bottom: 30px;
+      color: #d32f2f;
     }
 
-    /* --- TABELLA OTTIMIZZATA --- */
+    /* --- TABELLA --- */
     .table-container-wrapper {
       width: 100%;
       margin: 0 auto;
@@ -106,11 +181,14 @@
       border-collapse: collapse;
       table-layout: fixed;
       background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(26,50,120,0.15);
+      margin-bottom: 20px;
     }
 
-    /* SFONDO BIANCO PER LE ICONE */
     .icon-row td {
-      background-color: #ffffff !important; /* Forza lo sfondo bianco */
+      background-color: #ffffff !important;
       border: none !important;
       padding: 20px 5px 10px 5px !important;
       vertical-align: bottom;
@@ -125,64 +203,60 @@
     }
 
     .header-row th {
-      background-color: #2332bb;
+      background: linear-gradient(135deg, #2332bb, #547bfc);
       color: white;
       padding: 15px 2px;
       font-size: clamp(0.7em, 2.5vw, 0.9em);
       text-transform: uppercase;
-      border: 1px solid #1a27a0;
+      letter-spacing: 0.6px;
     }
 
     #tabella-giri td {
       padding: 12px 2px;
       text-align: center;
-      border: 1px solid #eee;
+      border-bottom: 1px solid #eee;
       font-size: clamp(0.9em, 3vw, 1.1em);
+      color: #222;
     }
 
-    /* --- TREND  */
-    /* Container Legenda Trend - Compatto e su una riga */
+    #tabella-giri tbody tr:nth-child(even) { background-color: #f4f6ff; }
+    #tabella-giri tbody tr:hover { background-color: #e0e7ff; transition: background 0.2s ease; }
+
+    /* --- GRAFICI --- */
+    .charts-vertical-stack { margin-bottom: 20px; }
+    
+    .chart-wrapper { 
+      width: 100%;
+      height: 300px; 
+      margin-top: 30px;
+      margin-bottom: 60px; 
+    }
+
     #trend-legend-custom {
       display: flex;
-      flex-wrap: nowrap; /* Forza su una riga sola */
+      flex-wrap: nowrap;
       justify-content: center;
       gap: 8px;
       margin-top: 10px;
-      overflow-x: auto; /* Permette lo scroll se lo schermo è mini */
+      overflow-x: auto;
       padding: 5px 0;
     }
 
-    /* Badge più piccoli e sottili */
     .legend-badge {
-      padding: 4px 10px; /* Ridotto */
+      padding: 4px 10px;
       border-radius: 6px;
       color: white;
       font-weight: bold;
-      font-size: 0.75em; /* Testo più piccolo */
-      white-space: nowrap; /* Evita che il testo vada a capo nel badge */
+      font-size: 0.75em;
+      white-space: nowrap;
       cursor: pointer;
       transition: all 0.2s;
-      flex-shrink: 0; /* Impedisce ai badge di restringersi troppo */
+      flex-shrink: 0;
     }
 
-    .legend-badge.hidden {
-      opacity: 0.2;
-      background-color: #ddd !important;
-      color: #888;
-    }
-
-    /* Fix per il contenitore del grafico per evitare sovrapposizioni */
-    .charts-vertical-stack { 
-      margin-bottom: 20px; 
-    }
-    
-    .chart-wrapper { 
-      height: 300px; /* Leggermente ridotto per dare respiro */
-      margin-bottom: 60px; /* Spazio extra per i badge sotto */
-    }
+    .legend-badge.hidden { opacity: 0.2; background-color: #ddd !important; color: #888; }
 
     /* --- TORTA --- */
-
     .torta-container {
       background: #fff;
       padding: 25px 15px;
@@ -240,13 +314,25 @@
       text-align: center;
     }
 
+    /* --- MEDIA QUERIES --- */
+    @media (max-width: 1200px) {
+      .grid-riquadri, #contagiri, .chart-wrapper { max-width: 980px; }
+    }
+
+    @media (max-width: 900px) {
+      .grid-riquadri { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 600px) {
       .grid-riquadri, #contagiri, .top-links {
         padding-left: 5px !important;
         padding-right: 5px !important;
       }
+      .grid-riquadri { grid-template-columns: 1fr; }
+      .riquadro { width: 95vw; height: 180px; }
       .icon-row img { max-width: 75px; }
       #grid-legend { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .chart-wrapper { height: 320px; }
     }
   </style>
 </head>
@@ -333,7 +419,7 @@
 <script src="giri.js"></script>
 
 <script>
-
+// Codice JS originale invariato
 const container = document.getElementById("contenitore-giri");
 if (typeof GIRI !== 'undefined') {
   GIRI.slice(0, 9).forEach(giro => {
@@ -467,7 +553,7 @@ function renderTrend(data) {
       responsive: true,
       maintainAspectRatio: false,
       layout: {
-        padding: { bottom: 10 } // Spazio interno al canvas
+        padding: { bottom: 10 }
       },
       plugins: {
         legend: { display: false }
