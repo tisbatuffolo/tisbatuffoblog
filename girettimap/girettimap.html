@@ -3,73 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GirettiMap</title>
+  <title>GirettiMap - SbatuffoBlog</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     /* =======================================================
-       CSS GENERALE (da stile.css)
+       CSS GENERALE E VARIABILI
        ======================================================= */
+    :root {
+      --main-blue: #0000ff;
+      --light-blue-border: #bde0fe;
+      --bg-soft: #fdfdfd;
+      --heart-red: #ff4d4d;
+      --giretti-color: #5eb5ff; /* Colore della linea card .c2 in index */
+    }
+
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f9fafd;
+      font-family: 'Fredoka', sans-serif; /* Sostituito Segoe UI con Fredoka */
+      background: var(--bg-soft);
       margin: 0;
       padding: 0;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      color: #333;
     }
 
     main {
       flex: 1;
     }
 
+    /* --- HEADER UNIFORMATO --- */
     header {
-      background: #e2eaff;
-      padding: 20px 0;
+      background: #fff;
+      padding: 25px 10px 5px;
       text-align: center;
+      position: relative;
     }
 
-    header h1 {
+    .header-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      position: relative;
+    }
+
+    .home-link-img {
+      position: absolute;
+      left: 20px;
+      top: 5px;
+      transition: transform 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+    .home-link-img:hover { transform: scale(1.1); }
+    .home-link-img img {
+      width: clamp(70px, 12vw, 100px);
+      height: auto;
+    }
+
+    .brand-title {
+      font-family: 'Grandstander', cursive;
+      font-weight: 900;
+      font-size: clamp(2.2rem, 8vw, 4.2rem);
+      color: var(--main-blue);
       margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 2.3em;
-      font-weight: bold;
+      line-height: 1;
+      text-decoration: none;
     }
 
-    /* Link SbatuffoBlog */
-    header h1 a { 
-      font-size: 1em !important; 
-      color: #2332bb !important; 
-      text-decoration: none !important; 
-      transition: color 0.2s;
+    .brand-subtitle {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(0.9rem, 3vw, 1.2rem);
+      color: var(--giretti-color); /* Colore Giretti applicato */
+      font-weight: 700;
+      margin-top: 5px;
+      letter-spacing: 1.5px;
+      text-transform: lowercase;
     }
 
-    header h1 a:hover {
-      color: #547bfc !important;
-      text-decoration: underline !important;
+    /* --- DIVISORI CON CUORICINO --- */
+    .section-divider {
+      max-width: 200px;
+      height: 3px;
+      background: var(--light-blue-border);
+      margin: 30px auto 20px;
+      border-radius: 50px;
+      position: relative;
+      clear: both;
+    }
+    .section-divider::after {
+      content: "♥";
+      position: absolute;
+      top: -14px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-soft);
+      padding: 0 15px;
+      color: var(--heart-red);
+      font-size: 1.5rem;
     }
 
-    header h1 span {
-      color: #2332bb;
-    }
-
+    /* --- FOOTER --- */
     footer {
-      color: #888;
-      text-align: center;
-      margin: 16px 0 8px 0;
+      background: #fff;
+      padding: 20px 10px 40px;
+      margin-top: 20px;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-home {
+      position: absolute;
+      left: 20px;
+      transition: transform 0.2s ease;
+    }
+    .footer-home:hover { transform: scale(1.1); }
+    .footer-home img { width: clamp(50px, 8vw, 70px); height: auto; }
+
+    .footer-text {
+      font-family: 'Grandstander', cursive;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #444;
     }
 
     /* =======================================================
-       STILI SPECIFICI GIRETTI MAP (Ottimizzati)
+       STILI SPECIFICI GIRETTI MAP
        ======================================================= */
     main h2 {
       text-align: center;
       margin: 35px 0 20px;
-      color: #000;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: clamp(1.5em, 5vw, 2.2em);
-      font-weight: bold;
+      /* color: var(--main-blue); */
+      color:#000;
+      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-size: clamp(1.8em, 6vw, 2.5em);
+      font-weight: 900;
+      letter-spacing: 1px;
     }
 
     /* --- TOP LINKS --- */
@@ -95,18 +174,24 @@
       min-height: 160px; 
     }
     .link-box:hover { transform: translateY(-5px); }
-    .link-box.map-box { background-color: #d4edda; } 
-    .link-box.list-box { background-color: #f8d7da; }
+    .link-box.map-box { background-color: #eff7ff; border: 2px solid var(--light-blue-border); } 
+    .link-box.list-box { background-color: #fff0f0; border: 2px solid #ffd1d1;}
 
     .link-box a {
       text-decoration: none;
-      color: #000000;
-      font-weight: bold;
+      color: #000;
       display: flex;
       flex-direction: column;
       align-items: center;
       white-space: nowrap; 
-      font-size: clamp(0.75em, 3.2vw, 1.05em); 
+    }
+    
+    .link-box a span {
+      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-weight: 900;
+      font-size: clamp(0.9em, 3.5vw, 1.2em); 
+     /* color: var(--main-blue); */
+      color: #000;
     }
 
     .link-box img { width: 100%; max-width: 110px; height: auto; margin-bottom: 12px; }
@@ -123,7 +208,7 @@
 
     .riquadro {
       background: #fff;
-      border: 3px solid #2366c6;
+      border: 3px solid var(--giretti-color);
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 6px 15px rgba(0,0,0,0.08);
@@ -134,24 +219,25 @@
 
     .riquadro:hover {
       transform: scale(1.03);
-      box-shadow: 0 6px 24px rgba(26,50,120,0.16);
+      box-shadow: 0 6px 24px rgba(94, 181, 255, 0.3);
     }
 
     .riquadro img { width: 100%; height: 200px; object-fit: cover; display: block; flex: 1 1 auto; }
     
     .riquadro-titolo { 
       padding: 15px; 
-      font-weight: bold; 
+      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-weight: 600; 
       text-align: center; 
-      color: #fff; 
-      background: rgba(0,0,0,0.5); 
-      font-size: 1.1em;
+      color: #000; /* Testo scuro per staccare sull'azzurro */
+      background: var(--giretti-color); /* Sfondo color Giretti! */
+      font-size: 1.2em;
       letter-spacing: 1px;
       word-wrap: break-word;
     }
 
     .riquadro-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; }
-    .riquadro-link:hover .riquadro-titolo { color: #ffeb3b; text-decoration: underline; }
+    .riquadro-link:hover .riquadro-titolo { color: #fff; text-decoration: underline; }
 
     /* --- CONTAGIRI SECTION --- */
     #contagiri {
@@ -162,12 +248,13 @@
     }
 
     #frase-giri {
-      font-size: clamp(1em, 4vw, 1.25em);
+      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-size: clamp(1.2em, 4vw, 1.5em);
       line-height: 1.4;
-      font-weight: bold;
+      font-weight: 600;
       text-align: center;
       margin-bottom: 30px;
-      color: #d32f2f;
+      color: var(--heart-red);
     }
 
     /* --- TABELLA --- */
@@ -202,25 +289,35 @@
       margin: 0 auto;
     }
 
+    /* Modifica header tabella con sfumatura unica riga colore Giretti */
+    .header-row {
+      background: linear-gradient(90deg, #3db0ff, var(--giretti-color), #8dd0ff, var(--giretti-color), #3db0ff); 
+    }
+
     .header-row th {
-      background: linear-gradient(135deg, #2332bb, #547bfc);
-      color: white;
+      background: transparent; /* Tolto l'effetto caselle */
+      color: #000; /* Testo nero per maggior contrasto */
       padding: 15px 2px;
-      font-size: clamp(0.7em, 2.5vw, 0.9em);
+      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-size: clamp(0.9em, 3vw, 1.1em);
+      font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.6px;
+      border: none;
     }
 
     #tabella-giri td {
       padding: 12px 2px;
       text-align: center;
       border-bottom: 1px solid #eee;
+      font-family: 'Fredoka', sans-serif;
       font-size: clamp(0.9em, 3vw, 1.1em);
+      font-weight: 700;
       color: #222;
     }
 
-    #tabella-giri tbody tr:nth-child(even) { background-color: #f4f6ff; }
-    #tabella-giri tbody tr:hover { background-color: #e0e7ff; transition: background 0.2s ease; }
+    #tabella-giri tbody tr:nth-child(even) { background-color: #f4f8ff; }
+    #tabella-giri tbody tr:hover { background-color: var(--light-blue-border); transition: background 0.2s ease; }
 
     /* --- GRAFICI --- */
     .charts-vertical-stack { margin-bottom: 20px; }
@@ -269,6 +366,14 @@
       align-items: center;
       margin-top: 30px;
     }
+    
+    .torta-container h3 {
+      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      /* color: var(--main-blue); */
+      color:#000;
+      font-size: 1.8em;
+      margin-top: 0;
+    }
 
     .torta-wrapper { width: 100%; max-width: 320px; height: 320px; }
 
@@ -282,7 +387,7 @@
       border-top: 1px solid #eee;
     }
 
-    .legend-item { font-size: 0.85em; display: flex; align-items: center; gap: 8px; }
+    .legend-item { font-size: 0.85em; display: flex; align-items: center; gap: 8px; font-weight: 600;}
     .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
     .filter-area {
@@ -303,15 +408,24 @@
       align-items: center;
       gap: 5px;
       cursor: pointer;
+      border: 1px solid var(--light-blue-border);
     }
 
     .footer-banner {
-      background-color: #e3f2fd;
+      background-color: #eff7ff;
+      border: 3px solid var(--light-blue-border);
       padding: 25px;
       border-radius: 15px;
       max-width: 1100px;
       margin: 40px auto;
       text-align: center;
+    }
+    
+    .footer-banner h2 {
+      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      color: var(--main-blue);
+      margin: 0;
+      font-size: clamp(1.5em, 5vw, 2.2em);
     }
 
     /* --- MEDIA QUERIES --- */
@@ -321,6 +435,14 @@
 
     @media (max-width: 900px) {
       .grid-riquadri { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 850px) {
+      .footer-home { position: static; margin-right: 15px; }
+      .footer-container { justify-content: center; }
+      .footer-home img { width: 45px; }
+      .home-link-img { left: 10px; }
+      .home-link-img img { width: 60px; }
     }
 
     @media (max-width: 600px) {
@@ -340,8 +462,18 @@
 <body>
 
 <header>
-  <h1><a href="../index.html">SbatuffoBlog</a><span> - Giretti</span></h1>
+  <div class="header-container">
+    <a href="../index.html" class="home-link-img" title="Torna alla Home">
+      <img src="img/home.png" alt="Home">
+    </a>
+    <div class="brand-wrapper">
+      <a href="../index.html" class="brand-title">SbatuffoBlog</a>
+      <div class="brand-subtitle">Giretti</div>
+    </div>
+  </div>
 </header>
+
+<div class="section-divider"></div>
 
 <main>
   <section class="top-links">
@@ -359,8 +491,12 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <h2>Ultimi Giri</h2>
   <div class="grid-riquadri" id="contenitore-giri"></div>
+
+  <div class="section-divider"></div>
 
   <section id="contagiri">
     <h2>Conta Giri</h2>
@@ -412,9 +548,23 @@
   </section>
 
   <div class="footer-banner">
-    <h2 style="margin: 0;">Solo posti nuovi e tutti giri belli!</h2>
+    <h2>Solo posti nuovi e tutti giri belli!</h2>
   </div>
+  
+  <div class="section-divider"></div>
+
 </main>
+
+<footer>
+    <div class="footer-container">
+    <a href="../index.html" class="footer-home">
+      <img src="img/home.png" alt="Home">
+    </a>
+    <div class="footer-text">
+      @SbatuffoBlog 2026
+    </div>
+  </div>
+</footer>
 
 <script src="giri.js"></script>
 
@@ -494,10 +644,10 @@ async function init() {
   if (ultimaData) {
     const diff = Math.floor((new Date().setHours(0,0,0,0) - new Date(ultimaData).setHours(0,0,0,0)) / 86400000);
     const el = document.getElementById("frase-giri");
-    if (diff === 0) { el.innerText = "Che bello oggi abbiamo fatto un giro insieme!"; el.style.color = "green"; }
-    else if (diff === 1) { el.innerText = "Che bello ieri abbiamo fatto un giro insieme!"; el.style.color = "green"; }
-    else if (diff <= 6) { el.innerText = "Che bello questa settimana abbiamo fatto un giro insieme!"; el.style.color = "green"; }
-    else { el.innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`; el.style.color = "#d32f2f"; }
+    if (diff === 0) { el.innerText = "Che bello oggi abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+    else if (diff === 1) { el.innerText = "Che bello ieri abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+    else if (diff <= 6) { el.innerText = "Che bello questa settimana abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+    else { el.innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`; el.style.color = "var(--heart-red)"; }
   }
 }
 

@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fotopuzzle - SbatuffoBlog</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Grandstander:wght@900&family=Luckiest+Guy&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --cartoon-yellow: #ffdf00;
-    --cartoon-border-dark: #1a1a1a;
     --main-blue: #0000ff;
     --light-blue-border: #bde0fe;
+    --bg-soft: #fdfdfd;
+    --heart-red: #ff4d4d;
+    --fotopuzzle-red: #ff5e5e; 
+    --cartoon-border-dark: #1a1a1a;
+    --cartoon-yellow: #ffdf00;
   }
 
   * { box-sizing: border-box; }
@@ -21,82 +24,111 @@
     font-family: 'Fredoka', sans-serif;
     text-align: center;
     margin: 0;
-    background-color: #f8f9fa;
+    background-color: var(--bg-soft);
     color: #333;
     overflow-x: hidden;
   }
 
-  /* Header aggiornato: sfondo bianco e layout con icona */
+  /* --- HEADER UNIFORMATO --- */
   header {
-    background: #fff; /* Sfondo bianco richiesto */
-    padding: 20px 20px;
-    border-bottom: 2px solid var(--main-blue);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #fff;
+    padding: 25px 10px 5px;
+    text-align: center;
     position: relative;
-    min-height: 80px;
   }
 
-  .home-icon {
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    position: relative;
+  }
+
+  .home-link-img {
     position: absolute;
     left: 20px;
+    top: 5px;
+    transition: transform 0.2s ease;
     display: flex;
     align-items: center;
-    transition: transform 0.2s ease;
+  }
+  .home-link-img:hover { transform: scale(1.1); }
+  /* Immagine Home raddoppiata */
+  .home-link-img img {
+    width: clamp(70px, 12vw, 100px);
+    height: auto;
   }
 
-  .home-icon:hover {
-    transform: scale(1.1);
-  }
-
-  .home-icon svg {
-    width: 40px;
-    height: 40px;
-    fill: var(--main-blue); /* Colore coerente con il brand */
-  }
-
-  header h1 {
+  .brand-title {
     font-family: 'Grandstander', cursive;
-    color: var(--main-blue);
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    margin: 0;
     font-weight: 900;
+    font-size: clamp(2.2rem, 8vw, 4.2rem);
+    color: var(--main-blue);
+    margin: 0;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .brand-subtitle {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    color: var(--fotopuzzle-red);
+    font-weight: 700;
+    margin-top: 5px;
+    letter-spacing: 1.5px;
+    text-transform: lowercase;
+  }
+
+  /* --- DIVISORI CON CUORICINO --- */
+  .section-divider {
+    max-width: 200px;
+    height: 3px;
+    background: var(--light-blue-border);
+    margin: 30px auto 20px; /* Ridotto spazio sotto */
+    border-radius: 50px;
+    position: relative;
+    clear: both;
+  }
+  .section-divider::after {
+    content: "♥";
+    position: absolute;
+    top: -14px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-soft);
+    padding: 0 15px;
+    color: var(--heart-red);
+    font-size: 1.5rem;
+  }
+
+  /* --- SEZIONI PUZZLE --- */
+  #puzzles-container { padding-bottom: 60px; }
+
+  .puzzle-section {
+    padding: 5px 15px 10px; /* Ridotto padding superiore */
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .puzzle-title {
+    font-family: 'Grandstander', cursive;
+    font-weight: 900;
+    /* Rimpicciolito: deve essere meno del titolo principale */
+    font-size: clamp(1.8rem, 6vw, 3.2rem);
+    margin-bottom: 8px;
     letter-spacing: -1px;
     line-height: 1;
   }
 
-  header h1 a {
-    color: var(--main-blue);
-    text-decoration: none;
-  }
-
-  #puzzles-container { padding-bottom: 100px; }
-
-  .puzzle-section {
-    padding: 60px 15px;
-    max-width: 1100px;
-    margin: 0 auto;
-    border-bottom: 4px dashed #ddd;
-  }
-
-  .puzzle-title {
-    font-family: 'Boogaloo', cursive;
-    font-size: 4.5em;
-    margin-bottom: 35px;
-    letter-spacing: 2px;
-    -webkit-text-stroke: 1px var(--cartoon-border-dark);
-    paint-order: stroke fill;
-    filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1));
-  }
-
   .puzzle-subtitle {
-    font-family: 'Fredoka', sans-serif;
-    font-size: 1.3em;
-    color: #000000;
-    margin-top: -25px;
-    margin-bottom: 30px;
-    font-weight: 600;
+    font-family: 'Fredoka', sans-serif; /* Allineato a brand-subtitle */
+    font-weight: 700;
+    /* Dimensione identica al sottotitolo header */
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-transform: none;
   }
 
   .collage-container {
@@ -120,19 +152,15 @@
     border-radius: 18px;
   }
 
+  /* --- MODAL --- */
   .modal {
     display: none;
     position: fixed;
     z-index: 2000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    left: 0; top: 0; width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.9);
     backdrop-filter: blur(10px);
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
+    justify-content: center; align-items: center; padding: 15px;
   }
 
   .modal-content {
@@ -181,8 +209,6 @@
     color: #555;
     margin-top: 8px;
     font-weight: 400;
-    letter-spacing: 0;
-    -webkit-text-stroke: 0; 
   }
 
   .nav-btn, .close-btn {
@@ -207,27 +233,66 @@
 
   .nav-btn {
     top: 50%; transform: translateY(-50%);
-    width: 70px; height: 70px;
-    border-radius: 50%; font-size: 40px;
+    width: 65px; height: 65px;
+    border-radius: 50%; font-size: 35px;
     font-family: 'Luckiest Guy', cursive;
   }
 
-  .prev-btn { left: -40px; }
-  .next-btn { right: -40px; }
-
+  .prev-btn { left: -35px; }
+  .next-btn { right: -35px; }
   .hidden { visibility: hidden; pointer-events: none; }
 
   @media (max-width: 850px) {
     .nav-btn { width: 45px; height: 45px; font-size: 22px; }
     .prev-btn { left: -5px; }
     .next-btn { right: -5px; }
-    .puzzle-title { font-size: 2.8em; margin-bottom: 25px; }
-    .puzzle-subtitle { font-size: 1.1em; margin-top: -15px; }
     .collage-container { border-width: 6px; }
     .modal-content { border-width: 5px; width: 94%; }
-    .modal-title { font-size: 1.4em; margin: 10px 5px 5px; }
-    .home-icon { left: 10px; }
-    .home-icon svg { width: 30px; height: 30px; }
+    .modal-title { font-size: 1.4em; }
+    .home-link-img { left: 10px; }
+    .home-link-img img { width: 60px; }
+  }
+
+  /* --- FOOTER --- */
+  footer {
+    background: #fff;
+    padding: 20px 10px 40px;
+    margin-top: 20px;
+  }
+
+  .footer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-home {
+    position: absolute;
+    left: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  .footer-home:hover { transform: scale(1.1); }
+
+  .footer-home img {
+    width: clamp(50px, 8vw, 70px); /* Leggermente più piccola dell'header per proporzione */
+    height: auto;
+  }
+
+  .footer-text {
+    font-family: 'Grandstander', cursive;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #444;
+  }
+
+  @media (max-width: 850px) {
+    .footer-home { position: static; margin-right: 15px; }
+    .footer-container { justify-content: center; }
+    .footer-home img { width: 45px; }
   }
 </style>
 </head>
@@ -235,16 +300,18 @@
 <body>
 
 <header>
-  <a href="../index.html" class="home-icon" title="Torna alla Home">
-    <svg viewBox="0 0 24 24">
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-    </svg>
-  </a>
-  <h1>
-      <a class="home-link" href="../index.html">SbatuffoBlog</a>
-      <span> - Fotopuzzle</span>
-  </h1>
+  <div class="header-container">
+    <a href="../index.html" class="home-link-img" title="Torna alla Home">
+      <img src="imm/home.png" alt="Home">
+    </a>
+    <div class="brand-wrapper">
+      <a href="../index.html" class="brand-title" style="text-decoration:none">SbatuffoBlog</a>
+      <div class="brand-subtitle">fotopuzzle</div>
+    </div>
+  </div>
 </header>
+
+<div class="section-divider"></div>
 
 <div id="puzzles-container"></div>
 
@@ -259,6 +326,19 @@
   </div>
 </div>
 
+
+<div class="section-divider"></div>
+<footer>
+    <div class="footer-container">
+    <a href="../index.html" class="footer-home">
+      <img src="imm/home.png" alt="Home">
+    </a>
+    <div class="footer-text">
+      @SbatuffoBlog 2026
+    </div>
+  </div>
+</footer>
+
 <script>
   const puzzlesContainer = document.getElementById('puzzles-container');
   const modal = document.getElementById('photo-modal');
@@ -269,8 +349,13 @@
   const nextBtn = document.getElementById('next-btn');
 
   const puzzleColors = {
-    1: '#2332bb', 2: '#28a745', 3: '#ff9800', 
-    4: '#e91e63', 5: '#673ab7', 6: '#00bcd4', 7: '#ff4747'
+    1: '#00008b', // Blu Notte più scuro
+    2: '#28a745', 
+    3: '#ff9800', 
+    4: '#e91e63', 
+    5: '#673ab7', 
+    6: '#005f5f', 
+    7: '#00bcd4', 
   };
 
   const puzzleSubtitles = {
@@ -289,20 +374,29 @@
   let currentIndex = -1;
 
   function createPuzzleSections() {
-    puzzleIds.forEach((id) => {
+    puzzleIds.forEach((id, index) => {
       const color = puzzleColors[id];
       const subtitle = puzzleSubtitles[id];
       const section = document.createElement('section');
       section.className = 'puzzle-section';
+      
       section.innerHTML = `
         <h2 class="puzzle-title" style="color: ${color}">Fotopuzzle ${id}</h2>
         <p class="puzzle-subtitle">${subtitle}</p>
-        <div class="collage-container" style="border-color: ${color}; box-shadow: 18px 18px 0px ${color}">
+        <div class="collage-container" style="border-color: ${color}; box-shadow: 15px 15px 0px ${color}">
           <img src="imm/fotopuzzle${id}.jpg" usemap="#map-puzzle-${id}" class="collage-img" id="img-puzzle-${id}">
           <map name="map-puzzle-${id}" id="map-puzzle-${id}"></map>
         </div>
       `;
+      
       puzzlesContainer.appendChild(section);
+      
+      if (index < puzzleIds.length - 1) {
+        const divider = document.createElement('div');
+        divider.className = 'section-divider';
+        puzzlesContainer.appendChild(divider);
+      }
+
       allPuzzlesData[id] = { photos: [], originalCoords: [] };
       loadMapData(id);
     });

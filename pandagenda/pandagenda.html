@@ -14,7 +14,7 @@
   --bg: #f4f7fa;
   --text: #1a1a1a;
   --stroke: #1a1a1a;
-  --export-excel: #1D6F42; 
+  --export-excel: #1D6F42; /* Verde Excel: scuro ma brillante */
   --c-cibo: #ffd32a; 
   --c-giretto: #ff8c00; 
   --c-girolungo: #05c46b;
@@ -93,6 +93,7 @@ td { height: 75px; vertical-align: top; border-radius: 10px; border: 2px solid #
   border-left: 6px solid var(--primary); padding-left: 12px;
 }
 
+/* Stili Card Attività */
 .activity-card {
   background: #fff; border: 2.5px solid var(--stroke); 
   border-radius: 20px; margin-bottom: 15px; position: relative;
@@ -123,12 +124,11 @@ td { height: 75px; vertical-align: top; border-radius: 10px; border: 2px solid #
     font-size: 0.85rem; color: #555; text-transform: uppercase; font-weight: 500; 
 }
 
-/* Solo icona per la ricorrenza nelle card */
 .recur-tag { 
     background: #eef1ff; color: var(--primary); 
-    padding: 2px 6px; border-radius: 8px; 
-    border: 1.5px solid var(--primary); font-size: 0.85rem;
-    display: inline-flex; align-items: center; justify-content: center;
+    padding: 2px 8px; border-radius: 8px; 
+    border: 1.5px solid var(--primary); font-size: 0.75rem;
+    font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
 }
 
 .edit-pencil {
@@ -170,9 +170,10 @@ td { height: 75px; vertical-align: top; border-radius: 10px; border: 2px solid #
 .modal-btns button { 
     flex: 1; padding: 15px; border-radius: 15px; font-weight: 600; 
     border: 3px solid var(--stroke); cursor: pointer; font-family: 'Fredoka', sans-serif; font-size: 1rem;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 #btn-confirm { background: var(--primary); color: white; box-shadow: 4px 4px 0 var(--stroke); }
+
+/* Colore Verde Excel per il pulsante Export */
 #btn-export { background: var(--export-excel); color: white; display: none; box-shadow: 4px 4px 0 var(--stroke); }
 
 </style>
@@ -232,7 +233,7 @@ td { height: 75px; vertical-align: top; border-radius: 10px; border: 2px solid #
         </div>
         <div class="modal-btns">
           <button id="btn-export">Export 📅</button>
-          <button id="btn-confirm">SALVA 💾</button>
+          <button id="btn-confirm">SALVA</button>
         </div>
     </div>
   </div>
@@ -334,7 +335,7 @@ function renderList() {
         <b>${item.ev.nome}</b>
         <div class="cat-wrapper">
             ${item.ev.tipo || 'attività'} 
-            ${item.ev.ricorrenza === 'annuale' ? '<span class="recur-tag">🔁</span>' : ''}
+            ${item.ev.ricorrenza === 'annuale' ? '<span class="recur-tag">RICORRENTE 🔁</span>' : ''}
         </div>
       </div>
       <div class="edit-pencil" onclick="event.stopPropagation(); openModal('${item.dateKey}', '${item.origKey}')">✎</div>`;
@@ -383,7 +384,6 @@ document.getElementById("btn-close-x").onclick = closeModal;
 document.getElementById("btn-export").onclick = () => downloadICS(selectedDateStr, editEventKey);
 document.getElementById("prev-m").onclick = () => { month--; if(month<0){month=11;year--;} render(); };
 document.getElementById("next-m").onclick = () => { month++; if(month>11){month=0;year++;} render(); };
-
 document.getElementById("save-github").onclick = async () => {
   const btn = document.getElementById("save-github"); btn.disabled = true; btn.innerHTML = "⏳ Salvataggio...";
   try {

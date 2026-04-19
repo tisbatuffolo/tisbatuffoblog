@@ -25,139 +25,65 @@
 
     /* --- HEADER --- */
     header {
-      padding: 30px 10px;
+      padding: 25px 10px 5px;
       text-align: center;
       background: #fff;
-      border-bottom: 2px solid var(--light-blue-border);
     }
 
     .header-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 15px;
+      gap: 30px;
+      position: relative;
     }
 
     .side-heart {
-      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
       color: var(--heart-red);
-      animation: heartbeat 1.5s infinite;
+      animation: heartbeat 1.5s infinite ease-in-out;
+      position: relative;
+      user-select: none;
     }
 
     @keyframes heartbeat {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.15); }
-    }
-
-    .brand-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      50% { transform: scale(1.2); }
     }
 
     .brand-title {
-      /* Font Grandstander: Molto più elegante del Luckiest Guy, mantiene lo stile comic ma con classe */
       font-family: 'Grandstander', cursive;
       font-weight: 900;
-      font-size: clamp(2rem, 7vw, 3.8rem);
+      font-size: clamp(2rem, 7vw, 4rem);
       color: var(--main-blue);
-      position: relative;
-      display: inline-block;
-      overflow: hidden;
       margin: 0;
-      letter-spacing: -1px; /* Stringe leggermente le lettere per un look più moderno */
       line-height: 1;
     }
 
-    .brand-title::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -150%;
-      width: 60%;
-      height: 100%;
-      background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
-      transform: skewX(-25deg);
-      animation: slowReflect 3s infinite linear;
-    }
-
+    /* SOTTOTITOLO RIPRISTINATO */
     .brand-subtitle {
+      font-family: 'Fredoka', sans-serif;
       font-size: clamp(0.9rem, 3vw, 1.2rem);
       color: var(--light-blue-border);
       font-weight: 700;
-      margin-top: 8px;
+      margin-top: 5px;
       letter-spacing: 1.5px;
-      text-transform: lowercase; /* Rende il tutto più "morbido" ed elegante */
+      text-transform: lowercase;
     }
 
-    @keyframes slowReflect {
-      0% { left: -150%; }
-      70% { left: 150%; } 
-      100% { left: 150%; } 
-    }
-
-    /* --- SLIDER --- */
-    .slider-box {
-      width: 94%;
-      max-width: 900px;
-      aspect-ratio: 16 / 9;
-      margin: 25px auto;
-      overflow: hidden;
-      border-radius: 25px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      position: relative;
-    }
-    .slider-box img {
-      width: 100%; height: 100%; object-fit: cover;
-      position: absolute; opacity: 0; transition: opacity 1.2s;
-    }
-    .slider-box img.active { opacity: 1; }
-
-    /* --- GRID CARD --- */
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      padding: 10px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 15px;
-      border: 1.5px solid var(--light-blue-border);
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.3s ease;
-    }
-    .card:hover { transform: translateY(-3px); border-color: var(--main-blue); }
-    .card-info { padding: 12px 5px 0 5px; text-align: center; }
-    .card-title { font-weight: 700; font-size: clamp(0.65rem, 2.5vw, 0.95rem); text-transform: uppercase; margin-bottom: 4px; }
-    .color-line { height: 4px; width: 25px; margin: 0 auto 10px; border-radius: 10px; }
-    
-    .c1 { background: #ff5e5e; } .c2 { background: #5eb5ff; } .c3 { background: #ffde59; }
-    .c4 { background: #002147; } .c5 { background: #55efc4; } .c6 { background: #fab1a0; }
-    .c7 { background: #fd79a8; } .c8 { background: #00cec9; } .c9 { background: #a29bfe; }
-
-    .card-img { width: 100%; aspect-ratio: 1.3 / 1; overflow: hidden; }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; }
-
-    /* --- DIVISORE --- */
+    /* --- DIVISORI COMPATTI --- */
     .section-divider {
       max-width: 200px;
       height: 3px;
       background: var(--light-blue-border);
-      margin: 60px auto 30px;
+      margin: 30px auto; /* Distanza dimezzata */
       border-radius: 50px;
       position: relative;
     }
     .section-divider::after {
       content: "♥";
       position: absolute;
-      top: -14px;
-      left: 50%;
+      top: -14px; left: 50%;
       transform: translateX(-50%);
       background: var(--bg-soft);
       padding: 0 15px;
@@ -165,10 +91,64 @@
       font-size: 1.5rem;
     }
 
+    /* --- SLIDER --- */
+    .slider-box {
+      width: 94%;
+      max-width: 900px;
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .slider-box img {
+      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; opacity: 0; transition: opacity 1.2s ease-in-out;
+    }
+    .slider-box img.active { opacity: 1; }
+
+    /* --- GRID CARD --- */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 0 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      border: 1.5px solid var(--light-blue-border);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); border-color: var(--main-blue); }
+    .card-info { padding: 12px 5px 0 5px; text-align: center; }
+    .card-title { font-weight: 700; font-size: clamp(0.65rem, 2.5vw, 0.9rem); text-transform: uppercase; margin-bottom: 5px; }
+    .color-line { height: 4px; width: 25px; margin: 0 auto 10px; border-radius: 10px; }
+    .card-img { width: 100%; aspect-ratio: 1.3 / 1; overflow: hidden; }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .c1 { background: #ff5e5e; } .c2 { background: #5eb5ff; } .c3 { background: #ffde59; }
+    .c4 { background: #002147; } .c5 { background: #55efc4; } .c6 { background: #fab1a0; }
+    .c7 { background: #fd79a8; } .c8 { background: #00cec9; } .c9 { background: #a29bfe; }
+
     /* --- TIMER SECTION --- */
     .timer-section {
       text-align: center;
-      padding: 10px 10px 80px;
+      padding-bottom: 50px;
+    }
+
+    .timer-section h2 {
+      font-family: 'Grandstander';
+      color: var(--main-blue);
+      margin: 0 0 10px 0;
+      font-size: 1.6rem;
     }
 
     .timer-wrap {
@@ -176,7 +156,10 @@
       justify-content: center;
       gap: 15px;
       perspective: 1000px;
-      padding: 20px 0;
+    }
+
+    .pulse-wrapper {
+      animation: heartbeat 1.5s infinite ease-in-out;
     }
 
     .heart-flip {
@@ -184,10 +167,12 @@
       height: 100px;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .heart-flip.flipped { transform: rotateY(180deg); }
+    .heart-flip.flipped { 
+      transform: rotateY(180deg); 
+    }
 
     .heart-front, .heart-back {
       position: absolute;
@@ -198,7 +183,8 @@
       justify-content: center;
       align-items: center;
       background: #eff7ff;
-      clip-path: path('M50 90 C 20 70, 5 55, 5 35 C 5 20, 20 10, 35 10 C 43 10, 47 15, 50 18 C 53 15, 57 10, 65 10 C 80 10, 95 20, 95 35 C 95 55, 80 70, 50 90');
+      /* Clip-path ricalibrato per evitare tagli su mobile */
+      clip-path: path('M50 85 C 30 70, 15 55, 15 38 C 15 25, 25 18, 38 18 C 45 18, 48 22, 50 25 C 52 22, 55 18, 62 18 C 75 18, 85 25, 85 38 C 85 55, 70 70, 50 85');
     }
 
     .heart-back {
@@ -209,26 +195,35 @@
       font-size: 2.2rem;
     }
 
+    /* Allineamento testi timer */
     .val { 
       font-size: 1.6rem; 
       font-weight: 700; 
       color: var(--main-blue); 
-      margin-top: -5px;
-      line-height: 1;
+      margin: 0;
+      line-height: 1.1;
     }
     .lbl { 
-      font-size: 0.65rem; 
+      font-size: 0.6rem; 
       text-transform: uppercase; 
       font-weight: 700; 
       color: #888;
+      line-height: 1;
     }
 
     @media (max-width: 450px) {
       .timer-wrap { gap: 8px; }
       .heart-flip { width: 85px; height: 85px; }
-      .val { font-size: 1.4rem; }
-      .lbl { font-size: 0.55rem; }
-      .heart-back { font-size: 1.8rem; }
+      .val { font-size: 1.3rem; }
+      .brand-title { font-size: 2.2rem; }
+      .header-container { gap: 15px; }
+    }
+
+    .firework-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
     }
   </style>
 </head>
@@ -236,14 +231,16 @@
 
   <header>
     <div class="header-container">
-      <div class="side-heart">♥</div>
+      <div class="side-heart" id="h-left">♥</div>
       <div class="brand-wrapper">
         <h1 class="brand-title">SbatuffoBlog</h1>
-        <div class="brand-subtitle">Pandosamente insieme</div>
+        <div class="brand-subtitle">pandosamente insieme</div>
       </div>
-      <div class="side-heart">♥</div>
+      <div class="side-heart" id="h-right">♥</div>
     </div>
   </header>
+
+  <div class="section-divider"></div>
 
   <main>
     <section class="slider-box">
@@ -251,6 +248,8 @@
       <img src="img/ioete2.jpg" alt="2">
       <img src="img/ioete3.jpg" alt="3">
     </section>
+
+    <div class="section-divider"></div>
 
     <section class="grid-container">
       <a href="fotopuzzle/fotopuzzle.html" class="card">
@@ -294,25 +293,67 @@
     <div class="section-divider"></div>
 
     <section class="timer-section">
-      <h2 style="font-family: 'Grandstander'; color: var(--main-blue); margin-bottom: 35px; font-size: 1.6rem;">Stiamo insieme da...</h2>
+      <h2>Stiamo insieme da...</h2>
       <div class="timer-wrap">
-        <div class="heart-flip" id="f1">
-          <div class="heart-front"><span class="val" id="years">0</span><span class="lbl">Anni</span></div>
-          <div class="heart-back">T</div>
+        <div class="pulse-wrapper">
+          <div class="heart-flip" id="f1">
+            <div class="heart-front"><span class="val" id="years">0</span><span class="lbl">Anni</span></div>
+            <div class="heart-back">T</div>
+          </div>
         </div>
-        <div class="heart-flip" id="f2">
-          <div class="heart-front"><span class="val" id="months">0</span><span class="lbl">Mesi</span></div>
-          <div class="heart-back">V</div>
+        <div class="pulse-wrapper">
+          <div class="heart-flip" id="f2">
+            <div class="heart-front"><span class="val" id="months">0</span><span class="lbl">Mesi</span></div>
+            <div class="heart-back">V</div>
+          </div>
         </div>
-        <div class="heart-flip" id="f3">
-          <div class="heart-front"><span class="val" id="days">0</span><span class="lbl">Giorni</span></div>
-          <div class="heart-back">B</div>
+        <div class="pulse-wrapper">
+          <div class="heart-flip" id="f3">
+            <div class="heart-front"><span class="val" id="days">0</span><span class="lbl">Giorni</span></div>
+            <div class="heart-back">B</div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <script>
+    /* --- FUOCHI D'ARTIFICIO SINCRONIZZATI --- */
+    function createParticle(x, y) {
+      const p = document.createElement('div');
+      p.classList.add('firework-particle');
+      const size = Math.random() * 4 + 3;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      const colors = ['#ff4d4d', '#ffde59', '#bde0fe', '#0000ff', '#ffd700', '#ffffff'];
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      document.body.appendChild(p);
+
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = Math.random() * 100 + 40;
+      p.animate([
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+        { transform: `translate(${Math.cos(angle) * velocity}px, ${Math.sin(angle) * velocity + 50}px) scale(0)`, opacity: 0 }
+      ], {
+        duration: 3500 + Math.random() * 2000,
+        easing: 'cubic-bezier(0.1, 0.5, 0.2, 1)'
+      }).onfinish = () => p.remove();
+    }
+
+    function burst(id) {
+      const el = document.getElementById(id);
+      const rect = el.getBoundingClientRect();
+      for (let i = 0; i < 20; i++) createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
+    }
+
+    // Sincronizzato con il picco della pulsazione (ogni 1.5s)
+    setTimeout(() => {
+      setInterval(() => { burst('h-left'); burst('h-right'); }, 1500);
+    }, 750);
+
+    /* --- SLIDER --- */
     const imgs = document.querySelectorAll('.slider-box img');
     let idx = 0;
     setInterval(() => {
@@ -321,36 +362,30 @@
       imgs[idx].classList.add('active');
     }, 4000);
 
+    /* --- TIMER --- */
     function updateTimer() {
       const start = new Date(2018, 7, 20);
       const now = new Date();
       let years = now.getFullYear() - start.getFullYear();
       let months = now.getMonth() - start.getMonth();
       let days = now.getDate() - start.getDate();
-      if (days < 0) {
-        months--;
-        const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-        days += lastMonth;
-      }
-      if (months < 0) {
-        years--;
-        months += 12;
-      }
+      if (days < 0) { months--; const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate(); days += lastMonth; }
+      if (months < 0) { years--; months += 12; }
       document.getElementById("years").innerText = years;
       document.getElementById("months").innerText = months;
       document.getElementById("days").innerText = days;
     }
-
     updateTimer();
-    setInterval(updateTimer, 3600000);
 
+    /* --- FLIP TVB ARMONIOSO (1 pulsazione) --- */
     const hearts = [document.getElementById('f1'), document.getElementById('f2'), document.getElementById('f3')];
     function triggerFlip() {
       hearts.forEach((h, i) => {
         setTimeout(() => {
           h.classList.add('flipped');
-          setTimeout(() => h.classList.remove('flipped'), 3000);
-        }, i * 300);
+          // Resta girato per circa una pulsazione e mezzo, poi torna
+          setTimeout(() => h.classList.remove('flipped'), 1800);
+        }, i * 300); 
       });
     }
     setInterval(triggerFlip, 7000);
