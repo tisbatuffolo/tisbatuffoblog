@@ -17,11 +17,11 @@
       --light-blue-border: #bde0fe;
       --bg-soft: #fdfdfd;
       --heart-red: #ff4d4d;
-      --giretti-color: #5eb5ff; /* Colore della linea card .c2 in index */
+      --color-theme: #5eb5ff; /* Colore "Giretti" salvato come variabile principale */
     }
 
     body {
-      font-family: 'Fredoka', sans-serif; /* Sostituito Segoe UI con Fredoka */
+      font-family: 'Fredoka', sans-serif;
       background: var(--bg-soft);
       margin: 0;
       padding: 0;
@@ -35,7 +35,7 @@
       flex: 1;
     }
 
-    /* --- HEADER UNIFORMATO --- */
+    /* --- HEADER --- */
     header {
       background: #fff;
       padding: 25px 10px 5px;
@@ -49,17 +49,19 @@
       align-items: center;
       gap: 30px;
       position: relative;
+      min-height: 100px; /* Assicura altezza per allineamento */
     }
 
     .home-link-img {
       position: absolute;
       left: 20px;
-      top: 5px;
+      top: 50%;
+      transform: translateY(-50%);
       transition: transform 0.2s ease;
       display: flex;
       align-items: center;
     }
-    .home-link-img:hover { transform: scale(1.1); }
+    .home-link-img:hover { transform: translateY(-50%) scale(1.1); }
     .home-link-img img {
       width: clamp(70px, 12vw, 100px);
       height: auto;
@@ -78,7 +80,7 @@
     .brand-subtitle {
       font-family: 'Fredoka', sans-serif;
       font-size: clamp(0.9rem, 3vw, 1.2rem);
-      color: var(--giretti-color); /* Colore Giretti applicato */
+      color: var(--color-theme); 
       font-weight: 700;
       margin-top: 5px;
       letter-spacing: 1.5px;
@@ -87,13 +89,14 @@
 
     /* --- DIVISORI CON CUORICINO --- */
     .section-divider {
-      max-width: 200px;
+      max-width: 250px; /* Leggermente più largo per visibilità */
       height: 3px;
-      background: var(--light-blue-border);
-      margin: 30px auto 20px;
+      background: var(--color-theme); /* Linee del divisorio con color-theme */
+      margin: 40px auto;
       border-radius: 50px;
       position: relative;
       clear: both;
+      display: block; /* Garantisce il rendering */
     }
     .section-divider::after {
       content: "♥";
@@ -120,21 +123,27 @@
       position: relative;
       max-width: 1100px;
       margin: 0 auto;
+      min-height: 80px;
     }
 
     .footer-home {
       position: absolute;
       left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
       transition: transform 0.2s ease;
     }
-    .footer-home:hover { transform: scale(1.1); }
-    .footer-home img { width: clamp(50px, 8vw, 70px); height: auto; }
+    .footer-home:hover { transform: translateY(-50%) scale(1.1); }
+    /* Home footer grande come header */
+    .footer-home img { width: clamp(70px, 12vw, 100px); height: auto; }
 
     .footer-text {
       font-family: 'Grandstander', cursive;
       font-weight: 600;
       font-size: 1.2rem;
       color: #444;
+      display: flex;
+      align-items: center;
     }
 
     /* =======================================================
@@ -143,9 +152,8 @@
     main h2 {
       text-align: center;
       margin: 35px 0 20px;
-      /* color: var(--main-blue); */
-      color:#000;
-      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      color: #000;
+      font-family: 'Grandstander', cursive;
       font-size: clamp(1.8em, 6vw, 2.5em);
       font-weight: 900;
       letter-spacing: 1px;
@@ -172,10 +180,14 @@
       flex-direction: column;
       justify-content: center;
       min-height: 160px; 
+      border: 2px solid transparent;
     }
     .link-box:hover { transform: translateY(-5px); }
-    .link-box.map-box { background-color: #eff7ff; border: 2px solid var(--light-blue-border); } 
-    .link-box.list-box { background-color: #fff0f0; border: 2px solid #ffd1d1;}
+    
+    /* Colore Rosso Pastello Tenue */
+    .link-box.map-box { background-color: #fff0f0; border-color: #ffdada; } 
+    /* Colore Verde Pastello Tenue */
+    .link-box.list-box { background-color: #f0fff4; border-color: #dcfce7;}
 
     .link-box a {
       text-decoration: none;
@@ -187,10 +199,9 @@
     }
     
     .link-box a span {
-      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-family: 'Grandstander', cursive;
       font-weight: 900;
       font-size: clamp(0.9em, 3.5vw, 1.2em); 
-     /* color: var(--main-blue); */
       color: #000;
     }
 
@@ -208,7 +219,7 @@
 
     .riquadro {
       background: #fff;
-      border: 3px solid var(--giretti-color);
+      border: 3px solid var(--color-theme); /* Contorno card con color-theme */
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 6px 15px rgba(0,0,0,0.08);
@@ -226,11 +237,11 @@
     
     .riquadro-titolo { 
       padding: 15px; 
-      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-family: 'Grandstander', cursive;
       font-weight: 600; 
       text-align: center; 
-      color: #000; /* Testo scuro per staccare sull'azzurro */
-      background: var(--giretti-color); /* Sfondo color Giretti! */
+      color: #000; 
+      background: var(--color-theme); /* Sfondo titolo card con color-theme */
       font-size: 1.2em;
       letter-spacing: 1px;
       word-wrap: break-word;
@@ -248,7 +259,7 @@
     }
 
     #frase-giri {
-      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-family: 'Grandstander', cursive;
       font-size: clamp(1.2em, 4vw, 1.5em);
       line-height: 1.4;
       font-weight: 600;
@@ -289,16 +300,16 @@
       margin: 0 auto;
     }
 
-    /* Modifica header tabella con sfumatura unica riga colore Giretti */
+    /* Header tabella con sfumatura basata su color-theme */
     .header-row {
-      background: linear-gradient(90deg, #3db0ff, var(--giretti-color), #8dd0ff, var(--giretti-color), #3db0ff); 
+      background: linear-gradient(90deg, #3db0ff, var(--color-theme), #8dd0ff, var(--color-theme), #3db0ff); 
     }
 
     .header-row th {
-      background: transparent; /* Tolto l'effetto caselle */
-      color: #000; /* Testo nero per maggior contrasto */
+      background: transparent;
+      color: #000;
       padding: 15px 2px;
-      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-family: 'Grandstander', cursive;
       font-size: clamp(0.9em, 3vw, 1.1em);
       font-weight: 900;
       text-transform: uppercase;
@@ -312,7 +323,7 @@
       border-bottom: 1px solid #eee;
       font-family: 'Fredoka', sans-serif;
       font-size: clamp(0.9em, 3vw, 1.1em);
-      font-weight: 700;
+      font-weight: 400; /* Tolto grassetto */
       color: #222;
     }
 
@@ -368,14 +379,13 @@
     }
     
     .torta-container h3 {
-      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
-      /* color: var(--main-blue); */
-      color:#000;
-      font-size: 1.8em;
+      font-family: 'Grandstander', cursive;
+      color: #000;
+      font-size: 1.5em; /* Rimpicciolito rispetto a h2 */
       margin-top: 0;
     }
 
-    .torta-wrapper { width: 100%; max-width: 320px; height: 320px; }
+    .torta-wrapper { width: 100%; max-width: 300px; height: 300px; } /* Leggermente più piccola */
 
     #grid-legend {
       display: grid;
@@ -387,7 +397,15 @@
       border-top: 1px solid #eee;
     }
 
-    .legend-item { font-size: 0.85em; display: flex; align-items: center; gap: 8px; font-weight: 600;}
+    .legend-item { 
+        font-size: 0.85em; 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        font-weight: 400; /* Tolto grassetto */
+    }
+    .legend-item strong { font-weight: 700; } /* Solo i numeri in grassetto */
+
     .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
     .filter-area {
@@ -403,7 +421,7 @@
       padding: 6px 12px;
       border-radius: 15px;
       font-size: 0.9em;
-      font-weight: bold;
+      font-weight: normal; /* Tolto grassetto dalle label anni */
       display: flex;
       align-items: center;
       gap: 5px;
@@ -422,7 +440,7 @@
     }
     
     .footer-banner h2 {
-      font-family: 'Grandstander', cursive; /* Applicato Grandstander */
+      font-family: 'Grandstander', cursive;
       color: var(--main-blue);
       margin: 0;
       font-size: clamp(1.5em, 5vw, 2.2em);
@@ -438,11 +456,8 @@
     }
 
     @media (max-width: 850px) {
-      .footer-home { position: static; margin-right: 15px; }
-      .footer-container { justify-content: center; }
-      .footer-home img { width: 45px; }
+      .footer-home { position: absolute; left: 10px; } /* Mantenuta posizione assoluta per allineamento */
       .home-link-img { left: 10px; }
-      .home-link-img img { width: 60px; }
     }
 
     @media (max-width: 600px) {
@@ -451,10 +466,8 @@
         padding-right: 5px !important;
       }
       .grid-riquadri { grid-template-columns: 1fr; }
-      .riquadro { width: 95vw; height: 180px; }
       .icon-row img { max-width: 75px; }
       #grid-legend { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-      .chart-wrapper { height: 320px; }
     }
   </style>
 </head>
@@ -532,7 +545,7 @@
     </div>
 
     <div class="torta-container">
-      <h3>Torta dei Giretti 🍰 </h3>
+      <h3>Torta dei Giretti 🍰</h3>
       <div class="filter-area">
         <div class="anno-item">
           <input type="checkbox" id="selectAll" checked>
@@ -569,7 +582,7 @@
 <script src="giri.js"></script>
 
 <script>
-// Codice JS originale invariato
+// Logica JavaScript invariata per mantenere funzionalità
 const container = document.getElementById("contenitore-giri");
 if (typeof GIRI !== 'undefined') {
   GIRI.slice(0, 9).forEach(giro => {

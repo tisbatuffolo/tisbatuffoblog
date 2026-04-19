@@ -60,7 +60,6 @@
       line-height: 1;
     }
 
-    /* SOTTOTITOLO RIPRISTINATO */
     .brand-subtitle {
       font-family: 'Fredoka', sans-serif;
       font-size: clamp(0.9rem, 3vw, 1.2rem);
@@ -71,12 +70,12 @@
       text-transform: lowercase;
     }
 
-    /* --- DIVISORI COMPATTI --- */
+    /* --- DIVISORI --- */
     .section-divider {
       max-width: 200px;
       height: 3px;
       background: var(--light-blue-border);
-      margin: 30px auto; /* Distanza dimezzata */
+      margin: 30px auto;
       border-radius: 50px;
       position: relative;
     }
@@ -138,7 +137,7 @@
     .c4 { background: #002147; } .c5 { background: #55efc4; } .c6 { background: #fab1a0; }
     .c7 { background: #fd79a8; } .c8 { background: #00cec9; } .c9 { background: #a29bfe; }
 
-    /* --- TIMER SECTION --- */
+    /* --- TIMER SECTION CORRETTA --- */
     .timer-section {
       text-align: center;
       padding-bottom: 50px;
@@ -147,14 +146,14 @@
     .timer-section h2 {
       font-family: 'Grandstander';
       color: var(--main-blue);
-      margin: 0 0 10px 0;
+      margin: 0 0 15px 0;
       font-size: 1.6rem;
     }
 
     .timer-wrap {
       display: flex;
       justify-content: center;
-      gap: 15px;
+      gap: 12px;
       perspective: 1000px;
     }
 
@@ -180,10 +179,9 @@
       backface-visibility: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: center; /* Centra verticalmente */
+      align-items: center;     /* Centra orizzontalmente */
       background: #eff7ff;
-      /* Clip-path ricalibrato per evitare tagli su mobile */
       clip-path: path('M50 85 C 30 70, 15 55, 15 38 C 15 25, 25 18, 38 18 C 45 18, 48 22, 50 25 C 52 22, 55 18, 62 18 C 75 18, 85 25, 85 38 C 85 55, 70 70, 50 85');
     }
 
@@ -192,29 +190,36 @@
       color: #fff;
       transform: rotateY(180deg);
       font-family: 'Grandstander', cursive;
-      font-size: 2.2rem;
+      font-size: 2.5rem;
+      padding-bottom: 8px; /* Correzione ottica per la punta del cuore */
+      box-sizing: border-box;
     }
 
-    /* Allineamento testi timer */
+    .heart-front {
+      padding-bottom: 10px; /* Alza i numeri per centrarli nella parte tonda */
+      box-sizing: border-box;
+    }
+
     .val { 
-      font-size: 1.6rem; 
-      font-weight: 700; 
+      font-size: 1.8rem; 
+      font-weight: 900; 
       color: var(--main-blue); 
       margin: 0;
-      line-height: 1.1;
+      line-height: 1;
     }
     .lbl { 
-      font-size: 0.6rem; 
+      font-size: 0.65rem; 
       text-transform: uppercase; 
       font-weight: 700; 
-      color: #888;
-      line-height: 1;
+      color: #666;
+      margin-top: 2px;
     }
 
     @media (max-width: 450px) {
-      .timer-wrap { gap: 8px; }
-      .heart-flip { width: 85px; height: 85px; }
-      .val { font-size: 1.3rem; }
+      .timer-wrap { gap: 6px; }
+      .heart-flip { width: 90px; height: 90px; }
+      .val { font-size: 1.5rem; }
+      .heart-back { font-size: 2.2rem; padding-bottom: 10px; }
       .brand-title { font-size: 2.2rem; }
       .header-container { gap: 15px; }
     }
@@ -318,7 +323,7 @@
   </main>
 
   <script>
-    /* --- FUOCHI D'ARTIFICIO SINCRONIZZATI --- */
+    /* --- FUOCHI D'ARTIFICIO --- */
     function createParticle(x, y) {
       const p = document.createElement('div');
       p.classList.add('firework-particle');
@@ -344,11 +349,11 @@
 
     function burst(id) {
       const el = document.getElementById(id);
+      if(!el) return;
       const rect = el.getBoundingClientRect();
       for (let i = 0; i < 20; i++) createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
     }
 
-    // Sincronizzato con il picco della pulsazione (ogni 1.5s)
     setTimeout(() => {
       setInterval(() => { burst('h-left'); burst('h-right'); }, 1500);
     }, 750);
@@ -377,19 +382,18 @@
     }
     updateTimer();
 
-    /* --- FLIP TVB ARMONIOSO (1 pulsazione) --- */
+    /* --- FLIP TVB --- */
     const hearts = [document.getElementById('f1'), document.getElementById('f2'), document.getElementById('f3')];
     function triggerFlip() {
       hearts.forEach((h, i) => {
         setTimeout(() => {
           h.classList.add('flipped');
-          // Resta girato per circa una pulsazione e mezzo, poi torna
-          setTimeout(() => h.classList.remove('flipped'), 1800);
+          setTimeout(() => h.classList.remove('flipped'), 2200);
         }, i * 300); 
       });
     }
-    setInterval(triggerFlip, 7000);
-    setTimeout(triggerFlip, 1000);
+    setInterval(triggerFlip, 8000);
+    setTimeout(triggerFlip, 1500);
   </script>
 </body>
 </html>
