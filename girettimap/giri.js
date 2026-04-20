@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Celle Ipogee Melinda",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/celle-ipogee-melinda/339115612/",
+    "img": "https://img3.oastatic.com/img2/627881074/800x600/variant.webp?revbust=19da546e299"
+  },
+  {
     "titolo": "Caltena",
     "link": "https://www.outdooractive.com/it/route/escursione/san-martino-di-castrozza-primiero-vanoi/caltena/338654801/",
     "img": "https://img2.oastatic.com/img2/627434203/800x600/variant.webp?revbust=19d82733135"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Sottocorno del Renon",
     "link": "https://www.outdooractive.com/it/route/escursione-invernale/bolzano-e-dintorni/sottocorno-del-renon/332978308/",
     "img": "https://img1.oastatic.com/img2/623694727/800x600/variant.jpg"
-  },
-  {
-    "titolo": "Lana",
-    "link": "https://www.outdooractive.com/it/route/percorso-urbano/merano-e-dintorni/lana/331537395/",
-    "img": "https://img3.oastatic.com/img2/622602399/800x600/variant.jpg"
   }
 ]
