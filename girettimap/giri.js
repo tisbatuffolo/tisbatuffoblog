@@ -1,5 +1,20 @@
 const GIRI = [
   {
+    "titolo": "Eremo e forra di Santa Giustina",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/eremo-e-forra-di-santa-giustina/339142120/",
+    "img": "https://img3.oastatic.com/img2/627957069/800x600/variant.webp?revbust=19dab90f94c"
+  },
+  {
+    "titolo": "Castel Cles",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/castel-cles/339131415/",
+    "img": "https://img3.oastatic.com/img2/627886314/800x600/variant.webp?revbust=19da60c05c1"
+  },
+  {
+    "titolo": "Celle Ipogee Melinda",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/celle-ipogee-melinda/339115612/",
+    "img": "https://img3.oastatic.com/img2/627881074/800x600/variant.webp?revbust=19da546e299"
+  },
+  {
     "titolo": "Caltena",
     "link": "https://www.outdooractive.com/it/route/escursione/san-martino-di-castrozza-primiero-vanoi/caltena/338654801/",
     "img": "https://img2.oastatic.com/img2/627434203/800x600/variant.webp?revbust=19d82733135"
@@ -28,20 +43,5 @@ const GIRI = [
     "titolo": "Budapest",
     "link": "https://www.outdooractive.com/it/route/strada-panoramica/dunazug-hegyvidek/budapest/338840491/",
     "img": "https://img2.oastatic.com/img2/627617808/800x600/variant.webp?revbust=19d9247a1e9"
-  },
-  {
-    "titolo": "Monte Finonchio",
-    "link": "https://www.outdooractive.com/it/route/escursione-invernale/altopiano-di-folgaria-lavarone-luserna-e-vigolana/monte-finonchio/333322619/",
-    "img": "https://img2.oastatic.com/img2/623993058/800x600/variant.jpg"
-  },
-  {
-    "titolo": "Sottocorno del Renon",
-    "link": "https://www.outdooractive.com/it/route/escursione-invernale/bolzano-e-dintorni/sottocorno-del-renon/332978308/",
-    "img": "https://img1.oastatic.com/img2/623694727/800x600/variant.jpg"
-  },
-  {
-    "titolo": "Lana",
-    "link": "https://www.outdooractive.com/it/route/percorso-urbano/merano-e-dintorni/lana/331537395/",
-    "img": "https://img3.oastatic.com/img2/622602399/800x600/variant.jpg"
   }
 ]
