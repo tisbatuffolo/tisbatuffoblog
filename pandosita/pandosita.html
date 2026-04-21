@@ -3,47 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pandosita</title>
+<title>SbatuffoBlog - Pandosità</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+  :root {
+    --primary: #00cec9; /* Color Theme Pandosità */
+    --sbatuffo-blue: #0000ff;
+    --bg-soft: #fdfdfd;
+    --text: #1a1a1a;
+    --heart-red: #ff4d4d;
+    --zombie-eye: #a0ff00; /* Variabile per il colore degli occhi zombie/sottotitolo */
+  }
+
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'Fredoka', sans-serif;
     text-align: center;
     margin: 0;
-    background-color: #f0f2f5;
-    padding-bottom: 80px;
+    background-color: var(--bg-soft);
+    color: var(--text);
   }
 
+  /* --- HEADER --- */
   header {
-    background: #e2eaff;
-    padding: 20px 0 10px 0;
+    background: #fff;
+    padding: 25px 10px 5px;
+    text-align: center;
+    position: relative;
   }
 
-  header h1 {
-    color: #2332bb;
-    font-size: 2em;
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    position: relative;
+  }
+
+  .home-link-img {
+    position: absolute;
+    left: 20px;
+    top: 5px;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+  }
+  .home-link-img:hover { transform: scale(1.1); }
+  .home-link-img img { width: clamp(70px, 12vw, 100px); height: auto; }
+
+  .brand-title {
+    font-family: 'Grandstander', cursive;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 8vw, 4.2rem);
+    color: var(--sbatuffo-blue);
     margin: 0;
+    line-height: 1;
+    text-decoration: none;
   }
 
-  header h1 a { color: #2332bb; text-decoration: none; }
-  header h1 a:hover { color: #547bfc; }
-
-  /* --- STILI COMUNI --- */
-  .section-title { color: #000000; margin-bottom: 20px; font-size: 1.8em; margin-top: 40px; }
-  .section-subtitle { color: #667; font-size: 0.9em; margin-bottom: 20px; }
-
-  .scroll-wrapper {
-    overflow-x: auto;
-    padding: 20px;
-    -webkit-overflow-scrolling: touch;
+  .brand-subtitle {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    color: var(--primary);
+    font-weight: 700;
+    margin-top: 5px;
+    letter-spacing: 1.5px;
+    text-transform: lowercase;
   }
 
-  .scroll-wrapper::-webkit-scrollbar { height: 12px; }
-  .scroll-wrapper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-  .scroll-wrapper::-webkit-scrollbar-thumb { background: #2332bb; border-radius: 10px; }
+  /* --- DIVISORI --- */
+  .section-divider {
+    max-width: 200px;
+    height: 3px;
+    background: var(--primary);
+    margin: 30px auto;
+    border-radius: 50px;
+    position: relative;
+    clear: both;
+  }
+  .section-divider::after {
+    content: "♥";
+    position: absolute;
+    top: -14px; left: 50%;
+    transform: translateX(-50%);
+    padding: 0 15px;
+    color: var(--heart-red);
+    font-size: 1.5rem;
+    background: var(--bg-soft); 
+  }
 
-  /* --- CELLULARE MAGICO PANDA STICKERS --- */
-  .stickers-section { background: #fff; padding: 80px 0; position: relative; overflow: hidden; }
+  .sbatuffolart-section .section-divider::after { background: #fdfaf2; }
+  .sfigatini-section .section-divider::after { background: #000; }
+  .stickers-section .section-divider::after, 
+  .gif-section .section-divider::after, 
+  .lulu-sofa-section .section-divider::after { background: #fff; }
+
+  /* --- STILI SEZIONI --- */
+  .section-title { 
+    font-family: 'Grandstander', cursive;
+    color: #000; 
+    margin-bottom: 10px; 
+    font-size: 1.8em; 
+    font-weight: 900;
+  }
+  
+  /* Modifica 1: Sottotitoli allineati allo stile di brand-subtitle */
+  .section-subtitle { 
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    font-weight: 700;
+    color: #666; 
+    margin-bottom: 20px; 
+    margin-top: 0;
+    letter-spacing: 1.5px;
+  }
+
+  /* --- PANDA STICKERS --- */
+  .stickers-section { background: #fff; padding: 40px 0 60px 0; position: relative; overflow: hidden; }
   .phone-wrapper { position: relative; display: inline-block; margin: 0 auto; }
   .floating-heart, .pulsing-star { position: absolute; pointer-events: none; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
   .floating-heart { color: #ff8fab; font-size: 35px; animation: floatHeart 4s infinite ease-in-out; }
@@ -66,153 +143,27 @@
   .sticker-item-phone img { width: 100%; height: auto; display: block; }
   .phone-button { width: 44px; height: 44px; background: transparent; border: 3px solid #b1b4b8; border-radius: 50%; margin-top: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
 
-  /* --- PANDA GIF (SEZIONE MODIFICATA) --- */
-  .gif-section { 
-    padding: 60px 0; 
-    background: #fdfdfd; 
-    overflow: hidden;
-  }
-  
-  .camera-display-container {
-    position: relative;
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* Rullino Fotografico */
-  .film-roll-container {
-    width: 100%;
-    background: #1a1a1a;
-    padding: 20px 0;
-    position: relative;
-    border-top: 4px solid #333;
-    border-bottom: 4px solid #333;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    overflow-x: auto;
-    scrollbar-width: none; /* Nascondiamo quella nativa per usare quella della macchina */
-    -ms-overflow-style: none;
-    scroll-behavior: smooth;
-    display: flex;
-  }
+  /* --- PANDA GIF --- */
+  .gif-section { padding: 40px 0 60px 0; background: #fdfdfd; overflow: hidden; }
+  .camera-display-container { position: relative; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+  .film-roll-container { width: 100%; background: #1a1a1a; padding: 20px 0; position: relative; border-top: 4px solid #333; border-bottom: 4px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.2); overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; display: flex; }
   .film-roll-container::-webkit-scrollbar { display: none; }
-
-  .film-strip-gifs {
-    display: flex;
-    gap: 10px;
-    padding: 0 50px;
-    align-items: center;
-  }
-
-  .film-frame-gif {
-    flex: 0 0 220px;
-    height: 160px;
-    background: #000;
-    position: relative;
-    border-left: 15px solid #1a1a1a;
-    border-right: 15px solid #1a1a1a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Fori del rullino */
-  .film-frame-gif::before, .film-frame-gif::after {
-    content: "";
-    position: absolute;
-    left: -15px;
-    right: -15px;
-    height: 12px;
-    background-image: radial-gradient(circle, #444 40%, transparent 45%);
-    background-size: 20px 20px;
-  }
+  .film-strip-gifs { display: flex; gap: 10px; padding: 0 50px; align-items: center; }
+  .film-frame-gif { flex: 0 0 220px; height: 160px; background: #000; position: relative; border-left: 15px solid #1a1a1a; border-right: 15px solid #1a1a1a; display: flex; align-items: center; justify-content: center; }
+  .film-frame-gif::before, .film-frame-gif::after { content: ""; position: absolute; left: -15px; right: -15px; height: 12px; background-image: radial-gradient(circle, #444 40%, transparent 45%); background-size: 20px 20px; }
   .film-frame-gif::before { top: -16px; }
   .film-frame-gif::after { bottom: -16px; }
-
-  .film-frame-gif video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border: 1px solid #333;
-  }
-
-  /* Macchina Fotografica */
-  .camera-body {
-    width: 280px;
-    height: 180px;
-    background: #222;
-    border-radius: 20px;
-    margin-top: -30px; /* Sovrappone leggermente il rullino */
-    position: relative;
-    z-index: 10;
-    border: 5px solid #444;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-    background: linear-gradient(145deg, #333, #111);
-  }
-
-  .camera-lens-big {
-    width: 110px;
-    height: 110px;
-    background: #111;
-    border-radius: 50%;
-    margin: 30px auto 0;
-    border: 8px solid #333;
-    box-shadow: inset 0 0 20px #000;
-    position: relative;
-  }
-  
-  .camera-lens-inner {
-    width: 40px;
-    height: 40px;
-    background: #050505;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 2px solid #222;
-  }
-
-  .camera-flash {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    width: 40px;
-    height: 30px;
-    background: #444;
-    border-radius: 5px;
-    border: 2px solid #555;
-  }
-
-  /* La base con la Scrollbar */
-  .camera-base-scroll {
-    width: 320px;
-    height: 50px;
-    background: #444;
-    border-radius: 0 0 15px 15px;
-    margin-top: -10px;
-    padding: 15px 20px;
-    box-sizing: border-box;
-    z-index: 9;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  }
-
-  .custom-scrollbar-input {
-    width: 100%;
-    cursor: pointer;
-    accent-color: #2332bb;
-  }
+  .film-frame-gif video, .film-frame-gif img { width: 100%; height: 100%; object-fit: cover; border: 1px solid #333; }
+  .camera-body { width: 280px; height: 180px; background: #222; border-radius: 20px; margin-top: -30px; position: relative; z-index: 10; border: 5px solid #444; box-shadow: 0 15px 30px rgba(0,0,0,0.4); background: linear-gradient(145deg, #333, #111); }
+  .camera-lens-big { width: 110px; height: 110px; background: #111; border-radius: 50%; margin: 30px auto 0; border: 8px solid #333; box-shadow: inset 0 0 20px #000; position: relative; }
+  .camera-lens-inner { width: 40px; height: 40px; background: #050505; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 2px solid #222; }
+  .camera-flash { position: absolute; top: 15px; right: 20px; width: 40px; height: 30px; background: #444; border-radius: 5px; border: 2px solid #555; }
+  .camera-base-scroll { width: 320px; height: 50px; background: #444; border-radius: 0 0 15px 15px; margin-top: -10px; padding: 15px 20px; box-sizing: border-box; z-index: 9; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+  .custom-scrollbar-input { width: 100%; cursor: pointer; accent-color: var(--primary); }
   
   /* --- SBATUFFOLART --- */
   .sbatuffolart-section { padding: 60px 0; background: #fdfaf2; overflow: hidden; position: relative; }
-  .sbatuffolart-section .section-subtitle {
-    color: #000000;
-    font-family: Arial, sans-serif;
-  }
   .art-container { display: flex; flex-direction: column; align-items: center; margin-top: 40px; position: relative; }
-  
   .easel { position: relative; width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; z-index: 2; margin-top: 10px;}
   .easel-back-leg { position: absolute; width: 18px; height: 110%; background: #6b4226; top: -5%; z-index: 1; border-radius: 8px; }
   .easel-leg-left, .easel-leg-right { position: absolute; width: 24px; height: 115%; background: #8b5a2b; top: 0; z-index: 1; border-radius: 10px; box-shadow: inset 2px 0 5px rgba(0,0,0,0.2); }
@@ -220,9 +171,8 @@
   .easel-leg-right { right: 12%; transform: rotate(-10deg); transform-origin: top center; }
   .easel-crossbar { position: absolute; bottom: 20%; width: 85%; height: 25px; background: #5c3a21; z-index: 2; border-radius: 5px; box-shadow: 0 5px 10px rgba(0,0,0,0.3); }
   .easel-top { position: absolute; top: -15px; width: 50px; height: 30px; background: #5c3a21; z-index: 4; border-radius: 5px; }
-
-  .art-canvas { position: relative; width: 85%; max-width: 500px; height: 350px; background: #fffcf0; border: 15px solid #e0c8a0; box-shadow: inset 0 0 20px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.3); z-index: 3; margin: 30px 0 80px 0; border-radius: 5px; overflow: hidden; }
   
+  .art-canvas { position: relative; width: 85%; max-width: 500px; height: 350px; background: #fffcf0; border: 15px solid #e0c8a0; box-shadow: inset 0 0 20px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.3); z-index: 3; margin: 30px 0 80px 0; border-radius: 5px; overflow: hidden; }
   .canvas-splatters { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10;
       background: radial-gradient(circle at 15% 25%, rgba(255,99,71,0.6) 0%, rgba(255,99,71,0) 15px),
                   radial-gradient(circle at 85% 75%, rgba(65,105,225,0.6) 0%, rgba(65,105,225,0) 25px),
@@ -240,21 +190,10 @@
   .palette { width: 280px; height: 180px; background: #e0ac69; border-radius: 40% 60% 50% 40% / 50% 40% 60% 50%; box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2), 0 15px 25px rgba(0,0,0,0.3); position: relative; padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; transform: rotate(-5deg); }
   .palette-hole { position: absolute; top: 30px; left: 30px; width: 40px; height: 45px; background: #fdfaf2; border-radius: 50%; box-shadow: inset 3px 3px 8px rgba(0,0,0,0.3); }
   .palette-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-40%, -50%) rotate(-5deg);
-    font-size: 48px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    letter-spacing: 2px;
-    pointer-events: none;
-
+    position: absolute; top: 50%; left: 50%; transform: translate(-40%, -50%) rotate(-5deg);
+    font-size: 48px; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 2px;
     background: linear-gradient(45deg, #ff4500, #ffd700, #32cd32, #1e90ff, #9400d3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 2px 4px rgba(0,0,0,0.3); pointer-events: none;
   }
   .paint-blob { position: absolute; border-radius: 50%; filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.3)); }
   .blob-1 { width: 25px; height: 30px; background: #ff4500; top: 20px; right: 50px; transform: rotate(15deg); }
@@ -266,30 +205,36 @@
   .brush-1 { top: -20px; left: -40px; transform: rotate(35deg); }
   .brush-2 { top: 10px; right: -50px; transform: rotate(-120deg); background: linear-gradient(to right, #d2b48c 70%, #a9a9a9 70%, #a9a9a9 80%, #ff4500 80%); }
 
-  /* Modificata la posizione della scrollbar tramite absolute positioning */
   .palette-slider-container { position: absolute; bottom: 20px; left: 20px; width: 75%; background: rgba(0,0,0,0.15); border-radius: 15px; padding: 6px 12px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); box-sizing: border-box; transform: rotate(5deg); }
-  
   .art-scrollbar { width: 100%; appearance: none; background: transparent; cursor: pointer; }
   .art-scrollbar::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff4500, #ffd700, #32cd32, #1e90ff, #9400d3); border-radius: 5px; }
   .art-scrollbar::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: #fff; border: 4px solid #333; border-radius: 50%; margin-top: -7px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
+  /* --- LULU SOFA --- */
+  /* Modifica 2: Ridotto padding top per avvicinare titolo e divano al divisore superiore */
+  .lulu-sofa-section { padding: 30px 0 60px 0; background: #fff; } 
+  .sofa-external-wrapper { position: relative; padding: 20px 80px; max-width: 750px; margin: 0 auto; transition: all 0.3s ease; }
+  .sofa-main-body { position: relative; background: #004d40; border-radius: 50px 50px 10px 10px; box-shadow: inset 0 15px 40px rgba(0,0,0,0.6); padding: 40px 30px 15px 30px; z-index: 2; }
+  .armrest { position: absolute; bottom: 0; width: 100px; height: 240px; background: linear-gradient(to bottom, #00332c, #002621); border-radius: 40px 40px 15px 15px; box-shadow: 10px 15px 30px rgba(0,0,0,0.5), inset 0 10px 15px rgba(255,255,255,0.05); z-index: 4; transition: width 0.3s ease, height 0.3s ease; }
+  .arm-l { left: 0; }
+  .arm-r { right: 0; }
+  .sofa-backrest { display: flex; justify-content: center; gap: 25px; margin-bottom: 20px; perspective: 1000px; position: relative; }
+  .sofa-backrest::after { content: ""; position: absolute; top: -20px; bottom: -10px; left: 50%; width: 2px; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.4) 80%, transparent); box-shadow: 0 0 10px rgba(0,0,0,0.3); transform: translateX(-50%); z-index: 1; pointer-events: none; }
+  .cushion-container { position: relative; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4)); transition: transform 0.3s ease; z-index: 3; }
+  .cushion { width: var(--cushion-w, 240px); height: var(--cushion-h, 220px); background: radial-gradient(circle at 50% 50%, #fffdf5 0%, #fefae0 70%, #f5f5dc 100%); clip-path: url(#concave-cushion-shape); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+  .cushion img { width: 86%; height: 86%; object-fit: cover; opacity: 0; transition: opacity 0.3s ease; clip-path: url(#concave-cushion-shape); }
+  .sofa-seam-scroll-container { width: 100%; height: 18px; background: #002621; border-radius: 10px; position: relative; box-shadow: inset 0 3px 5px rgba(0,0,0,0.7); margin-top: 25px; touch-action: none; }
+  #sofa-cat-thumb { position: absolute; top: -45px; width: 110px; height: 80px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80" viewBox="0 0 120 80"><text y="60" x="10" font-size="65" filter="grayscale(1) brightness(0.8)" transform="scale(-1, 1) translate(-120, 0)">🐈‍⬛</text></svg>'); background-repeat: no-repeat; background-position: center; cursor: grab; z-index: 5; left: 0; }
+  .sofa-base { height: 40px; background: linear-gradient(to bottom, #1a1a1a, #0d0d0d); width: 100%; border-radius: 0 0 20px 20px; position: relative; top: -10px; }
 
-  /* --- SEZIONE GLI SFIGATINI --- */
+  /* --- GLI SFIGATINI --- */
   .sfigatini-section { padding: 80px 0; background: #000; color: white; overflow: hidden; position: relative; }
   .horror-title-wrapper { display: inline-flex; align-items: center; justify-content: center; position: relative; gap: 20px; }
   .ghost-icon { font-size: 60px; animation: floatGhost 3s infinite ease-in-out; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
   @keyframes floatGhost { 0%, 100% { transform: translateY(0) rotate(5deg); } 50% { transform: translateY(-15px) rotate(-5deg); } }
   
-  .cinema-container { 
-    position: relative; width: 95%; max-width: 1000px; margin: 40px auto 0; background: #000; border: 8px solid #1a1a1a; 
-    box-shadow: 0 0 80px rgba(255,0,0,0.5); 
-  }
-  .cinema-container::after { 
-    content: ""; position: absolute; top: -30px; left: -30px; right: -30px; bottom: 0; 
-    background: radial-gradient(ellipse at top, rgba(255,0,0,0.2) 0%, transparent 70%); 
-    pointer-events: none; z-index: 1; 
-  }
-
+  .cinema-container { position: relative; width: 95%; max-width: 1000px; margin: 40px auto 0; background: #000; border: 8px solid #1a1a1a; box-shadow: 0 0 80px rgba(255,0,0,0.5); }
+  .cinema-container::after { content: ""; position: absolute; top: -30px; left: -30px; right: -30px; bottom: 0; background: radial-gradient(ellipse at top, rgba(255,0,0,0.2) 0%, transparent 70%); pointer-events: none; z-index: 1; }
   .web-corner {
     position: absolute; top: -10px; right: -10px; width: 200px; height: 200px;
     background: radial-gradient(circle at top right, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px, transparent 21px), radial-gradient(circle at top right, transparent 40px, rgba(255,255,255,0.1) 40px, rgba(255,255,255,0.1) 41px, transparent 41px), radial-gradient(circle at top right, transparent 60px, rgba(255,255,255,0.1) 60px, rgba(255,255,255,0.1) 61px, transparent 61px), radial-gradient(circle at top right, transparent 80px, rgba(255,255,255,0.1) 80px, rgba(255,255,255,0.1) 81px, transparent 81px), radial-gradient(circle at top right, transparent 100px, rgba(255,255,255,0.1) 100px, rgba(255,255,255,0.1) 101px, transparent 101px), linear-gradient(45deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%), linear-gradient(15deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%), linear-gradient(75deg, transparent 49.5%, rgba(255,255,255,0.15) 50%, transparent 50.5%), linear-gradient(to bottom, transparent 49.5%, rgba(255,255,255,0.1) 50%, transparent 50.5%) 100% 0 / 100% 200%, linear-gradient(to left, transparent 49.5%, rgba(255,255,255,0.1) 50%, transparent 50.5%) 0 100% / 200% 100%;
@@ -311,32 +256,48 @@
   .zombie-fallback { position: absolute; bottom: -10px; width: 100%; display: flex; justify-content: space-around; align-items: flex-end; pointer-events: none; z-index: 20; padding: 0 20px; box-sizing: border-box; }
   .zombie-container { display: flex; flex-direction: column; align-items: center; position: relative; }
   .zombie-head { width: 50px; height: 70px; background: #1a1e12; border-radius: 40% 40% 10% 10%; position: relative; box-shadow: 0 0 15px black; transform-origin: bottom; animation: zombieSway 3s infinite ease-in-out alternate; z-index: 2; }
-  .zombie-head::after { content: "° °"; color: #a0ff00; font-size: 16px; position: absolute; top: 15px; left: 13px; text-shadow: 0 0 8px #a0ff00; }
+  .zombie-head::after { content: "° °"; color: var(--zombie-eye); font-size: 16px; position: absolute; top: 15px; left: 13px; text-shadow: 0 0 8px var(--zombie-eye); }
   .tombstone { width: 40px; height: 50px; background: #333; border-radius: 15px 15px 0 0; border: 1px solid #444; position: relative; z-index: 1; }
   .cross { width: 10px; height: 45px; background: #222; position: relative; z-index: 1; }
   .cross::after { content: ""; width: 30px; height: 10px; background: #222; position: absolute; top: 12px; left: -10px; }
   @keyframes zombieSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
 
-  /* --- MEDIA QUERIES AGGIORNATE --- */
-  @media (max-width: 768px) { 
-    .book-body { min-height: 500px; } 
-    .book-spread { min-width: 200%; flex-direction: row; scroll-snap-align: none; } 
-    .page { width: 50%; padding: 20px; flex-shrink: 0; scroll-snap-align: start; } 
-    .book-spine { display: none; } 
+  /* --- FOOTER --- */
+  footer { background: #fff; padding: 20px 10px 40px; border-top: 2px solid #eee; }
+  .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
+  .footer-home { position: absolute; left: 20px; }
+  .footer-home img { width: clamp(50px, 8vw, 70px); height: auto; }
+  .footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.2rem; color: #444; }
+
+  /* --- MEDIA QUERIES --- */
+  @media (max-width: 768px) {
+    :root { --cushion-w: 200px; --cushion-h: 180px; }
+    .sofa-external-wrapper { padding: 20px 60px; }
+    .armrest { width: 70px; height: 200px; }
   }
   @media (max-width: 480px) {
+    :root { --cushion-w: 155px; --cushion-h: 145px; }
+    .sofa-external-wrapper { padding: 20px 40px; }
+    .armrest { width: 45px; height: 160px; }
+    .sofa-main-body { padding: 30px 10px 10px 10px; }
+    .sofa-backrest { gap: -30px; } 
+    .cushion-container:first-child { transform: rotate(-8deg) translateX(8px); z-index: 3; }
+    .cushion-container:last-child { transform: rotate(8deg) translateX(-8px); z-index: 4; }
+    #sofa-cat-thumb { width: 90px; top: -38px; }
+
     .camera-body { width: 200px; height: 130px; }
     .camera-lens-big { width: 70px; height: 70px; margin: 25px auto 0; }
     .camera-base-scroll { width: 240px; }
     .film-frame-gif { flex: 0 0 160px; height: 120px; }
 
-    /* Fix Sbatuffolart su mobile */
     .art-canvas { height: 260px; border-width: 10px; margin: 20px 0 60px 0; }
     .palette { width: 230px; height: 150px; }
     .palette-hole { width: 30px; height: 35px; top: 20px; left: 20px; }
     .paint-blob { transform: scale(0.8); }
     .brush { width: 110px; height: 10px; }
     .easel-crossbar { bottom: 18%; }
+    
+    .footer-home { position: static; margin-right: 15px; }
   }
 </style>
 </head>
@@ -344,12 +305,20 @@
 <body>
 
 <header>
-  <h1><a href="../index.html">SbatuffoBlog</a> - Pandosità</h1>
+  <div class="header-container">
+    <a href="../index.html" class="home-link-img"><img src="img/home.png" alt="Home"></a>
+    <div class="brand-wrapper">
+      <a href="../index.html" class="brand-title">SbatuffoBlog</a>
+      <div class="brand-subtitle">Pandosità</div>
+    </div>
+  </div>
 </header>
+
+<div class="section-divider"></div>
 
 <section class="stickers-section">
   <h2 class="section-title">Panda Stickers</h2>
-  <p>Scorri verso il basso per vedere tutti i nostri panda stickers!</p>
+  <p class="section-subtitle">Scorri verso il basso per vedere tutti i nostri panda stickers!</p>
   <div class="phone-wrapper">
     <div class="floating-heart" style="top: 10%; left: -110px;">❤️</div>
     <div class="floating-heart" style="top: 50%; left: -130px; animation-delay: 1s;">💖</div>
@@ -365,33 +334,30 @@
   </div>
 </section>
 
+<div class="section-divider"></div>
+
 <section class="gif-section">
   <h2 class="section-title">Panda Gif</h2>
-  <p>Ti sbatuffolo animatamente</p>
-  
+  <p class="section-subtitle">Ti sbatuffolo animatamente</p>
   <div class="camera-display-container">
     <div class="film-roll-container" id="gif-scroll-container">
-      <div class="film-strip-gifs" id="gif-gallery">
-        </div>
+      <div class="film-strip-gifs" id="gif-gallery"></div>
     </div>
-
     <div class="camera-body">
       <div class="camera-flash"></div>
-      <div class="camera-lens-big">
-        <div class="camera-lens-inner"></div>
-      </div>
+      <div class="camera-lens-big"><div class="camera-lens-inner"></div></div>
     </div>
-
     <div class="camera-base-scroll">
       <input type="range" class="custom-scrollbar-input" id="camera-scrollbar" min="0" value="0" step="1">
     </div>
   </div>
 </section>
 
+<div class="section-divider"></div>
+
 <section class="sbatuffolart-section">
   <h2 class="section-title">Sbatuffolart</h2>
   <p class="section-subtitle">Quando sbatuffolare diventa arte</p>
-  
   <div class="art-container">
       <div class="easel">
           <div class="easel-back-leg"></div>
@@ -402,8 +368,7 @@
           
           <div class="art-canvas">
               <div class="canvas-splatters"></div>
-              <div class="art-gallery-container" id="sbatuffolart-gallery">
-                  </div>
+              <div class="art-gallery-container" id="sbatuffolart-gallery"></div>
           </div>
       </div>
       
@@ -428,155 +393,11 @@
   </div>
 </section>
 
+<div class="section-divider" style="margin: 40px auto 10px;"></div>
+
 <section class="lulu-sofa-section">
   <h2 class="section-title">Lulu meno male che ci sei tu</h2>
-  <p>Dove starà dormendo adesso la Lulu?</p>
-
-  <svg width="0" height="0" style="position: absolute;">
-    <defs>
-      <clipPath id="concave-cushion-shape" clipPathUnits="objectBoundingBox">
-        <path d="M 0,0 
-                 Q 0.5,0.12 1,0 
-                 Q 0.88,0.5 1,1 
-                 Q 0.5,0.88 0,1 
-                 Q 0.12,0.5 0,0 Z" />
-      </clipPath>
-    </defs>
-  </svg>
-
-  <style>
-    .sofa-external-wrapper {
-      position: relative;
-      padding: 20px 80px;
-      max-width: 750px;
-      margin: 0 auto;
-      transition: all 0.3s ease;
-    }
-
-    .sofa-main-body {
-      position: relative;
-      background: #004d40; 
-      border-radius: 50px 50px 10px 10px;
-      box-shadow: inset 0 15px 40px rgba(0,0,0,0.6);
-      padding: 40px 30px 15px 30px;
-      z-index: 2;
-    }
-
-    .armrest {
-      position: absolute;
-      bottom: 0;
-      width: 100px; 
-      height: 240px;
-      background: linear-gradient(to bottom, #00332c, #002621);
-      border-radius: 40px 40px 15px 15px;
-      box-shadow: 10px 15px 30px rgba(0,0,0,0.5), inset 0 10px 15px rgba(255,255,255,0.05);
-      z-index: 4;
-      transition: width 0.3s ease, height 0.3s ease;
-    }
-    .arm-l { left: 0; }
-    .arm-r { right: 0; }
-
-    .sofa-backrest {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      margin-bottom: 20px;
-      perspective: 1000px;
-      position: relative; 
-    }
-
-    .sofa-backrest::after {
-      content: "";
-      position: absolute;
-      top: -20px;
-      bottom: -10px;
-      left: 50%;
-      width: 2px;
-      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.4) 80%, transparent);
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      transform: translateX(-50%);
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .cushion-container {
-      position: relative;
-      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
-      transition: transform 0.3s ease;
-      z-index: 3; 
-    }
-
-    .cushion {
-      width: var(--cushion-w, 240px);
-      height: var(--cushion-h, 220px);
-      background: radial-gradient(circle at 50% 50%, #fffdf5 0%, #fefae0 70%, #f5f5dc 100%);
-      clip-path: url(#concave-cushion-shape);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-
-    .cushion img {
-      width: 86%; 
-      height: 86%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      clip-path: url(#concave-cushion-shape);
-    }
-
-    .sofa-seam-scroll-container {
-      width: 100%;
-      height: 18px;
-      background: #002621;
-      border-radius: 10px;
-      position: relative;
-      box-shadow: inset 0 3px 5px rgba(0,0,0,0.7);
-      margin-top: 25px;
-      touch-action: none; 
-    }
-
-    #sofa-cat-thumb {
-      position: absolute;
-      top: -45px; 
-      width: 110px;
-      height: 80px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80" viewBox="0 0 120 80"><text y="60" x="10" font-size="65" filter="grayscale(1) brightness(0.8)" transform="scale(-1, 1) translate(-120, 0)">🐈‍⬛</text></svg>');
-      background-repeat: no-repeat;
-      background-position: center;
-      cursor: grab;
-      z-index: 5;
-      left: 0;
-    }
-
-    .sofa-base {
-      height: 40px;
-      background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
-      width: 100%;
-      border-radius: 0 0 20px 20px;
-      position: relative;
-      top: -10px;
-    }
-
-    @media (max-width: 768px) {
-      :root { --cushion-w: 200px; --cushion-h: 180px; }
-      .sofa-external-wrapper { padding: 20px 60px; }
-      .armrest { width: 70px; height: 200px; }
-    }
-
-    @media (max-width: 480px) {
-      :root { --cushion-w: 155px; --cushion-h: 145px; }
-      .sofa-external-wrapper { padding: 20px 40px; }
-      .armrest { width: 45px; height: 160px; }
-      .sofa-main-body { padding: 30px 10px 10px 10px; }
-      .sofa-backrest { gap: -30px; } 
-      .cushion-container:first-child { transform: rotate(-8deg) translateX(8px); z-index: 3; }
-      .cushion-container:last-child { transform: rotate(8deg) translateX(-8px); z-index: 4; }
-      #sofa-cat-thumb { width: 90px; top: -38px; }
-    }
-  </style>
-
+  <p class="section-subtitle">Dove starà dormendo adesso la Lulu?</p>
   <div class="sofa-external-wrapper">
     <div class="armrest arm-l"></div>
     <div class="armrest arm-r"></div>
@@ -601,94 +422,22 @@
     </div>
     <div class="sofa-base"></div>
   </div>
-
-  <script>
-    (async function() {
-      const img1 = document.getElementById('lulu-c-1');
-      const img2 = document.getElementById('lulu-c-2');
-      const seam = document.getElementById('lulu-sofa-seam');
-      const catThumb = document.getElementById('sofa-cat-thumb');
-
-      const availableImages = [];
-      for (let i = 1; i <= 200; i++) {
-        const src = `img/lulu/lulu (${i}).jpg`;
-        const exists = await new Promise(r => {
-          const img = new Image();
-          img.onload = () => r(true);
-          img.onerror = () => r(false);
-          img.src = src;
-        });
-        if (exists) availableImages.push(src);
-        else if (i > 15) break; 
-      }
-
-      const count = availableImages.length;
-
-      function updateSofaPhotos(scrollX) {
-        if (count < 1) return;
-        const scrollRange = seam.clientWidth - catThumb.clientWidth;
-        const scrollPercent = Math.max(0, Math.min(1, scrollX / scrollRange));
-        
-        let index1 = Math.floor(scrollPercent * (count - 1));
-        let index2 = index1 + 1;
-
-        if (index1 >= 0 && index1 < count) {
-          img1.src = availableImages[index1];
-          img1.style.opacity = 1;
-        }
-        if (index2 < count) {
-          img2.src = availableImages[index2];
-          img2.style.opacity = 1;
-        } else {
-          img2.style.opacity = 0;
-        }
-      }
-
-      let isDragging = false;
-      let startX, initialLeft;
-
-      const startAction = (e) => {
-        isDragging = true;
-        startX = e.clientX || e.touches[0].clientX;
-        initialLeft = catThumb.offsetLeft;
-        document.body.style.userSelect = 'none';
-      };
-
-      const moveAction = (e) => {
-        if (!isDragging) return;
-        const currentX = (e.touches) ? e.touches[0].clientX : e.clientX;
-        const deltaX = currentX - startX;
-        let newLeft = initialLeft + deltaX;
-        const maxLeft = seam.clientWidth - catThumb.clientWidth;
-        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
-        catThumb.style.left = newLeft + 'px';
-        updateSofaPhotos(newLeft);
-      };
-
-      const stopAction = () => { isDragging = false; document.body.style.userSelect = 'auto'; };
-
-      catThumb.addEventListener('mousedown', startAction);
-      catThumb.addEventListener('touchstart', startAction, {passive: true});
-      window.addEventListener('mousemove', moveAction);
-      window.addEventListener('touchmove', moveAction, {passive: false});
-      window.addEventListener('mouseup', stopAction);
-      window.addEventListener('touchend', stopAction);
-
-      setTimeout(() => updateSofaPhotos(0), 500);
-    })();
-  </script>
 </section>
+
+<div class="section-divider" style="margin: 40px auto;"></div>
 
 <section class="sfigatini-section">
     <div class="horror-title-wrapper">
-        <h2 class="section-title" style="color: #900; font-family: 'Courier New', Courier;">GLI SFIGATINI</h2>
+        <h2 class="section-title" style="color: #900; font-family: 'Courier New', Courier; margin: 0;">GLI SFIGATINI</h2>
         <div class="ghost-icon">👻</div>
     </div>
-    <p>Ricordi da film horror</p>
+    <p class="section-subtitle" style="color: var(--zombie-eye); margin-top: 10px;">Ricordi da film horror</p>
+    
     <div class="cinema-container">
         <div class="web-corner"></div>
         <div class="spider-hanging"></div>
         <div class="cinema-screen" id="cinema-interact"><div class="film-strip" id="sfigatini-engine"></div></div>
+        
         <div class="zombie-fallback">
           <div class="zombie-container"><div class="zombie-head"></div></div>
           <div class="zombie-container" style="transform:translateY(-10px)"><div class="cross"></div></div>
@@ -704,9 +453,22 @@
     </div>
 </section>
 
-<!-- VERSIONE MODIFICATA: rimossa sezione "Lulu meno male che ci sei tu" + logica JS associata -->
+<div class="section-divider"></div>
 
-<!-- NOTA: ho lasciato tutto il resto IDENTICO -->
+<footer>
+    <div class="footer-container">
+    <a href="../index.html" class="footer-home"><img src="img/home.png" alt="Home"></a>
+    <div class="footer-text">@SbatuffoBlog 2026</div>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position: absolute;">
+  <defs>
+    <clipPath id="concave-cushion-shape" clipPathUnits="objectBoundingBox">
+      <path d="M 0,0 Q 0.5,0.12 1,0 Q 0.88,0.5 1,1 Q 0.5,0.88 0,1 Q 0.12,0.5 0,0 Z" />
+    </clipPath>
+  </defs>
+</svg>
 
 <script>
   function loadPhoneStickers() {
@@ -848,13 +610,85 @@
     animate();
   }
 
+  (async function initLuluSofa() {
+      const img1 = document.getElementById('lulu-c-1');
+      const img2 = document.getElementById('lulu-c-2');
+      const seam = document.getElementById('lulu-sofa-seam');
+      const catThumb = document.getElementById('sofa-cat-thumb');
+
+      const availableImages = [];
+      for (let i = 1; i <= 200; i++) {
+        const src = `img/lulu/lulu (${i}).jpg`;
+        const exists = await new Promise(r => {
+          const img = new Image();
+          img.onload = () => r(true);
+          img.onerror = () => r(false);
+          img.src = src;
+        });
+        if (exists) availableImages.push(src);
+        else if (i > 15) break; 
+      }
+
+      const count = availableImages.length;
+
+      function updateSofaPhotos(scrollX) {
+        if (count < 1) return;
+        const scrollRange = seam.clientWidth - catThumb.clientWidth;
+        const scrollPercent = Math.max(0, Math.min(1, scrollX / scrollRange));
+        
+        let index1 = Math.floor(scrollPercent * (count - 1));
+        let index2 = index1 + 1;
+
+        if (index1 >= 0 && index1 < count) {
+          img1.src = availableImages[index1];
+          img1.style.opacity = 1;
+        }
+        if (index2 < count) {
+          img2.src = availableImages[index2];
+          img2.style.opacity = 1;
+        } else {
+          img2.style.opacity = 0;
+        }
+      }
+
+      let isDragging = false;
+      let startX, initialLeft;
+
+      const startAction = (e) => {
+        isDragging = true;
+        startX = e.clientX || e.touches[0].clientX;
+        initialLeft = catThumb.offsetLeft;
+        document.body.style.userSelect = 'none';
+      };
+
+      const moveAction = (e) => {
+        if (!isDragging) return;
+        const currentX = (e.touches) ? e.touches[0].clientX : e.clientX;
+        const deltaX = currentX - startX;
+        let newLeft = initialLeft + deltaX;
+        const maxLeft = seam.clientWidth - catThumb.clientWidth;
+        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+        catThumb.style.left = newLeft + 'px';
+        updateSofaPhotos(newLeft);
+      };
+
+      const stopAction = () => { isDragging = false; document.body.style.userSelect = 'auto'; };
+
+      catThumb.addEventListener('mousedown', startAction);
+      catThumb.addEventListener('touchstart', startAction, {passive: true});
+      window.addEventListener('mousemove', moveAction);
+      window.addEventListener('touchmove', moveAction, {passive: false});
+      window.addEventListener('mouseup', stopAction);
+      window.addEventListener('touchend', stopAction);
+
+      setTimeout(() => updateSofaPhotos(0), 500);
+  })();
+
   loadPhoneStickers();
   loadGifs();
   loadSbatuffolart();
   buildSfigatini();
 </script>
-
-
 
 </body>
 </html>

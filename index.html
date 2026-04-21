@@ -68,6 +68,7 @@
       margin-top: 5px;
       letter-spacing: 1.5px;
       text-transform: lowercase;
+      min-height: 1.5em; /* Previene saltelli se la frase è vuota inizialmente */
     }
 
     /* --- DIVISORI --- */
@@ -100,10 +101,14 @@
       border-radius: 25px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       position: relative;
+      /* Fix per stabilità scroll mobile */
+      touch-action: pan-y; 
+      -webkit-backface-visibility: hidden;
     }
     .slider-box img {
       width: 100%; height: 100%; object-fit: cover;
       position: absolute; opacity: 0; transition: opacity 1.2s ease-in-out;
+      will-change: opacity;
     }
     .slider-box img.active { opacity: 1; }
 
@@ -134,13 +139,13 @@
     .card-img img { width: 100%; height: 100%; object-fit: cover; }
 
     .c1 { background: #ff5e5e; } .c2 { background: #5eb5ff; } .c3 { background: #ffde59; }
-    .c4 { background: #002147; } .c5 { background: #55efc4; } .c6 { background: #fab1a0; }
-    .c7 { background: #fd79a8; } .c8 { background: #00cec9; } .c9 { background: #a29bfe; }
+    .c4 { background: #00cec9; } .c5 { background: #00244d; } .c6 { background: #ff802b; }
+    .c7 { background: #f13bd2; } .c8 { background: #55ef8b; } .c9 { background: #a29bfe; }
 
-    /* --- TIMER SECTION CORRETTA --- */
+    /* --- TIMER SECTION --- */
     .timer-section {
       text-align: center;
-      padding-bottom: 50px;
+      padding-bottom: 20px;
     }
 
     .timer-section h2 {
@@ -179,8 +184,8 @@
       backface-visibility: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center; /* Centra verticalmente */
-      align-items: center;     /* Centra orizzontalmente */
+      justify-content: center; 
+      align-items: center;     
       background: #eff7ff;
       clip-path: path('M50 85 C 30 70, 15 55, 15 38 C 15 25, 25 18, 38 18 C 45 18, 48 22, 50 25 C 52 22, 55 18, 62 18 C 75 18, 85 25, 85 38 C 85 55, 70 70, 50 85');
     }
@@ -191,12 +196,12 @@
       transform: rotateY(180deg);
       font-family: 'Grandstander', cursive;
       font-size: 2.5rem;
-      padding-bottom: 8px; /* Correzione ottica per la punta del cuore */
+      padding-bottom: 12px; /* Allineamento ottico TVB */
       box-sizing: border-box;
     }
 
     .heart-front {
-      padding-bottom: 10px; /* Alza i numeri per centrarli nella parte tonda */
+      padding-bottom: 15px; /* Allineamento ottico Numeri */
       box-sizing: border-box;
     }
 
@@ -215,11 +220,29 @@
       margin-top: 2px;
     }
 
+    #anniversary-msg {
+      margin-top: 20px;
+      font-weight: 700;
+      color: var(--light-blue-border);
+      font-size: 1rem;
+      min-height: 1.2em;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      text-align: center;
+      padding: 20px 10px 40px;
+      font-family: 'Fredoka', sans-serif;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
     @media (max-width: 450px) {
       .timer-wrap { gap: 6px; }
       .heart-flip { width: 90px; height: 90px; }
       .val { font-size: 1.5rem; }
-      .heart-back { font-size: 2.2rem; padding-bottom: 10px; }
+      .heart-back { font-size: 2.2rem; padding-bottom: 14px; }
+      .heart-front { padding-bottom: 18px; } /* Centratura mobile migliorata */
       .brand-title { font-size: 2.2rem; }
       .header-container { gap: 15px; }
     }
@@ -239,7 +262,7 @@
       <div class="side-heart" id="h-left">♥</div>
       <div class="brand-wrapper">
         <h1 class="brand-title">SbatuffoBlog</h1>
-        <div class="brand-subtitle">pandosamente insieme</div>
+        <div class="brand-subtitle" id="dynamic-subtitle">pandosamente insieme</div>
       </div>
       <div class="side-heart" id="h-right">♥</div>
     </div>
@@ -319,10 +342,29 @@
           </div>
         </div>
       </div>
+      <div id="anniversary-msg"></div>
     </section>
+
+    <div class="section-divider"></div>
+
   </main>
 
+  <footer>
+    @SbatuffoBlog 2026
+  </footer>
+
   <script>
+    /* --- SOTTOTITOLO RANDOM --- */
+    const frasi = [
+      "ti sbatuffoblog intensamente", "ti sbatuffoblog pandosamente", 
+      "ti sbatuffoblog creativamente", "ti sbatuffoblog amorevolmente", 
+      "ti sbatuffoblog coccolosamente", "ti sbatuffoblog doccialungamente", 
+      "ti sbatuffoblog girettosamente", "ti sbatuffoblog ovunquemente", 
+      "ti sbatuffoblog insistentemente", "ti sbatuffoblog incessantemente", 
+      "ti sbatuffoblog infinitamente"
+    ];
+    document.getElementById('dynamic-subtitle').innerText = frasi[Math.floor(Math.random() * frasi.length)];
+
     /* --- FUOCHI D'ARTIFICIO --- */
     function createParticle(x, y) {
       const p = document.createElement('div');
@@ -367,28 +409,48 @@
       imgs[idx].classList.add('active');
     }, 4000);
 
-    /* --- TIMER --- */
+    /* --- TIMER & ANNIVERSARI --- */
     function updateTimer() {
-      const start = new Date(2018, 7, 20);
+      const start = new Date(2018, 7, 20); // 20 Agosto 2018
       const now = new Date();
       let years = now.getFullYear() - start.getFullYear();
       let months = now.getMonth() - start.getMonth();
       let days = now.getDate() - start.getDate();
-      if (days < 0) { months--; const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate(); days += lastMonth; }
-      if (months < 0) { years--; months += 12; }
+      
+      if (days < 0) { 
+        months--; 
+        const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate(); 
+        days += lastMonth; 
+      }
+      if (months < 0) { 
+        years--; 
+        months += 12; 
+      }
+
       document.getElementById("years").innerText = years;
       document.getElementById("months").innerText = months;
       document.getElementById("days").innerText = days;
+
+      // Logica Messaggi Anniversario
+      const msgBox = document.getElementById("anniversary-msg");
+      if (months === 0 && days === 0) {
+        msgBox.innerHTML = "Oggi è il nostro anniversario! <3";
+      } else if (days === 0) {
+        msgBox.innerHTML = "Oggi è il nostro anniversario mese!";
+      } else {
+        msgBox.innerHTML = "";
+      }
     }
     updateTimer();
 
-    /* --- FLIP TVB --- */
+    /* --- FLIP TVB (Durata 2 pulsazioni = 3 secondi) --- */
     const hearts = [document.getElementById('f1'), document.getElementById('f2'), document.getElementById('f3')];
     function triggerFlip() {
       hearts.forEach((h, i) => {
         setTimeout(() => {
           h.classList.add('flipped');
-          setTimeout(() => h.classList.remove('flipped'), 2200);
+          // 3000ms corrispondono a due cicli di animazione heartbeat (1.5s * 2)
+          setTimeout(() => h.classList.remove('flipped'), 3000);
         }, i * 300); 
       });
     }
