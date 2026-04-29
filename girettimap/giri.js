@@ -1,5 +1,15 @@
 const GIRI = [
   {
+    "titolo": "Mostar",
+    "link": "https://www.outdooractive.com/it/route/percorso-urbano/bosnia-herzegovina/mostar/339890494/",
+    "img": "https://img0.oastatic.com/img2/628489321/800x600/variant.webp?revbust=19dd51f794b"
+  },
+  {
+    "titolo": "Sarajevo",
+    "link": "https://www.outdooractive.com/it/route/strada-panoramica/bosnia-herzegovina/sarajevo/339889799/",
+    "img": "https://img3.oastatic.com/img2/628489249/800x600/variant.webp?revbust=19dd51bd87b"
+  },
+  {
     "titolo": "Eremo e forra di Santa Giustina",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/eremo-e-forra-di-santa-giustina/339142120/",
     "img": "https://img3.oastatic.com/img2/627957069/800x600/variant.webp?revbust=19dab90f94c"
@@ -26,22 +36,12 @@ const GIRI = [
   },
   {
     "titolo": "Bondonail 2026",
-    "link": "https://www.outdooractive.com/it/route/escursione-invernale/trento-monte-bondone-e-altopiano-di-pine/bondonail-2026/335619584/",
+    "link": "https://www.outdooractive.com/it/route/escursione-invernale/trento-monte-bondone-valle-dell-adige/bondonail-2026/335619584/",
     "img": "https://img2.oastatic.com/img2/625561303/800x600/variant.webp"
   },
   {
     "titolo": "Peio Fonti",
     "link": "https://www.outdooractive.com/it/route/ciaspole/val-di-sole-pejo-e-rabbi/peio-fonti/335131304/",
     "img": "https://img2.oastatic.com/img2/625321383/800x600/variant.webp"
-  },
-  {
-    "titolo": "Corno d'Aquilio",
-    "link": "https://www.outdooractive.com/it/route/ciaspole/verona/corno-d-aquilio/334085565/",
-    "img": "https://img3.oastatic.com/img2/624546094/800x600/variant.webp"
-  },
-  {
-    "titolo": "Budapest",
-    "link": "https://www.outdooractive.com/it/route/strada-panoramica/dunazug-hegyvidek/budapest/338840491/",
-    "img": "https://img2.oastatic.com/img2/627617808/800x600/variant.webp?revbust=19d9247a1e9"
   }
 ]
