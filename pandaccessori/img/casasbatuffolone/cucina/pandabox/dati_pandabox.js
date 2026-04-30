@@ -1,7 +1,7 @@
-// Dati generati automaticamente per cucina
+// Dati generati automaticamente per pandabox
 const dati_pandabox = [
     {
-        "titolo": "DentroPandaBox",
-        "immagine": "DentroPandaBox.jpg"
+        "titolo": "Panda Sticker",
+        "immagine": "Panda Sticker.jpg"
     }
 ];
