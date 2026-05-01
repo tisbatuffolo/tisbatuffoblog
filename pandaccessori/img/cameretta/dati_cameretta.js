@@ -1,6 +1,14 @@
 // Dati generati automaticamente per cameretta
 const dati_cameretta = [
     {
+        "titolo": "Bacheca dei Ricordi",
+        "immagine": "Bacheca dei Ricordi.jpg"
+    },
+    {
+        "titolo": "Orsetto Cuore",
+        "immagine": "Orsetto Cuore.jpg"
+    },
+    {
         "titolo": "Panda Adesivi",
         "immagine": "Panda Adesivi.jpg"
     },
@@ -9,12 +17,16 @@ const dati_cameretta = [
         "immagine": "Panda Peluche.jpg"
     },
     {
-        "titolo": "Panda Portaocciali",
-        "immagine": "Panda Portaocciali.jpg"
+        "titolo": "Panda Portaocchiali",
+        "immagine": "Panda Portaocchiali.jpg"
     },
     {
         "titolo": "Panda Sasso",
         "immagine": "Panda Sasso.jpg"
+    },
+    {
+        "titolo": "Panda Zen",
+        "immagine": "Panda Zen.jpg"
     },
     {
         "titolo": "Pandanello",
@@ -23,5 +35,13 @@ const dati_cameretta = [
     {
         "titolo": "Scorlino",
         "immagine": "Scorlino.jpg"
+    },
+    {
+        "titolo": "Ti Voglio Bene",
+        "immagine": "Ti Voglio Bene.jpg"
+    },
+    {
+        "titolo": "Torna a letto",
+        "immagine": "Torna a letto.jpg"
     }
 ];
