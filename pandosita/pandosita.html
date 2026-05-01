@@ -265,8 +265,6 @@
   /* --- FOOTER --- */
   footer { background: #fff; padding: 20px 10px 40px; border-top: 2px solid #eee; }
   .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
-  .footer-home { position: absolute; left: 20px; }
-  .footer-home img { width: clamp(50px, 8vw, 70px); height: auto; }
   .footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.2rem; color: #444; }
 
   /* --- MEDIA QUERIES --- */
@@ -296,8 +294,6 @@
     .paint-blob { transform: scale(0.8); }
     .brush { width: 110px; height: 10px; }
     .easel-crossbar { bottom: 18%; }
-    
-    .footer-home { position: static; margin-right: 15px; }
   }
 </style>
 </head>
@@ -457,7 +453,6 @@
 
 <footer>
     <div class="footer-container">
-    <a href="../index.html" class="footer-home"><img src="img/home.png" alt="Home"></a>
     <div class="footer-text">@SbatuffoBlog 2026</div>
   </div>
 </footer>
@@ -598,8 +593,14 @@
     }
     engine.innerHTML += engine.innerHTML;
     let currentX = 0; let baseSpeed = 1; let currentSpeed = 1; let targetSpeed = 1;
+    
     screen.addEventListener('mousedown', () => { targetSpeed = 15; });
+    screen.addEventListener('touchstart', () => { targetSpeed = 15; }, { passive: true });
+    
     window.addEventListener('mouseup', () => { targetSpeed = baseSpeed; });
+    window.addEventListener('touchend', () => { targetSpeed = baseSpeed; });
+    window.addEventListener('touchcancel', () => { targetSpeed = baseSpeed; });
+    
     function animate() {
       currentSpeed += (targetSpeed - currentSpeed) * 0.05;
       currentX -= currentSpeed;
@@ -636,7 +637,9 @@
         const scrollRange = seam.clientWidth - catThumb.clientWidth;
         const scrollPercent = Math.max(0, Math.min(1, scrollX / scrollRange));
         
-        let index1 = Math.floor(scrollPercent * (count - 1));
+        // Modifica: Limita index1 a count - 2 in modo che index2 non sgarri il count
+        let maxIndex = Math.max(0, count - 2); 
+        let index1 = Math.floor(scrollPercent * maxIndex);
         let index2 = index1 + 1;
 
         if (index1 >= 0 && index1 < count) {
