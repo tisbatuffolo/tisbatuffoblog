@@ -35,8 +35,11 @@ body { font-family: 'Fredoka', sans-serif; margin: 0; background: var(--bg-soft)
 
 /* --- HEADER & DIVISORI --- */
 header { background: #fff; padding: 25px 10px 10px; text-align: center; position: relative;}
-.header-container { display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; max-width: 1200px; margin: 0 auto; }
-.home-link-img img { width: clamp(70px, 12vw, 100px); height: auto; }
+/* Modifica Punto 1: Header centrato con casetta a sinistra */
+.header-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1200px; margin: 0 auto; min-height: clamp(60px, 10vw, 90px); }
+.home-link-img { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 10;}
+.home-link-img img { width: clamp(50px, 12vw, 100px); height: auto; }
+.brand-group { display: flex; flex-direction: column; align-items: center; }
 .brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(2.2rem, 8vw, 4.2rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
 .brand-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--primary); font-weight: 700; margin-top: 5px; letter-spacing: 1.5px; text-transform: lowercase; }
 
@@ -51,7 +54,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
   clear: both;
 }
 .section-divider::after {
-  content: "♥";
+  content: "🐼";
   position: absolute;
   top: -14px; left: 50%;
   transform: translateX(-50%);
@@ -66,7 +69,8 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .total-title span { color: var(--primary); font-size: 2rem; }
 
 /* --- MAPPA RIFINITA & RESPONSIVE --- */
-.map-outer { background: #a2eafc; padding: 4vw 0; }
+/* Modifica Punto 2: Rimossa cornice azzurra e ottimizzati spazi */
+.map-outer { padding: 4vw 0; background: transparent; }
 .map-canvas { 
     position: relative; width: 95%; max-width: 1100px; 
     aspect-ratio: 4 / 3; 
@@ -104,8 +108,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .m-sign-trento::after { right: 15%; }
 
 /* Montagne di sfondo e Fiume */
-
-
 .m-mountain-1 {
     position: absolute; top: 12%; left: -5%; width: 60%; height: 18%;
     background: #95a5a6; border: clamp(2px, 0.5vw, 4px) solid #333;
@@ -119,7 +121,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 
 .m-river-svg { position: absolute; top: 30%; left: 43%; width: 20%; height: 70%; z-index: 5; opacity: 0.8; }
 
-/* La Grande Montagna Innevata (Ripristinata) */
+/* La Grande Montagna Innevata */
 .m-big-mountain { 
     position: absolute; bottom: 0; right: -5%; width: 52%; height: 75%; 
     background: #7f8c8d; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); z-index: 8; 
@@ -191,7 +193,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .card-mini {
     cursor: pointer; border: 4px solid #eee; border-radius: 15px;
     overflow: hidden; background: #fff; text-align: center; padding: 10px;
-    transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 .card-mini:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 .card-mini img {
@@ -201,11 +203,13 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     font-weight: 700; font-size: 0.85rem; margin-top: 8px;
 }
 
+/* Modifica Punto 5: Ottimizzazione per Mobile a 4 colonne */
 @media (max-width: 768px) {
-    .grid-mini { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .card-mini { border-width: 2px; padding: 5px; border-radius: 8px; }
+    .section-container { padding: 0 5px; } /* Rimossi spazi laterali extra */
+    .grid-mini { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .card-mini { border-width: 1px; padding: 3px; border-radius: 6px; }
     .card-mini img { border-radius: 4px; }
-    .card-title { font-size: 0.65rem; margin-top: 5px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-title { font-size: 0.55rem; margin-top: 3px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 /* --- PLANIMETRIA --- */
@@ -213,13 +217,18 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     width: 100%; aspect-ratio: 2 / 1; min-height: 200px; background: #fff; 
     border: 6px solid #ccc; border-radius: 15px; position: relative; margin-bottom: 40px; 
 }
+
+/* Modifica Punto 3 e 4: Line-height ridotto per contenere le scritte e cursore pointer per i link */
 .p-room { 
     position: absolute; border: 2px solid #666; display: flex; flex-direction: column; 
     align-items: center; justify-content: center; font-weight: 900; color: #444; 
     font-family: 'Grandstander'; text-align: center; font-size: clamp(0.7rem, 1.5vw, 1.2rem);
-    border-radius: 4px;
+    border-radius: 4px; line-height: 1; cursor: pointer; transition: 0.2s;
 }
-.p-room span { font-size: clamp(0.6rem, 1vw, 0.75rem); background: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 10px; margin-top: 5px; color: #666; font-family: 'Fredoka', sans-serif;}
+.p-room:hover { filter: brightness(0.95); transform: scale(1.02); z-index: 10; box-shadow: 0 4px 8px rgba(0,0,0,0.2);}
+
+/* Modifica Punto 3: margin-top ridotto per ravvicinare i testi */
+.p-room span { font-size: clamp(0.55rem, 1vw, 0.75rem); background: rgba(255,255,255,0.8); padding: 1px 6px; border-radius: 10px; margin-top: 1px; color: #666; font-family: 'Fredoka', sans-serif;}
 
 /* Geometricamente bilanciata */
 .p-terrazzo { top: 6%; left: 4%; width: 26%; height: 32%; background: var(--c-terrazzo); }
@@ -316,14 +325,14 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
             </div>
         </div>
         <a href="#sec-progetto" class="m-pin p-progetto">
-            <div class="pin-label" style="background:#2d3436;">📂 Progetto <span id="c-progetto">0</span></div>
+            <div class="pin-label" style="background:#2d3436;">🏢 Progetto <span id="c-progetto">0</span></div>
         </a>
 
         <div class="m-car m-car-blue">
             <div class="wheel wheel-l"></div><div class="wheel wheel-r"></div>
         </div>
         <a href="#sec-konad" class="m-pin p-konad">
-            <div class="pin-label" style="background:#0984e3;">🚗 Konad <span id="c-konad">0</span></div>
+            <div class="pin-label" style="background:#0984e3;">🛒 Konad <span id="c-konad">0</span></div>
         </a>
 
         <div class="m-cameretta-small">
@@ -338,7 +347,7 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
             <div class="wheel wheel-l"></div><div class="wheel wheel-r"></div>
         </div>
         <a href="#sec-gazy" class="m-pin p-gazy">
-            <div class="pin-label" style="background:#d63031;">🚗 Gazy <span id="c-gazy">0</span></div>
+            <div class="pin-label" style="background:#d63031;">🛒 Gazy <span id="c-gazy">0</span></div>
         </a>
     </div>
 </section>
@@ -348,19 +357,20 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
     <h2 class="section-title">Casa Sbatuffolone</h2>
     <p class="section-sub" id="sub-casa">Caricamento...</p>
     
+    <!-- Modifica Punto 4: Aggiunto onclick ad ogni stanza per scrollare alle rispettive card -->
     <div class="plani-box" id="plani-casa">
-        <div class="p-room p-terrazzo" id="p-terrazzo">Terrazzo <span>0</span></div>
-        <div class="p-room p-salotto" id="p-salotto">Salotto <span>0</span></div>
-        <div class="p-room p-cucina" id="p-cucina">Cucina <span>0</span></div>
+        <div class="p-room p-terrazzo" id="p-terrazzo" onclick="scrollToRoom('terrazzo')">Terrazzo <span>0</span></div>
+        <div class="p-room p-salotto" id="p-salotto" onclick="scrollToRoom('salotto')">Salotto <span>0</span></div>
+        <div class="p-room p-cucina" id="p-cucina" onclick="scrollToRoom('cucina')">Cucina <span>0</span></div>
         
-        <div class="p-room p-corridoio" id="p-corridoio">Corridoio <span>0</span></div>
+        <div class="p-room p-corridoio" id="p-corridoio" onclick="scrollToRoom('corridoio')">Corridoio <span>0</span></div>
         
-        <div class="p-room p-bagno" id="p-bagno">Bagno <span>0</span></div>
-        <div class="p-room p-lettone" id="p-lettone">Lettone <span>0</span></div>
-        <div class="p-room p-cantina" id="p-cantina">Cantina <span>0</span></div>
+        <div class="p-room p-bagno" id="p-bagno" onclick="scrollToRoom('bagno')">Bagno <span>0</span></div>
+        <div class="p-room p-lettone" id="p-lettone" onclick="scrollToRoom('lettone')">Lettone <span>0</span></div>
+        <div class="p-room p-cantina" id="p-cantina" onclick="scrollToRoom('cantina')">Cantina <span>0</span></div>
     </div>
     
-    <div style="background:#fff; padding: clamp(10px, 3vw, 30px); border-radius:25px; border:1px solid #eee;">
+    <div style="background:#fff; padding: clamp(5px, 2vw, 30px); border-radius:25px; border:1px solid #eee;">
         <div class="grid-mini" id="grid-casa"></div>
     </div>
 </div>
@@ -486,6 +496,10 @@ function renderGrid(k, items) {
     items.forEach((it, idx) => {
         const d = document.createElement('div');
         d.className = 'card-mini';
+        
+        // Aggiunto data-attribute per facilitare la ricerca della stanza tramite JS (Modifica Punto 4)
+        if (it.room) d.setAttribute('data-room', it.room);
+        
         if(it.room && roomColors[it.room]) d.style.backgroundColor = roomColors[it.room];
         d.onclick = () => openModal(items, idx);
         d.innerHTML = `<img src="${it.imgSrc}">
@@ -503,7 +517,7 @@ function renderPlani(id, items) {
         const dot = document.createElement('div');
         dot.className = 'item-dot';
         dot.style.left = arr[0].posX + '%'; dot.style.top = arr[0].posY + '%';
-        dot.innerHTML = `<span class="dot-val">${arr.length > 1 ? arr.length : '🐾'}</span>`;
+        dot.innerHTML = `<span class="dot-val">${arr.length > 1 ? arr.length : '📍'}</span>`;
         dot.onclick = (e) => { e.stopPropagation(); openModal(arr, 0); };
         box.appendChild(dot);
     }
@@ -556,6 +570,24 @@ function updateModal() {
     }
     
     document.getElementById('l-comment').innerText = it.commento || "";
+}
+
+// Nuova Funzione: Scroll dinamico alla card della stanza selezionata (Modifica Punto 4)
+function scrollToRoom(roomName) {
+    const firstCardOfRoom = document.querySelector(`.card-mini[data-room="${roomName}"]`);
+    if (firstCardOfRoom) {
+        // Scorre alla prima carta trovata
+        firstCardOfRoom.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Applica un effetto visivo temporaneo per far capire quale card è stata selezionata
+        firstCardOfRoom.style.transform = 'scale(1.1)';
+        firstCardOfRoom.style.boxShadow = '0 0 20px var(--primary)';
+        
+        setTimeout(() => {
+            firstCardOfRoom.style.transform = '';
+            firstCardOfRoom.style.boxShadow = '';
+        }, 1500);
+    }
 }
 </script>
 </body>

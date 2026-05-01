@@ -471,7 +471,8 @@
     for (let i = 1; i <= 116; i++) {
       const div = document.createElement('div');
       div.className = 'sticker-item-phone';
-      div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" onerror="this.remove()">`;
+      // MODIFICA: Rimuove il parent node anziché solo l'immagine, evitando gli spazi vuoti
+      div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" onerror="this.parentElement.remove()">`;
       container.appendChild(div);
     }
   }

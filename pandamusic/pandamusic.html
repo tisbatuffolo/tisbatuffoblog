@@ -6,7 +6,6 @@
 <title>SbatuffoBlog - PandaMusic</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Importiamo l'API ufficiale di Spotify per controllare lo stato di riproduzione -->
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 
 <style>
@@ -167,10 +166,9 @@ header {
 }
 
 .concert-header {
-    /* Header più compatto e overflow nascosto per tagliare il nastro VIP */
     position: relative;
     overflow: hidden; 
-    padding: 45px 20px 15px; /* Padding ridotto */
+    padding: 55px 20px 15px; /* Aumentato padding top */
     text-align: center;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
@@ -178,25 +176,27 @@ header {
     border-bottom: 2px dashed #444;
 }
 
-/* Badge VIP Access spostato a 45° */
+/* Badge VIP Access - Centrato e Sistemato */
 .pass-badge {
     position: absolute;
-    top: 45px;
-    right: -35px;
+    top: 30px;
+    right: -65px;
+    width: 180px; /* Larghezza fissa per centrare bene il testo */
     transform: rotate(45deg);
     background: #ffd700; color: #000;
     font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.75rem;
-    padding: 6px 40px; /* Padding laterale largo per l'effetto nastro */
-    letter-spacing: 2px;
+    padding: 6px 0;
+    letter-spacing: 1px;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
     z-index: 10;
+    text-align: center;
 }
 
 /* Dettagli del Pass (Luogo e Data) */
 .pass-details {
     color: #ccc;
     font-family: 'Fredoka', sans-serif; 
-    font-weight: 700; /* Stesso peso del badge VIP */
+    font-weight: 700; 
     font-size: 1rem;
     margin-top: 10px; 
     text-transform: uppercase; 
@@ -241,7 +241,7 @@ header {
 .slideshow img:nth-child(odd) { transform: rotate(-3deg); }
 .slideshow img:nth-child(even) { transform: rotate(3deg); }
 
-footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-top: 3px dashed var(--stroke); }
+footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-top: none; }
 .footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.2rem; color: #444; }
 
 
@@ -269,7 +269,16 @@ footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-t
     .reel { width: 35px; height: 35px; }
     .playlist-card { padding: 15px; }
     
-    /* Ridimensionamento Pass su Mobile */
+    /* FIX FASCIA VIP Mobile */
+    .concert-header { 
+        padding-top: 65px; 
+    }
+    .pass-badge {
+        top: 25px; 
+        right: -60px;
+        width: 190px;
+        font-size: 0.65rem;
+    }
     .concert-header h2 { font-size: 1.6rem !important; }
     .pass-details { font-size: 0.85rem; }
     .slideshow img { height: 180px; }
@@ -291,12 +300,10 @@ footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-t
 <div class="section-divider"></div>
 
 <main class="container">
-  <!-- Titolo Modificato -->
   <div class="section-title">Le nostre playlist 🎵</div>
 
   <div class="playlist-grid">
 
-      <!-- PLAYLIST 1: 883 -->
       <div class="playlist-card">
           <div class="card-content">
               <div class="cover-art cover-883"><span class="cover-text">883</span></div>
@@ -322,7 +329,6 @@ footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-t
           </div>
       </div>
 
-      <!-- PLAYLIST 2: Cartoni -->
       <div class="playlist-card">
           <div class="card-content">
               <div class="cover-art cover-cartoni"><span class="cover-text">Cartoni</span></div>
@@ -348,7 +354,6 @@ footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-t
           </div>
       </div>
 
-      <!-- PLAYLIST 3: Gem Boy -->
       <div class="playlist-card">
           <div class="card-content">
               <div class="cover-art cover-gemboy"><span class="cover-text">Gem Boy</span></div>
@@ -374,7 +379,6 @@ footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-t
           </div>
       </div>
 
-      <!-- PLAYLIST 4: Vasco -->
       <div class="playlist-card">
           <div class="card-content">
               <div class="cover-art cover-vasco"><span class="cover-text">Vasco</span></div>
@@ -400,46 +404,41 @@ footer { background: #fff; padding: 20px 10px 40px; text-align: center; border-t
           </div>
       </div>
 
-  </div> <!-- Fine griglia -->
-
-  
-  <div class="section-divider divider-concerti"></div>
+  </div> <div class="section-divider divider-concerti"></div>
 
   <div class="section-title">I nostri concerti 🎸</div>
   
-  <!-- CONCERTO VASCO -->
   <div class="concert-card pass-vasco">
       <div class="concert-header">
           <div class="pass-badge">VIP - ALL ACCESS</div>
-          <h2>Vasco Rossi</h2>
+          <h2>Vasco</h2>
           <div class="pass-details">
               <span>📍 Trento</span> • <span>📅 20 maggio 2022</span>
           </div>
       </div>
       <div class="slideshow-container">
           <div class="slideshow" id="slideshow-vasco">
-              <!-- Le immagini verranno caricate dinamicamente qui da JavaScript -->
           </div>
       </div>
   </div>
 
-  <!-- CONCERTO CRISTINA -->
   <div class="concert-card pass-cristina">
       <div class="concert-header">
           <div class="pass-badge">VIP - ALL ACCESS</div>
-          <h2>Cristina D'Avena</h2>
+          <h2>Cristina</h2>
           <div class="pass-details">
               <span>📍 Bussolengo</span> • <span>📅 30 giugno 2023</span>
           </div>
       </div>
       <div class="slideshow-container">
           <div class="slideshow" id="slideshow-cristina">
-              <!-- Le immagini verranno caricate dinamicamente qui da JavaScript -->
           </div>
       </div>
   </div>
 
 </main>
+
+<div class="section-divider"></div>
 
 <footer>
     <div class="footer-text">@SbatuffoBlog 2026</div>
@@ -469,11 +468,7 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
         const uri = embedElement.getAttribute('data-spotify-uri');
         const reels = card.querySelectorAll('.reel');
         
-        const options = {
-            width: '100%',
-            height: '80',
-            uri: uri
-        };
+        const options = { width: '100%', height: '80', uri: uri };
         
         const callback = (EmbedController) => {
             EmbedController.addListener('playback_update', e => {
@@ -484,7 +479,6 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
                 }
             });
         };
-        
         IFrameAPI.createController(embedElement, options, callback);
     });
 };
@@ -493,30 +487,22 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
 function loadConcertImages(folderName, containerId) {
     const container = document.getElementById(containerId);
     let currentIndex = 1;
-    
     function tryLoadNextImage() {
         const img = new Image();
         const imagePath = `img/${folderName}/${folderName} (${currentIndex}).jpg`;
-        
         img.onload = function() {
             img.alt = `Foto ${folderName} ${currentIndex}`;
             container.appendChild(img);
             currentIndex++;
-            
-            if (currentIndex <= 50) { 
-                tryLoadNextImage(); 
-            }
+            if (currentIndex <= 50) { tryLoadNextImage(); }
         };
-        
         img.onerror = function() {
             if (currentIndex === 1) {
                 container.innerHTML = `<img src="https://via.placeholder.com/300x220/1a1a1a/ffffff?text=Metti+foto+in+img/${folderName}/" alt="Placeholder">`;
             }
         };
-        
         img.src = imagePath;
     }
-    
     tryLoadNextImage();
 }
 
