@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Brione",
+    "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/brione/340259924/",
+    "img": "https://img2.oastatic.com/img2/628740888/800x600/variant.webp?revbust=19de9176878"
+  },
+  {
     "titolo": "Mostar",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/bosnia-herzegovina/mostar/339890494/",
     "img": "https://img0.oastatic.com/img2/628489321/800x600/variant.webp?revbust=19dd51f794b"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Bondonail 2026",
     "link": "https://www.outdooractive.com/it/route/escursione-invernale/trento-monte-bondone-valle-dell-adige/bondonail-2026/335619584/",
     "img": "https://img2.oastatic.com/img2/625561303/800x600/variant.webp"
-  },
-  {
-    "titolo": "Peio Fonti",
-    "link": "https://www.outdooractive.com/it/route/ciaspole/val-di-sole-pejo-e-rabbi/peio-fonti/335131304/",
-    "img": "https://img2.oastatic.com/img2/625321383/800x600/variant.webp"
   }
 ]
