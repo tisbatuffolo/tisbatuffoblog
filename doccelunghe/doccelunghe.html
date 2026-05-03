@@ -9,7 +9,6 @@
 
   <style>
     :root {
-     /* --theme-color: #1b2566; */
       --theme-color: #ff802b;
       --sbatuffo-blue: #0000ff;
       --card-blue: #2366c6; 
@@ -33,19 +32,18 @@
     /* --- HEADER --- */
     header { background: #fff; padding: 25px 10px 5px; text-align: center; }
     .header-container { display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; }
-    .home-link-img { position: absolute; left: 20px; top: 5px; }
-    .home-link-img img { width: clamp(45px, 10vw, 80px); height: auto; }
     .brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(1.8rem, 7vw, 3.5rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
     .brand-subtitle { font-weight: 700; font-size: clamp(0.75rem, 2.5vw, 1.1rem); color: var(--theme-color); text-transform: lowercase; }
 
-    /* --- DIVISORI --- */
+    /* --- DIVISORI (Aggiornati come pandaccessori) --- */
     .section-divider {
       max-width: 200px;
       height: 3px;
       background: var(--theme-color);
-      margin: 15px auto;
+      margin: 30px auto; /* Spaziatura aumentata a 30px */
       border-radius: 50px;
       position: relative;
+      clear: both;
     }
     .section-divider::after {
       content: "♥";
@@ -60,7 +58,7 @@
 
     main { flex: 1; padding: 0 5px; max-width: 1000px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 
-    /* --- TITOLO PRINCIPALE (Distanziato dal separatore) --- */
+    /* --- TITOLO PRINCIPALE --- */
     .main-title {
         text-align: center;
         font-family: 'Grandstander', cursive;
@@ -84,7 +82,7 @@
     .stats-box p { margin: 4px 0; color: var(--card-blue); font-size: clamp(0.85rem, 2.5vw, 1.05rem); font-weight: 700; }
     .stats-box span { font-family: 'Grandstander', cursive; font-weight: 900; color: var(--heart-red); font-size: 1.2rem; }
 
-    /* --- LAYOUT BILANCIATO (Sempre affiancato) --- */
+    /* --- LAYOUT BILANCIATO --- */
     .main-layout {
       display: flex;
       flex-direction: row !important;
@@ -94,7 +92,6 @@
       width: 100%;
     }
 
-    /* COLONNA SINISTRA (GRID FORZATA 3x4) */
     .months-grid {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
@@ -115,7 +112,6 @@
     .month-name { font-weight: 700; font-size: clamp(0.55rem, 1.6vw, 0.75rem); color: var(--theme-color); text-transform: uppercase; margin-bottom: 2px; }
     .month-count { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(1rem, 3.5vw, 1.6rem); color: var(--card-blue); line-height: 1; }
 
-    /* COLONNA DESTRA (GRAFICO + IMG) */
     .visual-col {
       flex: 1.3;
       display: flex;
@@ -141,7 +137,6 @@
         margin-top: 5px;
     }
 
-    /* BOTTONE AGGIUNGI (CENTRALE) */
     .btn-container { width: 100%; text-align: center; margin: 30px 0 40px; }
     #btn-aggiungi {
       width: 90%;
@@ -159,17 +154,39 @@
     }
     #btn-aggiungi:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--stroke); }
 
-    /* FOOTER */
-    footer { padding: 20px; text-align: center; font-family: 'Grandstander'; color: #666; font-size: 0.9rem; }
+    /* FOOTER AGGIORNATO (Stile pandaccessori) */
+    footer { 
+      padding: 40px 10px; /* Padding come pandaccessori */
+      text-align: center; 
+      font-family: 'Grandstander'; 
+      font-weight: 600; /* Font-weight come pandaccessori */
+      color: #666; 
+      font-size: 1.1rem; /* Dimensione come pandaccessori */
+      border-top: 2px solid #eee; /* Spessore bordo come pandaccessori */
+    }
+    .footer-home-link { 
+      text-decoration: none; 
+      color: inherit; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 8px; 
+      vertical-align: middle;
+      transition: transform 0.2s ease;
+    }
+    .footer-home-link:hover { transform: scale(1.05); }
+    .footer-home-link img { 
+      width: clamp(40px, 8vw, 60px); /* Grandezza immagine come pandaccessori */
+      height: auto; 
+    }
   </style>
 </head>
 <body>
 
   <header>
     <div class="header-container">
-      <a href="../index.html" class="home-link-img"><img src="img/home.png" alt="Home"></a>
       <div>
-        <div class="brand-title">SbatuffoBlog</div>
+        <!-- Aggiunto link alla homepage su SbatuffoBlog -->
+        <a href="../index.html" class="brand-title">SbatuffoBlog</a>
         <div class="brand-subtitle">doccelunghe</div>
       </div>
     </div>
@@ -201,9 +218,14 @@
     </div>
   </main>
 
-  <center><div class="section-divider"></div></center>
+  <center><div class="section-divider" style="margin-bottom: 80px;"></div></center>
 
-  <footer>@SbatuffoBlog 2026</footer>
+  <footer>
+    @SbatuffoBlog 2026 - 
+    <a href="../index.html" class="footer-home-link">
+      Torna alla Home <img src="img/home.png" alt="Home">
+    </a>
+  </footer>
 
   <script>
     const mesi = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
@@ -238,7 +260,6 @@
         grid.appendChild(card);
       });
 
-      // --- CANVAS TREND ---
       const c = document.getElementById('docce-trend'), ctx = c.getContext('2d');
       const p = 30, w = c.width - p*2, h = c.height - p*3;
       const vals = mesi.map((_, i) => annoData[i+1] || 0);
@@ -246,13 +267,11 @@
 
       ctx.clearRect(0,0,c.width,c.height);
 
-      // Titolo grafico con colore tema (1b2566)
       ctx.fillStyle = "#1b2566";
       ctx.font = "bold 18px Grandstander";
       ctx.textAlign = "center";
       ctx.fillText("Trend docce mese per mese", c.width/2, 28);
 
-      // Linea Trend
       ctx.beginPath(); 
       ctx.strokeStyle = "#2366c6"; 
       ctx.lineWidth = 4;
@@ -263,7 +282,6 @@
       });
       ctx.stroke();
 
-      // Punti
       vals.forEach((v, i) => {
         const x = p + (i/11)*w, y = p + h - (v/max)*h + 35;
         ctx.beginPath();

@@ -45,21 +45,6 @@
     position: relative;
   }
 
-  .home-link-img {
-    position: absolute;
-    left: 20px;
-    top: 5px;
-    transition: transform 0.2s ease;
-    display: flex;
-    align-items: center;
-  }
-  .home-link-img:hover { transform: scale(1.1); }
-  /* Immagine Home raddoppiata */
-  .home-link-img img {
-    width: clamp(70px, 12vw, 100px);
-    height: auto;
-  }
-
   .brand-title {
     font-family: 'Grandstander', cursive;
     font-weight: 900;
@@ -85,7 +70,7 @@
     max-width: 200px;
     height: 3px;
     background: var(--light-blue-border);
-    margin: 30px auto 20px; /* Ridotto spazio sotto */
+    margin: 30px auto 20px;
     border-radius: 50px;
     position: relative;
     clear: both;
@@ -105,7 +90,7 @@
   #puzzles-container { padding-bottom: 60px; }
 
   .puzzle-section {
-    padding: 5px 15px 10px; /* Ridotto padding superiore */
+    padding: 5px 15px 10px;
     max-width: 1100px;
     margin: 0 auto;
   }
@@ -113,7 +98,6 @@
   .puzzle-title {
     font-family: 'Grandstander', cursive;
     font-weight: 900;
-    /* Rimpicciolito: deve essere meno del titolo principale */
     font-size: clamp(1.8rem, 6vw, 3.2rem);
     margin-bottom: 8px;
     letter-spacing: -1px;
@@ -121,9 +105,8 @@
   }
 
   .puzzle-subtitle {
-    font-family: 'Fredoka', sans-serif; /* Allineato a brand-subtitle */
+    font-family: 'Fredoka', sans-serif;
     font-weight: 700;
-    /* Dimensione identica al sottotitolo header */
     font-size: clamp(0.9rem, 3vw, 1.2rem);
     color: #555;
     margin-top: 0;
@@ -249,51 +232,14 @@
     .collage-container { border-width: 6px; }
     .modal-content { border-width: 5px; width: 94%; }
     .modal-title { font-size: 1.4em; }
-    .home-link-img { left: 10px; }
-    .home-link-img img { width: 60px; }
   }
 
   /* --- FOOTER --- */
-  footer {
-    background: #fff;
-    padding: 20px 10px 40px;
-    margin-top: 20px;
-  }
+  footer { background: #fff; padding: 20px 10px 40px; border-top: 2px solid #eee; }
+  .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
+  .footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.2rem; color: #444; }
 
-  .footer-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
 
-  .footer-home {
-    position: absolute;
-    left: 20px;
-    transition: transform 0.2s ease;
-  }
-
-  .footer-home:hover { transform: scale(1.1); }
-
-  .footer-home img {
-    width: clamp(50px, 8vw, 70px); /* Leggermente più piccola dell'header per proporzione */
-    height: auto;
-  }
-
-  .footer-text {
-    font-family: 'Grandstander', cursive;
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: #444;
-  }
-
-  @media (max-width: 850px) {
-    .footer-home { position: static; margin-right: 15px; }
-    .footer-container { justify-content: center; }
-    .footer-home img { width: 45px; }
-  }
 </style>
 </head>
 
@@ -301,9 +247,6 @@
 
 <header>
   <div class="header-container">
-    <a href="../index.html" class="home-link-img" title="Torna alla Home">
-      <img src="imm/home.png" alt="Home">
-    </a>
     <div class="brand-wrapper">
       <a href="../index.html" class="brand-title" style="text-decoration:none">SbatuffoBlog</a>
       <div class="brand-subtitle">fotopuzzle</div>
@@ -327,14 +270,12 @@
 </div>
 
 
-<div class="section-divider"></div>
+<div class="section-divider" style="margin-bottom: 80px;"></div>
+
 <footer>
     <div class="footer-container">
-    <a href="../index.html" class="footer-home">
-      <img src="imm/home.png" alt="Home">
-    </a>
-    <div class="footer-text">
-      @SbatuffoBlog 2026
+    <div class="footer-text" style="display: flex; align-items: center; justify-content: center;">
+        @SbatuffoBlog 2026 - Torna alla &nbsp;<a href="../index.html" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;">home <img src="imm/home.png" alt="Home" style="width: 50px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>
     </div>
   </div>
 </footer>
@@ -349,7 +290,7 @@
   const nextBtn = document.getElementById('next-btn');
 
   const puzzleColors = {
-    1: '#00008b', // Blu Notte più scuro
+    1: '#00008b',
     2: '#28a745', 
     3: '#ff9800', 
     4: '#e91e63', 

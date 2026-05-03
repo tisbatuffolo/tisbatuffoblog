@@ -71,7 +71,7 @@
       min-height: 1.5em;
     }
 
-    /* --- DIVISORI (Senza sfondo bianco) --- */
+    /* --- DIVISORI --- */
     .section-divider {
       max-width: 200px;
       height: 3px;
@@ -79,15 +79,22 @@
       margin: 30px auto;
       border-radius: 50px;
       position: relative;
+      clear: both;
     }
     .section-divider::after {
       content: "♥";
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
+      top: -14px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-soft);
+      padding: 0 15px;
       color: var(--heart-red);
       font-size: 1.5rem;
-      /* Sfondo e padding rimossi per togliere il rettangolo bianco */
+    }
+
+    /* Avvicina l'ultimo separatore alla sezione precedente */
+    .section-divider.last-divider {
+      margin-top: 5px;
     }
 
     /* --- SLIDER --- */
@@ -339,7 +346,7 @@
       <div id="anniversary-msg"></div>
     </section>
 
-    <div class="section-divider"></div>
+    <div class="section-divider last-divider"></div>
 
   </main>
 
@@ -355,7 +362,8 @@
       "ti sbatuffoblog coccolosamente", "ti sbatuffoblog doccialungamente", 
       "ti sbatuffoblog girettosamente", "ti sbatuffoblog ovunquemente", 
       "ti sbatuffoblog insistentemente", "ti sbatuffoblog incessantemente", 
-      "ti sbatuffoblog infinitamente"
+      "ti sbatuffoblog infinitamente", "ti sbatuffoblog persistentemente",
+      "ti sbatuffoblog dolcemente", "ti sbatuffoblog appassionatamente"
     ];
     document.getElementById('dynamic-subtitle').innerText = frasi[Math.floor(Math.random() * frasi.length)];
 

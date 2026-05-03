@@ -35,10 +35,8 @@ body { font-family: 'Fredoka', sans-serif; margin: 0; background: var(--bg-soft)
 
 /* --- HEADER & DIVISORI --- */
 header { background: #fff; padding: 25px 10px 10px; text-align: center; position: relative;}
-/* Modifica Punto 1: Header centrato con casetta a sinistra */
+/* Modifica Punto 1: Header centrato con casetta rimossa */
 .header-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1200px; margin: 0 auto; min-height: clamp(60px, 10vw, 90px); }
-.home-link-img { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 10;}
-.home-link-img img { width: clamp(50px, 12vw, 100px); height: auto; }
 .brand-group { display: flex; flex-direction: column; align-items: center; }
 .brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(2.2rem, 8vw, 4.2rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
 .brand-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--primary); font-weight: 700; margin-top: 5px; letter-spacing: 1.5px; text-transform: lowercase; }
@@ -53,8 +51,9 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
   position: relative;
   clear: both;
 }
+/* Modifica Punto 2: Cuore colore ff4d4d al posto del panda */
 .section-divider::after {
-  content: "🐼";
+  content: "♥";
   position: absolute;
   top: -14px; left: 50%;
   transform: translateX(-50%);
@@ -69,7 +68,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .total-title span { color: var(--primary); font-size: 2rem; }
 
 /* --- MAPPA RIFINITA & RESPONSIVE --- */
-/* Modifica Punto 2: Rimossa cornice azzurra e ottimizzati spazi */
 .map-outer { padding: 4vw 0; background: transparent; }
 .map-canvas { 
     position: relative; width: 95%; max-width: 1100px; 
@@ -142,14 +140,16 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; 
     gap: 15%; padding: 15% 10%; height: 80%; 
 }
-.m-condo .win { background: #81ecec; border: 2px solid #333; width: 100%; height: 100%; }
+/* Modifica Punto 3: Flexbox aggiunto per centrare il panda nelle finestre */
+.m-condo .win { background: #81ecec; border: 2px solid #333; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: clamp(8px, 2vw, 16px); }
 .m-condo .door { width: 25%; height: 20%; background: #5d4037; border: 2px solid #333; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
 .m-project-build { 
     position: absolute; top: 38%; left: 6%; width: 14%; height: 18%; 
     background: #bdc3c7; border: clamp(2px, 0.5vw, 4px) solid #333; z-index: 10;
 }
-.m-project-build::before { content: 'OFFICE'; position: absolute; top: -20px; left: 0; width: 100%; text-align: center; font-weight: 900; font-size: clamp(0.5rem, 1vw, 12px); color: #333; }
+/* Modifica Punto 3: Parola OFFICE rimossa eliminando il selettore ::before che la conteneva */
+
 .m-project-build .grid-b { display:grid; grid-template-columns:1fr 1fr 1fr; gap:5%; padding:10%; height:100%; }
 .m-project-build .grid-b div { background:#fff; height:20%; border: 1px solid #777;}
 
@@ -158,7 +158,8 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     background: #ecf0f1; border: 2px solid #333; z-index: 15;
 }
 .m-cameretta-small .roof { position: absolute; top: -60%; left: -15%; width: 130%; height: 60%; background: #795548; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border: 2px solid #333; }
-.m-cameretta-small .win-s { width: 25%; height: 25%; background: #fff; border: 1px solid #333; position: absolute; top: 15%; left: 15%; box-shadow: inset 1px 1px 0 #ccc; }
+/* Modifica Punto 3: Flexbox aggiunto per centrare il panda */
+.m-cameretta-small .win-s { width: 25%; height: 25%; background: #fff; border: 1px solid #333; position: absolute; top: 15%; left: 15%; box-shadow: inset 1px 1px 0 #ccc; display: flex; align-items: center; justify-content: center; font-size: clamp(6px, 1.5vw, 12px); }
 .m-cameretta-small .win-s-2 { width: 25%; height: 25%; background: #fff; border: 1px solid #333; position: absolute; top: 15%; right: 15%; box-shadow: inset 1px 1px 0 #ccc; }
 .m-cameretta-small .door-s { width: 25%; height: 40%; background: #5d4037; border: 1px solid #333; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
@@ -203,9 +204,9 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     font-weight: 700; font-size: 0.85rem; margin-top: 8px;
 }
 
-/* Modifica Punto 5: Ottimizzazione per Mobile a 4 colonne */
+/* Ottimizzazione per Mobile a 4 colonne */
 @media (max-width: 768px) {
-    .section-container { padding: 0 5px; } /* Rimossi spazi laterali extra */
+    .section-container { padding: 0 5px; } 
     .grid-mini { grid-template-columns: repeat(4, 1fr); gap: 4px; }
     .card-mini { border-width: 1px; padding: 3px; border-radius: 6px; }
     .card-mini img { border-radius: 4px; }
@@ -218,7 +219,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     border: 6px solid #ccc; border-radius: 15px; position: relative; margin-bottom: 40px; 
 }
 
-/* Modifica Punto 3 e 4: Line-height ridotto per contenere le scritte e cursore pointer per i link */
 .p-room { 
     position: absolute; border: 2px solid #666; display: flex; flex-direction: column; 
     align-items: center; justify-content: center; font-weight: 900; color: #444; 
@@ -227,7 +227,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 }
 .p-room:hover { filter: brightness(0.95); transform: scale(1.02); z-index: 10; box-shadow: 0 4px 8px rgba(0,0,0,0.2);}
 
-/* Modifica Punto 3: margin-top ridotto per ravvicinare i testi */
 .p-room span { font-size: clamp(0.55rem, 1vw, 0.75rem); background: rgba(255,255,255,0.8); padding: 1px 6px; border-radius: 10px; margin-top: 1px; color: #666; font-family: 'Fredoka', sans-serif;}
 
 /* Geometricamente bilanciata */
@@ -260,14 +259,21 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .btn-p { left: -15px; } .btn-n { right: -15px; }
 .close-x { position: absolute; top: -15px; right: -15px; background: #ff4747; color: #fff; border: 4px solid var(--cartoon-border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: 900; display:flex; align-items:center; justify-content:center;}
 
-footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; font-weight: 600; color: #666; font-size: 1.1rem; }
+footer { 
+    padding: 40px 10px; 
+    text-align: center; 
+    font-family: 'Grandstander'; 
+    font-weight: 600; 
+    color: #666; 
+    font-size: 1.1rem; 
+    border-top: 2px solid #eee;
+    }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-container">
-    <a href="../index.html" class="home-link-img"><img src="img/home.png" alt="Home"></a>
     <div class="brand-group">
       <a href="../index.html" class="brand-title">SbatuffoBlog</a>
       <p class="brand-subtitle">Pandaccessori</p>
@@ -309,7 +315,8 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
         <div class="m-condo">
             <div class="roof-top"></div>
             <div class="win-grid">
-                <div class="win"></div><div class="win"></div>
+                <!-- Modifica Punto 3: Panda nella finestra in alto a destra di CasaSbatuffolone -->
+                <div class="win"></div><div class="win">🐼</div>
                 <div class="win"></div><div class="win"></div>
             </div>
             <div class="door"></div>
@@ -337,7 +344,8 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
 
         <div class="m-cameretta-small">
             <div class="roof"></div>
-            <div class="win-s"></div><div class="win-s-2"></div><div class="door-s"></div>
+            <!-- Modifica Punto 3: Panda nella finestra sinistra di cameretta -->
+            <div class="win-s">🐼</div><div class="win-s-2"></div><div class="door-s"></div>
         </div>
         <a href="#sec-cameretta" class="m-pin p-cameretta">
             <div class="pin-label" style="background:#a29bfe;">🧸 Cameretta <span id="c-cameretta">0</span></div>
@@ -357,7 +365,6 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
     <h2 class="section-title">Casa Sbatuffolone</h2>
     <p class="section-sub" id="sub-casa">Caricamento...</p>
     
-    <!-- Modifica Punto 4: Aggiunto onclick ad ogni stanza per scrollare alle rispettive card -->
     <div class="plani-box" id="plani-casa">
         <div class="p-room p-terrazzo" id="p-terrazzo" onclick="scrollToRoom('terrazzo')">Terrazzo <span>0</span></div>
         <div class="p-room p-salotto" id="p-salotto" onclick="scrollToRoom('salotto')">Salotto <span>0</span></div>
@@ -417,9 +424,15 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
     </div>
 </div>
 
-<div class="section-divider"></div>
+<div class="section-divider" style="margin-bottom: 80px;"></div>
+
+<!-- Modifica Punto 4: Aggiornamento link e immagine del footer -->
 <footer>
-    @SbatuffoBlog 2026
+    @SbatuffoBlog 2026 - 
+    <a href="../index.html" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        Torna alla Home 
+        <img src="img/home.png" alt="Home" style="width: clamp(40px, 8vw, 60px); height: auto; vertical-align: middle;">
+    </a>
 </footer>
 
 <script src="img/cameretta/dati_cameretta.js"></script>
@@ -497,7 +510,6 @@ function renderGrid(k, items) {
         const d = document.createElement('div');
         d.className = 'card-mini';
         
-        // Aggiunto data-attribute per facilitare la ricerca della stanza tramite JS (Modifica Punto 4)
         if (it.room) d.setAttribute('data-room', it.room);
         
         if(it.room && roomColors[it.room]) d.style.backgroundColor = roomColors[it.room];
@@ -545,7 +557,6 @@ function updateModal() {
     document.getElementById('l-img').src = it.imgSrc;
     document.getElementById('l-title').innerText = it.titolo || it.foro;
     
-    // Logica Frecce Navigazione
     const btnP = document.querySelector('.btn-p');
     const btnN = document.querySelector('.btn-n');
     
@@ -572,14 +583,11 @@ function updateModal() {
     document.getElementById('l-comment').innerText = it.commento || "";
 }
 
-// Nuova Funzione: Scroll dinamico alla card della stanza selezionata (Modifica Punto 4)
 function scrollToRoom(roomName) {
     const firstCardOfRoom = document.querySelector(`.card-mini[data-room="${roomName}"]`);
     if (firstCardOfRoom) {
-        // Scorre alla prima carta trovata
         firstCardOfRoom.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        // Applica un effetto visivo temporaneo per far capire quale card è stata selezionata
         firstCardOfRoom.style.transform = 'scale(1.1)';
         firstCardOfRoom.style.boxShadow = '0 0 20px var(--primary)';
         

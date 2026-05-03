@@ -52,16 +52,7 @@ header {
   position: relative;
 }
 
-.home-link-img {
-  position: absolute;
-  left: 20px;
-  top: 5px;
-  transition: transform 0.2s ease;
-  display: flex;
-  align-items: center;
-}
-.home-link-img:hover { transform: scale(1.1); }
-.home-link-img img { width: clamp(70px, 12vw, 100px); height: auto; }
+/* Rimosso .home-link-img CSS in quanto l'elemento è stato eliminato */
 
 .brand-title {
   font-family: 'Grandstander', cursive;
@@ -248,19 +239,29 @@ td { height: 65px; vertical-align: top; border-radius: 10px; border: 2px solid #
 }
 #btn-confirm { background: var(--sbatuffo-blue); color: white; box-shadow: 4px 4px 0 var(--stroke); } 
 
-/* FOOTER */
-footer { background: #fff; padding: 20px 10px 40px; }
+/* FOOTER AGGIORNATO */
+footer { background: #fff; padding: 20px 10px 40px; border-top: 1px solid #eee;}
 .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
-.footer-home { position: absolute; left: 20px; }
-.footer-home img { width: clamp(50px, 8vw, 70px); height: auto; }
-.footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.2rem; color: #444; }
+.footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.2rem; color: #444; text-align: center; }
+.footer-home-link { 
+  text-decoration: none; 
+  color: inherit; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+.footer-home-link:hover { transform: scale(1.05); }
+.footer-home-link img { width: 30px; height: auto; }
+
 </style>
 </head>
 
 <body>
 <header>
   <div class="header-container">
-    <a href="../index.html" class="home-link-img"><img src="img/home.png" alt="Home"></a>
+    <!-- Immagine Home rimossa come richiesto -->
     <div class="brand-wrapper">
       <a href="../index.html" class="brand-title">SbatuffoBlog</a>
       <div class="brand-subtitle">PandAgenda</div>
@@ -290,12 +291,16 @@ footer { background: #fff; padding: 20px 10px 40px; }
   <div id="act-list"></div>
 </main>
 
-<div class="section-divider"></div>
+<div class="section-divider" style="margin-bottom: 80px;"></div>
 
 <footer>
-    <div class="footer-container">
-    <a href="../index.html" class="footer-home"><img src="img/home.png" alt="Home"></a>
-    <div class="footer-text">@SbatuffoBlog 2026</div>
+  <div class="footer-container">
+    <div class="footer-text">
+      @SbatuffoBlog 2026 - 
+      <a href="../index.html" class="footer-home-link">
+        Torna alla Home <img src="img/home.png" alt="Home">
+      </a>
+    </div>
   </div>
 </footer>
 
@@ -401,7 +406,6 @@ function render() {
         cell.onclick = () => { 
             highlightDay(dateKey); 
             if (dayEvents.length > 0) {
-                // Se ci sono eventi, apre il primo (anche se ricorsivo futuro)
                 openModal(dayEvents[0].origKey, dayEvents[0].idx, dateKey);
             } else {
                 openModal(dateKey); 
@@ -467,15 +471,12 @@ function renderList() {
 const modal = document.getElementById("modal-overlay");
 const btnNew = document.getElementById("btn-new-event");
 
-// Aggiunto targetDate per gestire il tasto "Nuovo" sui giorni futuri
 function openModal(dateStr, idx = null, targetDate = null) {
   selectedDateStr = dateStr;
   editEventIdx = idx;
   
-  // Mostra tasto nuovo se stiamo visualizzando un evento esistente
   if (idx !== null) {
       btnNew.style.display = "flex";
-      // Se clicchiamo "Nuovo", la data di destinazione deve essere quella cliccata sul calendario
       btnNew.onclick = () => openModal(targetDate || dateStr, null);
   } else {
       btnNew.style.display = "none";

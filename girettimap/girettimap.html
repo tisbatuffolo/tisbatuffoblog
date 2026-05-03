@@ -52,21 +52,6 @@
       min-height: 100px; /* Assicura altezza per allineamento */
     }
 
-    .home-link-img {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      transition: transform 0.2s ease;
-      display: flex;
-      align-items: center;
-    }
-    .home-link-img:hover { transform: translateY(-50%) scale(1.1); }
-    .home-link-img img {
-      width: clamp(70px, 12vw, 100px);
-      height: auto;
-    }
-
     .brand-title {
       font-family: 'Grandstander', cursive;
       font-weight: 900;
@@ -89,6 +74,7 @@
 
     /* --- DIVISORI CON CUORICINO --- */
     .section-divider {
+      width: 100%; /* Fix per flex child (1° separatore) che collassava a 0 di larghezza */
       max-width: 250px; /* Leggermente più largo per visibilità */
       height: 3px;
       background: var(--color-theme); /* Linee del divisorio con color-theme */
@@ -113,7 +99,7 @@
     footer {
       background: #fff;
       padding: 20px 10px 40px;
-      margin-top: 20px;
+      margin-top: 0px;
     }
 
     .footer-container {
@@ -123,19 +109,8 @@
       position: relative;
       max-width: 1100px;
       margin: 0 auto;
-      min-height: 80px;
+      min-height: 20px;
     }
-
-    .footer-home {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      transition: transform 0.2s ease;
-    }
-    .footer-home:hover { transform: translateY(-50%) scale(1.1); }
-    /* Home footer grande come header */
-    .footer-home img { width: clamp(70px, 12vw, 100px); height: auto; }
 
     .footer-text {
       font-family: 'Grandstander', cursive;
@@ -144,6 +119,29 @@
       color: #444;
       display: flex;
       align-items: center;
+      justify-content: center;
+      flex-wrap: wrap; /* Adattabile su mobile */
+      gap: 6px;
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      transform: scale(1.05);
+      color: var(--color-theme);
+    }
+
+    .footer-link img {
+      width: clamp(40px, 8vw, 50px); /* Ottimizzato in proporzione al testo */
+      height: auto;
+      object-fit: contain;
     }
 
     /* =======================================================
@@ -455,11 +453,6 @@
       .grid-riquadri { grid-template-columns: repeat(2, 1fr); }
     }
 
-    @media (max-width: 850px) {
-      .footer-home { position: absolute; left: 10px; } /* Mantenuta posizione assoluta per allineamento */
-      .home-link-img { left: 10px; }
-    }
-
     @media (max-width: 600px) {
       .grid-riquadri, #contagiri, .top-links {
         padding-left: 5px !important;
@@ -476,9 +469,6 @@
 
 <header>
   <div class="header-container">
-    <a href="../index.html" class="home-link-img" title="Torna alla Home">
-      <img src="img/home.png" alt="Home">
-    </a>
     <div class="brand-wrapper">
       <a href="../index.html" class="brand-title">SbatuffoBlog</a>
       <div class="brand-subtitle">Giretti</div>
@@ -569,12 +559,10 @@
 </main>
 
 <footer>
-    <div class="footer-container">
-    <a href="../index.html" class="footer-home">
-      <img src="img/home.png" alt="Home">
-    </a>
+  <div class="footer-container">
     <div class="footer-text">
-      @SbatuffoBlog 2026
+      <span>@SbatuffoBlog 2026 - Torna alla</span> 
+      <a href="../index.html" class="footer-link">Home <img src="img/home.png" alt="Home"></a>
     </div>
   </div>
 </footer>
