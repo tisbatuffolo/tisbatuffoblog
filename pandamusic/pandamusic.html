@@ -27,7 +27,7 @@ body {
     overflow-x: hidden; 
 }
 
-/* --- HEADER (Immagine Home rimossa) --- */
+/* --- HEADER --- */
 header { 
     background: #fff; 
     padding: 25px 15px 15px; 
@@ -76,6 +76,28 @@ header {
     flex-direction: column;
 }
 
+/* Tasto Modifica (Matita) */
+.btn-edit {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #fff;
+    border: 2.5px solid var(--stroke);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px 0 var(--stroke);
+    transition: 0.15s;
+    z-index: 10;
+    padding: 0;
+}
+.btn-edit:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0 var(--stroke); }
+
 .card-content { display: flex; gap: 20px; align-items: center; }
 
 .cover-art {
@@ -91,15 +113,14 @@ header {
 .cover-cartoni { background: linear-gradient(135deg, var(--accent), #ffb8b8); }
 .cover-gemboy { background: linear-gradient(135deg, #636c00, #d0ff01); }
 .cover-vasco { background: linear-gradient(135deg, #004f2a, #01f9a6); }
+.cover-random1 { background: linear-gradient(135deg, #833ab4, #fd1d1d); }
+.cover-random2 { background: linear-gradient(135deg, #00C9FF, #92FE9D); }
+.cover-random3 { background: linear-gradient(135deg, #f12711, #f5af19); }
 
 .cover-text { 
     font-family: 'Grandstander', cursive; font-weight: 900; font-size: 1.4rem; 
     line-height: 1.1; color: #fff; text-shadow: 2px 2px 0 var(--stroke); text-align: center;
 }
-.title-883 { color: var(--sbatuffo-blue); }
-.title-cartoni { color: var(--accent); }
-.title-gemboy { color: #b8af00; }
-.title-vasco { color: #004f2a; }
 
 .cassette-mechanism {
     background: #e0e0e0; border: 3px solid var(--stroke); border-radius: 15px;
@@ -115,7 +136,7 @@ header {
 .spinning { animation: spinReel 2.5s linear infinite; }
 @keyframes spinReel { 100% { transform: rotate(360deg); } }
 
-.playlist-info { flex: 1; }
+.playlist-info { flex: 1; padding-right: 25px; /* Spazio per non accavallarsi con la matita */ }
 .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
 .btn {
     font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.85rem; padding: 10px 15px;
@@ -135,6 +156,30 @@ header {
     animation: slideDown 0.4s ease-out forwards;
 }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --- SEZIONE AGGIUNGI PLAYLIST & MODAL CD --- */
+.btn-add-container { text-align: center; margin: 40px 0; }
+
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
+.cd-shape { 
+    background: #e0e0e0; border-radius: 50%; 
+    width: 95vw; max-width: 550px; /* Aumentato da 450px a 550px */
+    aspect-ratio: 1; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; 
+    border: 15px solid #bbb; position: relative; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; 
+    max-height: 95vh;
+}
+.cd-hole { position: absolute; width: 15%; aspect-ratio: 1; background: rgba(0,0,0,0.6); border-radius: 50%; border: 5px solid #999; z-index: 0; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+.modal-content { 
+    z-index: 1; text-align: center; width: 80%; 
+    background: rgba(255,255,255,0.95); padding: 20px 25px; 
+    border-radius: 15px; border: 2px dashed #999; 
+    box-sizing: border-box;
+}
+.form-group { margin-bottom: 10px; }
+.form-group input { width: 100%; padding: 10px; border: 2px solid var(--stroke); border-radius: 8px; font-family: 'Fredoka', sans-serif; box-sizing: border-box; font-size: 0.95rem; }
+.modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
 
 /* --- CONCERTI --- */
 .concert-card {
@@ -225,7 +270,7 @@ header {
 .slideshow img:nth-child(odd) { transform: rotate(-3deg); }
 .slideshow img:nth-child(even) { transform: rotate(3deg); }
 
-/* --- FOOTER AGGIORNATO (Stile pandaccessori) --- */
+/* --- FOOTER --- */
 footer { 
   padding: 40px 10px; 
   text-align: center; 
@@ -233,7 +278,7 @@ footer {
   font-weight: 600; 
   color: #666; 
   font-size: 1.1rem; 
-  border-top: 2px solid #eee; /* Bordo grigio superiore */
+  border-top: 2px solid #eee; 
 }
 .footer-home-link { 
   text-decoration: none; 
@@ -255,6 +300,7 @@ footer {
     .card-content { flex-direction: row; align-items: center; gap: 12px; }
     .cover-art { width: 85px; height: 85px; padding: 5px; border-radius: 12px; }
     .cover-text { font-size: 1.1rem; }
+    .playlist-info { padding-right: 0; }
     .playlist-info h3 { font-size: 1.4rem !important; }
     .playlist-info p { font-size: 0.85rem; margin: 6px 0; }
     .btn-group { display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; gap: 8px; }
@@ -262,6 +308,7 @@ footer {
     .cassette-mechanism { gap: 25px; padding: 10px; margin-top: 10px; }
     .reel { width: 35px; height: 35px; }
     .playlist-card { padding: 15px; }
+    .btn-edit { width: 32px; height: 32px; font-size: 0.85rem; top: 12px; right: 12px; }
     .concert-header { padding-top: 65px; }
     .pass-badge { top: 25px; right: -60px; width: 190px; font-size: 0.65rem; }
     .concert-header h2 { font-size: 1.6rem !important; }
@@ -286,96 +333,17 @@ footer {
 <main class="container">
   <div class="section-title">Le nostre playlist 🎵</div>
 
-  <div class="playlist-grid">
-      <!-- Playlist 883 -->
-      <div class="playlist-card">
-          <div class="card-content">
-              <div class="cover-art cover-883"><span class="cover-text">883</span></div>
-              <div class="playlist-info">
-                  <h3 class="title-883" style="font-family: 'Grandstander'; font-size: 1.5rem; margin:0;">Max & 883</h3>
-                  <p style="color:#666; margin: 8px 0;"> Gli indimenticabili anni '90!</p>
-                  <div class="btn-group">
-                      <a href="https://open.spotify.com/playlist/3dgqd306fvGaDcXHpXqHT2" target="_blank" class="btn btn-link">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1DB954" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.195c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.859zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z"/></svg>
-                          Apri
-                      </a>
-                      <button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>
-                  </div>
-              </div>
-          </div>
-          <div class="cassette-mechanism">
-              <div class="reel"></div>
-              <div class="reel"></div>
-          </div>
-          <div class="player-container">
-            <div class="spotify-embed" data-spotify-uri="spotify:playlist:3dgqd306fvGaDcXHpXqHT2"></div>
-          </div>
-      </div>
-
-      <!-- Altre Playlist... (Gem Boy, Cartoni, Vasco) -->
-      <div class="playlist-card">
-          <div class="card-content">
-              <div class="cover-art cover-cartoni"><span class="cover-text">Cartoni</span></div>
-              <div class="playlist-info">
-                  <h3 class="title-cartoni" style="font-family: 'Grandstander'; font-size: 1.5rem; margin:0;">Cartoni</h3>
-                  <p style="color:#666; margin: 8px 0;">Le mitiche sigle dell'infanzia!</p>
-                  <div class="btn-group">
-                      <a href="https://open.spotify.com/playlist/3TKGHXuOMWHMWWKusfxsFA" target="_blank" class="btn btn-link">Apri</a>
-                      <button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>
-                  </div>
-              </div>
-          </div>
-          <div class="cassette-mechanism">
-              <div class="reel"></div>
-              <div class="reel"></div>
-          </div>
-          <div class="player-container">
-            <div class="spotify-embed" data-spotify-uri="spotify:playlist:3TKGHXuOMWHMWWKusfxsFA"></div>
-          </div>
-      </div>
-
-      <div class="playlist-card">
-          <div class="card-content">
-              <div class="cover-art cover-gemboy"><span class="cover-text">Gem Boy</span></div>
-              <div class="playlist-info">
-                  <h3 class="title-gemboy" style="font-family: 'Grandstander'; font-size: 1.5rem; margin:0;">Gem Boy</h3>
-                  <p style="color:#666; margin: 8px 0;">Una grande Orgia Cartoons!!</p>
-                  <div class="btn-group">
-                      <a href="https://open.spotify.com/playlist/2CPUQPeOuoIH6X5p8bWlsy" target="_blank" class="btn btn-link">Apri</a>
-                      <button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>
-                  </div>
-              </div>
-          </div>
-          <div class="cassette-mechanism">
-              <div class="reel"></div>
-              <div class="reel"></div>
-          </div>
-          <div class="player-container">
-            <div class="spotify-embed" data-spotify-uri="spotify:playlist:2CPUQPeOuoIH6X5p8bWlsy"></div>
-          </div>
-      </div>
-
-      <div class="playlist-card">
-          <div class="card-content">
-              <div class="cover-art cover-vasco"><span class="cover-text">Vasco</span></div>
-              <div class="playlist-info">
-                  <h3 class="title-vasco" style="font-family: 'Grandstander'; font-size: 1.5rem; margin:0;">Vasco</h3>
-                  <p style="color:#666; margin: 8px 0;">Una vita spericolata!</p>
-                  <div class="btn-group">
-                      <a href="https://open.spotify.com/playlist/2umIRuVheQRZrnOYlhy79M" target="_blank" class="btn btn-link">Apri</a>
-                      <button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>
-                  </div>
-              </div>
-          </div>
-          <div class="cassette-mechanism">
-              <div class="reel"></div>
-              <div class="reel"></div>
-          </div>
-          <div class="player-container">
-            <div class="spotify-embed" data-spotify-uri="spotify:playlist:2umIRuVheQRZrnOYlhy79M"></div>
-          </div>
-      </div>
+  <!-- Contenitore Griglia Dinamica -->
+  <div class="playlist-grid" id="playlist-container">
+      <!-- Le playlist verranno caricate qui via JavaScript -->
   </div> 
+
+  <!-- Pulsante Aggiungi Playlist -->
+  <div class="btn-add-container">
+      <button id="btn-add-playlist" class="btn btn-play" style="padding: 15px 30px; font-size: 1.1rem;">
+          ➕ Aggiungi nuova Playlist
+      </button>
+  </div>
 
   <div class="section-divider divider-concerti"></div>
 
@@ -418,7 +386,32 @@ footer {
     </a>
 </footer>
 
+<!-- Modale Stile CD (Per Inserimento e Modifica) -->
+<div id="modal-cd-overlay" class="overlay">
+    <div class="cd-shape">
+        <div class="cd-hole"></div>
+        <div class="modal-content">
+            <h3 id="modal-title" style="font-family: 'Grandstander'; font-size: 1.8rem; margin-top: 0; margin-bottom: 20px; color: var(--sbatuffo-blue);">Nuovo Disco</h3>
+            <div class="form-group"><input id="new-nome" placeholder="Nome Playlist (es. Rock)" required></div>
+            <div class="form-group"><input id="new-desc" placeholder="Breve descrizione..." required></div>
+            <div class="form-group"><input id="new-link" placeholder="Link web Spotify (https://...)" required></div>
+            <div class="form-group"><input id="new-uri" placeholder="URI Spotify (es. spotify:playlist:...)" required></div>
+            
+            <div class="modal-btns">
+                <button id="btn-cd-ok" class="btn btn-play" style="background: var(--sbatuffo-blue); color: white;">Registra ⏺️</button>
+                <button id="btn-cd-cancel" class="btn btn-link" style="background: var(--accent); color: white;">Annulla ✖</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+// --- VARIABILI GLOBALI ---
+let playlistsData = [];
+let isSpotifyApiReady = false;
+let editingIndex = -1; // -1 = Nuovo Inserimento, >= 0 = Modifica
+
+// --- GESTIONE PREVIEW MUSICARE ---
 function togglePlayerVisibility(btn) {
     const card = btn.closest('.playlist-card');
     const player = card.querySelector('.player-container');
@@ -431,13 +424,82 @@ function togglePlayerVisibility(btn) {
     }
 }
 
+// --- RENDERING DINAMICO PLAYLIST ---
+async function fetchPlaylists() {
+    try {
+        const res = await fetch(`playlist.json?v=${new Date().getTime()}`);
+        if(res.ok) {
+            playlistsData = await res.json();
+            renderPlaylists();
+        } else {
+            console.error("Impossibile caricare il file JSON.");
+        }
+    } catch(err) {
+        console.error("Errore di rete durante il fetch:", err);
+    }
+}
+
+function renderPlaylists() {
+    const container = document.getElementById('playlist-container');
+    container.innerHTML = ''; 
+
+    playlistsData.forEach((p, index) => {
+        const html = `
+        <div class="playlist-card">
+            <!-- Tasto Modifica -->
+            <button class="btn-edit" onclick="openEditModal(${index})" title="Modifica Cassetta">✏️</button>
+            
+            <div class="card-content">
+                <div class="cover-art ${p.stile.classe}">
+                    <span class="cover-text">${p.nome.substring(0, 10)}</span>
+                </div>
+                <div class="playlist-info">
+                    <h3 style="font-family: 'Grandstander'; font-size: 1.5rem; margin:0; color: ${p.stile.color};">${p.nome}</h3>
+                    <p style="color:#666; margin: 8px 0;">${p.descrizione}</p>
+                    <div class="btn-group">
+                        <a href="${p.linkSpotify}" target="_blank" class="btn btn-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1DB954" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.195c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.859zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z"/></svg>
+                            Apri
+                        </a>
+                        <button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>
+                    </div>
+                </div>
+            </div>
+            <div class="cassette-mechanism">
+                <div class="reel"></div>
+                <div class="reel"></div>
+            </div>
+            <div class="player-container">
+              <div class="spotify-embed" data-spotify-uri="${p.uriSpotify}" id="embed-${index}"></div>
+            </div>
+        </div>`;
+        container.innerHTML += html;
+    });
+
+    if (isSpotifyApiReady && window.SpotifyIframeApi) {
+        initSpotifyPlayers(window.SpotifyIframeApi);
+    }
+}
+
+// --- LOGICA IFRAME SPOTIFY ---
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    isSpotifyApiReady = true;
+    window.SpotifyIframeApi = IFrameAPI;
+    if(playlistsData.length > 0) {
+        initSpotifyPlayers(IFrameAPI);
+    }
+};
+
+function initSpotifyPlayers(IFrameAPI) {
     const cards = document.querySelectorAll('.playlist-card');
     cards.forEach(card => {
         const embedElement = card.querySelector('.spotify-embed');
+        if (embedElement.hasAttribute('data-initialized')) return; 
+
         const uri = embedElement.getAttribute('data-spotify-uri');
         const reels = card.querySelectorAll('.reel');
         const options = { width: '100%', height: '80', uri: uri };
+        
         const callback = (EmbedController) => {
             EmbedController.addListener('playback_update', e => {
                 if (e.data.isPaused || e.data.isBuffering) {
@@ -447,10 +509,129 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
                 }
             });
         };
+        
         IFrameAPI.createController(embedElement, options, callback);
+        embedElement.setAttribute('data-initialized', 'true');
     });
+}
+
+// --- GESTIONE FORM (AGGIUNTA E MODIFICA) ---
+const modalOverlay = document.getElementById("modal-cd-overlay");
+
+// Click su "Aggiungi"
+document.getElementById("btn-add-playlist").onclick = () => {
+    editingIndex = -1; // Reset stato a "Nuovo"
+    document.getElementById("modal-title").innerText = "Nuova Playlist";
+    document.getElementById("btn-cd-ok").innerHTML = "Salva ⏺️";
+    
+    document.getElementById("new-nome").value = "";
+    document.getElementById("new-desc").value = "";
+    document.getElementById("new-link").value = "";
+    document.getElementById("new-uri").value = "";
+    
+    modalOverlay.style.display = "flex";
 };
 
+// Click su "Modifica" (Icona Matita)
+window.openEditModal = function(index) {
+    editingIndex = index; // Imposta l'indice della cassetta da modificare
+    const p = playlistsData[index];
+    
+    document.getElementById("modal-title").innerText = "Modifica Playlist";
+    document.getElementById("btn-cd-ok").innerHTML = "Aggiorna 🔄";
+    
+    // Popola i campi con i dati attuali
+    document.getElementById("new-nome").value = p.nome;
+    document.getElementById("new-desc").value = p.descrizione;
+    document.getElementById("new-link").value = p.linkSpotify;
+    document.getElementById("new-uri").value = p.uriSpotify;
+    
+    modalOverlay.style.display = "flex";
+};
+
+// Chiudi Modale
+document.getElementById("btn-cd-cancel").onclick = () => {
+    modalOverlay.style.display = "none";
+};
+
+// Salvataggio (Nuovo o Aggiornamento)
+document.getElementById("btn-cd-ok").onclick = async () => {
+    const btnOk = document.getElementById("btn-cd-ok");
+    
+    const nome = document.getElementById("new-nome").value;
+    const desc = document.getElementById("new-desc").value;
+    const link = document.getElementById("new-link").value;
+    const uri = document.getElementById("new-uri").value;
+
+    if (!nome || !desc || !link || !uri) {
+        alert("Ops! Compila tutti i campi prima di procedere.");
+        return;
+    }
+
+    btnOk.innerText = "Salvataggio...";
+    btnOk.disabled = true;
+
+    // Lavoriamo su una copia dell'array
+    let arrayAggiornato = [...playlistsData];
+
+    if (editingIndex === -1) {
+        // CASO 1: NUOVO INSERIMENTO
+        const stiliPossibili = [
+            { classe: "cover-883", color: "#0000ff" },
+            { classe: "cover-cartoni", color: "#ff4757" },
+            { classe: "cover-gemboy", color: "#b8af00" },
+            { classe: "cover-vasco", color: "#004f2a" },
+            { classe: "cover-random1", color: "#fd1d1d" },
+            { classe: "cover-random2", color: "#00C9FF" },
+            { classe: "cover-random3", color: "#f5af19" }
+        ];
+        const stileRandom = stiliPossibili[Math.floor(Math.random() * stiliPossibili.length)];
+
+        arrayAggiornato.push({
+            nome: nome,
+            descrizione: desc,
+            linkSpotify: link,
+            uriSpotify: uri,
+            stile: stileRandom
+        });
+    } else {
+        // CASO 2: MODIFICA ESISTENTE
+        // Aggiorniamo solo i testi e i link, mantenendo intatto lo "stile" originale
+        arrayAggiornato[editingIndex].nome = nome;
+        arrayAggiornato[editingIndex].descrizione = desc;
+        arrayAggiornato[editingIndex].linkSpotify = link;
+        arrayAggiornato[editingIndex].uriSpotify = uri;
+    }
+
+    try {
+        const apiURL = "https://tisbatuffoblog.vercel.app/api/update_musicAPI"; 
+        
+        const res = await fetch(apiURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(arrayAggiornato)
+        });
+
+        if (res.ok) {
+            alert(editingIndex === -1 ? "Musicassetta registrata e inserita nello scaffale! 🎵" : "Musicassetta aggiornata correttamente! 🔄");
+            
+            playlistsData = arrayAggiornato;
+            renderPlaylists();
+            modalOverlay.style.display = "none";
+        } else {
+            const err = await res.json();
+            alert("Errore nel salvataggio su GitHub: " + (err.message || "Riprova"));
+        }
+    } catch(err) {
+        alert("Errore di connessione con l'API Vercel.");
+        console.error(err);
+    } finally {
+        btnOk.innerText = editingIndex === -1 ? "Registra ⏺️" : "Aggiorna 🔄";
+        btnOk.disabled = false;
+    }
+};
+
+// --- GESTIONE CONCERTI SLIDESHOW ---
 function loadConcertImages(folderName, containerId) {
     const container = document.getElementById(containerId);
     let currentIndex = 1;
@@ -461,7 +642,7 @@ function loadConcertImages(folderName, containerId) {
             img.alt = `Foto ${folderName} ${currentIndex}`;
             container.appendChild(img);
             currentIndex++;
-            if (currentIndex <= 50) { tryLoadNextImage(); }
+            if (currentIndex <= 50) { tryLoadNextImage(); } 
         };
         img.src = imagePath;
     }
@@ -469,6 +650,7 @@ function loadConcertImages(folderName, containerId) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    fetchPlaylists(); 
     loadConcertImages('vasco', 'slideshow-vasco');
     loadConcertImages('cristina', 'slideshow-cristina');
 });

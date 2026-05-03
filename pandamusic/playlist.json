@@ -1,0 +1,42 @@
+[
+  {
+    "nome": "Max & 883",
+    "descrizione": "Gli indimenticabili anni '90!",
+    "linkSpotify": "https://open.spotify.com/playlist/3dgqd306fvGaDcXHpXqHT2",
+    "uriSpotify": "spotify:playlist:3dgqd306fvGaDcXHpXqHT2",
+    "stile": {
+      "classe": "cover-883",
+      "color": "#0000ff"
+    }
+  },
+  {
+    "nome": "Cartoni",
+    "descrizione": "Le mitiche sigle dell'infanzia!",
+    "linkSpotify": "https://open.spotify.com/playlist/3TKGHXuOMWHMWWKusfxsFA",
+    "uriSpotify": "spotify:playlist:3TKGHXuOMWHMWWKusfxsFA",
+    "stile": {
+      "classe": "cover-cartoni",
+      "color": "#ff4757"
+    }
+  },
+  {
+    "nome": "Gem Boy",
+    "descrizione": "Una grande Orgia Cartoons!!",
+    "linkSpotify": "https://open.spotify.com/playlist/2CPUQPeOuoIH6X5p8bWlsy",
+    "uriSpotify": "spotify:playlist:2CPUQPeOuoIH6X5p8bWlsy",
+    "stile": {
+      "classe": "cover-gemboy",
+      "color": "#b8af00"
+    }
+  },
+  {
+    "nome": "Vasco",
+    "descrizione": "Una vita spericolata!",
+    "linkSpotify": "https://open.spotify.com/playlist/2umIRuVheQRZrnOYlhy79M",
+    "uriSpotify": "spotify:playlist:2umIRuVheQRZrnOYlhy79M",
+    "stile": {
+      "classe": "cover-vasco",
+      "color": "#004f2a"
+    }
+  }
+]
