@@ -38,5 +38,15 @@
       "classe": "cover-vasco",
       "color": "#004f2a"
     }
+  },
+  {
+    "nome": "Pinguini ",
+    "descrizione": "Tattici e nucleare!",
+    "linkSpotify": "https://open.spotify.com/playlist/6lRcYZZWKEy9dvRnpTR1PH?si=5B2_QmADS66D5ABoOYEsAA&pi=p5SYot6_SICp5",
+    "uriSpotify": "https://open.spotify.com/playlist/6lRcYZZWKEy9dvRnpTR1PH?si=5B2_QmADS66D5ABoOYEsAA&pi=p5SYot6_SICp5",
+    "stile": {
+      "classe": "cover-random2",
+      "color": "#00C9FF"
+    }
   }
 ]
