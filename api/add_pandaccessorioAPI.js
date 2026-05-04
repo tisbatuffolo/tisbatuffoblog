@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // Configurazione CORS (stessa del tuo file pandagenda)
+  // Configurazione CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     const REPO_OWNER = "tisbatuffolo"; 
     const REPO_NAME = "tisbatuffoblog";
 
-    // 1. Genera un nome file pulito dall'input dell'utente (rimuove caratteri strani)
+    // 1. Genera un nome file pulito
     const cleanFileName = titolo.replace(/[^a-zA-Z0-9 \-_]/g, '').trim() + '.jpg';
     const imageFullPath = `${targetDir}/${cleanFileName}`;
 
@@ -37,59 +37,65 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           message: `Aggiunta immagine Pandaccessorio: ${titolo}`,
-          content: imageB64 // È già puro base64 inviato dal client
+          content: imageB64 
         }),
+        cache: 'no-store' // EVITIAMO LA CACHE
       }
     );
 
     if (!uploadImgRes.ok) {
-        // Se il file esiste già fallirà perché serve lo SHA, ma è improbabile se i nomi sono unici.
         const errorText = await uploadImgRes.text();
         throw new Error(`Errore caricamento immagine: ${errorText}`);
     }
 
     // ==========================================
-    // STEP 2: SCARICA IL FILE JS ESISTENTE
+    // STEP 2: SCARICA IL FILE JS ESISTENTE (O PREPARALO SE NON ESISTE)
     // ==========================================
+    // Aggiungiamo un timestamp (?t=...) per ingannare Vercel e GitHub forzando dati freschi
     const getJsFile = await fetch(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${jsFilePath}`,
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${jsFilePath}?t=${Date.now()}`,
       {
         headers: {
           Authorization: `token ${GITHUB_TOKEN}`,
           Accept: "application/vnd.github+json",
         },
+        cache: 'no-store'
       }
     );
 
-    if (!getJsFile.ok) {
-      throw new Error(`Impossibile recuperare il file JS: ${jsFilePath}`);
+    let sha = null;
+    let decodedContent = "";
+
+    if (getJsFile.ok) {
+        const jsFileData = await getJsFile.json();
+        sha = jsFileData.sha;
+        decodedContent = Buffer.from(jsFileData.content, 'base64').toString('utf8');
+    } else if (getJsFile.status === 404) {
+        // Se il file non esiste su GitHub, lo creiamo noi automaticamente al volo!
+        decodedContent = `const ${arrayName} = [];\n`;
+        console.log(`File JS non trovato. Ne verrà creato uno nuovo: ${jsFilePath}`);
+    } else {
+        const errorText = await getJsFile.text();
+        throw new Error(`Impossibile recuperare il file JS: ${jsFilePath}. Dettaglio GitHub: ${errorText}`);
     }
 
-    const jsFileData = await getJsFile.json();
-    const sha = jsFileData.sha;
-    
-    // Decodifica il contenuto da base64
-    let decodedContent = Buffer.from(jsFileData.content, 'base64').toString('utf8');
-
     // ==========================================
-    // STEP 3: MODIFICA IL FILE JS (Regex Magica)
+    // STEP 3: MODIFICA IL FILE JS
     // ==========================================
-    // Cerchiamo l'array const arrayName = [ ... ];
     const arrayRegex = new RegExp(`(const\\s+${arrayName}\\s*=\\s*)(\\[[\\s\\S]*?\\])(\\s*;)`);
     const match = decodedContent.match(arrayRegex);
 
     if (!match) {
-        throw new Error(`Impossibile trovare l'array ${arrayName} nel file JS.`);
+        throw new Error(`Impossibile trovare l'array ${arrayName} nel file JS. Assicurati che la sintassi sia "const ${arrayName} = [...];"`);
     }
 
-    // Facciamo il parse dell'array esistente
     let currentArray = [];
     try {
-        // Tolgo eventuali virgole finali spurie che fanno arrabbiare JSON.parse
-        let cleanArrayStr = match[2].replace(/,\s*\]$/, ']'); 
-        currentArray = JSON.parse(cleanArrayStr);
+        // Uso 'new Function' invece di JSON.parse: è un trucchetto fantastico 
+        // per bypassare gli errori di sintassi se nel file hai usato apici singoli ('panda')
+        currentArray = new Function(`return ${match[2]}`)();
     } catch (e) {
-        throw new Error("Errore nel parsing del JSON interno al file .js");
+        throw new Error("Errore nel parsing dell'array interno al file .js");
     }
 
     // Aggiungiamo il nuovo record
@@ -98,15 +104,22 @@ export default async function handler(req, res) {
         "immagine": cleanFileName
     });
 
-    // Ricostruiamo la stringa con una formattazione pulita
     const newArrayString = JSON.stringify(currentArray, null, 4);
-    
-    // Sostituiamo il vecchio array con quello nuovo nel file .js
     decodedContent = decodedContent.replace(arrayRegex, `$1${newArrayString}$3`);
 
     // ==========================================
     // STEP 4: SALVA IL FILE JS SU GITHUB
     // ==========================================
+    const bodyData = {
+      message: `Aggiornato array in ${jsFilePath} per ${titolo}`,
+      content: Buffer.from(decodedContent).toString("base64")
+    };
+    
+    // Passiamo lo SHA solo se il file esisteva già, altrimenti GitHub sa che deve crearlo
+    if (sha) {
+        bodyData.sha = sha;
+    }
+
     const updateJsRes = await fetch(
       `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${jsFilePath}`,
       {
@@ -116,11 +129,8 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
           Accept: "application/vnd.github+json",
         },
-        body: JSON.stringify({
-          message: `Aggiornato array in ${jsFilePath} per ${titolo}`,
-          content: Buffer.from(decodedContent).toString("base64"),
-          sha: sha
-        }),
+        body: JSON.stringify(bodyData),
+        cache: 'no-store'
       }
     );
 
