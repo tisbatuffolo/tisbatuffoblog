@@ -32,6 +32,7 @@ header {
   background: #fff;
   padding: 25px 10px 5px;
   position: relative;
+  text-align: center;
 }
 
 .header-container {
@@ -39,16 +40,10 @@ header {
   justify-content: center;
   align-items: center;
   gap: 30px;
+  position: relative;
 }
 
-.home-link-img {
-  position: absolute;
-  left: 20px;
-  top: 5px;
-  transition: transform 0.2s ease;
-}
-.home-link-img:hover { transform: scale(1.1); }
-.home-link-img img { width: clamp(70px, 12vw, 100px); height: auto; }
+/* Immagine home rimossa come richiesto */
 
 .brand-title {
   font-family: 'Grandstander', cursive;
@@ -57,6 +52,7 @@ header {
   color: var(--sbatuffo-blue);
   text-decoration: none;
   line-height: 1;
+  display: block;
 }
 
 .brand-subtitle {
@@ -73,7 +69,7 @@ header {
   max-width: 200px;
   height: 3px;
   background: var(--primary);
-  margin: 20px auto; /* Ridotto il margine per avvicinare i contenuti */
+  margin: 30px auto; /* Spaziatura coerente con PandAgenda */
   border-radius: 50px;
   position: relative;
 }
@@ -90,12 +86,12 @@ header {
 
 /* --- CONTENT --- */
 .content {
-    margin: 0 auto; /* Rimosso mega spazio inutile */
+    margin: 0 auto; 
     padding: 0 20px;
     position: relative;
 }
 
-/* Palcoscenico per l'orbita - Altezza ottimizzata */
+/* Palcoscenico per l'orbita */
 .orbit-stage {
     position: relative;
     width: 100%;
@@ -115,10 +111,10 @@ header {
     position: relative;
 }
 
-/* --- IL PANDRONE (DOPPIO, NON SCHIACCIATO) --- */
+/* --- IL PANDRONE --- */
 .drone-wrapper {
     position: absolute;
-    width: 200px; /* Grande dimensione */
+    width: 200px; 
     height: auto;
     top: 50%; 
     left: 50%;
@@ -126,41 +122,22 @@ header {
     margin-left: -100px; 
     pointer-events: none;
     z-index: 20; 
-    /* Animazione orbita orizzontale ampia */
     animation: orbit-horizontal 7s ease-in-out infinite;
 }
 
 .drone-img {
     width: 100%;
     height: auto;
-    /* Oscillazione volo naturale */
     animation: hover-shake 2s ease-in-out infinite;
 }
 
 @keyframes orbit-horizontal {
-    0% {
-        transform: translateX(-380px) scale(1);
-        z-index: 20;
-    }
-    25% {
-        transform: translateX(0px) scale(1.15) translateY(-10px);
-        z-index: 20;
-    }
-    50% {
-        transform: translateX(380px) scale(1);
-        z-index: 20;
-    }
-    50.1% {
-        z-index: 5; /* Passa dietro l'immagine */
-    }
-    75% {
-        transform: translateX(0px) scale(0.85) translateY(10px);
-        z-index: 5;
-    }
-    100% {
-        transform: translateX(-380px) scale(1);
-        z-index: 5;
-    }
+    0% { transform: translateX(-380px) scale(1); z-index: 20; }
+    25% { transform: translateX(0px) scale(1.15) translateY(-10px); z-index: 20; }
+    50% { transform: translateX(380px) scale(1); z-index: 20; }
+    50.1% { z-index: 5; }
+    75% { transform: translateX(0px) scale(0.85) translateY(10px); z-index: 5; }
+    100% { transform: translateX(-380px) scale(1); z-index: 5; }
 }
 
 @keyframes hover-shake {
@@ -172,7 +149,7 @@ header {
     font-family: 'Grandstander', cursive;
     font-size: 1.8rem;
     font-weight: 900;
-    margin-top: 10px; /* Ridotto per compattezza */
+    margin-top: 10px;
     color: #ff4757;
     max-width: 600px;
     margin-left: auto;
@@ -184,7 +161,8 @@ header {
 /* --- FOOTER --- */
 footer { 
     background: #fff; 
-    padding: 10px 10px 30px; 
+    padding: 20px 10px 40px; 
+    border-top: 1px solid #eee;
 }
 .footer-container { 
     display: flex; 
@@ -194,9 +172,24 @@ footer {
     max-width: 1100px; 
     margin: 0 auto; 
 }
-.footer-home { position: absolute; left: 20px; }
-.footer-home img { width: 60px; height: auto; }
-.footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.1rem; color: #444; }
+.footer-text { 
+    font-family: 'Grandstander', cursive; 
+    font-weight: 600; 
+    font-size: 1.2rem; 
+    color: #444; 
+    text-align: center;
+}
+.footer-home-link { 
+  text-decoration: none; 
+  color: inherit; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+.footer-home-link:hover { transform: scale(1.05); }
+.footer-home-link img { width: 30px; height: auto; }
 
 @media (max-width: 768px) {
     .drone-wrapper { width: 140px; margin-left: -70px; }
@@ -216,7 +209,6 @@ footer {
 
 <header>
   <div class="header-container">
-    <a href="../index.html" class="home-link-img"><img src="img/home.png" alt="Home"></a>
     <div class="brand-wrapper">
       <a href="../index.html" class="brand-title">SbatuffoBlog</a>
       <div class="brand-subtitle">PandaVideo</div>
@@ -240,12 +232,17 @@ footer {
   </div>
 </main>
 
-<div class="section-divider"></div>
+<!-- Divider con margine inferiore aumentato per spaziare correttamente il footer -->
+<div class="section-divider" style="margin-bottom: 80px;"></div>
 
 <footer>
     <div class="footer-container">
-    <a href="../index.html" class="footer-home"><img src="img/home.png" alt="Home"></a>
-    <div class="footer-text">@SbatuffoBlog 2026</div>
+    <div class="footer-text">
+      @SbatuffoBlog - 
+      <a href="../index.html" class="footer-home-link">
+        Home <img src="img/home.png" alt="Home">
+      </a>
+    </div>
   </div>
 </footer>
 

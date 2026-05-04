@@ -13,28 +13,8 @@ const dati_pandabox = [
         "immagine": "Baby Portachiavi.jpg"
     },
     {
-        "titolo": "Campanello",
-        "immagine": "Campanello.jpg"
-    },
-    {
-        "titolo": "Coccinelle Tappabuchi",
-        "immagine": "Coccinelle Tappabuchi.jpg"
-    },
-    {
         "titolo": "Fasciacavi Orsetti",
         "immagine": "Fasciacavi Orsetti.jpg"
-    },
-    {
-        "titolo": "Feltrini",
-        "immagine": "Feltrini.jpg"
-    },
-    {
-        "titolo": "Gommini",
-        "immagine": "Gommini.jpg"
-    },
-    {
-        "titolo": "Lettere Sbrilluccicose",
-        "immagine": "Lettere Sbrilluccicose.jpg"
     },
     {
         "titolo": "Panda Collane",
@@ -63,10 +43,6 @@ const dati_pandabox = [
     {
         "titolo": "Salvacavo",
         "immagine": "Salvacavo.jpg"
-    },
-    {
-        "titolo": "Smaortphone Rings",
-        "immagine": "Smaortphone Rings.jpg"
     },
     {
         "titolo": "Stickers",

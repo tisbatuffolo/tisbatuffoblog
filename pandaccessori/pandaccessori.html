@@ -35,30 +35,30 @@ body { font-family: 'Fredoka', sans-serif; margin: 0; background: var(--bg-soft)
 
 /* --- HEADER & DIVISORI --- */
 header { background: #fff; padding: 25px 10px 10px; text-align: center; position: relative;}
-/* Modifica Punto 1: Header centrato con casetta rimossa */
 .header-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1200px; margin: 0 auto; min-height: clamp(60px, 10vw, 90px); }
 .brand-group { display: flex; flex-direction: column; align-items: center; }
 .brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(2.2rem, 8vw, 4.2rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
 .brand-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--primary); font-weight: 700; margin-top: 5px; letter-spacing: 1.5px; text-transform: lowercase; }
 
-/* --- DIVISORI --- */
+/* --- DIVISORI (Stile PandAgenda) --- */
 .section-divider {
-  max-width: 200px;
+  max-width: 200px; /* Puoi regolare la larghezza della linea qui */
   height: 3px;
-  background: var(--primary);
-  margin: 30px auto;
+  background: var(--primary); /* Il tuo rosa attuale */
+  margin: 40px auto;
   border-radius: 50px;
   position: relative;
   clear: both;
 }
-/* Modifica Punto 2: Cuore colore ff4d4d al posto del panda */
+
 .section-divider::after {
   content: "♥";
   position: absolute;
-  top: -14px; left: 50%;
+  top: -14px; 
+  left: 50%;
   transform: translateX(-50%);
-  background: var(--bg-soft);
-  padding: 0 15px;
+  background: var(--bg-soft); /* Fondamentale: usa lo sfondo della pagina per creare lo "spazio" */
+  padding: 0 15px; /* Ampiezza dello spazietto ai lati del cuore */
   color: var(--heart-red);
   font-size: 1.5rem;
 }
@@ -201,45 +201,57 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     font-weight: 700; font-size: 0.85rem; margin-top: 8px;
 }
 
-/* Stile Box Speciali (PandaBox e Mondo) */
+/* Contenitore Box Speciali */
+.special-boxes-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: clamp(15px, 4vw, 40px);
+    margin-top: 40px;
+    padding: 0 10px;
+    flex-wrap: nowrap;
+}
+
+/* Stile Box Speciali (PandaBox e Mondo) Tondi */
 .special-box {
     background: #ffffff;
-    border-radius: 15px;
+    border-radius: 50%;
     padding: 15px;
     cursor: pointer;
     text-align: center;
-    width: 100%;
-    max-width: 300px;
+    width: clamp(140px, 45vw, 300px); 
+    aspect-ratio: 1;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     transition: transform 0.2s, box-shadow 0.3s;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 .special-box:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-5px) scale(1.02); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 .special-box h3 {
     color: #000;
     font-family: 'Luckiest Guy', cursive;
-    font-size: 1.4rem;
-    margin: 0 0 15px 0;
+    font-size: clamp(0.9rem, 3vw, 1.5rem);
+    margin: 0 0 10px 0;
     letter-spacing: 0.5px;
-    line-height: 1.2;
+    line-height: 1.1;
+    z-index: 2;
 }
 .special-box img {
-    width: 100%;
-    height: 180px; /* Altezze uguali */
-    object-fit: contain; /* Adatta immagine mantenendo proporzioni */
-    background-color: transparent; /* Colore trasparente */
-    border-radius: 8px;
-    margin-top: auto;
+    width: 65%;
+    height: auto;
+    max-height: 55%;
+    object-fit: contain; 
+    background-color: transparent; 
+    z-index: 2;
 }
-.border-blue { border: 4px solid var(--sbatuffo-blue); }
-.border-red { border: 4px solid var(--heart-red); }
+.border-blue { border: clamp(3px, 1vw, 6px) solid var(--sbatuffo-blue); }
+.border-red { border: clamp(3px, 1vw, 6px) solid var(--heart-red); }
 
-/* Ottimizzazione per Mobile a 4 colonne */
 @media (max-width: 768px) {
     .section-container { padding: 0 5px; } 
     .grid-mini { grid-template-columns: repeat(4, 1fr); gap: 4px; }
@@ -264,13 +276,10 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 
 .p-room span { font-size: clamp(0.55rem, 1vw, 0.75rem); background: rgba(255,255,255,0.8); padding: 1px 6px; border-radius: 10px; margin-top: 1px; color: #666; font-family: 'Fredoka', sans-serif;}
 
-/* Geometricamente bilanciata */
 .p-terrazzo { top: 6%; left: 4%; width: 26%; height: 32%; background: var(--c-terrazzo); }
 .p-salotto { top: 6%; left: 32%; width: 42%; height: 32%; background: var(--c-salotto); }
 .p-cucina { top: 6%; left: 76%; width: 20%; height: 32%; background: var(--c-cucina); }
-
 .p-corridoio { top: 41%; left: 4%; width: 92%; height: 16%; background: var(--c-corridoio); }
-
 .p-bagno { top: 60%; left: 4%; width: 26%; height: 32%; background: var(--c-bagno); }
 .p-lettone { top: 60%; left: 32%; width: 42%; height: 32%; background: var(--c-lettone); }
 .p-cantina { top: 60%; left: 76%; width: 20%; height: 32%; background: var(--c-cantina); }
@@ -278,12 +287,30 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .item-dot { position: absolute; width: clamp(20px, 3vw, 32px); height: clamp(20px, 3vw, 32px); background: var(--accent); border-radius: 50% 50% 50% 0; transform: translate(-50%, -100%) rotate(-45deg); cursor: pointer; border: 2px solid #fff; z-index: 20; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
 .item-dot .dot-val { transform: rotate(45deg); display: block; text-align: center; color: #fff; font-weight: 900; line-height: clamp(16px, 2.5vw, 28px); font-size: clamp(10px, 1.5vw, 14px); }
 
-/* --- MODALE --- */
+/* --- MODALE CON FIT MIGLIORATO (NO STRISCETTE) --- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 15px; }
 .modal-overlay.active { display: flex; }
 .modal-content { background: #fff; border: 7px solid var(--cartoon-border); border-radius: 35px; padding: 15px; width: 100%; max-width: 700px; position: relative; text-align: center; box-shadow: 10px 10px 0px var(--primary); }
-.m-img-box { width: 100%; border: 6px solid var(--cartoon-border); border-radius: 25px; overflow: hidden; background: #f9f9f9; }
-.m-img-box img { width: 100%; max-height: 60vh; object-fit: contain; }
+
+.m-img-box { 
+    /* Il contenitore si stringe dinamicamente attorno alla foto e annulla le striscette laterali e superiori */
+    width: fit-content; 
+    max-width: 100%;
+    margin: 0 auto; 
+    border: 6px solid var(--cartoon-border); 
+    border-radius: 25px; 
+    overflow: hidden; 
+    background: transparent; 
+}
+.m-img-box img { 
+    display: block;
+    max-width: 100%; 
+    max-height: 60vh; 
+    width: auto; 
+    height: auto;
+    object-fit: contain; 
+}
+
 .m-title { font-family: 'Luckiest Guy'; font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 15px 0 5px; line-height: 1.1; }
 .m-subtitle { 
     font-weight: 800; font-size: clamp(1rem, 2.5vw, 1.3rem); text-transform: uppercase; margin-bottom: 10px; 
@@ -294,15 +321,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .btn-p { left: -15px; } .btn-n { right: -15px; }
 .close-x { position: absolute; top: -15px; right: -15px; background: #ff4747; color: #fff; border: 4px solid var(--cartoon-border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: 900; display:flex; align-items:center; justify-content:center;}
 
-footer { 
-    padding: 40px 10px; 
-    text-align: center; 
-    font-family: 'Grandstander'; 
-    font-weight: 600; 
-    color: #666; 
-    font-size: 1.1rem; 
-    border-top: 2px solid #eee;
-    }
+footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; font-weight: 600; color: #666; font-size: 1.1rem; border-top: 2px solid #eee; }
 </style>
 </head>
 <body>
@@ -321,13 +340,8 @@ footer {
 
 <section class="map-outer">
     <div class="map-canvas">
-        <div class="m-sky">
-            <div class="m-sun"></div>
-        </div>
-        
-        <div class="m-mountain-1"></div>
-        <div class="m-mountain-2"></div>
-        
+        <div class="m-sky"><div class="m-sun"></div></div>
+        <div class="m-mountain-1"></div><div class="m-mountain-2"></div>
         <div class="m-sign-trento">TRENTO</div>
 
         <!-- Fiume -->
@@ -349,10 +363,7 @@ footer {
 
         <div class="m-condo">
             <div class="roof-top"></div>
-            <div class="win-grid">
-                <div class="win"></div><div class="win">🐼</div>
-                <div class="win"></div><div class="win"></div>
-            </div>
+            <div class="win-grid"><div class="win"></div><div class="win">🐼</div><div class="win"></div><div class="win"></div></div>
             <div class="door"></div>
         </div>
         <a href="#sec-casa" class="m-pin p-casa">
@@ -361,19 +372,16 @@ footer {
 
         <div class="m-project-build">
             <div class="grid-b">
-                <div></div><div></div><div></div>
-                <div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div>
             </div>
         </div>
         <a href="#sec-progetto" class="m-pin p-progetto">
-            <div class="pin-label" style="background:#2d3436;">🏢 Progetto <span id="c-progetto">0</span></div>
+            <div class="pin-label" style="background:#2d3436;">💻 Progetto <span id="c-progetto">0</span></div>
         </a>
 
-        <div class="m-car m-car-blue">
-            <div class="wheel wheel-l"></div><div class="wheel wheel-r"></div>
-        </div>
+        <div class="m-car m-car-blue"><div class="wheel wheel-l"></div><div class="wheel wheel-r"></div></div>
         <a href="#sec-konad" class="m-pin p-konad">
-            <div class="pin-label" style="background:#0984e3;">🛒 Konad <span id="c-konad">0</span></div>
+            <div class="pin-label" style="background:#0984e3;">🚗 Konad <span id="c-konad">0</span></div>
         </a>
 
         <div class="m-cameretta-small">
@@ -384,11 +392,9 @@ footer {
             <div class="pin-label" style="background:#a29bfe;">🧸 Cameretta <span id="c-cameretta">0</span></div>
         </a>
 
-        <div class="m-car m-car-red">
-            <div class="wheel wheel-l"></div><div class="wheel wheel-r"></div>
-        </div>
+        <div class="m-car m-car-red"><div class="wheel wheel-l"></div><div class="wheel wheel-r"></div></div>
         <a href="#sec-gazy" class="m-pin p-gazy">
-            <div class="pin-label" style="background:#d63031;">🛒 Gazy <span id="c-gazy">0</span></div>
+            <div class="pin-label" style="background:#d63031;">🚗 Gazy <span id="c-gazy">0</span></div>
         </a>
     </div>
 </section>
@@ -402,9 +408,7 @@ footer {
         <div class="p-room p-terrazzo" id="p-terrazzo" onclick="scrollToRoom('terrazzo')">Terrazzo <span>0</span></div>
         <div class="p-room p-salotto" id="p-salotto" onclick="scrollToRoom('salotto')">Salotto <span>0</span></div>
         <div class="p-room p-cucina" id="p-cucina" onclick="scrollToRoom('cucina')">Cucina <span>0</span></div>
-        
         <div class="p-room p-corridoio" id="p-corridoio" onclick="scrollToRoom('corridoio')">Corridoio <span>0</span></div>
-        
         <div class="p-room p-bagno" id="p-bagno" onclick="scrollToRoom('bagno')">Bagno <span>0</span></div>
         <div class="p-room p-lettone" id="p-lettone" onclick="scrollToRoom('lettone')">Lettone <span>0</span></div>
         <div class="p-room p-cantina" id="p-cantina" onclick="scrollToRoom('cantina')">Cantina <span>0</span></div>
@@ -414,9 +418,8 @@ footer {
         <div class="grid-mini" id="grid-casa"></div>
     </div>
 
-    <!-- Nuovi Box Speciali: PandaBox e Mondo -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px;">
-        
+    <!-- Nuovi Box Speciali: PandaBox e Mondo in Contenitore Tondo e sulla stessa riga -->
+    <div class="special-boxes-wrapper">
         <div class="special-box border-blue" onclick="openSpecialModal('pandabox')">
             <h3>Cosa c'è nella<br>PandaBox?</h3>
             <img src="img/casasbatuffolone/pandabox-copertina.png" alt="PandaBox Copertina">
@@ -426,9 +429,7 @@ footer {
             <h3>Cosa c'è nel<br>Mondo?</h3>
             <img src="img/casasbatuffolone/mondo-copertina.png" alt="Mondo Copertina">
         </div>
-
     </div>
-
 </div>
 
 <div class="section-divider"></div>
@@ -496,6 +497,9 @@ footer {
 <script src="img/casasbatuffolone/terrazzo/dati_terrazzo.js"></script>
 <script src="img/casasbatuffolone/salotto/mondo/dati_mondo.js"></script>
 <script src="img/casasbatuffolone/cucina/pandabox/dati_pandabox.js"></script>
+<!-- Scripts File Extra -->
+<script src="img/casasbatuffolone/cucina/pandabox/extra_pandabox/dati_extra_pandabox.js"></script>
+<script src="img/casasbatuffolone/salotto/mondo/extra_mondo/dati_extra_mondo.js"></script>
 
 <script>
 const roomColors = {
@@ -508,7 +512,17 @@ function formatData(arr, path, room = null, cat = "", displayTitle = null) {
     return arr.map(i => ({ ...i, imgSrc: path + i.immagine, room, category: cat, displayTitle }));
 }
 
-// Database Globale - Ripristinato per contare gli elementi esattamente una volta
+// Lettura dinamica file extra anti-errore
+const getExtraPanda = () => {
+    if (typeof dati_extra_pandabox !== 'undefined') return dati_extra_pandabox;
+    return [];
+};
+const getExtraMondo = () => {
+    if (typeof dati_extra_mondo !== 'undefined') return dati_extra_mondo;
+    return [];
+};
+
+// Database Globale - EXTRA ESCLUSI volutamente per non incidere su Card / Contatori
 const DB = {
     casa: [
         ...formatData(typeof dati_terrazzo !== 'undefined' ? dati_terrazzo : [], 'img/casasbatuffolone/terrazzo/', 'terrazzo', 'Casa Sbatuffolone'),
@@ -527,10 +541,16 @@ const DB = {
     gazy: formatData(typeof dati_gazy !== 'undefined' ? dati_gazy : [], 'img/gazy/', null, 'Gazy')
 };
 
-// Database Speciale isolato per essere iterato dal Modale dei soli due riquadri
+// Database Speciale - INCLUSI gli EXTRA combinati a PandaBox e Mondo (Visibili solo nel rispettivo scorrimento)
 const specialDB = {
-    pandabox: formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox'),
-    mondo: formatData(typeof dati_mondo !== 'undefined' ? dati_mondo : [], 'img/casasbatuffolone/salotto/mondo/', 'salotto', 'Casa Sbatuffolone', 'Salotto - Mondo')
+    pandabox: [
+        ...formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox'),
+        ...formatData(getExtraPanda(), 'img/casasbatuffolone/cucina/pandabox/extra_pandabox/', 'cucina', 'Casa Sbatuffolone', 'PandaBox')
+    ],
+    mondo: [
+        ...formatData(typeof dati_mondo !== 'undefined' ? dati_mondo : [], 'img/casasbatuffolone/salotto/mondo/', 'salotto', 'Casa Sbatuffolone', 'Salotto - Mondo'),
+        ...formatData(getExtraMondo(), 'img/casasbatuffolone/salotto/mondo/extra_mondo/', 'salotto', 'Casa Sbatuffolone', 'Mondo')
+    ]
 };
 
 let activeSet = [];
