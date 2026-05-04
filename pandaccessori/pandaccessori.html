@@ -42,9 +42,9 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 
 /* --- DIVISORI (Stile PandAgenda) --- */
 .section-divider {
-  max-width: 200px; /* Puoi regolare la larghezza della linea qui */
+  max-width: 200px; 
   height: 3px;
-  background: var(--primary); /* Il tuo rosa attuale */
+  background: var(--primary); 
   margin: 40px auto;
   border-radius: 50px;
   position: relative;
@@ -57,8 +57,8 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
   top: -14px; 
   left: 50%;
   transform: translateX(-50%);
-  background: var(--bg-soft); /* Fondamentale: usa lo sfondo della pagina per creare lo "spazio" */
-  padding: 0 15px; /* Ampiezza dello spazietto ai lati del cuore */
+  background: var(--bg-soft); 
+  padding: 0 15px; 
   color: var(--heart-red);
   font-size: 1.5rem;
 }
@@ -321,6 +321,58 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .btn-p { left: -15px; } .btn-n { right: -15px; }
 .close-x { position: absolute; top: -15px; right: -15px; background: #ff4747; color: #fff; border: 4px solid var(--cartoon-border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: 900; display:flex; align-items:center; justify-content:center;}
 
+/* --- FORM AGGIUNTA PANDACCESSORIO --- */
+.add-form-container {
+    background: #fff;
+    border: 4px solid var(--cartoon-border);
+    border-radius: 25px;
+    padding: 25px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 8px 8px 0px var(--sbatuffo-blue);
+}
+.add-form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+.add-form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--sbatuffo-blue);
+    font-size: 1.1rem;
+}
+.add-form-group input[type="text"], 
+.add-form-group select, 
+.add-form-group input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: 3px solid var(--cartoon-border);
+    border-radius: 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.btn-submit {
+    background: var(--primary);
+    color: #fff;
+    font-family: 'Grandstander', cursive;
+    font-size: 1.4rem;
+    font-weight: 900;
+    border: 4px solid var(--cartoon-border);
+    border-radius: 15px;
+    padding: 12px 30px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+    box-shadow: 4px 4px 0px var(--cartoon-border);
+    transition: transform 0.1s;
+}
+.btn-submit:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--cartoon-border);
+}
+
 footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; font-weight: 600; color: #666; font-size: 1.1rem; border-top: 2px solid #eee; }
 </style>
 </head>
@@ -460,6 +512,76 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
     <div class="grid-mini" id="grid-gazy"></div>
 </div>
 
+<!-- ============================================== -->
+<!-- NUOVA SEZIONE: AGGIUNGI PANDACCESSORIO -->
+<!-- ============================================== -->
+<div class="section-divider"></div>
+<div class="section-container" id="sec-aggiungi">
+    <h2 class="section-title">Aggiungi PandAccessorio</h2>
+    <p class="section-sub">Metti un nuovo oggetto nel database! 🐼</p>
+    
+    <div class="add-form-container">
+        <div class="add-form-group">
+            <label for="add-nome">Nome Oggetto</label>
+            <input type="text" id="add-nome" placeholder="Es: Nuovo Peluche" required>
+        </div>
+
+        <div class="add-form-group">
+            <label for="add-img">Seleziona Immagine</label>
+            <input type="file" id="add-img" accept="image/*" required>
+        </div>
+
+        <div class="add-form-group">
+            <label for="add-ambiente">Dove si trova?</label>
+            <select id="add-ambiente">
+                <option value="">-- Scegli Ambiente --</option>
+                <option value="casasbatuffolone">Casa Sbatuffolone</option>
+                <option value="progetto">Progetto</option>
+                <option value="gazy">Gazy</option>
+                <option value="konad">Konad</option>
+                <option value="cameretta">Cameretta</option>
+            </select>
+        </div>
+
+        <!-- Sezione Stanza (Visibile solo se casasbatuffolone) -->
+        <div class="add-form-group" id="div-stanza" style="display: none;">
+            <label for="add-stanza">In che stanza?</label>
+            <select id="add-stanza">
+                <option value="">-- Scegli Stanza --</option>
+                <option value="salotto">Salotto</option>
+                <option value="cucina">Cucina</option>
+                <option value="corridoio">Corridoio</option>
+                <option value="terrazzo">Terrazzo</option>
+                <option value="lettone">Lettone</option>
+                <option value="bagno">Bagno</option>
+                <option value="cantina">Cantina</option>
+            </select>
+        </div>
+
+        <!-- Sezione Mondo (Visibile solo se stanza = salotto) -->
+        <div class="add-form-group" id="div-mondo" style="display: none;">
+            <label for="add-mondo">È nel Mondo?</label>
+            <select id="add-mondo">
+                <option value="no">No, in Salotto normale</option>
+                <option value="si">Sì, è nel Mondo!</option>
+            </select>
+        </div>
+
+        <!-- Sezione PandaBox (Visibile solo se stanza = cucina) -->
+        <div class="add-form-group" id="div-pandabox" style="display: none;">
+            <label for="add-pandabox">È nella PandaBox?</label>
+            <select id="add-pandabox">
+                <option value="no">No, in Cucina normale</option>
+                <option value="si">Sì, è nella PandaBox!</option>
+            </select>
+        </div>
+
+        <button class="btn-submit" id="btn-invia-panda">Aggiungi! 🚀</button>
+        <!-- Canvas invisibile per il resize -->
+        <canvas id="resize-canvas" style="display:none;"></canvas>
+    </div>
+</div>
+
 <div class="modal-overlay" id="lightbox" onclick="if(event.target == this) closeModal()">
     <div class="modal-content" id="m-box">
         <button class="close-x" onclick="closeModal()">&times;</button>
@@ -522,7 +644,7 @@ const getExtraMondo = () => {
     return [];
 };
 
-// Database Globale - EXTRA ESCLUSI volutamente per non incidere su Card / Contatori
+// Database Globale
 const DB = {
     casa: [
         ...formatData(typeof dati_terrazzo !== 'undefined' ? dati_terrazzo : [], 'img/casasbatuffolone/terrazzo/', 'terrazzo', 'Casa Sbatuffolone'),
@@ -541,7 +663,7 @@ const DB = {
     gazy: formatData(typeof dati_gazy !== 'undefined' ? dati_gazy : [], 'img/gazy/', null, 'Gazy')
 };
 
-// Database Speciale - INCLUSI gli EXTRA combinati a PandaBox e Mondo (Visibili solo nel rispettivo scorrimento)
+// Database Speciale
 const specialDB = {
     pandabox: [
         ...formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox'),
@@ -680,6 +802,156 @@ function scrollToRoom(roomName) {
         }, 1500);
     }
 }
+
+// ==============================================
+// LOGICA FORM AGGIUNTA PANDACCESSORIO
+// ==============================================
+
+// Gestione dei Menu a Tendina Dinamici
+document.getElementById('add-ambiente').addEventListener('change', function(e) {
+    const val = e.target.value;
+    const divStanza = document.getElementById('div-stanza');
+    const divMondo = document.getElementById('div-mondo');
+    const divPandabox = document.getElementById('div-pandabox');
+    
+    if (val === 'casasbatuffolone') {
+        divStanza.style.display = 'block';
+    } else {
+        divStanza.style.display = 'none';
+        divMondo.style.display = 'none';
+        divPandabox.style.display = 'none';
+        document.getElementById('add-stanza').value = "";
+    }
+});
+
+document.getElementById('add-stanza').addEventListener('change', function(e) {
+    const val = e.target.value;
+    const divMondo = document.getElementById('div-mondo');
+    const divPandabox = document.getElementById('div-pandabox');
+    
+    if (val === 'salotto') {
+        divMondo.style.display = 'block';
+        divPandabox.style.display = 'none';
+    } else if (val === 'cucina') {
+        divPandabox.style.display = 'block';
+        divMondo.style.display = 'none';
+    } else {
+        divMondo.style.display = 'none';
+        divPandabox.style.display = 'none';
+    }
+});
+
+// Funzione di ridimensionamento del 50%
+function resizeImage(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.getElementById('resize-canvas');
+                // Riduzione del 50%
+                canvas.width = img.width / 2;
+                canvas.height = img.height / 2;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // Restituiamo il Base64 (senza il prefisso data:image...)
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                const base64Data = dataUrl.split(',')[1];
+                resolve(base64Data);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// Logica di Invio
+document.getElementById('btn-invia-panda').addEventListener('click', async function() {
+    const nome = document.getElementById('add-nome').value.trim();
+    const fileInput = document.getElementById('add-img');
+    const ambiente = document.getElementById('add-ambiente').value;
+    const stanza = document.getElementById('add-stanza').value;
+    const isMondo = document.getElementById('add-mondo').value;
+    const isPandabox = document.getElementById('add-pandabox').value;
+
+    if (!nome || fileInput.files.length === 0 || !ambiente) {
+        alert("Inserisci nome, immagine e ambiente!");
+        return;
+    }
+    if (ambiente === 'casasbatuffolone' && !stanza) {
+        alert("Specifica la stanza in Casa Sbatuffolone!");
+        return;
+    }
+
+    const btn = document.getElementById('btn-invia-panda');
+    btn.innerText = "⏳ Caricamento in corso...";
+    btn.disabled = true;
+
+    try {
+        // 1. Resize immagine
+        const file = fileInput.files[0];
+        const base64Image = await resizeImage(file);
+
+        // 2. Determiniamo i percorsi esatti per GitHub
+        let targetDir = "";
+        let jsFilePath = "";
+        let arrayName = "";
+
+        if (ambiente === 'casasbatuffolone') {
+            if (stanza === 'salotto' && isMondo === 'si') {
+                targetDir = "img/casasbatuffolone/salotto/mondo";
+                jsFilePath = "img/casasbatuffolone/salotto/mondo/dati_mondo.js";
+                arrayName = "dati_mondo";
+            } else if (stanza === 'cucina' && isPandabox === 'si') {
+                targetDir = "img/casasbatuffolone/cucina/pandabox";
+                jsFilePath = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js";
+                arrayName = "dati_pandabox";
+            } else {
+                targetDir = `img/casasbatuffolone/${stanza}`;
+                jsFilePath = `img/casasbatuffolone/${stanza}/dati_${stanza}.js`;
+                arrayName = `dati_${stanza}`;
+            }
+        } else {
+            // progetto, gazy, konad, cameretta
+            targetDir = `img/${ambiente}`;
+            jsFilePath = `img/${ambiente}/dati_${ambiente}.js`;
+            arrayName = `dati_${ambiente}`;
+        }
+
+        // 3. Invio alla Vercel API
+        const payload = {
+            titolo: nome,
+            imageB64: base64Image,
+            targetDir: targetDir,
+            jsFilePath: jsFilePath,
+            arrayName: arrayName
+        };
+
+        const res = await fetch("https://tisbatuffoblog.vercel.app/api/add_pandaccessorioAPI", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            alert("Pandaccessorio salvato con successo! 🐼🎉 Aggiorna la pagina per vederlo.");
+            // Reset Form
+            document.getElementById('add-nome').value = "";
+            fileInput.value = "";
+        } else {
+            const errData = await res.json();
+            throw new Error(errData.error || "Errore sconosciuto API");
+        }
+
+    } catch (e) {
+        console.error(e);
+        alert("Errore durante il salvataggio: " + e.message);
+    } finally {
+        btn.innerText = "Aggiungi! 🚀";
+        btn.disabled = false;
+    }
+});
 </script>
 </body>
 </html>
