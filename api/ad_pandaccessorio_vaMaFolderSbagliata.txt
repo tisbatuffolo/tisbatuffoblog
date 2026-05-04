@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // Configurazione CORS immediata per evitare errori di fetch dal browser
+  // Configurazione CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -19,16 +19,17 @@ export default async function handler(req, res) {
     const REPO_OWNER = "tisbatuffolo";[cite: 9]
     const REPO_NAME = "tisbatuffoblog";[cite: 9]
 
-    // --- CORREZIONE PATH (Per forzare la cartella pandaccessori/) ---
-    const finalTargetDir = targetDir.startsWith("pandaccessori/") ? targetDir : `pandaccessori/${targetDir}`;
-    const finalJsFilePath = jsFilePath.startsWith("pandaccessori/") ? jsFilePath : `pandaccessori/${jsFilePath}`;
+    // FIX PERCORSI: Forza l'inserimento nella sottocartella pandaccessori/
+    const fixPath = (path) => path.startsWith("pandaccessori/") ? path : `pandaccessori/${path}`;
+    const finalTargetDir = fixPath(targetDir);
+    const finalJsFilePath = fixPath(jsFilePath);
 
     // 1. Genera un nome file pulito
     const cleanFileName = titolo.replace(/[^a-zA-Z0-9 \-_]/g, '').trim() + '.jpg';
     const imageFullPath = `${finalTargetDir}/${cleanFileName}`;
 
     // ==========================================
-    // STEP 1: CARICA L'IMMAGINE SU GITHUB
+    // STEP 1: CARICA L'IMMAGINE SU GITHUB[cite: 9]
     // ==========================================
     const uploadImgRes = await fetch(
       `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${imageFullPath}`,
