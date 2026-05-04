@@ -140,7 +140,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; 
     gap: 15%; padding: 15% 10%; height: 80%; 
 }
-/* Modifica Punto 3: Flexbox aggiunto per centrare il panda nelle finestre */
 .m-condo .win { background: #81ecec; border: 2px solid #333; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: clamp(8px, 2vw, 16px); }
 .m-condo .door { width: 25%; height: 20%; background: #5d4037; border: 2px solid #333; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
@@ -148,7 +147,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     position: absolute; top: 38%; left: 6%; width: 14%; height: 18%; 
     background: #bdc3c7; border: clamp(2px, 0.5vw, 4px) solid #333; z-index: 10;
 }
-/* Modifica Punto 3: Parola OFFICE rimossa eliminando il selettore ::before che la conteneva */
 
 .m-project-build .grid-b { display:grid; grid-template-columns:1fr 1fr 1fr; gap:5%; padding:10%; height:100%; }
 .m-project-build .grid-b div { background:#fff; height:20%; border: 1px solid #777;}
@@ -158,7 +156,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     background: #ecf0f1; border: 2px solid #333; z-index: 15;
 }
 .m-cameretta-small .roof { position: absolute; top: -60%; left: -15%; width: 130%; height: 60%; background: #795548; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border: 2px solid #333; }
-/* Modifica Punto 3: Flexbox aggiunto per centrare il panda */
 .m-cameretta-small .win-s { width: 25%; height: 25%; background: #fff; border: 1px solid #333; position: absolute; top: 15%; left: 15%; box-shadow: inset 1px 1px 0 #ccc; display: flex; align-items: center; justify-content: center; font-size: clamp(6px, 1.5vw, 12px); }
 .m-cameretta-small .win-s-2 { width: 25%; height: 25%; background: #fff; border: 1px solid #333; position: absolute; top: 15%; right: 15%; box-shadow: inset 1px 1px 0 #ccc; }
 .m-cameretta-small .door-s { width: 25%; height: 40%; background: #5d4037; border: 1px solid #333; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
@@ -203,6 +200,44 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .card-title {
     font-weight: 700; font-size: 0.85rem; margin-top: 8px;
 }
+
+/* Stile Box Speciali (PandaBox e Mondo) */
+.special-box {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.special-box:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.special-box h3 {
+    color: #000;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.4rem;
+    margin: 0 0 15px 0;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+.special-box img {
+    width: 100%;
+    height: 180px; /* Altezze uguali */
+    object-fit: contain; /* Adatta immagine mantenendo proporzioni */
+    background-color: transparent; /* Colore trasparente */
+    border-radius: 8px;
+    margin-top: auto;
+}
+.border-blue { border: 4px solid var(--sbatuffo-blue); }
+.border-red { border: 4px solid var(--heart-red); }
 
 /* Ottimizzazione per Mobile a 4 colonne */
 @media (max-width: 768px) {
@@ -315,7 +350,6 @@ footer {
         <div class="m-condo">
             <div class="roof-top"></div>
             <div class="win-grid">
-                <!-- Modifica Punto 3: Panda nella finestra in alto a destra di CasaSbatuffolone -->
                 <div class="win"></div><div class="win">🐼</div>
                 <div class="win"></div><div class="win"></div>
             </div>
@@ -344,7 +378,6 @@ footer {
 
         <div class="m-cameretta-small">
             <div class="roof"></div>
-            <!-- Modifica Punto 3: Panda nella finestra sinistra di cameretta -->
             <div class="win-s">🐼</div><div class="win-s-2"></div><div class="door-s"></div>
         </div>
         <a href="#sec-cameretta" class="m-pin p-cameretta">
@@ -380,6 +413,22 @@ footer {
     <div style="background:#fff; padding: clamp(5px, 2vw, 30px); border-radius:25px; border:1px solid #eee;">
         <div class="grid-mini" id="grid-casa"></div>
     </div>
+
+    <!-- Nuovi Box Speciali: PandaBox e Mondo -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px;">
+        
+        <div class="special-box border-blue" onclick="openSpecialModal('pandabox')">
+            <h3>Cosa c'è nella<br>PandaBox?</h3>
+            <img src="img/casasbatuffolone/pandabox-copertina.png" alt="PandaBox Copertina">
+        </div>
+
+        <div class="special-box border-red" onclick="openSpecialModal('mondo')">
+            <h3>Cosa c'è nel<br>Mondo?</h3>
+            <img src="img/casasbatuffolone/mondo-copertina.png" alt="Mondo Copertina">
+        </div>
+
+    </div>
+
 </div>
 
 <div class="section-divider"></div>
@@ -426,11 +475,10 @@ footer {
 
 <div class="section-divider" style="margin-bottom: 80px;"></div>
 
-<!-- Modifica Punto 4: Aggiornamento link e immagine del footer -->
 <footer>
     @SbatuffoBlog 2026 - 
     <a href="../index.html" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-        Torna alla Home 
+        Home 
         <img src="img/home.png" alt="Home" style="width: clamp(40px, 8vw, 60px); height: auto; vertical-align: middle;">
     </a>
 </footer>
@@ -460,6 +508,7 @@ function formatData(arr, path, room = null, cat = "", displayTitle = null) {
     return arr.map(i => ({ ...i, imgSrc: path + i.immagine, room, category: cat, displayTitle }));
 }
 
+// Database Globale - Ripristinato per contare gli elementi esattamente una volta
 const DB = {
     casa: [
         ...formatData(typeof dati_terrazzo !== 'undefined' ? dati_terrazzo : [], 'img/casasbatuffolone/terrazzo/', 'terrazzo', 'Casa Sbatuffolone'),
@@ -476,6 +525,12 @@ const DB = {
     konad: formatData(typeof dati_konad !== 'undefined' ? dati_konad : [], 'img/konad/', null, 'Konad'),
     cameretta: formatData(typeof dati_cameretta !== 'undefined' ? dati_cameretta : [], 'img/cameretta/', null, 'Cameretta'),
     gazy: formatData(typeof dati_gazy !== 'undefined' ? dati_gazy : [], 'img/gazy/', null, 'Gazy')
+};
+
+// Database Speciale isolato per essere iterato dal Modale dei soli due riquadri
+const specialDB = {
+    pandabox: formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox'),
+    mondo: formatData(typeof dati_mondo !== 'undefined' ? dati_mondo : [], 'img/casasbatuffolone/salotto/mondo/', 'salotto', 'Casa Sbatuffolone', 'Salotto - Mondo')
 };
 
 let activeSet = [];
@@ -532,6 +587,14 @@ function renderPlani(id, items) {
         dot.innerHTML = `<span class="dot-val">${arr.length > 1 ? arr.length : '📍'}</span>`;
         dot.onclick = (e) => { e.stopPropagation(); openModal(arr, 0); };
         box.appendChild(dot);
+    }
+}
+
+function openSpecialModal(type) {
+    if (specialDB[type] && specialDB[type].length > 0) {
+        openModal(specialDB[type], 0);
+    } else {
+        alert("Immagini non ancora caricate o non trovate!");
     }
 }
 
