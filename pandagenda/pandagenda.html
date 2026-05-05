@@ -22,8 +22,8 @@
   --c-cibo: #ffd32a; 
   --c-giretto: #ff8c00; 
   --c-girolungo: #05c46b;
-  --c-evento: #575fcf; 
-  --c-compleanno: #a55eea; /* Violetto */
+  --c-evento: #00a6ff; 
+  --c-compleanno: #1c6768; 
   --c-festa: #ff00ff; 
   --c-nessuna: #95a5a6;
 }
@@ -51,8 +51,6 @@ header {
   gap: 30px;
   position: relative;
 }
-
-/* Rimosso .home-link-img CSS in quanto l'elemento è stato eliminato */
 
 .brand-title {
   font-family: 'Grandstander', cursive;
@@ -167,11 +165,11 @@ td { height: 65px; vertical-align: top; border-radius: 10px; border: 2px solid #
   color: var(--primary);
 }
 
-/* Attività Cards */
+/* Attività Cards Ottimizzate[cite: 2] */
 .activity-card {
   background: #fff; border: 2.5px solid var(--stroke); 
   border-radius: 20px; margin-bottom: 15px; position: relative;
-  display: flex; align-items: center; min-height: 95px; cursor: pointer;
+  display: flex; align-items: stretch; min-height: 95px; cursor: pointer;
   transition: all 0.2s ease;
 }
 .activity-card.selected-card { 
@@ -180,17 +178,45 @@ td { height: 65px; vertical-align: top; border-radius: 10px; border: 2px solid #
     transform: translateY(-2px); 
 }
 .day-square { 
-  width: 65px; align-self: stretch; border-right: 2.5px solid var(--stroke);
+  width: 65px; border-right: 2.5px solid var(--stroke);
   border-top-left-radius: 17px; border-bottom-left-radius: 17px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   color: #fff; flex-shrink: 0;
 }
 .day-square b { font-size: 1.5rem; font-weight: 700; }
 .day-square span { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; }
-.activity-img { height: 85px; width: 110px; object-fit: contain; padding: 5px; }
-.activity-info { flex-grow: 1; padding: 10px 40px 10px 5px; }
-.activity-info b { font-size: 1.4rem; display: block; line-height: 1.1; margin-bottom: 4px; font-weight: 600; }
-.recur-tag { background: #eef1ff; color: var(--primary); padding: 2px 8px; border-radius: 8px; border: 1.5px solid var(--primary); font-size: 0.75rem; font-weight: 600; }
+
+.activity-img { width: 100px; object-fit: contain; padding: 5px; flex-shrink: 0; }
+
+.activity-info { 
+  flex-grow: 1; 
+  padding: 12px 40px 12px 8px; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+  gap: 4px;
+}
+.activity-info b { 
+  font-size: 1.3rem; 
+  display: block; 
+  line-height: 1.2; 
+  font-weight: 600; 
+}
+.activity-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.recur-tag { 
+  background: #eef1ff; 
+  color: var(--primary); 
+  padding: 2px 8px; 
+  border-radius: 8px; 
+  border: 1.5px solid var(--primary); 
+  font-size: 0.7rem; 
+  font-weight: 700; 
+}
 
 .edit-pencil {
     position: absolute; top: -10px; right: -5px;
@@ -239,7 +265,7 @@ td { height: 65px; vertical-align: top; border-radius: 10px; border: 2px solid #
 }
 #btn-confirm { background: var(--sbatuffo-blue); color: white; box-shadow: 4px 4px 0 var(--stroke); } 
 
-/* FOOTER AGGIORNATO */
+/* FOOTER */
 footer { background: #fff; padding: 20px 10px 40px; border-top: 1px solid #eee;}
 .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
 .footer-text { font-family: 'Grandstander', cursive; font-weight: 600; font-size: 1.2rem; color: #444; text-align: center; }
@@ -261,7 +287,6 @@ footer { background: #fff; padding: 20px 10px 40px; border-top: 1px solid #eee;}
 <body>
 <header>
   <div class="header-container">
-    <!-- Immagine Home rimossa come richiesto -->
     <div class="brand-wrapper">
       <a href="../index.html" class="brand-title">SbatuffoBlog</a>
       <div class="brand-subtitle">PandAgenda</div>
@@ -456,7 +481,10 @@ function renderList() {
       <img src="${imgMap[item.ev.tipo]}" class="activity-img">
       <div class="activity-info">
         <b>${item.ev.nome}</b>
-        <div style="font-size:0.8rem; color:#666;">${item.ev.tipo || 'attività'} ${item.ev.ricorrenza === 'annuale' ? '<span class="recur-tag">ANNUALE</span>' : ''}</div>
+        <div class="activity-meta">
+          <span style="font-size:0.8rem; color:#666;">${item.ev.tipo || 'attività'}</span>
+          ${item.ev.ricorrenza === 'annuale' ? '<span class="recur-tag">ANNUALE</span>' : ''}
+        </div>
       </div>
       <div class="edit-pencil" onclick="event.stopPropagation(); openModal('${item.origKey}', ${item.idx})">✎</div>`;
     

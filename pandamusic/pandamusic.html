@@ -187,7 +187,7 @@ header {
 .form-group input { width: 100%; padding: 12px; border: 2px solid var(--stroke); border-radius: 8px; font-family: 'Fredoka', sans-serif; box-sizing: border-box; font-size: 0.95rem; }
 .modal-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
 
-/* --- CONCERTI --- */
+/* --- CONCERTI (MODIFICATI PER RIDURRE ALTEZZA) --- */
 .concert-card {
     background: #111;
     border: 4px solid #222;
@@ -207,7 +207,7 @@ header {
 .concert-header {
     position: relative;
     overflow: hidden; 
-    padding: 55px 20px 15px;
+    padding: 42px 20px 12px; /* Ridotto top e bottom padding per avvicinare al buco e alzare la linea tratteggiata */
     text-align: center;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
@@ -235,7 +235,7 @@ header {
     font-family: 'Fredoka', sans-serif; 
     font-weight: 700; 
     font-size: 1rem;
-    margin-top: 10px; 
+    margin-top: 4px; /* Ridotto margine superiore per avvicinare i dati al titolo */
     text-transform: uppercase; 
     letter-spacing: 1px;
 }
@@ -254,20 +254,22 @@ header {
 }
 
 .slideshow-container {
-    padding: 30px 15px; background: #1e1e1e;
+    padding: 15px 15px 5px 15px; /* Ridotto padding verticale per accorciare il ticket */
+    background: #1e1e1e;
     border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;
 }
 
 .slideshow {
     display: flex; gap: 20px; overflow-x: auto;
-    scroll-snap-type: x mandatory; padding: 10px 5px 20px 5px;
+    scroll-snap-type: x mandatory; padding: 10px 5px 10px 5px; /* Ridotto padding inferiore */
 }
 .slideshow::-webkit-scrollbar { height: 10px; }
 .slideshow::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; border: 2px solid #1e1e1e; }
 
 .slideshow img {
     height: 220px; width: auto; max-width: 80vw; object-fit: cover;
-    background: #fdfdfd; padding: 10px 10px 35px 10px; border-radius: 3px;
+    background: #fdfdfd; padding: 10px 10px 15px 10px; /* Ridotto padding inferiore della foto "Polaroid" */
+    border-radius: 3px;
     scroll-snap-align: center; flex-shrink: 0;
     box-shadow: 4px 6px 15px rgba(0,0,0,0.6);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -315,7 +317,7 @@ footer {
     .reel { width: 35px; height: 35px; }
     .playlist-card { padding: 15px; }
     .btn-edit { width: 32px; height: 32px; font-size: 0.85rem; top: 12px; right: 12px; }
-    .concert-header { padding-top: 65px; }
+    .concert-header { padding-top: 48px; } /* Ridotto anche in mobile */
     .pass-badge { top: 25px; right: -60px; width: 190px; font-size: 0.65rem; }
     .concert-header h2 { font-size: 1.6rem !important; }
     .pass-details { font-size: 0.85rem; }
@@ -401,11 +403,10 @@ footer {
             <div class="form-group"><input id="new-nome" placeholder="Nome Playlist (es. Rock)" required></div>
             <div class="form-group"><input id="new-desc" placeholder="Breve descrizione..." required></div>
             <div class="form-group"><input id="new-link" placeholder="Link web Spotify (https://...)" required></div>
-            <!-- Campo URI rimosso, ora si genera in automatico! -->
             
             <div class="modal-btns">
                 <button id="btn-cd-ok" class="btn btn-play" style="background: var(--sbatuffo-blue); color: white;">Registra ⏺️</button>
-                <button id="btn-cd-delete" class="btn btn-play" style="background: var(--heart-red); color: white; display: none;">Elimina 🗑️</button>
+                <button id="btn-cd-delete" class="btn btn-play" style="background:  #260506 ; color: white; display: none;">Elimina 🗑️</button>
                 <button id="btn-cd-cancel" class="btn btn-link" style="background: var(--accent); color: white;">Annulla ✖</button>
             </div>
         </div>
@@ -413,12 +414,10 @@ footer {
 </div>
 
 <script>
-// --- VARIABILI GLOBALI ---
 let playlistsData = [];
 let isSpotifyApiReady = false;
-let editingIndex = -1; // -1 = Nuovo Inserimento, >= 0 = Modifica
+let editingIndex = -1;
 
-// --- GESTIONE PREVIEW MUSICARE ---
 function togglePlayerVisibility(btn) {
     const card = btn.closest('.playlist-card');
     const player = card.querySelector('.player-container');
@@ -431,34 +430,30 @@ function togglePlayerVisibility(btn) {
     }
 }
 
-// --- FUNZIONE PER GENERARE URI DA LINK WEB ---
 function generateSpotifyUri(link) {
-    if (link.startsWith('spotify:')) return link; // Se l'utente incolla già un URI, lo teniamo
+    if (link.startsWith('spotify:')) return link;
     try {
         const url = new URL(link);
         if (url.hostname === 'open.spotify.com') {
             const pathParts = url.pathname.split('/').filter(p => p);
             if (pathParts.length >= 2) {
-                const type = pathParts[0]; // es. playlist, track, album
+                const type = pathParts[0];
                 const id = pathParts[1];
                 return `spotify:${type}:${id}`;
             }
         }
-        return link; // Fallback
+        return link;
     } catch(e) {
-        return link; // Fallback se il link è invalido
+        return link;
     }
 }
 
-// --- RENDERING DINAMICO PLAYLIST ---
 async function fetchPlaylists() {
     try {
         const res = await fetch(`playlist.json?v=${new Date().getTime()}`);
         if(res.ok) {
             playlistsData = await res.json();
             renderPlaylists();
-        } else {
-            console.error("Impossibile caricare il file JSON.");
         }
     } catch(err) {
         console.error("Errore di rete durante il fetch:", err);
@@ -472,9 +467,7 @@ function renderPlaylists() {
     playlistsData.forEach((p, index) => {
         const html = `
         <div class="playlist-card">
-            <!-- Tasto Modifica -->
             <button class="btn-edit" onclick="openEditModal(${index})" title="Modifica Cassetta">✏️</button>
-            
             <div class="card-content">
                 <div class="cover-art ${p.stile.classe}">
                     <span class="cover-text">${p.nome.substring(0, 10)}</span>
@@ -507,7 +500,6 @@ function renderPlaylists() {
     }
 }
 
-// --- LOGICA IFRAME SPOTIFY ---
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
     isSpotifyApiReady = true;
     window.SpotifyIframeApi = IFrameAPI;
@@ -541,49 +533,37 @@ function initSpotifyPlayers(IFrameAPI) {
     });
 }
 
-// --- GESTIONE FORM (AGGIUNTA, MODIFICA E CANCELLAZIONE) ---
 const modalOverlay = document.getElementById("modal-cd-overlay");
 
-// Click su "Aggiungi"
 document.getElementById("btn-add-playlist").onclick = () => {
-    editingIndex = -1; // Reset stato a "Nuovo"
+    editingIndex = -1;
     document.getElementById("modal-title").innerText = "Nuova Playlist";
     document.getElementById("btn-cd-ok").innerHTML = "Salva ⏺️";
-    document.getElementById("btn-cd-delete").style.display = "none"; // Nasconde Elimina
-    
+    document.getElementById("btn-cd-delete").style.display = "none";
     document.getElementById("new-nome").value = "";
     document.getElementById("new-desc").value = "";
     document.getElementById("new-link").value = "";
-    
     modalOverlay.style.display = "flex";
 };
 
-// Click su "Modifica" (Icona Matita)
 window.openEditModal = function(index) {
-    editingIndex = index; // Imposta l'indice della cassetta da modificare
+    editingIndex = index;
     const p = playlistsData[index];
-    
     document.getElementById("modal-title").innerText = "Modifica Playlist";
     document.getElementById("btn-cd-ok").innerHTML = "Aggiorna 🔄";
-    document.getElementById("btn-cd-delete").style.display = "inline-flex"; // Mostra Elimina
-    
-    // Popola i campi con i dati attuali
+    document.getElementById("btn-cd-delete").style.display = "inline-flex";
     document.getElementById("new-nome").value = p.nome;
     document.getElementById("new-desc").value = p.descrizione;
     document.getElementById("new-link").value = p.linkSpotify;
-    
     modalOverlay.style.display = "flex";
 };
 
-// Chiudi Modale
 document.getElementById("btn-cd-cancel").onclick = () => {
     modalOverlay.style.display = "none";
 };
 
-// Salvataggio (Nuovo o Aggiornamento)
 document.getElementById("btn-cd-ok").onclick = async () => {
     const btnOk = document.getElementById("btn-cd-ok");
-    
     const nome = document.getElementById("new-nome").value;
     const desc = document.getElementById("new-desc").value;
     const link = document.getElementById("new-link").value;
@@ -593,17 +573,13 @@ document.getElementById("btn-cd-ok").onclick = async () => {
         return;
     }
 
-    // Creazione Automatica dell'URI
     const generatedUri = generateSpotifyUri(link);
-
     btnOk.innerText = "Salvataggio...";
     btnOk.disabled = true;
 
-    // Lavoriamo su una copia dell'array
     let arrayAggiornato = [...playlistsData];
 
     if (editingIndex === -1) {
-        // CASO 1: NUOVO INSERIMENTO
         const stiliPossibili = [
             { classe: "cover-883", color: "#0000ff" },
             { classe: "cover-cartoni", color: "#ff4757" },
@@ -623,7 +599,6 @@ document.getElementById("btn-cd-ok").onclick = async () => {
             stile: stileRandom
         });
     } else {
-        // CASO 2: MODIFICA ESISTENTE
         arrayAggiornato[editingIndex].nome = nome;
         arrayAggiornato[editingIndex].descrizione = desc;
         arrayAggiornato[editingIndex].linkSpotify = link;
@@ -632,64 +607,47 @@ document.getElementById("btn-cd-ok").onclick = async () => {
 
     try {
         const apiURL = "https://tisbatuffoblog.vercel.app/api/update_musicAPI"; 
-        
         const res = await fetch(apiURL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(arrayAggiornato)
         });
-
         if (res.ok) {
-            alert(editingIndex === -1 ? "Musicassetta registrata e inserita nello scaffale! 🎵" : "Musicassetta aggiornata correttamente! 🔄");
-            
             playlistsData = arrayAggiornato;
             renderPlaylists();
             modalOverlay.style.display = "none";
-        } else {
-            const err = await res.json();
-            alert("Errore nel salvataggio su GitHub: " + (err.message || "Riprova"));
         }
     } catch(err) {
-        alert("Errore di connessione con l'API Vercel.");
-        console.error(err);
+        alert("Errore di connessione.");
     } finally {
         btnOk.innerText = editingIndex === -1 ? "Registra ⏺️" : "Aggiorna 🔄";
         btnOk.disabled = false;
     }
 };
 
-// Cancellazione (Elimina Cassetta)
 document.getElementById("btn-cd-delete").onclick = async () => {
-    if (confirm("Sei sicuro di voler buttare via questa cassetta? 🗑️ L'azione è irreversibile!")) {
+    if (confirm("Sei sicuro di voler eliminare questa cassetta?")) {
         const btnDelete = document.getElementById("btn-cd-delete");
         btnDelete.innerText = "Eliminazione...";
         btnDelete.disabled = true;
 
         let arrayAggiornato = [...playlistsData];
-        arrayAggiornato.splice(editingIndex, 1); // Rimuove l'elemento corrente
+        arrayAggiornato.splice(editingIndex, 1);
 
         try {
             const apiURL = "https://tisbatuffoblog.vercel.app/api/update_musicAPI"; 
-            
             const res = await fetch(apiURL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(arrayAggiornato)
             });
-
             if (res.ok) {
-                alert("Musicassetta eliminata per sempre! 🗑️");
-                
                 playlistsData = arrayAggiornato;
                 renderPlaylists();
                 modalOverlay.style.display = "none";
-            } else {
-                const err = await res.json();
-                alert("Errore nell'eliminazione su GitHub: " + (err.message || "Riprova"));
             }
         } catch(err) {
-            alert("Errore di connessione con l'API Vercel.");
-            console.error(err);
+            alert("Errore.");
         } finally {
             btnDelete.innerText = "Elimina 🗑️";
             btnDelete.disabled = false;
@@ -697,7 +655,6 @@ document.getElementById("btn-cd-delete").onclick = async () => {
     }
 };
 
-// --- GESTIONE CONCERTI SLIDESHOW ---
 function loadConcertImages(folderName, containerId) {
     const container = document.getElementById(containerId);
     let currentIndex = 1;
