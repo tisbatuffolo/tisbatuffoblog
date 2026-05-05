@@ -3,9 +3,5 @@ const dati_progetto = [
     {
         "titolo": "PandaTazza",
         "immagine": "PandaTazza.jpg"
-    },
-    {
-        "titolo": "ciaooo",
-        "immagine": "ciaooo.jpg"
     }
 ];
