@@ -78,5 +78,12 @@
       "tipo": "compleanno",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-05-11": [
+    {
+      "nome": "Cinema",
+      "tipo": "evento",
+      "ricorrenza": "singola"
+    }
   ]
 }
