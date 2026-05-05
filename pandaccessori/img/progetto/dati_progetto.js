@@ -5,7 +5,7 @@ const dati_progetto = [
         "immagine": "PandaTazza.jpg"
     },
     {
-        "titolo": "fdffd",
-        "immagine": "fdffd.jpg"
+        "titolo": "ciaooo",
+        "immagine": "ciaooo.jpg"
     }
 ];
