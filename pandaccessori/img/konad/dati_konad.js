@@ -11,5 +11,9 @@ const dati_konad = [
     {
         "titolo": "PandMan",
         "immagine": "PandMan.jpg"
+    },
+    {
+        "titolo": "ciaooo",
+        "immagine": "ciaooo.jpg"
     }
 ];
