@@ -9,7 +9,7 @@ const dati_terrazzo = [
         "immagine": "Panda Sfigatino.jpg"
     },
     {
-        "titolo": "PandaMeter",
-        "immagine": "PandaMeter.jpg"
+        "titolo": "Panda Meter",
+        "immagine": "Panda Meter.jpg"
     }
 ];
