@@ -71,5 +71,12 @@
       "tipo": "festa",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-05-08": [
+    {
+      "nome": "Severino",
+      "tipo": "compleanno",
+      "ricorrenza": "annuale"
+    }
   ]
 }
