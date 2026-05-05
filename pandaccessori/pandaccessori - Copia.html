@@ -19,7 +19,6 @@
   --cartoon-border: #1a1a1a;
   --cartoon-yellow: #ffdf00;
 
-  /* Colori Pastello Stanze Aggiornati */
   --c-terrazzo: #ffe0b2;   
   --c-salotto: #fff9c4;    
   --c-cucina: #c8e6c9;     
@@ -40,113 +39,44 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(2.2rem, 8vw, 4.2rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
 .brand-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--primary); font-weight: 700; margin-top: 5px; letter-spacing: 1.5px; text-transform: lowercase; }
 
-.section-divider {
-  max-width: 200px; 
-  height: 3px;
-  background: var(--primary); 
-  margin: 40px auto;
-  border-radius: 50px;
-  position: relative;
-  clear: both;
-}
-
-.section-divider::after {
-  content: "♥";
-  position: absolute;
-  top: -14px; 
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-soft); 
-  padding: 0 15px; 
-  color: var(--heart-red);
-  font-size: 1.5rem;
-}
+.section-divider { max-width: 200px; height: 3px; background: var(--primary); margin: 40px auto; border-radius: 50px; position: relative; clear: both; }
+.section-divider::after { content: "♥"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--bg-soft); padding: 0 15px; color: var(--heart-red); font-size: 1.5rem; }
 
 .total-title { font-family: 'Luckiest Guy', cursive; font-size: 1.6rem; color: #000; margin: 45px 0 25px; letter-spacing: 1px; text-align: center; }
 .total-title span { color: var(--primary); font-size: 2rem; }
 
 /* --- MAPPA RIFINITA & RESPONSIVE --- */
 .map-outer { padding: 4vw 0; background: transparent; }
-.map-canvas { 
-    position: relative; width: 95%; max-width: 1100px; 
-    aspect-ratio: 4 / 3; 
-    min-height: 350px; margin: 0 auto; 
-    background: linear-gradient(135deg, #aed581 0%, var(--map-grass) 100%); 
-    border-radius: clamp(20px, 4vw, 50px); 
-    border: clamp(5px, 1.5vw, 12px) solid #fff;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.15); overflow: hidden;
-}
+.map-canvas { position: relative; width: 95%; max-width: 1100px; aspect-ratio: 4 / 3; min-height: 350px; margin: 0 auto; background: linear-gradient(135deg, #aed581 0%, var(--map-grass) 100%); border-radius: clamp(20px, 4vw, 50px); border: clamp(5px, 1.5vw, 12px) solid #fff; box-shadow: 0 20px 50px rgba(0,0,0,0.15); overflow: hidden; }
 
-.m-sky {
-    position: absolute; top: 0; left: 0; width: 100%; height: 30%;
-    background: linear-gradient(to bottom, #74b9ff, #dff9ff);
-    border-bottom: clamp(2px, 0.5vw, 4px) solid #333; z-index: 1;
-}
-.m-sun {
-    position: absolute; top: 15%; right: 8%; width: clamp(35px, 7vw, 70px); aspect-ratio: 1;
-    background: #FFD700; border-radius: 50%;
-    border: clamp(2px, 0.5vw, 4px) solid #333;
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); z-index: 2;
-}
+.m-sky { position: absolute; top: 0; left: 0; width: 100%; height: 30%; background: linear-gradient(to bottom, #74b9ff, #dff9ff); border-bottom: clamp(2px, 0.5vw, 4px) solid #333; z-index: 1; }
+.m-sun { position: absolute; top: 15%; right: 8%; width: clamp(35px, 7vw, 70px); aspect-ratio: 1; background: #FFD700; border-radius: 50%; border: clamp(2px, 0.5vw, 4px) solid #333; box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); z-index: 2; }
 
-.m-sign-trento {
-    position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
-    background: #8B4513; color: #fff; font-family: 'Luckiest Guy', cursive;
-    padding: 0.5% 2%; border: 3px solid #333; border-radius: 5px; z-index: 100;
-    font-size: clamp(0.8rem, 2.5vw, 1.5rem); box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
-}
-.m-sign-trento::before, .m-sign-trento::after {
-    content: ''; position: absolute; top: 100%; width: 4px; height: clamp(10px, 2vw, 20px); background: #333;
-}
+.m-sign-trento { position: absolute; top: 12%; left: 50%; transform: translateX(-50%); background: #8B4513; color: #fff; font-family: 'Luckiest Guy', cursive; padding: 0.5% 2%; border: 3px solid #333; border-radius: 5px; z-index: 100; font-size: clamp(0.8rem, 2.5vw, 1.5rem); box-shadow: 2px 2px 0px rgba(0,0,0,0.5); }
+.m-sign-trento::before, .m-sign-trento::after { content: ''; position: absolute; top: 100%; width: 4px; height: clamp(10px, 2vw, 20px); background: #333; }
 .m-sign-trento::before { left: 15%; }
 .m-sign-trento::after { right: 15%; }
 
-.m-mountain-1 {
-    position: absolute; top: 12%; left: -5%; width: 60%; height: 18%;
-    background: #95a5a6; border: clamp(2px, 0.5vw, 4px) solid #333;
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0; z-index: 3;
-}
-.m-mountain-2 {
-    position: absolute; top: 15%; left: 40%; width: 65%; height: 15%;
-    background: #7f8c8d; border: clamp(2px, 0.5vw, 4px) solid #333;
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0; z-index: 4;
-}
+.m-mountain-1 { position: absolute; top: 12%; left: -5%; width: 60%; height: 18%; background: #95a5a6; border: clamp(2px, 0.5vw, 4px) solid #333; border-radius: 50% 50% 0 0 / 100% 100% 0 0; z-index: 3; }
+.m-mountain-2 { position: absolute; top: 15%; left: 40%; width: 65%; height: 15%; background: #7f8c8d; border: clamp(2px, 0.5vw, 4px) solid #333; border-radius: 50% 50% 0 0 / 100% 100% 0 0; z-index: 4; }
 
 .m-river-svg { position: absolute; top: 30%; left: 43%; width: 20%; height: 70%; z-index: 5; opacity: 0.8; }
-
-.m-big-mountain { 
-    position: absolute; bottom: 0; right: -5%; width: 52%; height: 75%; 
-    background: #7f8c8d; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); z-index: 8; 
-    border-top: clamp(20px, 5vw, 50px) solid #fff; 
-}
+.m-big-mountain { position: absolute; bottom: 0; right: -5%; width: 52%; height: 75%; background: #7f8c8d; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); z-index: 8; border-top: clamp(20px, 5vw, 50px) solid #fff; }
 
 .m-tree { position: absolute; width: 15px; height: 15px; background: #27ae60; border-radius: 50%; z-index: 6; border: 1px solid #1e8449; }
 .m-tree::after { content: ''; position: absolute; bottom: -5px; left: 6px; width: 3px; height: 6px; background: #5d4037; }
 
-.m-condo { 
-    position: absolute; bottom: 3%; left: 4%; width: 18%; height: 26%; 
-    background: #f1f2f6; border: clamp(2px, 0.5vw, 4px) solid #333; border-radius: 10px; z-index: 10;
-}
+.m-condo { position: absolute; bottom: 3%; left: 4%; width: 18%; height: 26%; background: #f1f2f6; border: clamp(2px, 0.5vw, 4px) solid #333; border-radius: 10px; z-index: 10; }
 .m-condo .roof-top { position: absolute; top: -10%; left: -5%; width: 110%; height: 12%; background: #c0392b; border: 2px solid #333; }
-.m-condo .win-grid { 
-    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; 
-    gap: 15%; padding: 15% 10%; height: 80%; 
-}
+.m-condo .win-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 15%; padding: 15% 10%; height: 80%; }
 .m-condo .win { background: #81ecec; border: 2px solid #333; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: clamp(8px, 2vw, 16px); }
 .m-condo .door { width: 25%; height: 20%; background: #5d4037; border: 2px solid #333; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
-.m-project-build { 
-    position: absolute; top: 38%; left: 6%; width: 14%; height: 18%; 
-    background: #bdc3c7; border: clamp(2px, 0.5vw, 4px) solid #333; z-index: 10;
-}
-
+.m-project-build { position: absolute; top: 38%; left: 6%; width: 14%; height: 18%; background: #bdc3c7; border: clamp(2px, 0.5vw, 4px) solid #333; z-index: 10; }
 .m-project-build .grid-b { display:grid; grid-template-columns:1fr 1fr 1fr; gap:5%; padding:10%; height:100%; }
 .m-project-build .grid-b div { background:#fff; height:20%; border: 1px solid #777;}
 
-.m-cameretta-small { 
-    position: absolute; top: 60%; right: 16%; width: 9%; height: 11%; 
-    background: #ecf0f1; border: 2px solid #333; z-index: 15;
-}
+.m-cameretta-small { position: absolute; top: 60%; right: 16%; width: 9%; height: 11%; background: #ecf0f1; border: 2px solid #333; z-index: 15; }
 .m-cameretta-small .roof { position: absolute; top: -60%; left: -15%; width: 130%; height: 60%; background: #795548; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border: 2px solid #333; }
 .m-cameretta-small .win-s { width: 25%; height: 25%; background: #fff; border: 1px solid #333; position: absolute; top: 15%; left: 15%; box-shadow: inset 1px 1px 0 #ccc; display: flex; align-items: center; justify-content: center; font-size: clamp(6px, 1.5vw, 12px); }
 .m-cameretta-small .win-s-2 { width: 25%; height: 25%; background: #fff; border: 1px solid #333; position: absolute; top: 15%; right: 15%; box-shadow: inset 1px 1px 0 #ccc; }
@@ -161,12 +91,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .pin-label { background: var(--primary); color: #fff; padding: clamp(2px, 1vw, 6px) clamp(6px, 1.5vw, 14px); border-radius: 20px; font-weight: 900; border: clamp(1px, 0.5vw, 3px) solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 4px; white-space: nowrap; font-size: clamp(0.6rem, 1.8vw, 0.9rem); }
 .m-pin { position: absolute; text-decoration: none; z-index: 100; transition: 0.3s; }
 .m-pin:hover { transform: scale(1.1); }
-
-.p-casa { bottom: 32%; left: 0%; }
-.p-progetto { top: 30%; left: 4%; }
-.p-konad { bottom: 10%; left: 26%; }
-.p-cameretta { top: 48%; right: 10%; } 
-.p-gazy { bottom: 28%; right: 22%; } 
+.p-casa { bottom: 32%; left: 0%; } .p-progetto { top: 30%; left: 4%; } .p-konad { bottom: 10%; left: 26%; } .p-cameretta { top: 48%; right: 10%; } .p-gazy { bottom: 28%; right: 22%; } 
 
 /* --- SEZIONI & GRID --- */
 .section-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
@@ -218,7 +143,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .modal-content { background: #fff; border: 7px solid var(--cartoon-border); border-radius: 35px; padding: 15px; width: 100%; max-width: 700px; position: relative; text-align: center; box-shadow: 10px 10px 0px var(--primary); }
 
 .m-img-box { width: fit-content; max-width: 100%; margin: 0 auto; border: 6px solid var(--cartoon-border); border-radius: 25px; overflow: hidden; background: transparent; }
-.m-img-box img { display: block; max-width: 100%; max-height: 60vh; width: auto; height: auto; object-fit: contain; }
+.m-img-box img { display: block; max-width: 100%; max-height: 50vh; width: auto; height: auto; object-fit: contain; }
 
 .m-title { font-family: 'Luckiest Guy'; font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 15px 0 5px; line-height: 1.1; }
 .m-subtitle { font-weight: 800; font-size: clamp(1rem, 2.5vw, 1.3rem); text-transform: uppercase; margin-bottom: 10px; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; }
@@ -226,173 +151,59 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--cartoon-yellow); border: 5px solid var(--cartoon-border); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-family: 'Luckiest Guy'; font-size: 20px; z-index: 100; display:flex; align-items:center; justify-content:center;}
 .btn-p { left: -15px; } .btn-n { right: -15px; }
 .close-x { position: absolute; top: -15px; right: -15px; background: #ff4747; color: #fff; border: 4px solid var(--cartoon-border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: 900; display:flex; align-items:center; justify-content:center;}
+/* NUOVO: Matitina per Edit Modale */
+.edit-btn { position: absolute; top: -15px; left: -15px; background: #3498db; color: #fff; border: 4px solid var(--cartoon-border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; font-weight: 900; display:flex; align-items:center; justify-content:center; transition: transform 0.2s; }
+.edit-btn:hover { transform: scale(1.1); }
+
+/* --- EDIT CONTROLS IN MODAL --- */
+.m-edit-area { display: none; margin-top: 15px; background: #f1f2f6; border: 3px dashed #ccc; padding: 15px; border-radius: 20px; }
+.m-edit-area input, .m-edit-area select { width: 100%; margin-bottom: 10px; padding: 8px; border: 2px solid var(--cartoon-border); border-radius: 10px; font-family: 'Fredoka', sans-serif; text-align: center; font-size: 0.95rem; }
+.m-edit-area button { background: #2ecc71; color: #fff; font-family: 'Grandstander'; font-weight: 900; font-size: 1.1rem; border: 3px solid var(--cartoon-border); border-radius: 12px; padding: 8px 20px; cursor: pointer; box-shadow: 2px 2px 0px var(--cartoon-border); }
+.m-edit-area button:hover { transform: translateY(-2px); box-shadow: 4px 4px 0px var(--cartoon-border); }
 
 /* ============================================== */
-/* --- DESIGN PANDA FORM (CSS ART) --- */
+/* --- DESIGN PANDA FORM --- */
 /* ============================================== */
-.panda-wrapper {
-    position: relative;
-    max-width: 550px;
-    margin: 100px auto 40px;
-    z-index: 5;
-    width: 90%;
-}
+.panda-wrapper { position: relative; max-width: 500px; margin: 120px auto 60px; z-index: 5; width: 95%; }
+.panda-head { position: absolute; top: -105px; left: 50%; transform: translateX(-50%); width: 180px; height: 140px; background: #fff; border: 6px solid var(--cartoon-border); border-radius: 70px 70px 60px 60px; z-index: 10; box-shadow: inset 0 -5px 0 rgba(0,0,0,0.05); }
+.panda-ear { position: absolute; width: 70px; height: 70px; background: #1c1c1c; border: 5px solid var(--cartoon-border); border-radius: 50%; top: -12px; z-index: -1; }
+.panda-ear.left { left: -12px; } .panda-ear.right { right: -12px; }
+.panda-eye { position: absolute; width: 42px; height: 52px; background: #1c1c1c; border-radius: 50%; top: 45px; }
+.panda-eye.left { left: 32px; transform: rotate(-20deg); } .panda-eye.right { right: 32px; transform: rotate(20deg); }
+.panda-eye-sparkle { position: absolute; width: 12px; height: 12px; background: #fff; border-radius: 50%; top: 10px; right: 10px; }
+.panda-nose { position: absolute; width: 22px; height: 14px; background: #1c1c1c; border-radius: 50%; top: 98px; left: 50%; transform: translateX(-50%); }
+.panda-mouth { position: absolute; width: 30px; height: 12px; border-bottom: 4px solid #1c1c1c; border-radius: 0 0 50px 50px; top: 108px; left: 50%; transform: translateX(-50%); }
+.panda-blush { position: absolute; width: 28px; height: 16px; background: #ffb3ba; border-radius: 50%; top: 88px; opacity: 0.6; filter: blur(2px); }
+.panda-blush.left { left: 12px; } .panda-blush.right { right: 12px; }
 
-.panda-head {
-    position: absolute;
-    top: -90px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 150px;
-    background: #fff;
-    border: 6px solid var(--cartoon-border);
-    border-radius: 50% 50% 40% 40%;
-    z-index: 10;
-    box-shadow: inset 0 -10px 0 rgba(0,0,0,0.05);
-}
+.add-form-container { position: relative; background: #fff; border: 6px solid var(--cartoon-border); border-radius: 48% 48% 52% 52% / 45% 45% 55% 55%; padding: 85px 40px 50px 40px; box-shadow: 0 15px 40px rgba(0,0,0,0.08), 8px 8px 0px var(--sbatuffo-blue); z-index: 5; }
+.panda-arm { position: absolute; width: 65px; height: 110px; background: #1c1c1c; border: 5px solid var(--cartoon-border); border-radius: 40px; top: 40px; z-index: 4; }
+.panda-arm.left { left: -35px; transform: rotate(15deg); } .panda-arm.right { right: -35px; transform: rotate(-15deg); }
+.panda-arm::after { content: ''; position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); width: 30px; height: 25px; background: rgba(255,255,255,0.15); border-radius: 50%; box-shadow: -15px -18px 0 -8px rgba(255,255,255,0.15), 0 -22px 0 -8px rgba(255,255,255,0.15), 15px -18px 0 -8px rgba(255,255,255,0.15); }
+.panda-paw { position: absolute; width: 85px; height: 100px; background: #1c1c1c; border: 5px solid var(--cartoon-border); border-radius: 45% 45% 35% 35%; bottom: -35px; z-index: 10; }
+.panda-paw.left { left: 40px; transform: rotate(-8deg); } .panda-paw.right { right: 40px; transform: rotate(8deg); }
+.panda-paw-pad { position: absolute; width: 40px; height: 35px; background: #333; border-radius: 50%; bottom: 15px; left: 50%; transform: translateX(-50%); }
+.panda-paw-pad::before { content: ''; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 18px; height: 18px; background: #333; border-radius: 50%; box-shadow: -22px 8px 0 -2px #333, 22px 8px 0 -2px #333; }
 
-.panda-ear {
-    position: absolute;
-    width: 75px; height: 75px;
-    background: #1c1c1c;
-    border: 5px solid var(--cartoon-border);
-    border-radius: 50%;
-    top: -15px;
-    z-index: -1;
-}
-.panda-ear.left { left: -15px; }
-.panda-ear.right { right: -15px; }
+.add-form-group { margin-bottom: 15px; text-align: center; }
+.add-form-group label { display: inline-block; font-weight: 800; margin-bottom: 6px; color: var(--sbatuffo-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; background: #fff; padding: 0 10px; }
+.add-form-group input[type="text"], .add-form-group select, .add-form-group input[type="file"] { width: 100%; padding: 6px; border: 3px solid var(--cartoon-border); border-radius: 12px; font-family: 'Fredoka', sans-serif; font-size: 0.9rem; text-align: center; background: var(--bg-soft); }
+.btn-submit { display: block; width: 65%; margin: 20px auto 0; background: var(--primary); color: #fff; font-family: 'Grandstander', cursive; font-size: 1.2rem; font-weight: 900; border: 4px solid var(--cartoon-border); border-radius: 18px; padding: 10px; cursor: pointer; box-shadow: 4px 4px 0px var(--cartoon-border); transition: all 0.2s; }
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 6px 6px 0px var(--cartoon-border); }
+.btn-submit:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--cartoon-border); }
 
-.panda-eye {
-    position: absolute;
-    width: 45px; height: 55px;
-    background: #1c1c1c;
-    border-radius: 50% 50% 40% 40%;
-    top: 45px;
-}
-.panda-eye.left { left: 35px; transform: rotate(-25deg); }
-.panda-eye.right { right: 35px; transform: rotate(25deg); }
-
-.panda-eye-sparkle {
-    position: absolute;
-    width: 14px; height: 14px;
-    background: #fff;
-    border-radius: 50%;
-    top: 10px; right: 12px;
-}
-
-.panda-nose {
-    position: absolute;
-    width: 24px; height: 14px;
-    background: #1c1c1c;
-    border-radius: 50%;
-    top: 95px; left: 50%; transform: translateX(-50%);
-}
-
-.panda-mouth {
-    position: absolute;
-    width: 34px; height: 15px;
-    border-bottom: 4px solid #1c1c1c;
-    border-radius: 0 0 50px 50px;
-    top: 105px; left: 50%; transform: translateX(-50%);
-}
-
-.panda-blush {
-    position: absolute;
-    width: 30px; height: 18px;
-    background: #ffb3ba;
-    border-radius: 50%;
-    top: 85px; opacity: 0.7; filter: blur(2px);
-}
-.panda-blush.left { left: 15px; }
-.panda-blush.right { right: 15px; }
-
-/* La pancia del panda è il nostro contenitore del form */
-.add-form-container {
-    position: relative;
-    background: #fff;
-    border: 6px solid var(--cartoon-border);
-    border-radius: 50px;
-    padding: 70px 30px 35px 30px; /* Spazio in alto per la testa sovrapposta */
-    box-shadow: 8px 8px 0px var(--sbatuffo-blue);
-    z-index: 5;
-    transition: all 0.3s ease;
-}
-
-.panda-paw {
-    position: absolute;
-    width: 65px; height: 85px;
-    background: #1c1c1c;
-    border: 5px solid var(--cartoon-border);
-    border-radius: 35px;
-    bottom: -30px;
-    z-index: 10;
-}
-.panda-paw.left { left: 45px; transform: rotate(15deg); }
-.panda-paw.right { right: 45px; transform: rotate(-15deg); }
-
-.panda-paw-pad {
-    position: absolute;
-    width: 30px; height: 35px;
-    background: #444;
-    border-radius: 50%;
-    bottom: 12px; left: 50%; transform: translateX(-50%);
-}
-
-/* Stili Campi Form (uguali al precedente ma adattati al design del panda) */
-.add-form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-.add-form-group label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--sbatuffo-blue);
-    font-size: 1.1rem;
-}
-.add-form-group input[type="text"], 
-.add-form-group select, 
-.add-form-group input[type="file"] {
-    width: 100%;
-    padding: 12px;
-    border: 3px solid var(--cartoon-border);
-    border-radius: 12px;
-    font-family: 'Fredoka', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    background: var(--bg-soft);
-}
-.btn-submit {
-    background: var(--primary);
-    color: #fff;
-    font-family: 'Grandstander', cursive;
-    font-size: 1.4rem;
-    font-weight: 900;
-    border: 4px solid var(--cartoon-border);
-    border-radius: 15px;
-    padding: 12px 30px;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 15px;
-    box-shadow: 4px 4px 0px var(--cartoon-border);
-    transition: transform 0.1s;
-}
-.btn-submit:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px var(--cartoon-border);
-}
+.bottom-area { margin-top: 80px; }
+footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; font-weight: 600; color: #666; font-size: 1.1rem; border-top: 2px solid #eee; }
 
 @media (max-width: 600px) {
-    .panda-wrapper { margin-top: 80px; width: 95%; }
-    .panda-head { transform: translateX(-50%) scale(0.85); top: -80px; }
-    .add-form-container { padding: 60px 20px 30px; border-radius: 40px; }
-    .panda-paw.left { left: 20px; }
-    .panda-paw.right { right: 20px; }
+    .panda-wrapper { margin-top: 100px; width: 88%; }
+    .panda-head { width: 160px; height: 130px; top: -85px; }
+    .add-form-container { padding: 65px 20px 45px; }
+    .panda-arm { width: 50px; height: 90px; top: 30px; }
+    .panda-arm.left { left: -25px; } .panda-arm.right { right: -25px; }
+    .panda-paw { width: 70px; height: 85px; }
+    .panda-paw.left { left: 15px; } .panda-paw.right { right: 15px; }
 }
-
-footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; font-weight: 600; color: #666; font-size: 1.1rem; border-top: 2px solid #eee; }
 </style>
 </head>
 <body>
@@ -415,21 +226,14 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
         <div class="m-mountain-1"></div><div class="m-mountain-2"></div>
         <div class="m-sign-trento">TRENTO</div>
 
-        <!-- Fiume -->
         <svg class="m-river-svg" viewBox="0 0 100 700" preserveAspectRatio="none">
             <path d="M50 0 C 80 150, 10 350, 40 500 C 60 650, 30 700, 40 700" stroke="#74b9ff" stroke-width="20" fill="none" />
         </svg>
 
-        <!-- Alberi -->
-        <div class="m-tree" style="top:35%; left:47%;"></div>
-        <div class="m-tree" style="top:55%; left:40%;"></div> 
-        <div class="m-tree" style="top:75%; left:42%;"></div>
-        <div class="m-tree" style="top:40%; left:65%;"></div>
-        <div class="m-tree" style="top:50%; left:58%;"></div> 
-        <div class="m-tree" style="top:65%; left:55%;"></div>
+        <div class="m-tree" style="top:35%; left:47%;"></div><div class="m-tree" style="top:55%; left:40%;"></div> 
+        <div class="m-tree" style="top:75%; left:42%;"></div><div class="m-tree" style="top:40%; left:65%;"></div>
+        <div class="m-tree" style="top:50%; left:58%;"></div><div class="m-tree" style="top:65%; left:55%;"></div>
         <div class="m-tree" style="top:80%; left:55%;"></div>
-        
-        <!-- Grande Montagna Innevata -->
         <div class="m-big-mountain"></div>
 
         <div class="m-condo">
@@ -442,9 +246,7 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
         </a>
 
         <div class="m-project-build">
-            <div class="grid-b">
-                <div></div><div></div><div></div><div></div><div></div><div></div>
-            </div>
+            <div class="grid-b"><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
         <a href="#sec-progetto" class="m-pin p-progetto">
             <div class="pin-label" style="background:#2d3436;">💻 Progetto <span id="c-progetto">0</span></div>
@@ -456,8 +258,7 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
         </a>
 
         <div class="m-cameretta-small">
-            <div class="roof"></div>
-            <div class="win-s">🐼</div><div class="win-s-2"></div><div class="door-s"></div>
+            <div class="roof"></div><div class="win-s">🐼</div><div class="win-s-2"></div><div class="door-s"></div>
         </div>
         <a href="#sec-cameretta" class="m-pin p-cameretta">
             <div class="pin-label" style="background:#a29bfe;">🧸 Cameretta <span id="c-cameretta">0</span></div>
@@ -530,39 +331,30 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
     <div class="grid-mini" id="grid-gazy"></div>
 </div>
 
-<!-- ============================================== -->
-<!-- NUOVA SEZIONE PANDA: AGGIUNGI PANDACCESSORIO -->
-<!-- ============================================== -->
-<div class="section-divider"></div>
+<div class="section-divider" style="margin-bottom: 50px;"></div>
 <div class="section-container" id="sec-aggiungi">
     <h2 class="section-title">Aggiungi PandAccessorio</h2>
-    <p class="section-sub">Metti un nuovo oggetto nel database! 🐼</p>
+    <p class="section-sub" style="margin-bottom: 45px;">Metti un nuovo oggetto nel database! 🐼</p>
     
     <div class="panda-wrapper">
-        <!-- Testa del Panda (Posizionata Assoluta in Alto) -->
+        <div class="panda-arm left"></div><div class="panda-arm right"></div>
         <div class="panda-head">
-            <div class="panda-ear left"></div>
-            <div class="panda-ear right"></div>
+            <div class="panda-ear left"></div><div class="panda-ear right"></div>
             <div class="panda-eye left"><div class="panda-eye-sparkle"></div></div>
             <div class="panda-eye right"><div class="panda-eye-sparkle"></div></div>
-            <div class="panda-blush left"></div>
-            <div class="panda-blush right"></div>
-            <div class="panda-nose"></div>
-            <div class="panda-mouth"></div>
+            <div class="panda-blush left"></div><div class="panda-blush right"></div>
+            <div class="panda-nose"></div><div class="panda-mouth"></div>
         </div>
         
-        <!-- Pancia del Panda (Il Contenitore del Form che si allunga) -->
         <div class="add-form-container">
             <div class="add-form-group">
                 <label for="add-nome">Nome Oggetto</label>
                 <input type="text" id="add-nome" placeholder="Es: Nuovo Peluche" required>
             </div>
-
             <div class="add-form-group">
                 <label for="add-img">Seleziona Immagine</label>
                 <input type="file" id="add-img" accept="image/*" required>
             </div>
-
             <div class="add-form-group">
                 <label for="add-ambiente">Dove si trova?</label>
                 <select id="add-ambiente">
@@ -574,7 +366,6 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                     <option value="cameretta">Cameretta</option>
                 </select>
             </div>
-
             <div class="add-form-group" id="div-stanza" style="display: none;">
                 <label for="add-stanza">In che stanza?</label>
                 <select id="add-stanza">
@@ -588,7 +379,6 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                     <option value="cantina">Cantina</option>
                 </select>
             </div>
-
             <div class="add-form-group" id="div-mondo" style="display: none;">
                 <label for="add-mondo">È nel Mondo?</label>
                 <select id="add-mondo">
@@ -596,7 +386,6 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                     <option value="si">Sì, è nel Mondo!</option>
                 </select>
             </div>
-
             <div class="add-form-group" id="div-pandabox" style="display: none;">
                 <label for="add-pandabox">È nella PandaBox?</label>
                 <select id="add-pandabox">
@@ -604,12 +393,9 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                     <option value="si">Sì, è nella PandaBox!</option>
                 </select>
             </div>
-
             <button class="btn-submit" id="btn-invia-panda">Aggiungi! 🚀</button>
             <canvas id="resize-canvas" style="display:none;"></canvas>
         </div>
-        
-        <!-- Zampette del Panda (Posizionate in Basso) -->
         <div class="panda-paw left"><div class="panda-paw-pad"></div></div>
         <div class="panda-paw right"><div class="panda-paw-pad"></div></div>
     </div>
@@ -617,48 +403,72 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
 
 <div class="modal-overlay" id="lightbox" onclick="if(event.target == this) closeModal()">
     <div class="modal-content" id="m-box">
+        <button class="edit-btn" onclick="toggleEditMode()" title="Modifica">✏️</button>
         <button class="close-x" onclick="closeModal()">&times;</button>
         <button class="nav-btn btn-p" onclick="nav(-1)">&#10094;</button>
         <button class="nav-btn btn-n" onclick="nav(1)">&#10095;</button>
+        
         <div class="m-img-box"><img src="" id="l-img"></div>
-        <div class="m-info">
+        
+        <div class="m-info" id="m-info-view">
             <h2 class="m-title" id="l-title">Titolo</h2>
             <div class="m-subtitle" id="l-room">Stanza</div>
             <p id="l-comment" style="font-style:italic; color:#555;"></p>
         </div>
+
+        <div class="m-edit-area" id="m-edit-area">
+            <input type="text" id="edit-nome" placeholder="Nuovo Nome Oggetto" required>
+            
+            <select id="edit-ambiente" onchange="updateEditSelects()">
+                <option value="casasbatuffolone">Casa Sbatuffolone</option>
+                <option value="progetto">Progetto</option>
+                <option value="gazy">Gazy</option>
+                <option value="konad">Konad</option>
+                <option value="cameretta">Cameretta</option>
+            </select>
+            
+            <select id="edit-stanza" onchange="updateEditSelects()" style="display: none;">
+                <option value="salotto">Salotto</option>
+                <option value="cucina">Cucina</option>
+                <option value="corridoio">Corridoio</option>
+                <option value="terrazzo">Terrazzo</option>
+                <option value="lettone">Lettone</option>
+                <option value="bagno">Bagno</option>
+                <option value="cantina">Cantina</option>
+            </select>
+            
+            <select id="edit-mondo" style="display: none;">
+                <option value="no">No, in Salotto normale</option>
+                <option value="si">Sì, è nel Mondo!</option>
+            </select>
+            
+            <select id="edit-pandabox" style="display: none;">
+                <option value="no">No, in Cucina normale</option>
+                <option value="si">Sì, è nella PandaBox!</option>
+            </select>
+
+            <button id="btn-save-edit" onclick="submitEdit()">Salva Modifica ✔️</button>
+        </div>
     </div>
 </div>
 
-<div class="section-divider" style="margin-bottom: 80px;"></div>
-
-<footer>
-    @SbatuffoBlog 2026 - 
-    <a href="../index.html" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-        Home 
-        <img src="img/home.png" alt="Home" style="width: clamp(40px, 8vw, 60px); height: auto; vertical-align: middle;">
-    </a>
-</footer>
+<div class="bottom-area">
+    <div class="section-divider" style="margin-bottom: 25px;"></div>
+    <footer>
+        @SbatuffoBlog 2026 - 
+        <a href="../index.html" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            Home <img src="img/home.png" alt="Home" style="width: clamp(40px, 8vw, 60px); height: auto; vertical-align: middle;">
+        </a>
+    </footer>
+</div>
 
 <script>
-// ==============================================
-// GESTIONE DINAMICA CACHE & CARICAMENTO DB
-// ==============================================
 const jsFilesToLoad = [
-    "img/cameretta/dati_cameretta.js",
-    "img/gazy/dati_gazy.js",
-    "img/konad/dati_konad.js",
-    "img/progetto/dati_progetto.js",
-    "img/casasbatuffolone/bagno/dati_bagno.js",
-    "img/casasbatuffolone/cantina/dati_cantina.js",
-    "img/casasbatuffolone/corridoio/dati_corridoio.js",
-    "img/casasbatuffolone/cucina/dati_cucina.js",
-    "img/casasbatuffolone/lettone/dati_lettone.js",
-    "img/casasbatuffolone/salotto/dati_salotto.js",
-    "img/casasbatuffolone/terrazzo/dati_terrazzo.js",
-    "img/casasbatuffolone/salotto/mondo/dati_mondo.js",
-    "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js",
-    "img/casasbatuffolone/cucina/pandabox/extra_pandabox/dati_extra_pandabox.js",
-    "img/casasbatuffolone/salotto/mondo/extra_mondo/dati_extra_mondo.js"
+    "img/cameretta/dati_cameretta.js", "img/gazy/dati_gazy.js", "img/konad/dati_konad.js", "img/progetto/dati_progetto.js",
+    "img/casasbatuffolone/bagno/dati_bagno.js", "img/casasbatuffolone/cantina/dati_cantina.js", "img/casasbatuffolone/corridoio/dati_corridoio.js",
+    "img/casasbatuffolone/cucina/dati_cucina.js", "img/casasbatuffolone/lettone/dati_lettone.js", "img/casasbatuffolone/salotto/dati_salotto.js",
+    "img/casasbatuffolone/terrazzo/dati_terrazzo.js", "img/casasbatuffolone/salotto/mondo/dati_mondo.js", "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js",
+    "img/casasbatuffolone/cucina/pandabox/extra_pandabox/dati_extra_pandabox.js", "img/casasbatuffolone/salotto/mondo/extra_mondo/dati_extra_mondo.js"
 ];
 
 const roomColors = {
@@ -666,9 +476,19 @@ const roomColors = {
     'corridoio': '#ffb3ba', 'bagno': '#b2ebf2', 'lettone': '#e1bee7', 'cantina': '#cfd8dc'
 };
 
-function formatData(arr, path, room = null, cat = "", displayTitle = null) {
+/* CRITICAL: Aggiornata per mappare le directory esatte per la modifica */
+function formatData(arr, path, room = null, cat = "", displayTitle = null, rawArrayName = "") {
     if (!arr) return [];
-    return arr.map(i => ({ ...i, imgSrc: path + i.immagine, room, category: cat, displayTitle }));
+    return arr.map(i => ({
+        ...i, 
+        imgSrc: path + i.immagine,
+        targetDir: path.replace(/\/$/, ""), // es. img/casasbatuffolone/terrazzo
+        jsFilePath: path + "dati_" + rawArrayName + ".js",
+        arrayName: "dati_" + rawArrayName,
+        room, 
+        category: cat, 
+        displayTitle 
+    }));
 }
 
 let DB = {};
@@ -677,57 +497,49 @@ let activeSet = [];
 let activeIdx = 0;
 
 function loadDynamicScripts() {
-    const timestamp = new Date().getTime(); // Anti-Cache Force
-    const promises = jsFilesToLoad.map(src => {
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = `${src}?v=${timestamp}`;
-            script.onload = resolve;
-            script.onerror = resolve; // Procedi anche se un file manca temporaneamente
-            document.body.appendChild(script);
-        });
-    });
-    return Promise.all(promises);
+    const timestamp = new Date().getTime(); 
+    return Promise.all(jsFilesToLoad.map(src => new Promise(resolve => {
+        const script = document.createElement('script');
+        script.src = `${src}?v=${timestamp}`;
+        script.onload = resolve; script.onerror = resolve; 
+        document.body.appendChild(script);
+    })));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('total-banner').innerHTML = "Caricamento database in corso... 🐼";
-
     loadDynamicScripts().then(() => {
-        // Lettura file extra post-load per evitare ref-error
         const getExtraPanda = () => typeof dati_extra_pandabox !== 'undefined' ? dati_extra_pandabox : [];
         const getExtraMondo = () => typeof dati_extra_mondo !== 'undefined' ? dati_extra_mondo : [];
 
-        // Compilazione DB Garantita (dati sicuri caricati)
         DB = {
             casa: [
-                ...formatData(typeof dati_terrazzo !== 'undefined' ? dati_terrazzo : [], 'img/casasbatuffolone/terrazzo/', 'terrazzo', 'Casa Sbatuffolone'),
-                ...formatData(typeof dati_salotto !== 'undefined' ? dati_salotto : [], 'img/casasbatuffolone/salotto/', 'salotto', 'Casa Sbatuffolone'),
-                ...formatData(typeof dati_mondo !== 'undefined' ? dati_mondo : [], 'img/casasbatuffolone/salotto/mondo/', 'salotto', 'Casa Sbatuffolone', 'Salotto - Mondo'),
-                ...formatData(typeof dati_cucina !== 'undefined' ? dati_cucina : [], 'img/casasbatuffolone/cucina/', 'cucina', 'Casa Sbatuffolone'),
-                ...formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox'),
-                ...formatData(typeof dati_bagno !== 'undefined' ? dati_bagno : [], 'img/casasbatuffolone/bagno/', 'bagno', 'Casa Sbatuffolone'),
-                ...formatData(typeof dati_lettone !== 'undefined' ? dati_lettone : [], 'img/casasbatuffolone/lettone/', 'lettone', 'Casa Sbatuffolone'),
-                ...formatData(typeof dati_cantina !== 'undefined' ? dati_cantina : [], 'img/casasbatuffolone/cantina/', 'cantina', 'Casa Sbatuffolone'),
-                ...formatData(typeof dati_corridoio !== 'undefined' ? dati_corridoio : [], 'img/casasbatuffolone/corridoio/', 'corridoio', 'Casa Sbatuffolone')
+                ...formatData(typeof dati_terrazzo !== 'undefined' ? dati_terrazzo : [], 'img/casasbatuffolone/terrazzo/', 'terrazzo', 'Casa Sbatuffolone', null, 'terrazzo'),
+                ...formatData(typeof dati_salotto !== 'undefined' ? dati_salotto : [], 'img/casasbatuffolone/salotto/', 'salotto', 'Casa Sbatuffolone', null, 'salotto'),
+                ...formatData(typeof dati_mondo !== 'undefined' ? dati_mondo : [], 'img/casasbatuffolone/salotto/mondo/', 'salotto', 'Casa Sbatuffolone', 'Salotto - Mondo', 'mondo'),
+                ...formatData(typeof dati_cucina !== 'undefined' ? dati_cucina : [], 'img/casasbatuffolone/cucina/', 'cucina', 'Casa Sbatuffolone', null, 'cucina'),
+                ...formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox', 'pandabox'),
+                ...formatData(typeof dati_bagno !== 'undefined' ? dati_bagno : [], 'img/casasbatuffolone/bagno/', 'bagno', 'Casa Sbatuffolone', null, 'bagno'),
+                ...formatData(typeof dati_lettone !== 'undefined' ? dati_lettone : [], 'img/casasbatuffolone/lettone/', 'lettone', 'Casa Sbatuffolone', null, 'lettone'),
+                ...formatData(typeof dati_cantina !== 'undefined' ? dati_cantina : [], 'img/casasbatuffolone/cantina/', 'cantina', 'Casa Sbatuffolone', null, 'cantina'),
+                ...formatData(typeof dati_corridoio !== 'undefined' ? dati_corridoio : [], 'img/casasbatuffolone/corridoio/', 'corridoio', 'Casa Sbatuffolone', null, 'corridoio')
             ],
-            progetto: formatData(typeof dati_progetto !== 'undefined' ? dati_progetto : [], 'img/progetto/', null, 'Progetto'),
-            konad: formatData(typeof dati_konad !== 'undefined' ? dati_konad : [], 'img/konad/', null, 'Konad'),
-            cameretta: formatData(typeof dati_cameretta !== 'undefined' ? dati_cameretta : [], 'img/cameretta/', null, 'Cameretta'),
-            gazy: formatData(typeof dati_gazy !== 'undefined' ? dati_gazy : [], 'img/gazy/', null, 'Gazy')
+            progetto: formatData(typeof dati_progetto !== 'undefined' ? dati_progetto : [], 'img/progetto/', null, 'Progetto', null, 'progetto'),
+            konad: formatData(typeof dati_konad !== 'undefined' ? dati_konad : [], 'img/konad/', null, 'Konad', null, 'konad'),
+            cameretta: formatData(typeof dati_cameretta !== 'undefined' ? dati_cameretta : [], 'img/cameretta/', null, 'Cameretta', null, 'cameretta'),
+            gazy: formatData(typeof dati_gazy !== 'undefined' ? dati_gazy : [], 'img/gazy/', null, 'Gazy', null, 'gazy')
         };
 
         specialDB = {
             pandabox: [
-                ...formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox'),
-                ...formatData(getExtraPanda(), 'img/casasbatuffolone/cucina/pandabox/extra_pandabox/', 'cucina', 'Casa Sbatuffolone', 'PandaBox')
+                ...formatData(typeof dati_pandabox !== 'undefined' ? dati_pandabox : [], 'img/casasbatuffolone/cucina/pandabox/', 'cucina', 'Casa Sbatuffolone', 'Cucina - PandaBox', 'pandabox'),
+                ...formatData(getExtraPanda(), 'img/casasbatuffolone/cucina/pandabox/extra_pandabox/', 'cucina', 'Casa Sbatuffolone', 'PandaBox', 'extra_pandabox')
             ],
             mondo: [
-                ...formatData(typeof dati_mondo !== 'undefined' ? dati_mondo : [], 'img/casasbatuffolone/salotto/mondo/', 'salotto', 'Casa Sbatuffolone', 'Salotto - Mondo'),
-                ...formatData(getExtraMondo(), 'img/casasbatuffolone/salotto/mondo/extra_mondo/', 'salotto', 'Casa Sbatuffolone', 'Mondo')
+                ...formatData(typeof dati_mondo !== 'undefined' ? dati_mondo : [], 'img/casasbatuffolone/salotto/mondo/', 'salotto', 'Casa Sbatuffolone', 'Salotto - Mondo', 'mondo'),
+                ...formatData(getExtraMondo(), 'img/casasbatuffolone/salotto/mondo/extra_mondo/', 'salotto', 'Casa Sbatuffolone', 'Mondo', 'extra_mondo')
             ]
         };
-
         initApp();
     });
 });
@@ -737,20 +549,15 @@ function initApp() {
     for(let k in DB) {
         total += DB[k].length;
         if(document.getElementById(`c-${k}`)) document.getElementById(`c-${k}`).innerText = DB[k].length;
-        if(document.getElementById(`sub-${k}`)) {
-            const name = k.charAt(0).toUpperCase() + k.slice(1);
-            document.getElementById(`sub-${k}`).innerText = `In ${name} ci sono ${DB[k].length} Pandaccessori!`;
-        }
+        if(document.getElementById(`sub-${k}`)) document.getElementById(`sub-${k}`).innerText = `In ${k.charAt(0).toUpperCase() + k.slice(1)} ci sono ${DB[k].length} Pandaccessori!`;
         renderGrid(k, DB[k]);
     }
     document.getElementById('total-banner').innerHTML = `In totale abbiamo <span>${total}</span> Pandaccessori!`;
-
     Object.keys(roomColors).forEach(r => {
         const count = DB.casa.filter(i => i.room === r).length;
         const el = document.querySelector(`#p-${r} span`);
         if(el) el.innerText = `${count} Pandaccessori`;
     });
-
     renderPlani('plani-casa', DB.casa);
 }
 
@@ -758,15 +565,10 @@ function renderGrid(k, items) {
     const g = document.getElementById(`grid-${k}`);
     if(!g) return;
     items.forEach((it, idx) => {
-        const d = document.createElement('div');
-        d.className = 'card-mini';
-        
-        if (it.room) d.setAttribute('data-room', it.room);
-        
-        if(it.room && roomColors[it.room]) d.style.backgroundColor = roomColors[it.room];
+        const d = document.createElement('div'); d.className = 'card-mini';
+        if (it.room) { d.setAttribute('data-room', it.room); d.style.backgroundColor = roomColors[it.room]; }
         d.onclick = () => openModal(items, idx);
-        d.innerHTML = `<img src="${it.imgSrc}">
-                       <div class="card-title">${it.titolo || it.foro}</div>`;
+        d.innerHTML = `<img src="${it.imgSrc}"><div class="card-title">${it.titolo || it.foro}</div>`;
         g.appendChild(d);
     });
 }
@@ -777,8 +579,7 @@ function renderPlani(id, items) {
     items.forEach(it => { if(it.posX) { const p = `${it.posX}_${it.posY}`; if(!groups[p]) groups[p] = []; groups[p].push(it); }});
     for(let p in groups) {
         const arr = groups[p];
-        const dot = document.createElement('div');
-        dot.className = 'item-dot';
+        const dot = document.createElement('div'); dot.className = 'item-dot';
         dot.style.left = arr[0].posX + '%'; dot.style.top = arr[0].posY + '%';
         dot.innerHTML = `<span class="dot-val">${arr.length > 1 ? arr.length : '📍'}</span>`;
         dot.onclick = (e) => { e.stopPropagation(); openModal(arr, 0); };
@@ -786,27 +587,22 @@ function renderPlani(id, items) {
     }
 }
 
-function openSpecialModal(type) {
-    if (specialDB[type] && specialDB[type].length > 0) {
-        openModal(specialDB[type], 0);
-    } else {
-        alert("Immagini non ancora caricate o non trovate!");
-    }
-}
+function openSpecialModal(type) { if (specialDB[type] && specialDB[type].length > 0) openModal(specialDB[type], 0); else alert("Immagini non ancora caricate!"); }
 
 function openModal(set, idx) {
     activeSet = set; activeIdx = idx;
+    document.getElementById('m-edit-area').style.display = 'none';
+    document.getElementById('m-info-view').style.display = 'block';
     updateModal();
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-function closeModal() { 
-    document.getElementById('lightbox').classList.remove('active'); 
-    document.body.style.overflow = 'auto';
-}
+function closeModal() { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
 function nav(d) {
+    document.getElementById('m-edit-area').style.display = 'none';
+    document.getElementById('m-info-view').style.display = 'block';
     activeIdx = (activeIdx + d + activeSet.length) % activeSet.length;
     updateModal();
 }
@@ -816,185 +612,145 @@ function updateModal() {
     document.getElementById('l-img').src = it.imgSrc;
     document.getElementById('l-title').innerText = it.titolo || it.foro;
     
-    const btnP = document.querySelector('.btn-p');
-    const btnN = document.querySelector('.btn-n');
-    
-    if (activeSet.length <= 1) {
-        btnP.style.display = 'none';
-        btnN.style.display = 'none';
-    } else {
-        btnP.style.display = activeIdx === 0 ? 'none' : 'flex';
-        btnN.style.display = activeIdx === activeSet.length - 1 ? 'none' : 'flex';
-    }
+    const btnP = document.querySelector('.btn-p'); const btnN = document.querySelector('.btn-n');
+    if (activeSet.length <= 1) { btnP.style.display = 'none'; btnN.style.display = 'none'; } 
+    else { btnP.style.display = activeIdx === 0 ? 'none' : 'flex'; btnN.style.display = activeIdx === activeSet.length - 1 ? 'none' : 'flex'; }
 
     const sub = document.getElementById('l-room');
-    if(it.displayTitle) {
-        sub.innerText = it.displayTitle;
-        sub.style.color = roomColors[it.room] || 'var(--primary)';
-    } else if(it.room) {
-        sub.innerText = it.room;
-        sub.style.color = roomColors[it.room] || 'var(--primary)';
-    } else {
-        sub.innerText = it.category;
-        sub.style.color = 'var(--primary)';
-    }
-    
+    if(it.displayTitle) { sub.innerText = it.displayTitle; sub.style.color = roomColors[it.room] || 'var(--primary)'; } 
+    else if(it.room) { sub.innerText = it.room; sub.style.color = roomColors[it.room] || 'var(--primary)'; } 
+    else { sub.innerText = it.category; sub.style.color = 'var(--primary)'; }
     document.getElementById('l-comment').innerText = it.commento || "";
 }
 
 function scrollToRoom(roomName) {
-    const firstCardOfRoom = document.querySelector(`.card-mini[data-room="${roomName}"]`);
-    if (firstCardOfRoom) {
-        firstCardOfRoom.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        firstCardOfRoom.style.transform = 'scale(1.1)';
-        firstCardOfRoom.style.boxShadow = '0 0 20px var(--primary)';
-        
-        setTimeout(() => {
-            firstCardOfRoom.style.transform = '';
-            firstCardOfRoom.style.boxShadow = '';
-        }, 1500);
-    }
+    const el = document.querySelector(`.card-mini[data-room="${roomName}"]`);
+    if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.transform = 'scale(1.1)'; el.style.boxShadow = '0 0 20px var(--primary)'; setTimeout(() => { el.style.transform = ''; el.style.boxShadow = ''; }, 1500); }
 }
 
-// ==============================================
-// LOGICA FORM AGGIUNTA PANDACCESSORIO
-// ==============================================
+// LOGICA FORM AGGIUNGI STANDARD
 document.getElementById('add-ambiente').addEventListener('change', function(e) {
-    const val = e.target.value;
-    const divStanza = document.getElementById('div-stanza');
-    const divMondo = document.getElementById('div-mondo');
-    const divPandabox = document.getElementById('div-pandabox');
-    
-    if (val === 'casasbatuffolone') {
-        divStanza.style.display = 'block';
-    } else {
-        divStanza.style.display = 'none';
-        divMondo.style.display = 'none';
-        divPandabox.style.display = 'none';
-        document.getElementById('add-stanza').value = "";
-    }
+    const val = e.target.value; const divStanza = document.getElementById('div-stanza');
+    if (val === 'casasbatuffolone') divStanza.style.display = 'block';
+    else { divStanza.style.display = 'none'; document.getElementById('div-mondo').style.display = 'none'; document.getElementById('div-pandabox').style.display = 'none'; document.getElementById('add-stanza').value = ""; }
 });
-
 document.getElementById('add-stanza').addEventListener('change', function(e) {
-    const val = e.target.value;
-    const divMondo = document.getElementById('div-mondo');
-    const divPandabox = document.getElementById('div-pandabox');
-    
-    if (val === 'salotto') {
-        divMondo.style.display = 'block';
-        divPandabox.style.display = 'none';
-    } else if (val === 'cucina') {
-        divPandabox.style.display = 'block';
-        divMondo.style.display = 'none';
-    } else {
-        divMondo.style.display = 'none';
-        divPandabox.style.display = 'none';
-    }
+    document.getElementById('div-mondo').style.display = (e.target.value === 'salotto') ? 'block' : 'none';
+    document.getElementById('div-pandabox').style.display = (e.target.value === 'cucina') ? 'block' : 'none';
 });
-
-function resizeImage(file) {
+async function resizeImage(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.getElementById('resize-canvas');
-                canvas.width = img.width / 2;
-                canvas.height = img.height / 2;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-                const base64Data = dataUrl.split(',')[1];
-                resolve(base64Data);
-            };
-            img.src = event.target.result;
-        };
+        reader.onload = (e) => { const img = new Image(); img.onload = () => { const cvs = document.getElementById('resize-canvas'); cvs.width = img.width/2; cvs.height = img.height/2; cvs.getContext('2d').drawImage(img,0,0,cvs.width,cvs.height); resolve(cvs.toDataURL('image/jpeg', 0.85).split(',')[1]); }; img.src = e.target.result; };
         reader.readAsDataURL(file);
     });
 }
-
 document.getElementById('btn-invia-panda').addEventListener('click', async function() {
-    const nome = document.getElementById('add-nome').value.trim();
-    const fileInput = document.getElementById('add-img');
-    const ambiente = document.getElementById('add-ambiente').value;
-    const stanza = document.getElementById('add-stanza').value;
-    const isMondo = document.getElementById('add-mondo').value;
-    const isPandabox = document.getElementById('add-pandabox').value;
-
-    if (!nome || fileInput.files.length === 0 || !ambiente) {
-        alert("Inserisci nome, immagine e ambiente!");
-        return;
-    }
-    if (ambiente === 'casasbatuffolone' && !stanza) {
-        alert("Specifica la stanza in Casa Sbatuffolone!");
-        return;
-    }
-
-    const btn = document.getElementById('btn-invia-panda');
-    btn.innerText = "⏳ Caricamento in corso...";
-    btn.disabled = true;
-
+    const n = document.getElementById('add-nome').value.trim(); const f = document.getElementById('add-img'); const a = document.getElementById('add-ambiente').value; const s = document.getElementById('add-stanza').value;
+    if (!n || f.files.length === 0 || !a) return alert("Inserisci nome, immagine e ambiente!");
+    const btn = this; btn.innerText = "⏳ Caricamento..."; btn.disabled = true;
     try {
-        const file = fileInput.files[0];
-        const base64Image = await resizeImage(file);
+        const b64 = await resizeImage(f.files[0]); let t="", j="", arr="";
+        if (a === 'casasbatuffolone') {
+            const isM = document.getElementById('add-mondo').value; const isP = document.getElementById('add-pandabox').value;
+            if (s === 'salotto' && isM === 'si') { t = "img/casasbatuffolone/salotto/mondo"; j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js"; arr = "dati_mondo"; } 
+            else if (s === 'cucina' && isP === 'si') { t = "img/casasbatuffolone/cucina/pandabox"; j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js"; arr = "dati_pandabox"; } 
+            else { t = `img/casasbatuffolone/${s}`; j = `img/casasbatuffolone/${s}/dati_${s}.js`; arr = `dati_${s}`; }
+        } else { t = `img/${a}`; j = `img/${a}/dati_${a}.js`; arr = `dati_${a}`; }
+        const res = await fetch("https://tisbatuffoblog.vercel.app/api/add_pandaccessorioAPI", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ titolo: n, imageB64: b64, targetDir: t, jsFilePath: j, arrayName: arr }) });
+        if (res.ok) { alert("Salvato! 🐼"); location.reload(); } else throw new Error("Errore API");
+    } catch (e) { alert("Errore: " + e.message); } finally { btn.innerText = "Aggiungi! 🚀"; btn.disabled = false; }
+});
 
-        let targetDir = "";
-        let jsFilePath = "";
-        let arrayName = "";
-
-        if (ambiente === 'casasbatuffolone') {
-            if (stanza === 'salotto' && isMondo === 'si') {
-                targetDir = "img/casasbatuffolone/salotto/mondo";
-                jsFilePath = "img/casasbatuffolone/salotto/mondo/dati_mondo.js";
-                arrayName = "dati_mondo";
-            } else if (stanza === 'cucina' && isPandabox === 'si') {
-                targetDir = "img/casasbatuffolone/cucina/pandabox";
-                jsFilePath = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js";
-                arrayName = "dati_pandabox";
-            } else {
-                targetDir = `img/casasbatuffolone/${stanza}`;
-                jsFilePath = `img/casasbatuffolone/${stanza}/dati_${stanza}.js`;
-                arrayName = `dati_${stanza}`;
+// ==============================================
+// LOGICA EDIT MODALE 
+// ==============================================
+function toggleEditMode() {
+    const editArea = document.getElementById('m-edit-area');
+    const infoArea = document.getElementById('m-info-view');
+    if(editArea.style.display === 'block') {
+        editArea.style.display = 'none'; infoArea.style.display = 'block';
+    } else {
+        editArea.style.display = 'block'; infoArea.style.display = 'none';
+        const it = activeSet[activeIdx];
+        document.getElementById('edit-nome').value = it.titolo || it.foro;
+        
+        // Auto-Seleziona il luogo basato su targetDir
+        const tDir = it.targetDir;
+        const ambSel = document.getElementById('edit-ambiente');
+        if (tDir.includes('casasbatuffolone')) {
+            ambSel.value = 'casasbatuffolone';
+            updateEditSelects();
+            const stanzaRegex = /casasbatuffolone\/([^\/]+)/;
+            const match = tDir.match(stanzaRegex);
+            if (match) {
+                document.getElementById('edit-stanza').value = match[1];
+                updateEditSelects();
+                if (match[1] === 'salotto') {
+                    document.getElementById('edit-mondo').value = tDir.includes('mondo') ? 'si' : 'no';
+                } else if (match[1] === 'cucina') {
+                    document.getElementById('edit-pandabox').value = tDir.includes('pandabox') ? 'si' : 'no';
+                }
             }
         } else {
-            targetDir = `img/${ambiente}`;
-            jsFilePath = `img/${ambiente}/dati_${ambiente}.js`;
-            arrayName = `dati_${ambiente}`;
+            const rootEnv = tDir.replace('img/', '');
+            ambSel.value = rootEnv;
+            updateEditSelects();
         }
+    }
+}
 
+function updateEditSelects() {
+    const a = document.getElementById('edit-ambiente').value;
+    const s = document.getElementById('edit-stanza');
+    const sm = document.getElementById('edit-mondo');
+    const sp = document.getElementById('edit-pandabox');
+    
+    if (a === 'casasbatuffolone') { s.style.display = 'block'; } 
+    else { s.style.display = 'none'; sm.style.display = 'none'; sp.style.display = 'none'; s.value = ""; }
+    
+    if (s.style.display === 'block') {
+        sm.style.display = (s.value === 'salotto') ? 'block' : 'none';
+        sp.style.display = (s.value === 'cucina') ? 'block' : 'none';
+    }
+}
+
+async function submitEdit() {
+    const newName = document.getElementById('edit-nome').value.trim();
+    if (!newName) return alert("Il nome non può essere vuoto!");
+    
+    const a = document.getElementById('edit-ambiente').value;
+    const s = document.getElementById('edit-stanza').value;
+    let t="", j="", arr="";
+    
+    if (a === 'casasbatuffolone') {
+        const isM = document.getElementById('edit-mondo').value; 
+        const isP = document.getElementById('edit-pandabox').value;
+        if (s === 'salotto' && isM === 'si') { t = "img/casasbatuffolone/salotto/mondo"; j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js"; arr = "dati_mondo"; } 
+        else if (s === 'cucina' && isP === 'si') { t = "img/casasbatuffolone/cucina/pandabox"; j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js"; arr = "dati_pandabox"; } 
+        else { t = `img/casasbatuffolone/${s}`; j = `img/casasbatuffolone/${s}/dati_${s}.js`; arr = `dati_${s}`; }
+    } else { t = `img/${a}`; j = `img/${a}/dati_${a}.js`; arr = `dati_${a}`; }
+
+    const it = activeSet[activeIdx];
+    const btn = document.getElementById('btn-save-edit');
+    btn.innerText = "⏳ Sto Spostando..."; btn.disabled = true;
+
+    try {
         const payload = {
-            titolo: nome,
-            imageB64: base64Image,
-            targetDir: targetDir,
-            jsFilePath: jsFilePath,
-            arrayName: arrayName
+            oldTitolo: it.titolo || it.foro, oldImmagine: it.immagine,
+            oldTargetDir: it.targetDir, oldJsFilePath: it.jsFilePath, oldArrayName: it.arrayName,
+            newTitolo: newName, newTargetDir: t, newJsFilePath: j, newArrayName: arr
         };
 
-        const res = await fetch("https://tisbatuffoblog.vercel.app/api/add_pandaccessorioAPI", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+        const res = await fetch("https://tisbatuffoblog.vercel.app/api/update_pandaccessorioAPI", { 
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) 
         });
 
-        if (res.ok) {
-            alert("Pandaccessorio salvato con successo! 🐼🎉 Aggiorna la pagina per vederlo.");
-            document.getElementById('add-nome').value = "";
-            fileInput.value = "";
-        } else {
-            const errData = await res.json();
-            throw new Error(errData.error || "Errore sconosciuto API");
-        }
-
-    } catch (e) {
-        console.error(e);
-        alert("Errore durante il salvataggio: " + e.message);
-    } finally {
-        btn.innerText = "Aggiungi! 🚀";
-        btn.disabled = false;
-    }
-});
+        if (res.ok) { alert("Modifica completata con successo! 🐼✨"); location.reload(); } 
+        else { const errText = await res.text(); throw new Error(errText); }
+    } catch (e) { alert("Errore durante la modifica: " + e.message); } 
+    finally { btn.innerText = "Salva Modifica ✔️"; btn.disabled = false; }
+}
 </script>
 </body>
 </html>
