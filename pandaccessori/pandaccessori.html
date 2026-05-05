@@ -785,7 +785,7 @@ async function submitEdit() {
 
     const it = activeSet[activeIdx];
     const btn = document.getElementById('btn-save-edit');
-    btn.innerText = "⏳ Sto Spostando..."; btn.disabled = true;
+    btn.innerText = "⏳ Sto Salvando..."; btn.disabled = true;
 
     try {
         const payload = {
@@ -799,9 +799,8 @@ async function submitEdit() {
         });
 
         if (res.ok) { 
-            alert("Modifica completata con successo! 🐼✨"); 
-            
-            // OPTIMISTIC UI: Rimuove il vecchio dai DB locali
+            // --- INIZIO AGGIORNAMENTO OTTIMISTICO ---
+            // 1. Rimuoviamo il vecchio riferimento da tutti i database locali
             for (let key in DB) {
                 DB[key] = DB[key].filter(item => item !== it);
             }
@@ -809,7 +808,7 @@ async function submitEdit() {
                 specialDB[key] = specialDB[key].filter(item => item !== it);
             }
 
-            // Aggiorna l'oggetto mantenendo i suoi campi necessari
+            // 2. Aggiorniamo le proprietà dell'oggetto in memoria
             it.titolo = newName;
             it.targetDir = t;
             it.jsFilePath = j;
@@ -818,11 +817,12 @@ async function submitEdit() {
             it.room = (a === 'casasbatuffolone' && s) ? s : null;
             it.displayTitle = null;
 
-            // Inserisce nel DB nuovo
+            // 3. Lo inseriamo nel nuovo "cassetto" corretto
             let dbKey = a === 'casasbatuffolone' ? 'casa' : a;
             if (!DB[dbKey]) DB[dbKey] = [];
             DB[dbKey].push(it);
 
+            // Gestione Special Box (Mondo/PandaBox)
             if (a === 'casasbatuffolone') {
                 if (s === 'salotto' && isM === 'si') {
                     it.displayTitle = 'Salotto - Mondo';
@@ -835,16 +835,18 @@ async function submitEdit() {
                 }
             }
 
-            clearUI();
-            initApp();
+            // 4. RESET VISIVO TOTALE E RE-INIT
+            clearUI(); // Questa funzione cancella tutti i nodi HTML esistenti nelle griglie e planimetria
+            initApp(); // Questa funzione ricrea tutto da zero usando i dati aggiornati
             
-            // Chiude il modale post-spostamento in modo da evitare incongruenze di scroll
-            closeModal(); 
+            closeModal(); // Chiudiamo il modale per pulizia
+            alert("Modifica completata con successo! 🐼✨"); 
             
         } else { const errText = await res.text(); throw new Error(errText); }
     } catch (e) { alert("Errore durante la modifica: " + e.message); } 
     finally { btn.innerText = "Salva Modifica ✔️"; btn.disabled = false; }
 }
+
 </script>
 </body>
 </html>
