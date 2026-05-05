@@ -544,6 +544,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+/* NUOVO: Funzione per pulire l'UI prima di un Optimistic Update */
+function clearUI() {
+    for(let k in DB) {
+        const g = document.getElementById(`grid-${k}`);
+        if(g) g.innerHTML = '';
+    }
+    const plani = document.getElementById('plani-casa');
+    if (plani) {
+        const dots = plani.querySelectorAll('.item-dot');
+        dots.forEach(d => d.remove());
+    }
+}
+
 function initApp() {
     let total = 0;
     for(let k in DB) {
@@ -651,14 +664,53 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
     const btn = this; btn.innerText = "⏳ Caricamento..."; btn.disabled = true;
     try {
         const b64 = await resizeImage(f.files[0]); let t="", j="", arr="";
+        const isM = document.getElementById('add-mondo').value; const isP = document.getElementById('add-pandabox').value;
         if (a === 'casasbatuffolone') {
-            const isM = document.getElementById('add-mondo').value; const isP = document.getElementById('add-pandabox').value;
             if (s === 'salotto' && isM === 'si') { t = "img/casasbatuffolone/salotto/mondo"; j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js"; arr = "dati_mondo"; } 
             else if (s === 'cucina' && isP === 'si') { t = "img/casasbatuffolone/cucina/pandabox"; j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js"; arr = "dati_pandabox"; } 
             else { t = `img/casasbatuffolone/${s}`; j = `img/casasbatuffolone/${s}/dati_${s}.js`; arr = `dati_${s}`; }
         } else { t = `img/${a}`; j = `img/${a}/dati_${a}.js`; arr = `dati_${a}`; }
         const res = await fetch("https://tisbatuffoblog.vercel.app/api/add_pandaccessorioAPI", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ titolo: n, imageB64: b64, targetDir: t, jsFilePath: j, arrayName: arr }) });
-        if (res.ok) { alert("Salvato! 🐼"); location.reload(); } else throw new Error("Errore API");
+        
+        if (res.ok) { 
+            alert("Salvato! 🐼"); 
+            
+            // OPTIMISTIC UI: Aggiorniamo le variabili in locale per riflettere le modifiche all'istante
+            const newItem = {
+                titolo: n,
+                immagine: "",
+                imgSrc: "data:image/jpeg;base64," + b64,
+                targetDir: t,
+                jsFilePath: j,
+                arrayName: arr,
+                room: (a === 'casasbatuffolone' && s) ? s : null,
+                category: a === 'casasbatuffolone' ? 'Casa Sbatuffolone' : a.charAt(0).toUpperCase() + a.slice(1)
+            };
+            
+            let dbKey = a === 'casasbatuffolone' ? 'casa' : a;
+            if (!DB[dbKey]) DB[dbKey] = [];
+            DB[dbKey].push(newItem);
+
+            if (a === 'casasbatuffolone') {
+                if (s === 'salotto' && isM === 'si') {
+                    newItem.displayTitle = 'Salotto - Mondo';
+                    if(!specialDB.mondo) specialDB.mondo = [];
+                    specialDB.mondo.push(newItem);
+                } else if (s === 'cucina' && isP === 'si') {
+                    newItem.displayTitle = 'Cucina - PandaBox';
+                    if(!specialDB.pandabox) specialDB.pandabox = [];
+                    specialDB.pandabox.push(newItem);
+                }
+            }
+            
+            clearUI();
+            initApp();
+            
+            // Svuota i campi per esser pronti ad un altro inserimento
+            document.getElementById('add-nome').value = '';
+            f.value = '';
+            
+        } else throw new Error("Errore API");
     } catch (e) { alert("Errore: " + e.message); } finally { btn.innerText = "Aggiungi! 🚀"; btn.disabled = false; }
 });
 
@@ -721,11 +773,11 @@ async function submitEdit() {
     
     const a = document.getElementById('edit-ambiente').value;
     const s = document.getElementById('edit-stanza').value;
+    const isM = document.getElementById('edit-mondo').value; 
+    const isP = document.getElementById('edit-pandabox').value;
     let t="", j="", arr="";
     
     if (a === 'casasbatuffolone') {
-        const isM = document.getElementById('edit-mondo').value; 
-        const isP = document.getElementById('edit-pandabox').value;
         if (s === 'salotto' && isM === 'si') { t = "img/casasbatuffolone/salotto/mondo"; j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js"; arr = "dati_mondo"; } 
         else if (s === 'cucina' && isP === 'si') { t = "img/casasbatuffolone/cucina/pandabox"; j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js"; arr = "dati_pandabox"; } 
         else { t = `img/casasbatuffolone/${s}`; j = `img/casasbatuffolone/${s}/dati_${s}.js`; arr = `dati_${s}`; }
@@ -746,8 +798,50 @@ async function submitEdit() {
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) 
         });
 
-        if (res.ok) { alert("Modifica completata con successo! 🐼✨"); location.reload(); } 
-        else { const errText = await res.text(); throw new Error(errText); }
+        if (res.ok) { 
+            alert("Modifica completata con successo! 🐼✨"); 
+            
+            // OPTIMISTIC UI: Rimuove il vecchio dai DB locali
+            for (let key in DB) {
+                DB[key] = DB[key].filter(item => item !== it);
+            }
+            for (let key in specialDB) {
+                specialDB[key] = specialDB[key].filter(item => item !== it);
+            }
+
+            // Aggiorna l'oggetto mantenendo i suoi campi necessari
+            it.titolo = newName;
+            it.targetDir = t;
+            it.jsFilePath = j;
+            it.arrayName = arr;
+            it.category = a === 'casasbatuffolone' ? 'Casa Sbatuffolone' : a.charAt(0).toUpperCase() + a.slice(1);
+            it.room = (a === 'casasbatuffolone' && s) ? s : null;
+            it.displayTitle = null;
+
+            // Inserisce nel DB nuovo
+            let dbKey = a === 'casasbatuffolone' ? 'casa' : a;
+            if (!DB[dbKey]) DB[dbKey] = [];
+            DB[dbKey].push(it);
+
+            if (a === 'casasbatuffolone') {
+                if (s === 'salotto' && isM === 'si') {
+                    it.displayTitle = 'Salotto - Mondo';
+                    if (!specialDB.mondo) specialDB.mondo = [];
+                    specialDB.mondo.push(it);
+                } else if (s === 'cucina' && isP === 'si') {
+                    it.displayTitle = 'Cucina - PandaBox';
+                    if (!specialDB.pandabox) specialDB.pandabox = [];
+                    specialDB.pandabox.push(it);
+                }
+            }
+
+            clearUI();
+            initApp();
+            
+            // Chiude il modale post-spostamento in modo da evitare incongruenze di scroll
+            closeModal(); 
+            
+        } else { const errText = await res.text(); throw new Error(errText); }
     } catch (e) { alert("Errore durante la modifica: " + e.message); } 
     finally { btn.innerText = "Salva Modifica ✔️"; btn.disabled = false; }
 }
