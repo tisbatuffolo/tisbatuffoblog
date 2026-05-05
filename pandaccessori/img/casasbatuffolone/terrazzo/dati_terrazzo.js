@@ -11,9 +11,5 @@ const dati_terrazzo = [
     {
         "titolo": "PandaMeter",
         "immagine": "PandaMeter.jpg"
-    },
-    {
-        "titolo": "ciaooo in terrazzo",
-        "immagine": "ciaooo in terrazzo.jpg"
     }
 ];
