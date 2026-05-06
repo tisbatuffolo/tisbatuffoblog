@@ -43,5 +43,9 @@ const dati_pandabox = [
     {
         "titolo": "Stickers",
         "immagine": "Stickers.jpg"
+    },
+    {
+        "titolo": "Salvacavo",
+        "immagine": "Salvacavo.jpg"
     }
 ];
