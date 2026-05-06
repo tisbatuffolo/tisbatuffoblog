@@ -454,7 +454,7 @@
 <footer>
     <div class="footer-container">
     <div class="footer-text" style="display: flex; align-items: center; justify-content: center;">
-        @SbatuffoBlog 2026 - Torna alla &nbsp;<a href="../index.html" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;">home <img src="img/home.png" alt="Home" style="width: 50px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>
+        @SbatuffoBlog 2026 - &nbsp;<a href="../index.html" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;">Home <img src="img/home.png" alt="Home" style="width: 50px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>
     </div>
   </div>
 </footer>
@@ -468,142 +468,198 @@
 </svg>
 
 <script>
+  /* ── Utility: verifica esistenza immagine/video in parallelo ─────────── */
+  function probeImage(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload  = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src;
+    });
+  }
+
+  function probeMedia(index) {
+    const mp4Src = `img/gif/pandagif (${index}).mp4`;
+    const gifSrc = `img/gif/pandagif (${index}).gif`;
+    return new Promise(resolve => {
+      const video = document.createElement('video');
+      video.src = mp4Src;
+      video.onloadeddata = () => resolve({ index, type: 'mp4', src: mp4Src });
+      video.onerror = () => {
+        const img = new Image();
+        img.src = gifSrc;
+        img.onload  = () => resolve({ index, type: 'gif', src: gifSrc });
+        img.onerror = () => resolve({ index, type: null });
+      };
+    });
+  }
+
+  /* ── Utility: scopre l'ultimo indice disponibile in parallelo ────────── */
+  async function discoverRange(buildSrc, maxGuess, batchSize = 10, earlyBreak = 3) {
+    // Scansiona a batch; si ferma quando trova `earlyBreak` fallimenti consecutivi
+    const found = [];
+    let consecutiveFails = 0;
+    for (let start = 1; start <= maxGuess && consecutiveFails < earlyBreak; start += batchSize) {
+      const end = Math.min(start + batchSize - 1, maxGuess);
+      const batch = [];
+      for (let i = start; i <= end; i++) batch.push({ i, src: buildSrc(i) });
+      const results = await Promise.all(batch.map(({ i, src }) => probeImage(src).then(ok => ({ i, ok }))));
+      for (const { i, ok } of results) {
+        if (ok) { found.push(i); consecutiveFails = 0; }
+        else { consecutiveFails++; if (consecutiveFails >= earlyBreak) break; }
+      }
+    }
+    return found;
+  }
+
+  /* ── Panda Stickers ──────────────────────────────────────────────────── */
   function loadPhoneStickers() {
     const container = document.getElementById('sticker-phone-gallery');
     for (let i = 1; i <= 116; i++) {
       const div = document.createElement('div');
       div.className = 'sticker-item-phone';
-      // MODIFICA: Rimuove il parent node anziché solo l'immagine, evitando gli spazi vuoti
       div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" onerror="this.parentElement.remove()">`;
       container.appendChild(div);
     }
   }
 
+  /* ── Panda Gif: caricamento parallelo a batch, mostra subito i primi ── */
   async function loadGifs() {
-    const container = document.getElementById('gif-gallery');
+    const container      = document.getElementById('gif-gallery');
     const scrollContainer = document.getElementById('gif-scroll-container');
-    const scrollbar = document.getElementById('camera-scrollbar');
+    const scrollbar      = document.getElementById('camera-scrollbar');
 
-    let i = 1;
-    let failCount = 0;
+    const MAX_GIFS  = 200;
+    const BATCH     = 8;   // probe N gif alla volta
+    const FAIL_STOP = 5;   // stop dopo 5 indici mancanti consecutivi
 
-    while (failCount < 5) {
-      const mp4Src = `img/gif/pandagif (${i}).mp4`;
-      const gifSrc = `img/gif/pandagif (${i}).gif`;
-
-      const exists = await new Promise(resolve => {
-        const video = document.createElement('video');
-        video.src = mp4Src;
-        video.onloadeddata = () => resolve('mp4');
-        video.onerror = () => {
-          const img = new Image();
-          img.src = gifSrc;
-          img.onload = () => resolve('gif');
-          img.onerror = () => resolve(false);
-        };
-      });
-
-      if (exists === 'mp4') {
-        const div = document.createElement('div');
-        div.className = 'film-frame-gif';
-        div.innerHTML = `
-          <video autoplay loop muted playsinline>
-            <source src="${mp4Src}" type="video/mp4">
-          </video>`;
-        container.appendChild(div);
-        failCount = 0;
-
-      } else if (exists === 'gif') {
-        const div = document.createElement('div');
-        div.className = 'film-frame-gif';
-        div.innerHTML = `<img src="${gifSrc}" style="width:100%;height:100%;object-fit:cover;">`;
-        container.appendChild(div);
-        failCount = 0;
-
+    function appendFrame(result) {
+      const div = document.createElement('div');
+      div.className = 'film-frame-gif';
+      if (result.type === 'mp4') {
+        div.innerHTML = `<video autoplay loop muted playsinline>
+          <source src="${result.src}" type="video/mp4">
+        </video>`;
       } else {
-        failCount++;
+        div.innerHTML = `<img src="${result.src}" style="width:100%;height:100%;object-fit:cover;">`;
       }
-
-      i++;
+      container.appendChild(div);
     }
 
-    setTimeout(() => {
+    function syncScrollbar() {
       const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-      scrollbar.max = maxScroll;
+      scrollbar.max = Math.max(0, maxScroll);
+    }
 
-      scrollbar.addEventListener('input', () => {
-        scrollContainer.scrollLeft = scrollbar.value;
-      });
+    scrollbar.addEventListener('input', () => { scrollContainer.scrollLeft = +scrollbar.value; });
+    scrollContainer.addEventListener('scroll', () => { scrollbar.value = scrollContainer.scrollLeft; });
 
-      scrollContainer.addEventListener('scroll', () => {
-        scrollbar.value = scrollContainer.scrollLeft;
-      });
-    }, 500);
+    let consecutiveFails = 0;
+    for (let start = 1; start <= MAX_GIFS && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX_GIFS);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
+
+      // Lancia tutti i probe del batch in parallelo
+      const results = await Promise.all(indices.map(i => probeMedia(i)));
+
+      // Ordina per indice (Promise.all mantiene già l'ordine, ma usiamo sort per sicurezza)
+      results.sort((a, b) => a.index - b.index);
+
+      for (const result of results) {
+        if (result.type) {
+          appendFrame(result);
+          consecutiveFails = 0;
+          syncScrollbar();
+        } else {
+          consecutiveFails++;
+        }
+      }
+    }
+
+    syncScrollbar();
   }
 
+  /* ── SbatuffolArt: probe parallelo, inserisce in ordine ─────────────── */
   async function loadSbatuffolart() {
     const container = document.getElementById('sbatuffolart-gallery');
     const scrollbar = document.getElementById('art-scrollbar');
 
-    let i = 1;
-    let failCount = 0;
+    const MAX   = 300;
+    const BATCH = 10;
+    const FAIL_STOP = 5;
 
-    while (failCount < 5) {
-      const src = `img/sbatuffolart/sbatuffolart (${i}).jpg`;
-
-      const exists = await new Promise(resolve => {
-        const img = new Image();
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
-        img.src = src;
-      });
-
-      if (exists) {
-        const div = document.createElement('div');
-        div.className = 'art-frame';
-        div.innerHTML = `<img src="${src}">`;
-        container.appendChild(div);
-        failCount = 0;
-      } else {
-        failCount++;
-      }
-
-      i++;
+    function syncScrollbar() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      scrollbar.max = Math.max(0, maxScroll);
     }
 
-    setTimeout(() => {
-      const maxScroll = container.scrollWidth - container.clientWidth;
-      scrollbar.max = maxScroll;
+    scrollbar.addEventListener('input', () => { container.scrollLeft = +scrollbar.value; });
+    container.addEventListener('scroll', () => { scrollbar.value = container.scrollLeft; });
 
-      scrollbar.addEventListener('input', () => {
-        container.scrollLeft = scrollbar.value;
-      });
+    let consecutiveFails = 0;
+    for (let start = 1; start <= MAX && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
 
-      container.addEventListener('scroll', () => {
-        scrollbar.value = container.scrollLeft;
-      });
-    }, 500);
+      const results = await Promise.all(
+        indices.map(i => probeImage(`img/sbatuffolart/sbatuffolart (${i}).jpg`).then(ok => ({ i, ok })))
+      );
+      results.sort((a, b) => a.i - b.i);
+
+      for (const { i, ok } of results) {
+        if (ok) {
+          const div = document.createElement('div');
+          div.className = 'art-frame';
+          div.innerHTML = `<img src="img/sbatuffolart/sbatuffolart (${i}).jpg">`;
+          container.appendChild(div);
+          consecutiveFails = 0;
+          syncScrollbar();
+        } else {
+          consecutiveFails++;
+        }
+      }
+    }
+
+    syncScrollbar();
   }
 
+  /* ── Sfigatini: pre-verifica in parallelo, poi costruisce il loop ────── */
   async function buildSfigatini() {
     const engine = document.getElementById('sfigatini-engine');
     const screen = document.getElementById('cinema-interact');
-    for (let i = 1; i <= 53; i++) {
+
+    // Verifica tutte e 53 le immagini in parallelo prima di costruire il loop
+    const total = 53;
+    const checks = await Promise.all(
+      Array.from({ length: total }, (_, k) => {
+        const i = k + 1;
+        return probeImage(`img/sfigatini/sfigatini (${i}).jpg`).then(ok => ok ? i : null);
+      })
+    );
+    const validIndices = checks.filter(i => i !== null);
+
+    // Costruisce i frame solo con le immagini esistenti
+    function appendFrames() {
+      for (const i of validIndices) {
         const frame = document.createElement('div');
         frame.className = 'film-frame';
-        frame.innerHTML = `<img src="img/sfigatini/sfigatini (${i}).jpg" onerror="this.remove()">`;
+        frame.innerHTML = `<img src="img/sfigatini/sfigatini (${i}).jpg">`;
         engine.appendChild(frame);
+      }
     }
-    engine.innerHTML += engine.innerHTML;
-    let currentX = 0; let baseSpeed = 1; let currentSpeed = 1; let targetSpeed = 1;
-    
+    appendFrames();          // primo set
+    appendFrames();          // secondo set (loop infinito)
+
+    let currentX = 0, baseSpeed = 1, currentSpeed = 1, targetSpeed = 1;
+
     screen.addEventListener('mousedown', () => { targetSpeed = 15; });
     screen.addEventListener('touchstart', () => { targetSpeed = 15; }, { passive: true });
-    
     window.addEventListener('mouseup', () => { targetSpeed = baseSpeed; });
     window.addEventListener('touchend', () => { targetSpeed = baseSpeed; });
     window.addEventListener('touchcancel', () => { targetSpeed = baseSpeed; });
-    
+
     function animate() {
       currentSpeed += (targetSpeed - currentSpeed) * 0.05;
       currentX -= currentSpeed;
@@ -614,80 +670,77 @@
     animate();
   }
 
+  /* ── Lulu Sofa: probe parallelo a batch, poi avvia l'interazione ─────── */
   (async function initLuluSofa() {
-      const img1 = document.getElementById('lulu-c-1');
-      const img2 = document.getElementById('lulu-c-2');
-      const seam = document.getElementById('lulu-sofa-seam');
-      const catThumb = document.getElementById('sofa-cat-thumb');
+    const img1     = document.getElementById('lulu-c-1');
+    const img2     = document.getElementById('lulu-c-2');
+    const seam     = document.getElementById('lulu-sofa-seam');
+    const catThumb = document.getElementById('sofa-cat-thumb');
 
-      const availableImages = [];
-      for (let i = 1; i <= 200; i++) {
-        const src = `img/lulu/lulu (${i}).jpg`;
-        const exists = await new Promise(r => {
-          const img = new Image();
-          img.onload = () => r(true);
-          img.onerror = () => r(false);
-          img.src = src;
-        });
-        if (exists) availableImages.push(src);
-        else if (i > 15) break; 
+    const MAX_LULU = 200;
+    const BATCH    = 15;
+    const FAIL_STOP = 3;
+
+    const availableImages = [];
+    let consecutiveFails = 0;
+
+    for (let start = 1; start <= MAX_LULU && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX_LULU);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
+
+      const results = await Promise.all(
+        indices.map(i => probeImage(`img/lulu/lulu (${i}).jpg`).then(ok => ({ i, ok })))
+      );
+      results.sort((a, b) => a.i - b.i);
+
+      for (const { i, ok } of results) {
+        if (ok) { availableImages.push(`img/lulu/lulu (${i}).jpg`); consecutiveFails = 0; }
+        else { consecutiveFails++; }
       }
+    }
 
-      const count = availableImages.length;
+    const count = availableImages.length;
 
-      function updateSofaPhotos(scrollX) {
-        if (count < 1) return;
-        const scrollRange = seam.clientWidth - catThumb.clientWidth;
-        const scrollPercent = Math.max(0, Math.min(1, scrollX / scrollRange));
-        
-        // Modifica: Limita index1 a count - 2 in modo che index2 non sgarri il count
-        let maxIndex = Math.max(0, count - 2); 
-        let index1 = Math.floor(scrollPercent * maxIndex);
-        let index2 = index1 + 1;
+    function updateSofaPhotos(scrollX) {
+      if (count < 1) return;
+      const scrollRange = seam.clientWidth - catThumb.clientWidth;
+      const scrollPercent = Math.max(0, Math.min(1, scrollX / scrollRange));
+      let maxIndex = Math.max(0, count - 2);
+      let index1 = Math.floor(scrollPercent * maxIndex);
+      let index2 = index1 + 1;
+      if (index1 >= 0 && index1 < count) { img1.src = availableImages[index1]; img1.style.opacity = 1; }
+      if (index2 < count) { img2.src = availableImages[index2]; img2.style.opacity = 1; }
+      else { img2.style.opacity = 0; }
+    }
 
-        if (index1 >= 0 && index1 < count) {
-          img1.src = availableImages[index1];
-          img1.style.opacity = 1;
-        }
-        if (index2 < count) {
-          img2.src = availableImages[index2];
-          img2.style.opacity = 1;
-        } else {
-          img2.style.opacity = 0;
-        }
-      }
+    let isDragging = false, startX, initialLeft;
 
-      let isDragging = false;
-      let startX, initialLeft;
+    const startAction = (e) => {
+      isDragging = true;
+      startX = e.clientX || e.touches[0].clientX;
+      initialLeft = catThumb.offsetLeft;
+      document.body.style.userSelect = 'none';
+    };
+    const moveAction = (e) => {
+      if (!isDragging) return;
+      const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+      let newLeft = initialLeft + (currentX - startX);
+      const maxLeft = seam.clientWidth - catThumb.clientWidth;
+      newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+      catThumb.style.left = newLeft + 'px';
+      updateSofaPhotos(newLeft);
+    };
+    const stopAction = () => { isDragging = false; document.body.style.userSelect = 'auto'; };
 
-      const startAction = (e) => {
-        isDragging = true;
-        startX = e.clientX || e.touches[0].clientX;
-        initialLeft = catThumb.offsetLeft;
-        document.body.style.userSelect = 'none';
-      };
+    catThumb.addEventListener('mousedown', startAction);
+    catThumb.addEventListener('touchstart', startAction, { passive: true });
+    window.addEventListener('mousemove', moveAction);
+    window.addEventListener('touchmove', moveAction, { passive: false });
+    window.addEventListener('mouseup', stopAction);
+    window.addEventListener('touchend', stopAction);
 
-      const moveAction = (e) => {
-        if (!isDragging) return;
-        const currentX = (e.touches) ? e.touches[0].clientX : e.clientX;
-        const deltaX = currentX - startX;
-        let newLeft = initialLeft + deltaX;
-        const maxLeft = seam.clientWidth - catThumb.clientWidth;
-        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
-        catThumb.style.left = newLeft + 'px';
-        updateSofaPhotos(newLeft);
-      };
-
-      const stopAction = () => { isDragging = false; document.body.style.userSelect = 'auto'; };
-
-      catThumb.addEventListener('mousedown', startAction);
-      catThumb.addEventListener('touchstart', startAction, {passive: true});
-      window.addEventListener('mousemove', moveAction);
-      window.addEventListener('touchmove', moveAction, {passive: false});
-      window.addEventListener('mouseup', stopAction);
-      window.addEventListener('touchend', stopAction);
-
-      setTimeout(() => updateSofaPhotos(0), 500);
+    setTimeout(() => updateSofaPhotos(0), 100);
   })();
 
   loadPhoneStickers();
