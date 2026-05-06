@@ -41,11 +41,11 @@ const dati_pandabox = [
         "immagine": "Profumatori Auto.jpg"
     },
     {
-        "titolo": "Salvacavo",
-        "immagine": "Salvacavo.jpg"
-    },
-    {
         "titolo": "Stickers",
         "immagine": "Stickers.jpg"
+    },
+    {
+        "titolo": "Salvacavo",
+        "immagine": "Salvacavo.jpg"
     }
 ];
