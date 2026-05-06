@@ -468,20 +468,7 @@
 </svg>
 
 <script>
-  /*
-   * ─────────────────────────────────────────────────────────────────────────
-   * STRATEGIA GENERALE
-   * Ogni sezione usa "fire-and-forget parallelo con sentinel":
-   *   1. Lancia TUTTI i probe contemporaneamente (nessun batch = nessuna attesa)
-   *   2. Ogni probe, appena risponde, agisce immediatamente sul DOM
-   *   3. Un "sentinel" monitora quanti fail consecutivi ci sono stati ALLA FINE
-   *      per decidere quando smettere di cercare nuovi indici oltre quelli lanciati
-   * Nessun limite statico: il ceiling è alto (500) e si ferma automaticamente
-   * dopo N fail consecutivi - basta aggiungere/rimuovere file nella cartella.
-   * ─────────────────────────────────────────────────────────────────────────
-   */
-
-  /* ── Utility base ─────────────────────────────────────────────────────── */
+  /* ── Utility: verifica esistenza immagine/video in parallelo ─────────── */
   function probeImage(src) {
     return new Promise(resolve => {
       const img = new Image();
@@ -507,218 +494,153 @@
     });
   }
 
-  /*
-   * parallelScan(probeFn, ceiling, failStop, onResult)
-   * Lancia ceiling probe tutti in parallelo.
-   * Ogni probe che risolve chiama onResult({ index, ...result }).
-   * Quando tutti hanno risposto, calcola i fail consecutivi in coda
-   * e restituisce il conteggio di quelli trovati — ma la UI è già aggiornata.
-   */
-  async function parallelScan(probeFn, ceiling, onResult) {
-    const promises = [];
-    for (let i = 1; i <= ceiling; i++) {
-      promises.push(probeFn(i).then(result => ({ index: i, result })));
+  /* ── Utility: scopre l'ultimo indice disponibile in parallelo ────────── */
+  async function discoverRange(buildSrc, maxGuess, batchSize = 10, earlyBreak = 3) {
+    // Scansiona a batch; si ferma quando trova `earlyBreak` fallimenti consecutivi
+    const found = [];
+    let consecutiveFails = 0;
+    for (let start = 1; start <= maxGuess && consecutiveFails < earlyBreak; start += batchSize) {
+      const end = Math.min(start + batchSize - 1, maxGuess);
+      const batch = [];
+      for (let i = start; i <= end; i++) batch.push({ i, src: buildSrc(i) });
+      const results = await Promise.all(batch.map(({ i, src }) => probeImage(src).then(ok => ({ i, ok }))));
+      for (const { i, ok } of results) {
+        if (ok) { found.push(i); consecutiveFails = 0; }
+        else { consecutiveFails++; if (consecutiveFails >= earlyBreak) break; }
+      }
     }
-    // Ogni settledresult viene processato nell'ordine in cui arriva
-    const all = await Promise.allSettled(promises);
-    // Riordiniamo per index per permettere a onResult di gestire l'ordine
-    const sorted = all
-      .filter(p => p.status === 'fulfilled')
-      .map(p => p.value)
-      .sort((a, b) => a.index - b.index);
-    sorted.forEach(({ index, result }) => onResult(index, result));
-    return sorted;
-  }
-
-  /*
-   * streamScan(probeFn, ceiling, failStop, onFound, onMiss)
-   * Come parallelScan ma:
-   * - Notifica onFound/onMiss appena ogni singolo probe risponde (non in ordine)
-   * - Usa placeholder ordinati nel DOM per mantenere l'ordine visivo
-   * - Si ferma dinamicamente quando i fail in coda superano failStop
-   */
-  async function streamScan(probeFn, ceiling, failStop, onFound, onMiss) {
-    // Crea placeholder ordinati subito, così l'ordine visivo è garantito
-    // senza aspettare: ogni placeholder viene riempito o rimosso al volo
-    const placeholders = new Map();
-    const probes = [];
-
-    for (let i = 1; i <= ceiling; i++) {
-      const ph = { i, el: null, resolved: false, found: false };
-      placeholders.set(i, ph);
-      probes.push(
-        probeFn(i).then(result => {
-          ph.resolved = true;
-          ph.found = result !== null && result !== false;
-          if (ph.found) onFound(i, result, ph);
-          else onMiss(i, ph);
-        })
-      );
-    }
-    await Promise.all(probes);
+    return found;
   }
 
   /* ── Panda Stickers ──────────────────────────────────────────────────── */
   function loadPhoneStickers() {
     const container = document.getElementById('sticker-phone-gallery');
-    // Nessun limite: lancia fino a 500, il browser scarterà i 404 con onerror
-    for (let i = 1; i <= 500; i++) {
+    for (let i = 1; i <= 116; i++) {
       const div = document.createElement('div');
       div.className = 'sticker-item-phone';
-      div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" loading="lazy" onerror="this.parentElement.remove()">`;
+      div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" onerror="this.parentElement.remove()">`;
       container.appendChild(div);
     }
   }
 
-  /* ── Panda Gif: massima priorità, placeholder visibili subito ─────────
-   * Strategia:
-   * 1. Crea placeholder scuri nel film roll immediatamente (appaiono subito)
-   * 2. Lancia tutti i probe in parallelo senza aspettare
-   * 3. Appena un probe risponde: sostituisce il placeholder col media,
-   *    o rimuove il placeholder se non esiste
-   * 4. Aggiorna la scrollbar ad ogni modifica
-   * ─────────────────────────────────────────────────────────────────────── */
-  function loadGifs() {
-    const container       = document.getElementById('gif-gallery');
+  /* ── Panda Gif: caricamento parallelo a batch, mostra subito i primi ── */
+  async function loadGifs() {
+    const container      = document.getElementById('gif-gallery');
     const scrollContainer = document.getElementById('gif-scroll-container');
-    const scrollbar       = document.getElementById('camera-scrollbar');
+    const scrollbar      = document.getElementById('camera-scrollbar');
 
-    const CEILING   = 500; // nessun limite fisso: si ferma da solo coi fail
-    const FAIL_STOP = 5;   // quanti fail consecutivi in coda prima di ignorare
+    const MAX_GIFS  = 200;
+    const BATCH     = 8;   // probe N gif alla volta
+    const FAIL_STOP = 5;   // stop dopo 5 indici mancanti consecutivi
+
+    function appendFrame(result) {
+      const div = document.createElement('div');
+      div.className = 'film-frame-gif';
+      if (result.type === 'mp4') {
+        div.innerHTML = `<video autoplay loop muted playsinline>
+          <source src="${result.src}" type="video/mp4">
+        </video>`;
+      } else {
+        div.innerHTML = `<img src="${result.src}" style="width:100%;height:100%;object-fit:cover;">`;
+      }
+      container.appendChild(div);
+    }
+
+    function syncScrollbar() {
+      const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      scrollbar.max = Math.max(0, maxScroll);
+    }
 
     scrollbar.addEventListener('input', () => { scrollContainer.scrollLeft = +scrollbar.value; });
     scrollContainer.addEventListener('scroll', () => { scrollbar.value = scrollContainer.scrollLeft; });
 
-    function syncScrollbar() {
-      scrollbar.max = Math.max(0, scrollContainer.scrollWidth - scrollContainer.clientWidth);
-    }
+    let consecutiveFails = 0;
+    for (let start = 1; start <= MAX_GIFS && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX_GIFS);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
 
-    // Mappa index → placeholder <div>
-    const slots = new Map();
+      // Lancia tutti i probe del batch in parallelo
+      const results = await Promise.all(indices.map(i => probeMedia(i)));
 
-    // Step 1: crea placeholder per i primi N indici e lanciamo probe
-    // Non sappiamo quante gif ci sono, quindi partiamo con i placeholder
-    // solo per i primi che risponderanno positivamente — usiamo un approccio
-    // "slot on demand": il placeholder viene creato al lancio del probe,
-    // riempito o rimosso quando risponde.
+      // Ordina per indice (Promise.all mantiene già l'ordine, ma usiamo sort per sicurezza)
+      results.sort((a, b) => a.index - b.index);
 
-    const probes = [];
-    for (let i = 1; i <= CEILING; i++) {
-      // Crea placeholder scuro subito e aggiungilo in ordine
-      const ph = document.createElement('div');
-      ph.className = 'film-frame-gif';
-      ph.style.cssText = 'background:#111; opacity:0.4;';
-      container.appendChild(ph);
-      slots.set(i, ph);
-
-      probes.push(
-        probeMedia(i).then(result => {
-          const slot = slots.get(i);
-          if (!slot) return;
-          if (result.type === 'mp4') {
-            slot.style.cssText = '';
-            slot.innerHTML = `<video autoplay loop muted playsinline>
-              <source src="${result.src}" type="video/mp4">
-            </video>`;
-          } else if (result.type === 'gif') {
-            slot.style.cssText = '';
-            slot.innerHTML = `<img src="${result.src}" style="width:100%;height:100%;object-fit:cover;">`;
-          } else {
-            slot.remove();
-            slots.delete(i);
-          }
+      for (const result of results) {
+        if (result.type) {
+          appendFrame(result);
+          consecutiveFails = 0;
           syncScrollbar();
-        })
-      );
+        } else {
+          consecutiveFails++;
+        }
+      }
     }
 
-    // Aspetta tutto in background, poi rimuovi eventuali placeholder rimasti
-    Promise.all(probes).then(() => {
-      // Rimuovi placeholder vuoti residui (indici oltre l'ultimo file)
-      // Calcola il tail di fail consecutivi per capire dove si ferma la sequenza
-      let lastFound = 0;
-      for (const [i, ph] of slots) {
-        if (ph.isConnected) lastFound = i;
-      }
-      // Rimuovi tutto ciò che è oltre lastFound + FAIL_STOP
-      for (const [i, ph] of slots) {
-        if (i > lastFound && ph.isConnected) ph.remove();
-      }
-      syncScrollbar();
-    });
+    syncScrollbar();
   }
 
-  /* ── SbatuffolArt: stesso approccio con placeholder ─────────────────── */
-  function loadSbatuffolart() {
+  /* ── SbatuffolArt: probe parallelo, inserisce in ordine ─────────────── */
+  async function loadSbatuffolart() {
     const container = document.getElementById('sbatuffolart-gallery');
     const scrollbar = document.getElementById('art-scrollbar');
 
-    const CEILING   = 500;
+    const MAX   = 300;
+    const BATCH = 10;
     const FAIL_STOP = 5;
+
+    function syncScrollbar() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      scrollbar.max = Math.max(0, maxScroll);
+    }
 
     scrollbar.addEventListener('input', () => { container.scrollLeft = +scrollbar.value; });
     container.addEventListener('scroll', () => { scrollbar.value = container.scrollLeft; });
 
-    function syncScrollbar() {
-      scrollbar.max = Math.max(0, container.scrollWidth - container.clientWidth);
-    }
+    let consecutiveFails = 0;
+    for (let start = 1; start <= MAX && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
 
-    const slots = new Map();
-    const probes = [];
-
-    for (let i = 1; i <= CEILING; i++) {
-      const ph = document.createElement('div');
-      ph.className = 'art-frame';
-      ph.style.cssText = 'background:#f0ebe0; opacity:0.3; min-width:100%;';
-      container.appendChild(ph);
-      slots.set(i, ph);
-
-      const src = `img/sbatuffolart/sbatuffolart (${i}).jpg`;
-      probes.push(
-        probeImage(src).then(ok => {
-          const slot = slots.get(i);
-          if (!slot) return;
-          if (ok) {
-            slot.style.cssText = '';
-            slot.innerHTML = `<img src="${src}">`;
-          } else {
-            slot.remove();
-            slots.delete(i);
-          }
-          syncScrollbar();
-        })
+      const results = await Promise.all(
+        indices.map(i => probeImage(`img/sbatuffolart/sbatuffolart (${i}).jpg`).then(ok => ({ i, ok })))
       );
+      results.sort((a, b) => a.i - b.i);
+
+      for (const { i, ok } of results) {
+        if (ok) {
+          const div = document.createElement('div');
+          div.className = 'art-frame';
+          div.innerHTML = `<img src="img/sbatuffolart/sbatuffolart (${i}).jpg">`;
+          container.appendChild(div);
+          consecutiveFails = 0;
+          syncScrollbar();
+        } else {
+          consecutiveFails++;
+        }
+      }
     }
 
-    Promise.all(probes).then(() => {
-      let lastFound = 0;
-      for (const [i, ph] of slots) { if (ph.isConnected) lastFound = i; }
-      for (const [i, ph] of slots) { if (i > lastFound && ph.isConnected) ph.remove(); }
-      syncScrollbar();
-    });
+    syncScrollbar();
   }
 
-  /* ── Sfigatini: probe parallelo totale, poi loop ─────────────────────── */
+  /* ── Sfigatini: pre-verifica in parallelo, poi costruisce il loop ────── */
   async function buildSfigatini() {
     const engine = document.getElementById('sfigatini-engine');
     const screen = document.getElementById('cinema-interact');
 
-    const CEILING = 500; // nessun limite fisso
-
-    // Lancia tutti in parallelo
+    // Verifica tutte e 53 le immagini in parallelo prima di costruire il loop
+    const total = 53;
     const checks = await Promise.all(
-      Array.from({ length: CEILING }, (_, k) => {
+      Array.from({ length: total }, (_, k) => {
         const i = k + 1;
-        const src = `img/sfigatini/sfigatini (${i}).jpg`;
-        return probeImage(src).then(ok => ok ? i : null);
+        return probeImage(`img/sfigatini/sfigatini (${i}).jpg`).then(ok => ok ? i : null);
       })
     );
+    const validIndices = checks.filter(i => i !== null);
 
-    // Trova l'ultimo indice trovato (per ignorare i fail in coda)
-    let lastFound = 0;
-    checks.forEach((v, k) => { if (v !== null) lastFound = k + 1; });
-    const validIndices = checks.slice(0, lastFound).filter(i => i !== null);
-
+    // Costruisce i frame solo con le immagini esistenti
     function appendFrames() {
       for (const i of validIndices) {
         const frame = document.createElement('div');
@@ -727,15 +649,17 @@
         engine.appendChild(frame);
       }
     }
-    appendFrames();
-    appendFrames();
+    appendFrames();          // primo set
+    appendFrames();          // secondo set (loop infinito)
 
     let currentX = 0, baseSpeed = 1, currentSpeed = 1, targetSpeed = 1;
+
     screen.addEventListener('mousedown', () => { targetSpeed = 15; });
     screen.addEventListener('touchstart', () => { targetSpeed = 15; }, { passive: true });
     window.addEventListener('mouseup', () => { targetSpeed = baseSpeed; });
     window.addEventListener('touchend', () => { targetSpeed = baseSpeed; });
     window.addEventListener('touchcancel', () => { targetSpeed = baseSpeed; });
+
     function animate() {
       currentSpeed += (targetSpeed - currentSpeed) * 0.05;
       currentX -= currentSpeed;
@@ -746,34 +670,52 @@
     animate();
   }
 
-  /* ── Lulu Sofa: probe parallelo totale, interazione immediata ────────── */
+  /* ── Lulu Sofa: probe parallelo a batch, poi avvia l'interazione ─────── */
   (async function initLuluSofa() {
     const img1     = document.getElementById('lulu-c-1');
     const img2     = document.getElementById('lulu-c-2');
     const seam     = document.getElementById('lulu-sofa-seam');
     const catThumb = document.getElementById('sofa-cat-thumb');
 
-    const CEILING = 500; // senza limite fisso
+    const MAX_LULU = 200;
+    const BATCH    = 15;
+    const FAIL_STOP = 3;
 
-    // Array sparso: lo popoliamo man mano che i probe rispondono
     const availableImages = [];
-    let discoveryDone = false;
+    let consecutiveFails = 0;
 
-    // Avvia l'interazione subito con le immagini già trovate
+    for (let start = 1; start <= MAX_LULU && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX_LULU);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
+
+      const results = await Promise.all(
+        indices.map(i => probeImage(`img/lulu/lulu (${i}).jpg`).then(ok => ({ i, ok })))
+      );
+      results.sort((a, b) => a.i - b.i);
+
+      for (const { i, ok } of results) {
+        if (ok) { availableImages.push(`img/lulu/lulu (${i}).jpg`); consecutiveFails = 0; }
+        else { consecutiveFails++; }
+      }
+    }
+
+    const count = availableImages.length;
+
     function updateSofaPhotos(scrollX) {
-      const count = availableImages.length;
       if (count < 1) return;
       const scrollRange = seam.clientWidth - catThumb.clientWidth;
       const scrollPercent = Math.max(0, Math.min(1, scrollX / scrollRange));
       let maxIndex = Math.max(0, count - 2);
       let index1 = Math.floor(scrollPercent * maxIndex);
       let index2 = index1 + 1;
-      if (index1 < count) { img1.src = availableImages[index1]; img1.style.opacity = 1; }
+      if (index1 >= 0 && index1 < count) { img1.src = availableImages[index1]; img1.style.opacity = 1; }
       if (index2 < count) { img2.src = availableImages[index2]; img2.style.opacity = 1; }
       else { img2.style.opacity = 0; }
     }
 
     let isDragging = false, startX, initialLeft;
+
     const startAction = (e) => {
       isDragging = true;
       startX = e.clientX || e.touches[0].clientX;
@@ -790,6 +732,7 @@
       updateSofaPhotos(newLeft);
     };
     const stopAction = () => { isDragging = false; document.body.style.userSelect = 'auto'; };
+
     catThumb.addEventListener('mousedown', startAction);
     catThumb.addEventListener('touchstart', startAction, { passive: true });
     window.addEventListener('mousemove', moveAction);
@@ -797,32 +740,7 @@
     window.addEventListener('mouseup', stopAction);
     window.addEventListener('touchend', stopAction);
 
-    // Struttura per mantenere l'ordine: slot indicizzati
-    const slots = new Array(CEILING + 1).fill(null);
-    let firstShown = false;
-
-    // Lancia tutti i probe contemporaneamente, ogni uno agisce appena risponde
-    const allProbes = Array.from({ length: CEILING }, (_, k) => {
-      const i = k + 1;
-      const src = `img/lulu/lulu (${i}).jpg`;
-      return probeImage(src).then(ok => {
-        slots[i] = ok ? src : false;
-        // Appena la prima risponde positivamente, mostriamola subito
-        if (ok && !firstShown) {
-          availableImages.push(src);
-          firstShown = true;
-          updateSofaPhotos(0);
-        }
-      });
-    });
-
-    // Aspetta tutto, poi ricostruisce l'array ordinato completo
-    await Promise.all(allProbes);
-    let lastFound = 0;
-    for (let i = 1; i <= CEILING; i++) { if (slots[i]) lastFound = i; }
-    availableImages.length = 0;
-    for (let i = 1; i <= lastFound; i++) { if (slots[i]) availableImages.push(slots[i]); }
-    updateSofaPhotos(catThumb.offsetLeft);
+    setTimeout(() => updateSofaPhotos(0), 100);
   })();
 
   loadPhoneStickers();
