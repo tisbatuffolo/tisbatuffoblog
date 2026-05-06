@@ -23,9 +23,5 @@ const dati_bagno = [
     {
         "titolo": "Scaldino",
         "immagine": "Scaldino.jpg"
-    },
-    {
-        "titolo": "Salvacavo",
-        "immagine": "Salvacavo.jpg"
     }
 ];
