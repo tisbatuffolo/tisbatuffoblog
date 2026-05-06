@@ -702,6 +702,23 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
                     specialDB.pandabox.push(newItem);
                 }
             }
+
+            // --- FIX RIORDINAMENTO ---
+            // Ordiniamo "casa" cosicché il nuovo oggetto si raggruppi subito nella sua stanza
+            if (DB.casa) {
+                const casaOrder = [
+                    'dati_terrazzo', 'dati_salotto', 'dati_mondo', 
+                    'dati_cucina', 'dati_pandabox', 'dati_bagno', 
+                    'dati_lettone', 'dati_cantina', 'dati_corridoio'
+                ];
+                DB.casa.sort((a, b) => {
+                    let idxA = casaOrder.indexOf(a.arrayName);
+                    let idxB = casaOrder.indexOf(b.arrayName);
+                    if (idxA === -1) idxA = 999;
+                    if (idxB === -1) idxB = 999;
+                    return idxA - idxB;
+                });
+            }
             
             clearUI();
             initApp();
@@ -800,12 +817,21 @@ async function submitEdit() {
 
         if (res.ok) { 
             // --- INIZIO AGGIORNAMENTO OTTIMISTICO ---
-            // 1. Rimuoviamo il vecchio riferimento da tutti i database locali
-            for (let key in DB) {
-                DB[key] = DB[key].filter(item => item !== it);
-            }
-            for (let key in specialDB) {
-                specialDB[key] = specialDB[key].filter(item => item !== it);
+            
+            const dbKeyOld = (it.category === 'Casa Sbatuffolone') ? 'casa' : (it.category ? it.category.toLowerCase() : '');
+            const dbKeyNew = (a === 'casasbatuffolone') ? 'casa' : a;
+            
+            // Verifichiamo se l'utente ha effettivamente cambiato categoria o stanza
+            const roomChanged = (dbKeyOld !== dbKeyNew) || (it.arrayName !== arr);
+
+            if (roomChanged) {
+                // 1. Rimuoviamo il vecchio riferimento da tutti i database locali SOLO se è stata cambiata posizione
+                for (let key in DB) {
+                    DB[key] = DB[key].filter(item => item !== it);
+                }
+                for (let key in specialDB) {
+                    specialDB[key] = specialDB[key].filter(item => item !== it);
+                }
             }
 
             // 2. Aggiorniamo le proprietà dell'oggetto in memoria
@@ -817,29 +843,47 @@ async function submitEdit() {
             it.room = (a === 'casasbatuffolone' && s) ? s : null;
             it.displayTitle = null;
 
-            // 3. Lo inseriamo nel nuovo "cassetto" corretto
-            let dbKey = a === 'casasbatuffolone' ? 'casa' : a;
-            if (!DB[dbKey]) DB[dbKey] = [];
-            DB[dbKey].push(it);
+            if (roomChanged) {
+                // 3. Lo inseriamo nel nuovo "cassetto" corretto
+                if (!DB[dbKeyNew]) DB[dbKeyNew] = [];
+                DB[dbKeyNew].push(it);
 
-            // Gestione Special Box (Mondo/PandaBox)
-            if (a === 'casasbatuffolone') {
-                if (s === 'salotto' && isM === 'si') {
-                    it.displayTitle = 'Salotto - Mondo';
-                    if (!specialDB.mondo) specialDB.mondo = [];
-                    specialDB.mondo.push(it);
-                } else if (s === 'cucina' && isP === 'si') {
-                    it.displayTitle = 'Cucina - PandaBox';
-                    if (!specialDB.pandabox) specialDB.pandabox = [];
-                    specialDB.pandabox.push(it);
+                // Gestione Special Box (Mondo/PandaBox)
+                if (a === 'casasbatuffolone') {
+                    if (s === 'salotto' && isM === 'si') {
+                        it.displayTitle = 'Salotto - Mondo';
+                        if (!specialDB.mondo) specialDB.mondo = [];
+                        specialDB.mondo.push(it);
+                    } else if (s === 'cucina' && isP === 'si') {
+                        it.displayTitle = 'Cucina - PandaBox';
+                        if (!specialDB.pandabox) specialDB.pandabox = [];
+                        specialDB.pandabox.push(it);
+                    }
                 }
             }
 
+            // --- FIX RIORDINAMENTO ---
+            // Riordiniamo in modo universale l'array di casa per evitare che le card finiscano "slegate" in fondo!
+            if (DB.casa) {
+                const casaOrder = [
+                    'dati_terrazzo', 'dati_salotto', 'dati_mondo', 
+                    'dati_cucina', 'dati_pandabox', 'dati_bagno', 
+                    'dati_lettone', 'dati_cantina', 'dati_corridoio'
+                ];
+                DB.casa.sort((a, b) => {
+                    let idxA = casaOrder.indexOf(a.arrayName);
+                    let idxB = casaOrder.indexOf(b.arrayName);
+                    if (idxA === -1) idxA = 999;
+                    if (idxB === -1) idxB = 999;
+                    return idxA - idxB;
+                });
+            }
+
             // 4. RESET VISIVO TOTALE E RE-INIT
-            clearUI(); // Questa funzione cancella tutti i nodi HTML esistenti nelle griglie e planimetria
-            initApp(); // Questa funzione ricrea tutto da zero usando i dati aggiornati
+            clearUI(); 
+            initApp(); 
             
-            closeModal(); // Chiudiamo il modale per pulizia
+            closeModal(); 
             alert("Modifica completata con successo! 🐼✨"); 
             
         } else { const errText = await res.text(); throw new Error(errText); }
