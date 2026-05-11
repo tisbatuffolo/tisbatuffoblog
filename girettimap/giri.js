@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Trauttsmandorff",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/meraner-land/trauttsmandorff/340903483/",
+    "img": "https://img0.oastatic.com/img2/629287051/800x600/variant.webp?revbust=19e121bce4f"
+  },
+  {
     "titolo": "Brione",
     "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/brione/340259924/",
     "img": "https://img2.oastatic.com/img2/628740888/800x600/variant.webp?revbust=19de9176878"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Malga Fratte",
     "link": "https://www.outdooractive.com/it/route/slittino/val-di-sole-pejo-e-rabbi/malga-fratte/335620094/",
     "img": "https://img0.oastatic.com/img2/625561416/800x600/variant.webp"
-  },
-  {
-    "titolo": "Bondonail 2026",
-    "link": "https://www.outdooractive.com/it/route/escursione-invernale/trento-monte-bondone-valle-dell-adige/bondonail-2026/335619584/",
-    "img": "https://img2.oastatic.com/img2/625561303/800x600/variant.webp"
   }
 ]
