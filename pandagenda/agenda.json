@@ -85,5 +85,19 @@
       "tipo": "evento",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-05-17": [
+    {
+      "nome": "Saretta",
+      "tipo": "compleanno",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-05-16": [
+    {
+      "nome": "Eurovision",
+      "tipo": "festa",
+      "ricorrenza": "singola"
+    }
   ]
 }
