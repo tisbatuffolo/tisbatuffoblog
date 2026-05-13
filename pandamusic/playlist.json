@@ -42,8 +42,8 @@
   {
     "nome": "YouTest",
     "descrizione": "Youtube",
-    "linkSpotify": "https://youtu.be/HeY4faoEPME?is=PiKSOfoNgL2aZbRo",
-    "uriSpotify": "https://youtu.be/HeY4faoEPME?is=PiKSOfoNgL2aZbRo",
+    "linkSpotify": "https://youtu.be/HeY4faoEPME",
+    "uriSpotify": "https://youtu.be/HeY4faoEPME",
     "stile": {
       "classe": "cover-random3",
       "color": "#f5af19"
