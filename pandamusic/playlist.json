@@ -48,5 +48,15 @@
       "classe": "cover-vasco",
       "color": "#004f2a"
     }
+  },
+  {
+    "nome": "Test",
+    "descrizione": "Da Amazon Music",
+    "linkSpotify": "https://music.amazon.it/user-playlists/8204bde3629c415fb8287cd70aef5a66itit?ref=dm_sh_vd4sfBOh3wjQhZuW2VELlIPAU",
+    "uriSpotify": "https://music.amazon.it/user-playlists/8204bde3629c415fb8287cd70aef5a66itit?ref=dm_sh_vd4sfBOh3wjQhZuW2VELlIPAU",
+    "stile": {
+      "classe": "cover-cartoni",
+      "color": "#ff4757"
+    }
   }
 ]
