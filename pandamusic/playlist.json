@@ -38,5 +38,15 @@
       "classe": "cover-vasco",
       "color": "#004f2a"
     }
+  },
+  {
+    "nome": "YouTest",
+    "descrizione": "Youtube",
+    "linkSpotify": "https://youtu.be/HeY4faoEPME?is=PiKSOfoNgL2aZbRo",
+    "uriSpotify": "https://youtu.be/HeY4faoEPME?is=PiKSOfoNgL2aZbRo",
+    "stile": {
+      "classe": "cover-random3",
+      "color": "#f5af19"
+    }
   }
 ]
