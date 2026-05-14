@@ -99,5 +99,9 @@ const dati_salotto = [
     {
         "titolo": "Ventolino",
         "immagine": "Ventolino.jpg"
+    },
+    {
+        "titolo": "Panda HDisk",
+        "immagine": "Panda HDisk.jpg"
     }
 ];
