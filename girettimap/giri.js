@@ -37,7 +37,7 @@ const GIRI = [
   {
     "titolo": "Caltena",
     "link": "https://www.outdooractive.com/it/route/escursione/san-martino-di-castrozza-primiero-vanoi/caltena/338654801/",
-    "img": "https://img2.oastatic.com/img2/627434203/800x600/variant.webp?revbust=19d82733135"
+    "img": "https://img2.oastatic.com/img2/627434203/800x600/variant.webp"
   },
   {
     "titolo": "Malga Fratte",
