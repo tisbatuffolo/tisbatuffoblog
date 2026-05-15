@@ -57,8 +57,8 @@ const dati_salotto = [
         "immagine": "Panda Copri-Puf.jpg"
     },
     {
-        "titolo": "Panda Dancer",
-        "immagine": "Panda Dancer.jpg"
+        "titolo": "Dancing Panda",
+        "immagine": "Dancing Panda.jpg"
     },
     {
         "titolo": "Panda Family",
