@@ -27,12 +27,12 @@ const GIRI = [
   {
     "titolo": "Castel Cles",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/castel-cles/339131415/",
-    "img": "https://img3.oastatic.com/img2/627886314/800x600/variant.webp?revbust=19da60c05c1"
+    "img": "https://img3.oastatic.com/img2/627886314/800x600/variant.webp"
   },
   {
     "titolo": "Celle Ipogee Melinda",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/celle-ipogee-melinda/339115612/",
-    "img": "https://img3.oastatic.com/img2/627881074/800x600/variant.webp?revbust=19da546e299"
+    "img": "https://img3.oastatic.com/img2/627881074/800x600/variant.webp"
   },
   {
     "titolo": "Caltena",
