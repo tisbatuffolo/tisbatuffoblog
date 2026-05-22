@@ -40,13 +40,13 @@
     }
   },
   {
-    "nome": "YouTest",
-    "descrizione": "Youtube",
-    "linkSpotify": "https://www.youtube.com/embed/HeY4faoEPME",
-    "uriSpotify": "https://www.youtube.com/embed/HeY4faoEPME",
+    "nome": "testing you",
+    "descrizione": "YoutubeTest",
+    "linkSpotify": "https://youtube.com/playlist?list=PLgULlLHTSGITOC_7lj8O1CilU9n_QPm0X&si=TydKVrE_pZy-mjAX",
+    "uriSpotify": "https://youtube.com/playlist?list=PLgULlLHTSGITOC_7lj8O1CilU9n_QPm0X&si=TydKVrE_pZy-mjAX",
     "stile": {
-      "classe": "cover-random3",
-      "color": "#f5af19"
+      "classe": "cover-random1",
+      "color": "#e100ff"
     }
   }
 ]
