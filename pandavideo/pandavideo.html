@@ -68,7 +68,7 @@ header {
 .section-divider {
   max-width: 200px;
   height: 3px;
-  background: var(--primary);
+  background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%);
   margin: 30px auto; /* Spaziatura coerente con PandAgenda */
   border-radius: 50px;
   position: relative;
@@ -78,7 +78,7 @@ header {
   position: absolute;
   top: -14px; left: 50%;
   transform: translateX(-50%);
-  background: var(--bg-soft);
+  background: transparent;
   padding: 0 15px;
   color: var(--heart-red);
   font-size: 1.5rem;

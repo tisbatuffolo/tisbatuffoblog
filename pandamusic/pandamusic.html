@@ -6,7 +6,7 @@
 <title>SbatuffoBlog - PandaMusic</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<script src="https://open.spotify.com/embed-podcast/iframe-api/v1" async></script>
 
 <style>
 :root {
@@ -48,8 +48,8 @@ header {
 .brand-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--primary); font-weight: 700; margin-top: 5px; text-transform: lowercase; }
 
 /* --- DIVISORE --- */
-.section-divider { max-width: 200px; height: 3px; background: var(--primary); margin: 30px auto; border-radius: 50px; position: relative; }
-.section-divider::after { content: "♥"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--bg-soft); padding: 0 15px; color: var(--heart-red); font-size: 1.5rem; }
+.section-divider { max-width: 200px; height: 3px; background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%); margin: 30px auto; border-radius: 50px; position: relative; }
+.section-divider::after { content: "♥"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: transparent; padding: 0 15px; color: var(--heart-red); font-size: 1.5rem; }
 
 .divider-concerti { margin-top: 80px; margin-bottom: 50px; }
 
@@ -108,14 +108,15 @@ header {
     position: relative;
     box-sizing: border-box;
     padding: 10px;
+    background-color: var(--cover-base, transparent);
 }
-.cover-883 { background: linear-gradient(135deg, var(--sbatuffo-blue), var(--primary)); }
-.cover-cartoni { background: linear-gradient(135deg, var(--accent), #ffb8b8); }
-.cover-gemboy { background: linear-gradient(135deg, #636c00, #d0ff01); }
-.cover-vasco { background: linear-gradient(135deg, #004f2a, #01f9a6); }
-.cover-random1 { background: linear-gradient(135deg, #833ab4, #fd1d1d); }
-.cover-random2 { background: linear-gradient(135deg, #00C9FF, #92FE9D); }
-.cover-random3 { background: linear-gradient(135deg, #f12711, #f5af19); }
+.cover-883 { background: linear-gradient(135deg, var(--cover-base, var(--sbatuffo-blue)), var(--primary)); }
+.cover-cartoni { background: linear-gradient(135deg, var(--cover-base, var(--accent)), #ffb8b8); }
+.cover-gemboy { background: linear-gradient(135deg, var(--cover-base, #636c00), #d0ff01); }
+.cover-vasco { background: linear-gradient(135deg, var(--cover-base, #004f2a), #01f9a6); }
+.cover-random1 { background: linear-gradient(135deg, var(--cover-base, #833ab4), #fd1d1d); }
+.cover-random2 { background: linear-gradient(135deg, var(--cover-base, #00C9FF), #92FE9D); }
+.cover-random3 { background: linear-gradient(135deg, var(--cover-base, #f12711), #f5af19); }
 
 .cover-text { 
     font-family: 'Grandstander', cursive; font-weight: 900; font-size: 1.4rem; 
@@ -136,7 +137,7 @@ header {
 .spinning { animation: spinReel 2.5s linear infinite; }
 @keyframes spinReel { 100% { transform: rotate(360deg); } }
 
-.playlist-info { flex: 1; padding-right: 25px; /* Spazio per non accavallarsi con la matita */ }
+.playlist-info { flex: 1; padding-right: 25px; }
 .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
 .btn {
     font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.85rem; padding: 10px 15px;
@@ -154,6 +155,12 @@ header {
     margin-top: 20px;
     display: none;
     animation: slideDown 0.4s ease-out forwards;
+}
+.youtube-embed iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* Mantiene le proporzioni corrette del video YouTube */
+    border: 0;
+    border-radius: 16px;
 }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -176,10 +183,9 @@ header {
     background: rgba(255,255,255,0.95); padding: 20px 20px; 
     border-radius: 15px; border: 2px dashed #999; 
     box-sizing: border-box;
-    max-height: 75vh; /* Evita che il form esca dal CD su schermi piccoli */
-    overflow-y: auto; /* Aggiunge scroll se il contenuto è troppo lungo */
+    max-height: 75vh; 
+    overflow-y: auto; 
 }
-/* Scrollbar personalizzata per il modale */
 .modal-content::-webkit-scrollbar { width: 6px; }
 .modal-content::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
@@ -187,7 +193,7 @@ header {
 .form-group input { width: 100%; padding: 12px; border: 2px solid var(--stroke); border-radius: 8px; font-family: 'Fredoka', sans-serif; box-sizing: border-box; font-size: 0.95rem; }
 .modal-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
 
-/* --- CONCERTI (MODIFICATI PER RIDURRE ALTEZZA) --- */
+/* --- CONCERTI --- */
 .concert-card {
     background: #111;
     border: 4px solid #222;
@@ -207,7 +213,7 @@ header {
 .concert-header {
     position: relative;
     overflow: hidden; 
-    padding: 42px 20px 12px; /* Ridotto top e bottom padding per avvicinare al buco e alzare la linea tratteggiata */
+    padding: 42px 20px 12px; 
     text-align: center;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
@@ -235,7 +241,7 @@ header {
     font-family: 'Fredoka', sans-serif; 
     font-weight: 700; 
     font-size: 1rem;
-    margin-top: 4px; /* Ridotto margine superiore per avvicinare i dati al titolo */
+    margin-top: 4px; 
     text-transform: uppercase; 
     letter-spacing: 1px;
 }
@@ -254,21 +260,21 @@ header {
 }
 
 .slideshow-container {
-    padding: 15px 15px 5px 15px; /* Ridotto padding verticale per accorciare il ticket */
+    padding: 15px 15px 5px 15px; 
     background: #1e1e1e;
     border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;
 }
 
 .slideshow {
     display: flex; gap: 20px; overflow-x: auto;
-    scroll-snap-type: x mandatory; padding: 10px 5px 10px 5px; /* Ridotto padding inferiore */
+    scroll-snap-type: x mandatory; padding: 10px 5px 10px 5px; 
 }
 .slideshow::-webkit-scrollbar { height: 10px; }
 .slideshow::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; border: 2px solid #1e1e1e; }
 
 .slideshow img {
     height: 220px; width: auto; max-width: 80vw; object-fit: cover;
-    background: #fdfdfd; padding: 10px 10px 15px 10px; /* Ridotto padding inferiore della foto "Polaroid" */
+    background: #fdfdfd; padding: 10px 10px 15px 10px; 
     border-radius: 3px;
     scroll-snap-align: center; flex-shrink: 0;
     box-shadow: 4px 6px 15px rgba(0,0,0,0.6);
@@ -317,7 +323,7 @@ footer {
     .reel { width: 35px; height: 35px; }
     .playlist-card { padding: 15px; }
     .btn-edit { width: 32px; height: 32px; font-size: 0.85rem; top: 12px; right: 12px; }
-    .concert-header { padding-top: 48px; } /* Ridotto anche in mobile */
+    .concert-header { padding-top: 48px; } 
     .pass-badge { top: 25px; right: -60px; width: 190px; font-size: 0.65rem; }
     .concert-header h2 { font-size: 1.6rem !important; }
     .pass-details { font-size: 0.85rem; }
@@ -341,12 +347,9 @@ footer {
 <main class="container">
   <div class="section-title">Le nostre playlist 🎵</div>
 
-  <!-- Contenitore Griglia Dinamica -->
   <div class="playlist-grid" id="playlist-container">
-      <!-- Le playlist verranno caricate qui via JavaScript -->
-  </div> 
+      </div> 
 
-  <!-- Pulsante Aggiungi Playlist -->
   <div class="btn-add-container">
       <button id="btn-add-playlist" class="btn btn-play" style="padding: 15px 30px; font-size: 1.1rem;">
           ➕ Aggiungi nuova Playlist
@@ -394,7 +397,6 @@ footer {
     </a>
 </footer>
 
-<!-- Modale Stile CD (Per Inserimento e Modifica) -->
 <div id="modal-cd-overlay" class="overlay">
     <div class="cd-shape">
         <div class="cd-hole"></div>
@@ -402,7 +404,11 @@ footer {
             <h3 id="modal-title" style="font-family: 'Grandstander'; font-size: 1.6rem; margin-top: 0; margin-bottom: 15px; color: var(--sbatuffo-blue);">Nuovo Disco</h3>
             <div class="form-group"><input id="new-nome" placeholder="Nome Playlist (es. Rock)" required></div>
             <div class="form-group"><input id="new-desc" placeholder="Breve descrizione..." required></div>
-            <div class="form-group"><input id="new-link" placeholder="Link web Spotify (https://...)" required></div>
+            <div class="form-group"><input id="new-link" placeholder="Link web (Spotify / YouTube / Amazon Music)" required></div>
+            <div class="form-group">
+                <label for="new-color" style="display:block; text-align:left; margin-bottom:6px; font-size:0.95rem;">Colore Playlist</label>
+                <input id="new-color" type="color" value="#0000ff" style="width:100%; height:44px; border: 2px solid var(--stroke); border-radius: 12px; padding: 0;" />
+            </div>
             
             <div class="modal-btns">
                 <button id="btn-cd-ok" class="btn btn-play" style="background: var(--sbatuffo-blue); color: white;">Registra ⏺️</button>
@@ -430,11 +436,14 @@ function togglePlayerVisibility(btn) {
     }
 }
 
+// Genera l'URI corretto per Spotify
 function generateSpotifyUri(link) {
     if (link.startsWith('spotify:')) return link;
     try {
         const url = new URL(link);
-        if (url.hostname === 'open.spotify.com') {
+        const host = url.hostname.toLowerCase();
+        
+        if (host.includes('spotify.com') || link.includes('spotify.com')) {
             const pathParts = url.pathname.split('/').filter(p => p);
             if (pathParts.length >= 2) {
                 const type = pathParts[0];
@@ -443,6 +452,66 @@ function generateSpotifyUri(link) {
             }
         }
         return link;
+    } catch(e) {
+        return link;
+    }
+}
+
+// Capisce che tipo di link è stato inserito
+function getLinkType(link) {
+    try {
+        if (link.startsWith('spotify:')) return 'spotify';
+        const url = new URL(link);
+        const host = url.hostname.toLowerCase();
+        
+        if (host.includes('spotify.com') || link.includes('spotify.com')) return 'spotify';
+        if (host.includes('youtube.com') || host.includes('youtu.be')) return 'youtube';
+        // Intercetta correttamente tutti i formati Amazon Music
+        if (host.includes('amazon') || host.includes('amzn.to')) return 'amazon'; 
+        
+        return 'web';
+    } catch(e) {
+        return 'web';
+    }
+}
+
+function getOpenButtonIcon(type) {
+    const icons = {
+        spotify: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1DB954" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.195c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.859zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z"/></svg>`,
+        youtube: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.5 6.2s-.2-1.7-.8-2.5c-.8-.9-1.7-.9-2.1-1-2-0.2-10-0.2-10-0.2s-8 0-10 .2c-.4 0-1.3.1-2.1 1-.6.8-.8 2.5-.8 2.5S0 8.9 0 11.5v1c0 2.6.2 5.3.2 5.3s.2 1.7.8 2.5c.8.9 1.8.9 2.3 1 1.7.2 10 .2 10 .2s8 0 10-.2c.4 0 1.3-.1 2.1-1 .6-.8.8-2.5.8-2.5s.2-2.7.2-5.3v-1c0-2.6-.2-5.3-.2-5.3zM9.5 15.5V8.5l6.5 3.5-6.5 3.5z"/></svg>`,
+        amazon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#FF9900"><path d="M5 6h14v2H5V6zm0 4h10v2H5v-2zm0 4h8v2H5v-2z"/></svg>`,
+        web: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#1A1A1A"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.32 12.79l-8.07-8.07A5.99 5.99 0 0 0 12 4zm-6.32 2.21l8.07 8.07A5.99 5.99 0 0 0 12 20a8 8 0 0 1-6.32-11.79z"/></svg>`
+    };
+    return icons[type] || icons.web;
+}
+
+// Estrae in modo intelligente gli ID dei video o delle playlist di YouTube
+function getYoutubeEmbedUrl(link) {
+    try {
+        // Se l'utente ha incollato l'intero tag iframe
+        if (link.includes('<iframe') && link.includes('src="')) {
+            const match = link.match(/src="([^"]+)"/);
+            if (match) return match[1].replace('youtube.com', 'youtube-nocookie.com');
+        }
+
+        const url = new URL(link);
+        const host = url.hostname.toLowerCase();
+        let videoId = "";
+        let listId = url.searchParams.get('list');
+        
+        // Estrazione ID
+        if (host.includes('youtu.be')) {
+            videoId = url.pathname.slice(1);
+        } else if (host.includes('youtube.com')) {
+            videoId = url.searchParams.get('v');
+        }
+
+        // Costruzione URL con youtube-nocookie
+        if (listId && videoId) return `https://www.youtube-nocookie.com/embed/${videoId}?list=${listId}`;
+        if (listId) return `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}`;
+        if (videoId) return `https://www.youtube-nocookie.com/embed/${videoId}`;
+        
+        return link; // Ritorna il link originale se non riconosciuto
     } catch(e) {
         return link;
     }
@@ -465,11 +534,26 @@ function renderPlaylists() {
     container.innerHTML = ''; 
 
     playlistsData.forEach((p, index) => {
+        const linkType = getLinkType(p.linkSpotify);
+        // Amazon non avrà il tasto Preview, YouTube e Spotify sì
+        const hasPreview = linkType === 'spotify' || linkType === 'youtube';
+        const previewButton = hasPreview ? `<button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>` : '';
+        const openIcon = getOpenButtonIcon(linkType);
+        
+        // Setup del Player HTML (Gestione corretta permessi YouTube)
+        const playerMarkup = linkType === 'spotify'
+            ? `<div class="spotify-embed" data-spotify-uri="${p.uriSpotify}" id="embed-${index}"></div>`
+            : linkType === 'youtube'
+                ? `<div class="youtube-embed"><iframe src="${getYoutubeEmbedUrl(p.linkSpotify)}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>`
+                : '';
+                
+        const coverStyle = `--cover-base: ${p.stile.color};`;
+
         const html = `
         <div class="playlist-card">
             <button class="btn-edit" onclick="openEditModal(${index})" title="Modifica Cassetta">✏️</button>
             <div class="card-content">
-                <div class="cover-art ${p.stile.classe}">
+                <div class="cover-art ${p.stile.classe}" style="${coverStyle}">
                     <span class="cover-text">${p.nome.substring(0, 10)}</span>
                 </div>
                 <div class="playlist-info">
@@ -477,10 +561,10 @@ function renderPlaylists() {
                     <p style="color:#666; margin: 8px 0;">${p.descrizione}</p>
                     <div class="btn-group">
                         <a href="${p.linkSpotify}" target="_blank" class="btn btn-link">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1DB954" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.195c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.859zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z"/></svg>
+                            ${openIcon}
                             Apri
                         </a>
-                        <button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>
+                        ${previewButton}
                     </div>
                 </div>
             </div>
@@ -489,7 +573,7 @@ function renderPlaylists() {
                 <div class="reel"></div>
             </div>
             <div class="player-container">
-              <div class="spotify-embed" data-spotify-uri="${p.uriSpotify}" id="embed-${index}"></div>
+              ${playerMarkup}
             </div>
         </div>`;
         container.innerHTML += html;
@@ -512,6 +596,7 @@ function initSpotifyPlayers(IFrameAPI) {
     const cards = document.querySelectorAll('.playlist-card');
     cards.forEach(card => {
         const embedElement = card.querySelector('.spotify-embed');
+        if (!embedElement) return; // Salta se è un video YouTube
         if (embedElement.hasAttribute('data-initialized')) return; 
 
         const uri = embedElement.getAttribute('data-spotify-uri');
@@ -543,6 +628,7 @@ document.getElementById("btn-add-playlist").onclick = () => {
     document.getElementById("new-nome").value = "";
     document.getElementById("new-desc").value = "";
     document.getElementById("new-link").value = "";
+    document.getElementById("new-color").value = "#0000ff";
     modalOverlay.style.display = "flex";
 };
 
@@ -555,6 +641,7 @@ window.openEditModal = function(index) {
     document.getElementById("new-nome").value = p.nome;
     document.getElementById("new-desc").value = p.descrizione;
     document.getElementById("new-link").value = p.linkSpotify;
+    document.getElementById("new-color").value = p.stile?.color || '#0000ff';
     modalOverlay.style.display = "flex";
 };
 
@@ -567,6 +654,7 @@ document.getElementById("btn-cd-ok").onclick = async () => {
     const nome = document.getElementById("new-nome").value;
     const desc = document.getElementById("new-desc").value;
     const link = document.getElementById("new-link").value;
+    const color = document.getElementById("new-color").value || '#0000ff';
 
     if (!nome || !desc || !link) {
         alert("Ops! Compila tutti i campi prima di procedere.");
@@ -596,13 +684,20 @@ document.getElementById("btn-cd-ok").onclick = async () => {
             descrizione: desc,
             linkSpotify: link,
             uriSpotify: generatedUri,
-            stile: stileRandom
+            stile: {
+                classe: stileRandom.classe,
+                color: color
+            }
         });
     } else {
         arrayAggiornato[editingIndex].nome = nome;
         arrayAggiornato[editingIndex].descrizione = desc;
         arrayAggiornato[editingIndex].linkSpotify = link;
         arrayAggiornato[editingIndex].uriSpotify = generatedUri;
+        arrayAggiornato[editingIndex].stile = {
+            ...arrayAggiornato[editingIndex].stile,
+            color: color
+        };
     }
 
     try {

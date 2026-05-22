@@ -76,7 +76,7 @@
   .section-divider {
     max-width: 200px;
     height: 3px;
-    background: var(--primary);
+    background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%);
     margin: 30px auto;
     border-radius: 50px;
     position: relative;
@@ -90,14 +90,14 @@
     padding: 0 15px;
     color: var(--heart-red);
     font-size: 1.5rem;
-    background: var(--bg-soft); 
+    background: transparent;
   }
 
-  .sbatuffolart-section .section-divider::after { background: #fdfaf2; }
-  .sfigatini-section .section-divider::after { background: #000; }
+  .sbatuffolart-section .section-divider::after { background: transparent; }
+  .sfigatini-section .section-divider::after { background: transparent; }
   .stickers-section .section-divider::after, 
   .gif-section .section-divider::after, 
-  .lulu-sofa-section .section-divider::after { background: #fff; }
+  .lulu-sofa-section .section-divider::after { background: transparent; }
 
   /* --- STILI SEZIONI --- */
   .section-title { 

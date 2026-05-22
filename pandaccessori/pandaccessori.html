@@ -39,8 +39,8 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(2.2rem, 8vw, 4.2rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
 .brand-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--primary); font-weight: 700; margin-top: 5px; letter-spacing: 1.5px; text-transform: lowercase; }
 
-.section-divider { max-width: 200px; height: 3px; background: var(--primary); margin: 40px auto; border-radius: 50px; position: relative; clear: both; }
-.section-divider::after { content: "♥"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--bg-soft); padding: 0 15px; color: var(--heart-red); font-size: 1.5rem; }
+.section-divider { max-width: 200px; height: 3px; background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%); margin: 40px auto; border-radius: 50px; position: relative; clear: both; }
+.section-divider::after { content: "♥"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: transparent; padding: 0 15px; color: var(--heart-red); font-size: 1.5rem; }
 
 .total-title { font-family: 'Luckiest Guy', cursive; font-size: 1.6rem; color: #000; margin: 45px 0 25px; letter-spacing: 1px; text-align: center; }
 .total-title span { color: var(--primary); font-size: 2rem; }

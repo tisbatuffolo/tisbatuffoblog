@@ -77,7 +77,7 @@
       width: 100%; /* Fix per flex child (1° separatore) che collassava a 0 di larghezza */
       max-width: 200px; /* Leggermente più largo per visibilità */
       height: 3px;
-      background: var(--color-theme); /* Linee del divisorio con color-theme */
+      background: linear-gradient(to right, var(--color-theme) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--color-theme) calc(50% + 30px) 100%); /* Linee del divisorio con color-theme */
       margin: 40px auto;
       border-radius: 50px;
       position: relative;
@@ -89,7 +89,7 @@
       position: absolute;
       top: -14px; left: 50%;
       transform: translateX(-50%);
-      background: var(--bg-soft);
+      background: transparent;
       padding: 0 15px;
       color: var(--heart-red);
       font-size: 1.5rem;
