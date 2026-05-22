@@ -48,5 +48,15 @@
       "classe": "cover-TestYoutubbb",
       "color": "#004f2a"
     }
+  },
+  {
+    "nome": "PlayMare2024",
+    "descrizione": "Estate 2024!",
+    "linkSpotify": "Scopri la mia playlist su Amazon Music: playmare 2024 https://music.amazon.it/user-playlists/5ccfd3e9b465490fa800e81678124016itit?ref=dm_sh_p1XwC0mL2Jg9krkaKXBxSCd4O",
+    "uriSpotify": "Scopri la mia playlist su Amazon Music: playmare 2024 https://music.amazon.it/user-playlists/5ccfd3e9b465490fa800e81678124016itit?ref=dm_sh_p1XwC0mL2Jg9krkaKXBxSCd4O",
+    "stile": {
+      "classe": "cover-random1",
+      "color": "#f700ff"
+    }
   }
 ]
