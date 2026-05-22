@@ -22,7 +22,7 @@ const GIRI = [
   {
     "titolo": "Eremo e forra di Santa Giustina",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/eremo-e-forra-di-santa-giustina/339142120/",
-    "img": "https://img3.oastatic.com/img2/627957069/800x600/variant.webp?revbust=19dab90f94c"
+    "img": "https://img3.oastatic.com/img2/627957069/800x600/variant.webp"
   },
   {
     "titolo": "Castel Cles",
