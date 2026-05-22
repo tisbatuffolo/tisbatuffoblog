@@ -57,8 +57,8 @@ const dati_salotto = [
         "immagine": "Panda Copri-Puf.jpg"
     },
     {
-        "titolo": "Panda Dancer",
-        "immagine": "Panda Dancer.jpg"
+        "titolo": "Dancing Panda",
+        "immagine": "Dancing Panda.jpg"
     },
     {
         "titolo": "Panda Family",
@@ -81,10 +81,6 @@ const dati_salotto = [
         "immagine": "Panda Termometro.jpg"
     },
     {
-        "titolo": "PandaBag",
-        "immagine": "PandaBag.jpg"
-    },
-    {
         "titolo": "Poomba",
         "immagine": "Poomba.jpg"
     },
@@ -99,5 +95,9 @@ const dati_salotto = [
     {
         "titolo": "Ventolino",
         "immagine": "Ventolino.jpg"
+    },
+    {
+        "titolo": "Panda HDisk",
+        "immagine": "Panda HDisk.jpg"
     }
 ];

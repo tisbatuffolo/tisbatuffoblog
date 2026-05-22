@@ -38,5 +38,15 @@
       "classe": "cover-vasco",
       "color": "#004f2a"
     }
+  },
+  {
+    "nome": "TestYoutubbb",
+    "descrizione": "se va",
+    "linkSpotify": "https://www.youtube.com/watch?v=R1o0z6HzclI",
+    "uriSpotify": "https://www.youtube.com/watch?v=R1o0z6HzclI",
+    "stile": {
+      "classe": "cover-TestYoutubbb",
+      "color": "#004f2a"
+    }
   }
 ]

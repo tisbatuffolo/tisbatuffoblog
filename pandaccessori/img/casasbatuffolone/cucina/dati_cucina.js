@@ -79,5 +79,9 @@ const dati_cucina = [
     {
         "titolo": "Stuzzicadenti Panda",
         "immagine": "Stuzzicadenti Panda.jpg"
+    },
+    {
+        "titolo": "Panda Spesa",
+        "immagine": "Panda Spesa.jpg"
     }
 ];
