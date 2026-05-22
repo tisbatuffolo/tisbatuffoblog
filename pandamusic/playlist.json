@@ -40,13 +40,13 @@
     }
   },
   {
-    "nome": "testing you",
-    "descrizione": "YoutubeTest",
-    "linkSpotify": "https://youtube.com/playlist?list=PLgULlLHTSGITOC_7lj8O1CilU9n_QPm0X&si=TydKVrE_pZy-mjAX",
-    "uriSpotify": "https://youtube.com/playlist?list=PLgULlLHTSGITOC_7lj8O1CilU9n_QPm0X&si=TydKVrE_pZy-mjAX",
+    "nome": "TestYoutubbb",
+    "descrizione": "se va",
+    "linkSpotify": "https://www.youtube.com/watch?v=ko70cExuzZM&list=PLgULlLHTSGITOC_7lj8O1CilU9n_QPm0X",
+    "uriSpotify": "https://www.youtube.com/watch?v=ko70cExuzZM&list=PLgULlLHTSGITOC_7lj8O1CilU9n_QPm0X",
     "stile": {
-      "classe": "cover-random1",
-      "color": "#e100ff"
+      "classe": "cover-TestYoutubbb",
+      "color": "#004f2a"
     }
   }
 ]
