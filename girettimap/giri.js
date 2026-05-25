@@ -1,5 +1,20 @@
 const GIRI = [
   {
+    "titolo": "Giardino Europa",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/giardino-europa/342097007/",
+    "img": "https://img.oastatic.com/img2/630359005/800x600/variant.webp?revbust=19e5b243cdc"
+  },
+  {
+    "titolo": "Monte Lefre",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/monte-lefre/342096060/",
+    "img": "https://img2.oastatic.com/img2/630358593/800x600/variant.webp?revbust=19e5b1ba4e8"
+  },
+  {
+    "titolo": "Castel Ivano",
+    "link": "https://www.outdooractive.com/it/route/percorso-urbano/valsugana-lagorai-tesino/castel-ivano/342095184/",
+    "img": "https://img3.oastatic.com/img2/630358449/800x600/variant.webp?revbust=19e5b166aa3"
+  },
+  {
     "titolo": "Trauttsmandorff",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/meraner-land/trauttsmandorff/340903483/",
     "img": "https://img0.oastatic.com/img2/629287051/800x600/variant.webp?revbust=19e121bce4f"
@@ -28,20 +43,5 @@ const GIRI = [
     "titolo": "Castel Cles",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/castel-cles/339131415/",
     "img": "https://img3.oastatic.com/img2/627886314/800x600/variant.webp"
-  },
-  {
-    "titolo": "Celle Ipogee Melinda",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/celle-ipogee-melinda/339115612/",
-    "img": "https://img3.oastatic.com/img2/627881074/800x600/variant.webp"
-  },
-  {
-    "titolo": "Caltena",
-    "link": "https://www.outdooractive.com/it/route/escursione/san-martino-di-castrozza-primiero-vanoi/caltena/338654801/",
-    "img": "https://img2.oastatic.com/img2/627434203/800x600/variant.webp"
-  },
-  {
-    "titolo": "Malga Fratte",
-    "link": "https://www.outdooractive.com/it/route/slittino/val-di-sole-pejo-e-rabbi/malga-fratte/335620094/",
-    "img": "https://img0.oastatic.com/img2/625561416/800x600/variant.webp"
   }
 ]
