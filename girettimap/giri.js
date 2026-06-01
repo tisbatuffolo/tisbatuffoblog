@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Lago di Ledro",
+    "link": "https://www.outdooractive.com/it/route/nuoto/garda-trentino/lago-di-ledro/342709933/",
+    "img": "https://img0.oastatic.com/img2/630911706/800x600/variant.webp?revbust=19e7e1f99af"
+  },
+  {
     "titolo": "Giardino Europa",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/giardino-europa/342097007/",
     "img": "https://img.oastatic.com/img2/630359005/800x600/variant.webp?revbust=19e5b243cdc"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Eremo e forra di Santa Giustina",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/eremo-e-forra-di-santa-giustina/339142120/",
     "img": "https://img3.oastatic.com/img2/627957069/800x600/variant.webp"
-  },
-  {
-    "titolo": "Castel Cles",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/castel-cles/339131415/",
-    "img": "https://img3.oastatic.com/img2/627886314/800x600/variant.webp"
   }
 ]
