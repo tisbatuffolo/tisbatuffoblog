@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Toraro",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/vicenza/toraro/342790081/",
+    "img": "https://img.oastatic.com/img2/630976895/800x600/variant.webp?revbust=19e8285706c"
+  },
+  {
     "titolo": "Lago di Ledro",
     "link": "https://www.outdooractive.com/it/route/nuoto/garda-trentino/lago-di-ledro/342709933/",
     "img": "https://img0.oastatic.com/img2/630911706/800x600/variant.webp?revbust=19e7e1f99af"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Sarajevo",
     "link": "https://www.outdooractive.com/it/route/strada-panoramica/bosnia-herzegovina/sarajevo/339889799/",
     "img": "https://img3.oastatic.com/img2/628489249/800x600/variant.webp"
-  },
-  {
-    "titolo": "Eremo e forra di Santa Giustina",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/eremo-e-forra-di-santa-giustina/339142120/",
-    "img": "https://img3.oastatic.com/img2/627957069/800x600/variant.webp"
   }
 ]
