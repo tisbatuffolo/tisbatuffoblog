@@ -2,65 +2,169 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>PandaVideo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SbatuffoBlog - FotoAlbum </title>
+
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
+:root {
+  --primary: #ffde59; 
+  --sbatuffo-blue: #0000ff;
+  --accent: #ff4757;
+  --bg-soft: #fdfdfd;
+  --text: #1a1a1a;
+  --stroke: #1a1a1a;
+  --heart-red: #ff4d4d;
+}
+
+body { 
+    font-family: 'Fredoka', sans-serif; 
+    margin: 0; 
+    background: var(--bg-soft); 
+    color: var(--text); 
+    overflow-x: hidden; 
     text-align: center;
-  }
+}
 
-  header {
-    background: #e2eaff;
-    padding: 20px 0 10px 0;
-  }
+/* --- HEADER --- */
+header {
+  background: #fff;
+  padding: 25px 10px 5px;
+  position: relative;
+  text-align: center;
+}
 
-  header h1 {
-    color: #2332bb;
-    font-size: 2em;
-  }
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+}
 
-  header h1 a {
-    color: #2332bb;
-    text-decoration: none;
-  }
+/* Immagine home rimossa come richiesto */
 
-  header h1 a:hover {
-    color: #547bfc;
-  }
+.brand-title {
+  font-family: 'Grandstander', cursive;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 8vw, 4.2rem);
+  color: var(--sbatuffo-blue);
+  text-decoration: none;
+  line-height: 1;
+  display: block;
+}
 
-  .content {
-    margin-top: 40px;
-  }
+.brand-subtitle {
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  color: var(--primary);
+  font-weight: 700;
+  margin-top: 5px;
+  letter-spacing: 1.5px;
+  text-transform: lowercase;
+}
 
-  .content img {
-    max-width: 300px;
-  }
+/* --- DIVISORI --- */
+.section-divider {
+  max-width: 200px;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%);
+  margin: 30px auto; /* Spaziatura coerente con PandAgenda */
+  border-radius: 50px;
+  position: relative;
+}
+.section-divider::after {
+  content: "♥";
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+  padding: 0 15px;
+  color: var(--heart-red);
+  font-size: 1.5rem;
+}
 
-  .message {
-    font-size: 1.8em;
-    margin-top: 20px;
-    color: red; /* 👈 cambiato qui */
-  }
+
+/* --- FOOTER --- */
+footer { 
+    background: #fff; 
+    padding: 20px 10px 40px; 
+    border-top: 1px solid #eee;
+}
+.footer-container { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    position: relative; 
+    max-width: 1100px; 
+    margin: 0 auto; 
+}
+.footer-text { 
+    font-family: 'Grandstander', cursive; 
+    font-weight: 600; 
+    font-size: 1.2rem; 
+    color: #444; 
+    text-align: center;
+}
+.footer-home-link { 
+  text-decoration: none; 
+  color: inherit; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+.footer-home-link:hover { transform: scale(1.05); }
+.footer-home-link img { width: 30px; height: auto; }
+
+@media (max-width: 768px) {
+    .drone-wrapper { width: 140px; margin-left: -70px; }
+    @keyframes orbit-horizontal {
+        0% { transform: translateX(-160px) scale(1); z-index: 20; }
+        25% { transform: translateX(0px) scale(1.1) translateY(-5px); z-index: 20; }
+        50% { transform: translateX(160px) scale(1); z-index: 20; }
+        50.1% { z-index: 5; }
+        75% { transform: translateX(0px) scale(0.9) translateY(5px); z-index: 5; }
+        100% { transform: translateX(-160px) scale(1); z-index: 5; }
+    }
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>
-      <a class="home-link" href="../index.html">SbatuffoBlog</a>
-      <span> - PandaVideo</span>
-  </h1>
+  <div class="header-container">
+    <div class="brand-wrapper">
+      <a href="../index.html" class="brand-title">SbatuffoBlog</a>
+      <div class="brand-subtitle">FotoAlbum</div>
+    </div>
+  </div>
 </header>
 
-<div class="content">
-  <img src="img/workinprogress.png" alt="Work in progress">
+<div class="section-divider"></div>
 
-  <div class="message">
-    Non posso fare video fino a quando non mi regali un pandrone!
+<main class="content">
+  <div class="orbit-stage">
+    <img src="img/workinprogress.png" alt="Work in progress" class="main-img">
+    
+
+</main>
+
+<!-- Divider con margine inferiore aumentato per spaziare correttamente il footer -->
+<div class="section-divider" style="margin-bottom: 80px;"></div>
+
+<footer>
+    <div class="footer-container">
+    <div class="footer-text">
+      @SbatuffoBlog - 
+      <a href="../index.html" class="footer-home-link">
+        Home <img src="img/home.png" alt="Home">
+      </a>
+    </div>
   </div>
-</div>
+</footer>
 
 </body>
 </html>

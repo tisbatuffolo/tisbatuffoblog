@@ -156,11 +156,16 @@ header {
     display: none;
     animation: slideDown 0.4s ease-out forwards;
 }
-.youtube-embed iframe {
+.youtube-embed iframe, .amazon-embed iframe {
     width: 100%;
-    aspect-ratio: 16 / 9; /* Mantiene le proporzioni corrette del video YouTube */
     border: 0;
     border-radius: 16px;
+}
+.youtube-embed iframe {
+    aspect-ratio: 16 / 9;
+}
+.amazon-embed iframe {
+    height: 350px;
 }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -427,12 +432,22 @@ let editingIndex = -1;
 function togglePlayerVisibility(btn) {
     const card = btn.closest('.playlist-card');
     const player = card.querySelector('.player-container');
+    const reels = card.querySelectorAll('.reel');
+    const isSpotify = card.querySelector('.spotify-embed') !== null;
+
     if (player.style.display === "none" || player.style.display === "") {
         player.style.display = "block";
         btn.innerHTML = "Chiudi ⏹️";
+        // Attiva la rotazione delle bobine all'apertura se non è controllato da API Spotify
+        if (!isSpotify) {
+            reels.forEach(r => r.classList.add("spinning"));
+        }
     } else {
         player.style.display = "none";
         btn.innerHTML = "Preview 🎧"; 
+        if (!isSpotify) {
+            reels.forEach(r => r.classList.remove("spinning"));
+        }
     }
 }
 
@@ -466,7 +481,6 @@ function getLinkType(link) {
         
         if (host.includes('spotify.com') || link.includes('spotify.com')) return 'spotify';
         if (host.includes('youtube.com') || host.includes('youtu.be')) return 'youtube';
-        // Intercetta correttamente tutti i formati Amazon Music
         if (host.includes('amazon') || host.includes('amzn.to')) return 'amazon'; 
         
         return 'web';
@@ -485,10 +499,9 @@ function getOpenButtonIcon(type) {
     return icons[type] || icons.web;
 }
 
-// Estrae in modo intelligente gli ID dei video o delle playlist di YouTube
+// Estrae in modo intelligente gli ID dei video, shorts o delle playlist di YouTube
 function getYoutubeEmbedUrl(link) {
     try {
-        // Se l'utente ha incollato l'intero tag iframe
         if (link.includes('<iframe') && link.includes('src="')) {
             const match = link.match(/src="([^"]+)"/);
             if (match) return match[1].replace('youtube.com', 'youtube-nocookie.com');
@@ -499,19 +512,38 @@ function getYoutubeEmbedUrl(link) {
         let videoId = "";
         let listId = url.searchParams.get('list');
         
-        // Estrazione ID
         if (host.includes('youtu.be')) {
-            videoId = url.pathname.slice(1);
+            videoId = url.pathname.split('/').filter(p => p)[0];
         } else if (host.includes('youtube.com')) {
-            videoId = url.searchParams.get('v');
+            if (url.pathname.includes('/shorts/')) {
+                videoId = url.pathname.split('/shorts/')[1].split('/')[0];
+            } else if (url.pathname.includes('/embed/')) {
+                return link.replace('youtube.com', 'youtube-nocookie.com');
+            } else {
+                videoId = url.searchParams.get('v');
+            }
         }
 
-        // Costruzione URL con youtube-nocookie
         if (listId && videoId) return `https://www.youtube-nocookie.com/embed/${videoId}?list=${listId}`;
         if (listId) return `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}`;
         if (videoId) return `https://www.youtube-nocookie.com/embed/${videoId}`;
         
-        return link; // Ritorna il link originale se non riconosciuto
+        return link; 
+    } catch(e) {
+        return link;
+    }
+}
+
+// Converte i link web standard di Amazon Music in sorgenti Embeddabili
+function getAmazonEmbedUrl(link) {
+    try {
+        const url = new URL(link);
+        if (url.pathname.includes('/embed/')) return link;
+        
+        if (url.hostname.includes('music.amazon')) {
+            return `https://${url.hostname}/embed${url.pathname}${url.search}`;
+        }
+        return link;
     } catch(e) {
         return link;
     }
@@ -535,17 +567,19 @@ function renderPlaylists() {
 
     playlistsData.forEach((p, index) => {
         const linkType = getLinkType(p.linkSpotify);
-        // Amazon non avrà il tasto Preview, YouTube e Spotify sì
-        const hasPreview = linkType === 'spotify' || linkType === 'youtube';
+        // Abilitato il Preview anche per Amazon Music oltre a YouTube e Spotify
+        const hasPreview = linkType === 'spotify' || linkType === 'youtube' || linkType === 'amazon';
         const previewButton = hasPreview ? `<button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>` : '';
         const openIcon = getOpenButtonIcon(linkType);
         
-        // Setup del Player HTML (Gestione corretta permessi YouTube)
+        // Setup del Player HTML differenziato per sorgente
         const playerMarkup = linkType === 'spotify'
             ? `<div class="spotify-embed" data-spotify-uri="${p.uriSpotify}" id="embed-${index}"></div>`
             : linkType === 'youtube'
                 ? `<div class="youtube-embed"><iframe src="${getYoutubeEmbedUrl(p.linkSpotify)}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>`
-                : '';
+                : linkType === 'amazon'
+                    ? `<div class="amazon-embed"><iframe src="${getAmazonEmbedUrl(p.linkSpotify)}" title="Amazon Music player" frameborder="0" allow="autoplay" loading="lazy"></iframe></div>`
+                    : '';
                 
         const coverStyle = `--cover-base: ${p.stile.color};`;
 
@@ -596,7 +630,7 @@ function initSpotifyPlayers(IFrameAPI) {
     const cards = document.querySelectorAll('.playlist-card');
     cards.forEach(card => {
         const embedElement = card.querySelector('.spotify-embed');
-        if (!embedElement) return; // Salta se è un video YouTube
+        if (!embedElement) return; 
         if (embedElement.hasAttribute('data-initialized')) return; 
 
         const uri = embedElement.getAttribute('data-spotify-uri');
