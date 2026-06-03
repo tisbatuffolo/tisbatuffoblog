@@ -32,7 +32,7 @@ const GIRI = [
   {
     "titolo": "Brione",
     "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/brione/340259924/",
-    "img": "https://img2.oastatic.com/img2/628740888/800x600/variant.webp?revbust=19de9176878"
+    "img": "https://img2.oastatic.com/img2/628740888/800x600/variant.webp"
   },
   {
     "titolo": "Mostar",
