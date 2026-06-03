@@ -118,6 +118,29 @@ footer {
 .footer-home-link:hover { transform: scale(1.05); }
 .footer-home-link img { width: 30px; height: auto; }
 
+/* --- FOTO ALBUM --- */
+.orbit-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 20px;
+  gap: 20px;
+}
+.main-img {
+  width: min(600px, 90%);
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 480px) {
+  .orbit-stage { padding: 14px 10px; }
+  .main-img { width: 92%; }
+}
+
 @media (max-width: 768px) {
     .drone-wrapper { width: 140px; margin-left: -70px; }
     @keyframes orbit-horizontal {
