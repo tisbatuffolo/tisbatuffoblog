@@ -23,6 +23,11 @@
       overflow-x: hidden;
     }
 
+    /* Prevent horizontal overflow and ensure responsive media */
+    html, body { max-width: 100%; overflow-x: hidden; touch-action: pan-y; }
+    *, *::before, *::after { box-sizing: border-box; }
+    img, video, iframe { max-width: 100%; height: auto; display: block; }
+
     /* --- HEADER --- */
     header {
       padding: 25px 10px 5px;
