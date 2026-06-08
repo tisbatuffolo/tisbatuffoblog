@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Monte Brento",
+    "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/monte-brento/343346247/",
+    "img": "https://img3.oastatic.com/img2/631417204/800x600/variant.webp?revbust=19ea2af7aa4"
+  },
+  {
     "titolo": "Toraro",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/vicenza/toraro/342790081/",
     "img": "https://img.oastatic.com/img2/630976895/800x600/variant.webp?revbust=19e8285706c"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Mostar",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/bosnia-herzegovina/mostar/339890494/",
     "img": "https://img0.oastatic.com/img2/628489321/800x600/variant.webp"
-  },
-  {
-    "titolo": "Sarajevo",
-    "link": "https://www.outdooractive.com/it/route/strada-panoramica/bosnia-herzegovina/sarajevo/339889799/",
-    "img": "https://img3.oastatic.com/img2/628489249/800x600/variant.webp"
   }
 ]
