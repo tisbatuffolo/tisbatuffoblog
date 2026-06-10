@@ -109,6 +109,7 @@ header {
     box-sizing: border-box;
     padding: 10px;
     background-color: var(--cover-base, transparent);
+    container-type: inline-size; /* Abilita Container Queries per il calcolo reattivo del testo */
 }
 .cover-883 { background: linear-gradient(135deg, var(--cover-base, var(--sbatuffo-blue)), var(--primary)); }
 .cover-cartoni { background: linear-gradient(135deg, var(--cover-base, var(--accent)), #ffb8b8); }
@@ -119,8 +120,16 @@ header {
 .cover-random3 { background: linear-gradient(135deg, var(--cover-base, #f12711), #f5af19); }
 
 .cover-text { 
-    font-family: 'Grandstander', cursive; font-weight: 900; font-size: 1.4rem; 
+    font-family: 'Grandstander', cursive; font-weight: 900;
     line-height: 1.1; color: #fff; text-shadow: 2px 2px 0 var(--stroke); text-align: center;
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    width: 100%;
+    /* Dimensione del font dinamica e adattiva in base ai caratteri e alla larghezza del box */
+    font-size: clamp(0.6rem, calc(150cqw / (var(--char-count, 8) + 3)), 1.35rem);
 }
 
 .cassette-mechanism {
@@ -318,7 +327,6 @@ footer {
     .playlist-grid { grid-template-columns: 1fr; }
     .card-content { flex-direction: row; align-items: center; gap: 12px; }
     .cover-art { width: 85px; height: 85px; padding: 5px; border-radius: 12px; }
-    .cover-text { font-size: 1.1rem; }
     .playlist-info { padding-right: 0; }
     .playlist-info h3 { font-size: 1.4rem !important; }
     .playlist-info p { font-size: 0.85rem; margin: 6px 0; }
@@ -438,9 +446,26 @@ function togglePlayerVisibility(btn) {
     if (player.style.display === "none" || player.style.display === "") {
         player.style.display = "block";
         btn.innerHTML = "Chiudi ⏹️";
-        // Attiva la rotazione delle bobine all'apertura se non è controllato da API Spotify
+        
+        // Attiva la rotazione delle bobine solo se l'iframe di terze parti ha finito il caricamento
         if (!isSpotify) {
-            reels.forEach(r => r.classList.add("spinning"));
+            const iframe = player.querySelector('iframe');
+            if (iframe) {
+                if (iframe.dataset.loaded === "true") {
+                    reels.forEach(r => r.classList.add("spinning"));
+                } else {
+                    reels.forEach(r => r.classList.remove("spinning"));
+                    iframe.onload = () => {
+                        iframe.dataset.loaded = "true";
+                        // Avvia la rotazione solo se l'utente tiene ancora aperto il player
+                        if (player.style.display === "block") {
+                            reels.forEach(r => r.classList.add("spinning"));
+                        }
+                    };
+                }
+            } else {
+                reels.forEach(r => r.classList.add("spinning"));
+            }
         }
     } else {
         player.style.display = "none";
@@ -493,7 +518,7 @@ function getOpenButtonIcon(type) {
     const icons = {
         spotify: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1DB954" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.195c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.859zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z"/></svg>`,
         youtube: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.5 6.2s-.2-1.7-.8-2.5c-.8-.9-1.7-.9-2.1-1-2-0.2-10-0.2-10-0.2s-8 0-10 .2c-.4 0-1.3.1-2.1 1-.6.8-.8 2.5-.8 2.5S0 8.9 0 11.5v1c0 2.6.2 5.3.2 5.3s.2 1.7.8 2.5c.8.9 1.8.9 2.3 1 1.7.2 10 .2 10 .2s8 0 10-.2c.4 0 1.3-.1 2.1-1 .6-.8.8-2.5.8-2.5s.2-2.7.2-5.3v-1c0-2.6-.2-5.3-.2-5.3zM9.5 15.5V8.5l6.5 3.5-6.5 3.5z"/></svg>`,
-        amazon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#FF9900"><path d="M5 6h14v2H5V6zm0 4h10v2H5v-2zm0 4h8v2H5v-2z"/></svg>`,
+        amazon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF9900" viewBox="0 0 24 24"><path d="M18.236 12.222c-.67-.423-1.63-.645-2.884-.666-1.895-.032-3.834.332-4.524 2.224-.316.866-.145 1.794.475 2.404.55.54 1.353.766 2.146.766 1.42 0 2.505-.623 3.14-1.794h.063l.232 1.321h2.247c-.243-1.396-.349-3.79-.349-5.59v-3.324c0-1.488-.349-2.731-1.696-3.414-.94-.486-2.28-.686-3.536-.686-2.246 0-4.526.496-5.466 1.406l.992 1.636c.644-.54 1.837-.992 3.444-.992 1.352 0 2.26.317 2.535 1.226.106.338.116.782.116 1.258v.486c-.739.02-2.02.095-3.234.306-2.673.465-4.537 1.658-4.537 4.19 0 2.22 1.584 3.73 3.93 3.73 1.944 0 3.355-.951 3.96-2.399h.053l.36 1.933H22c-.17-.993-.285-2.81-.285-4.81v-1.743c0-.665-.106-1.194-.285-1.636l-3.194 1.743zm-2.81 3.868c-.412.824-1.204 1.342-2.145 1.342-.877 0-1.5-.454-1.5-1.321 0-1.32 1.394-1.701 3.645-1.669v1.648zM23.013 19.96c-3.467 2.42-8.52 3.562-13.633 3.562-4.544 0-8.514-.908-11.233-2.61a.485.485 0 0 1-.043-.76c.454-.37 1.024-.265 1.491.074 2.451 1.733 6.074 2.504 10.024 2.504 4.724 0 9.424-1.12 12.513-3.38.39-.286.878-.149.88.37v.24a.48.48 0 0 1-.002.002zM21.127 18.23c-.222-.296-.91-.148-1.289-.043-.38.106-.412.338-.2.634.222.285.835.211 1.225.063.391-.148.486-.36.264-.655z"/></svg>`,
         web: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#1A1A1A"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.32 12.79l-8.07-8.07A5.99 5.99 0 0 0 12 4zm-6.32 2.21l8.07 8.07A5.99 5.99 0 0 0 12 20a8 8 0 0 1-6.32-11.79z"/></svg>`
     };
     return icons[type] || icons.web;
@@ -534,14 +559,23 @@ function getYoutubeEmbedUrl(link) {
     }
 }
 
-// Converte i link web standard di Amazon Music in sorgenti Embeddabili
+// Converte i link web standard di Amazon Music in sorgenti Embeddabili funzionanti
 function getAmazonEmbedUrl(link) {
     try {
+        if (link.includes('<iframe') && link.includes('src="')) {
+            const match = link.match(/src="([^"]+)"/);
+            if (match) return match[1];
+        }
         const url = new URL(link);
         if (url.pathname.includes('/embed/')) return link;
         
         if (url.hostname.includes('music.amazon')) {
-            return `https://${url.hostname}/embed${url.pathname}${url.search}`;
+            let path = url.pathname;
+            // Amazon embed player richiede tassativamente /playlists/ invece di /user-playlists/
+            if (path.includes('/user-playlists/')) {
+                path = path.replace('/user-playlists/', '/playlists/');
+            }
+            return `https://${url.hostname}/embed${path}${url.search}`;
         }
         return link;
     } catch(e) {
@@ -567,7 +601,6 @@ function renderPlaylists() {
 
     playlistsData.forEach((p, index) => {
         const linkType = getLinkType(p.linkSpotify);
-        // Abilitato il Preview anche per Amazon Music oltre a YouTube e Spotify
         const hasPreview = linkType === 'spotify' || linkType === 'youtube' || linkType === 'amazon';
         const previewButton = hasPreview ? `<button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>` : '';
         const openIcon = getOpenButtonIcon(linkType);
@@ -587,8 +620,8 @@ function renderPlaylists() {
         <div class="playlist-card">
             <button class="btn-edit" onclick="openEditModal(${index})" title="Modifica Cassetta">✏️</button>
             <div class="card-content">
-                <div class="cover-art ${p.stile.classe}" style="${coverStyle}">
-                    <span class="cover-text">${p.nome.substring(0, 10)}</span>
+                <div class="cover-art ${p.stile.classe}" style="${coverStyle} --char-count: ${p.nome.length};">
+                    <span class="cover-text">${p.nome}</span>
                 </div>
                 <div class="playlist-info">
                     <h3 style="font-family: 'Grandstander'; font-size: 1.5rem; margin:0; color: ${p.stile.color};">${p.nome}</h3>
