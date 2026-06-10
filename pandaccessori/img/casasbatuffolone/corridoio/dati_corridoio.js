@@ -15,5 +15,9 @@ const dati_corridoio = [
     {
         "titolo": "Pandino Sbattiporta",
         "immagine": "Pandino Sbattiporta.jpg"
+    },
+    {
+        "titolo": "Dancing Panda",
+        "immagine": "Dancing Panda.jpg"
     }
 ];
