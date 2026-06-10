@@ -99,5 +99,12 @@
       "tipo": "festa",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-06-11": [
+    {
+      "nome": "Cena con Chiara e Daniele",
+      "tipo": "cibo",
+      "ricorrenza": "singola"
+    }
   ]
 }
