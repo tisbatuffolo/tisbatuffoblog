@@ -32,7 +32,7 @@ const GIRI = [
   {
     "titolo": "Trauttsmandorff",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/meraner-land/trauttsmandorff/340903483/",
-    "img": "https://img0.oastatic.com/img2/629287051/800x600/variant.webp?revbust=19e121bce4f"
+    "img": "https://img0.oastatic.com/img2/629287051/800x600/variant.webp"
   },
   {
     "titolo": "Brione",
