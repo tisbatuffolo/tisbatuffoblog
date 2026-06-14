@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "kayak Lago della Serraia",
+    "link": "https://www.outdooractive.com/it/route/kayak/trento-monte-bondone-valle-dell-adige/kayak-lago-della-serraia/343850298/",
+    "img": "https://img.oastatic.com/img2/631846980/800x600/variant.webp?revbust=19ec1bb2005"
+  },
+  {
     "titolo": "Monte Brento",
     "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/monte-brento/343346247/",
     "img": "https://img3.oastatic.com/img2/631417204/800x600/variant.webp?revbust=19ea2af7aa4"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Brione",
     "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/brione/340259924/",
     "img": "https://img2.oastatic.com/img2/628740888/800x600/variant.webp"
-  },
-  {
-    "titolo": "Mostar",
-    "link": "https://www.outdooractive.com/it/route/percorso-urbano/bosnia-herzegovina/mostar/339890494/",
-    "img": "https://img0.oastatic.com/img2/628489321/800x600/variant.webp"
   }
 ]
