@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Ponte Tibetano di Gresta",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-fiemme/ponte-tibetano-di-gresta/343986313/",
+    "img": "https://img2.oastatic.com/img2/631917503/800x600/variant.webp?revbust=19ec76fb906"
+  },
+  {
     "titolo": "kayak Lago della Serraia",
     "link": "https://www.outdooractive.com/it/route/kayak/trento-monte-bondone-valle-dell-adige/kayak-lago-della-serraia/343850298/",
     "img": "https://img.oastatic.com/img2/631846980/800x600/variant.webp?revbust=19ec1bb2005"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Trauttsmandorff",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/meraner-land/trauttsmandorff/340903483/",
     "img": "https://img0.oastatic.com/img2/629287051/800x600/variant.webp"
-  },
-  {
-    "titolo": "Brione",
-    "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/brione/340259924/",
-    "img": "https://img2.oastatic.com/img2/628740888/800x600/variant.webp"
   }
 ]
