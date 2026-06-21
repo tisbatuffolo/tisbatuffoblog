@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Francolini",
+    "link": "https://www.outdooractive.com/it/route/escursione/altopiano-di-folgaria-lavarone-luserna/francolini/344466189/",
+    "img": "https://img1.oastatic.com/img2/632318277/800x600/variant.webp?revbust=19ee5457979"
+  },
+  {
     "titolo": "Ponte Tibetano di Gresta",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-fiemme/ponte-tibetano-di-gresta/343986313/",
     "img": "https://img2.oastatic.com/img2/631917503/800x600/variant.webp?revbust=19ec76fb906"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Castel Ivano",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/valsugana-lagorai-tesino/castel-ivano/342095184/",
     "img": "https://img3.oastatic.com/img2/630358449/800x600/variant.webp?revbust=19e5b166aa3"
-  },
-  {
-    "titolo": "Trauttsmandorff",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/meraner-land/trauttsmandorff/340903483/",
-    "img": "https://img0.oastatic.com/img2/629287051/800x600/variant.webp"
   }
 ]
