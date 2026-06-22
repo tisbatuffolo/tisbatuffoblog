@@ -109,7 +109,7 @@ header {
     box-sizing: border-box;
     padding: 10px;
     background-color: var(--cover-base, transparent);
-    container-type: inline-size; /* Abilita Container Queries per il calcolo reattivo del testo */
+    container-type: inline-size;
 }
 .cover-883 { background: linear-gradient(135deg, var(--cover-base, var(--sbatuffo-blue)), var(--primary)); }
 .cover-cartoni { background: linear-gradient(135deg, var(--cover-base, var(--accent)), #ffb8b8); }
@@ -128,7 +128,6 @@ header {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     width: 100%;
-    /* Dimensione del font dinamica e adattiva in base ai caratteri e alla larghezza del box */
     font-size: clamp(0.6rem, calc(150cqw / (var(--char-count, 8) + 3)), 1.35rem);
 }
 
@@ -273,6 +272,12 @@ header {
     text-shadow: 0 0 5px #fff, 0 0 15px #ff4757, 0 0 30px #ff4757;
 }
 
+.pass-gemboy { border-color: #d0ff01; box-shadow: 0 0 20px rgba(208, 255, 1, 0.15), inset 0 0 15px rgba(208, 255, 1, 0.1); }
+.pass-gemboy .concert-header h2 {
+    color: #fff; font-family: 'Grandstander', cursive; font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
+    text-shadow: 0 0 5px #fff, 0 0 15px #d0ff01, 0 0 30px #d0ff01;
+}
+
 .slideshow-container {
     padding: 15px 15px 5px 15px; 
     background: #1e1e1e;
@@ -360,8 +365,7 @@ footer {
 <main class="container">
   <div class="section-title">Le nostre playlist 🎵</div>
 
-  <div class="playlist-grid" id="playlist-container">
-      </div> 
+  <div class="playlist-grid" id="playlist-container"></div> 
 
   <div class="btn-add-container">
       <button id="btn-add-playlist" class="btn btn-play" style="padding: 15px 30px; font-size: 1.1rem;">
@@ -396,6 +400,19 @@ footer {
       </div>
       <div class="slideshow-container">
           <div class="slideshow" id="slideshow-cristina"></div>
+      </div>
+  </div>
+
+  <div class="concert-card pass-gemboy">
+      <div class="concert-header">
+          <div class="pass-badge">VIP - ALL ACCESS</div>
+          <h2>GemBoy</h2>
+          <div class="pass-details">
+              <span>📍 Pergine</span> • <span>📅 13 giugno 2026</span>
+          </div>
+      </div>
+      <div class="slideshow-container">
+          <div class="slideshow" id="slideshow-gemboy"></div>
       </div>
   </div>
 
@@ -441,38 +458,14 @@ function togglePlayerVisibility(btn) {
     const card = btn.closest('.playlist-card');
     const player = card.querySelector('.player-container');
     const reels = card.querySelectorAll('.reel');
-    const isSpotify = card.querySelector('.spotify-embed') !== null;
 
     if (player.style.display === "none" || player.style.display === "") {
         player.style.display = "block";
         btn.innerHTML = "Chiudi ⏹️";
-        
-        // Attiva la rotazione delle bobine solo se l'iframe di terze parti ha finito il caricamento
-        if (!isSpotify) {
-            const iframe = player.querySelector('iframe');
-            if (iframe) {
-                if (iframe.dataset.loaded === "true") {
-                    reels.forEach(r => r.classList.add("spinning"));
-                } else {
-                    reels.forEach(r => r.classList.remove("spinning"));
-                    iframe.onload = () => {
-                        iframe.dataset.loaded = "true";
-                        // Avvia la rotazione solo se l'utente tiene ancora aperto il player
-                        if (player.style.display === "block") {
-                            reels.forEach(r => r.classList.add("spinning"));
-                        }
-                    };
-                }
-            } else {
-                reels.forEach(r => r.classList.add("spinning"));
-            }
-        }
     } else {
         player.style.display = "none";
         btn.innerHTML = "Preview 🎧"; 
-        if (!isSpotify) {
-            reels.forEach(r => r.classList.remove("spinning"));
-        }
+        reels.forEach(r => r.classList.remove("spinning"));
     }
 }
 
@@ -524,15 +517,24 @@ function getOpenButtonIcon(type) {
     return icons[type] || icons.web;
 }
 
-// Estrae in modo intelligente gli ID dei video, shorts o delle playlist di YouTube
+// Estrae in modo intelligente gli ID dei video, shorts o delle playlist di YouTube abilitando le JS API
 function getYoutubeEmbedUrl(link) {
     try {
+        let resUrl = link;
         if (link.includes('<iframe') && link.includes('src="')) {
             const match = link.match(/src="([^"]+)"/);
-            if (match) return match[1].replace('youtube.com', 'youtube-nocookie.com');
+            if (match) resUrl = match[1];
         }
 
-        const url = new URL(link);
+        if (!resUrl.startsWith('http://') && !resUrl.startsWith('https://')) {
+            if (resUrl.includes('youtube.com') || resUrl.includes('youtu.be')) {
+                resUrl = 'https://' + resUrl;
+            } else {
+                return link;
+            }
+        }
+
+        const url = new URL(resUrl);
         const host = url.hostname.toLowerCase();
         let videoId = "";
         let listId = url.searchParams.get('list');
@@ -543,23 +545,32 @@ function getYoutubeEmbedUrl(link) {
             if (url.pathname.includes('/shorts/')) {
                 videoId = url.pathname.split('/shorts/')[1].split('/')[0];
             } else if (url.pathname.includes('/embed/')) {
-                return link.replace('youtube.com', 'youtube-nocookie.com');
+                videoId = url.pathname.split('/embed/')[1].split('?')[0];
             } else {
                 videoId = url.searchParams.get('v');
             }
         }
 
-        if (listId && videoId) return `https://www.youtube-nocookie.com/embed/${videoId}?list=${listId}`;
-        if (listId) return `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}`;
-        if (videoId) return `https://www.youtube-nocookie.com/embed/${videoId}`;
+        let embedBase = "";
+        if (listId && videoId) {
+            embedBase = `https://www.youtube-nocookie.com/embed/${videoId}?list=${listId}`;
+        } else if (listId) {
+            embedBase = `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}`;
+        } else if (videoId) {
+            embedBase = `https://www.youtube-nocookie.com/embed/${videoId}`;
+        } else {
+            embedBase = resUrl.replace('youtube.com', 'youtube-nocookie.com');
+        }
         
-        return link; 
+        const finalUrl = new URL(embedBase);
+        finalUrl.searchParams.set('enablejsapi', '1');
+        return finalUrl.toString();
     } catch(e) {
         return link;
     }
 }
 
-// Converte i link web standard di Amazon Music in sorgenti Embeddabili funzionanti
+// Converte i link web standard di Amazon Music (inclusi quelli con /music/player/) in sorgenti embed funzionanti
 function getAmazonEmbedUrl(link) {
     try {
         if (link.includes('<iframe') && link.includes('src="')) {
@@ -569,13 +580,25 @@ function getAmazonEmbedUrl(link) {
         const url = new URL(link);
         if (url.pathname.includes('/embed/')) return link;
         
-        if (url.hostname.includes('music.amazon')) {
+        if (url.hostname.includes('music.amazon') || url.hostname.includes('amazon.')) {
             let path = url.pathname;
+            
+            // Rimuove la sottocartella /music/player se presente nei link moderni copiati da browser/app
+            if (path.includes('/music/player')) {
+                path = path.replace('/music/player', '');
+            }
+            
             // Amazon embed player richiede tassativamente /playlists/ invece di /user-playlists/
             if (path.includes('/user-playlists/')) {
                 path = path.replace('/user-playlists/', '/playlists/');
             }
-            return `https://${url.hostname}/embed${path}${url.search}`;
+            
+            let hostname = url.hostname;
+            if (!hostname.startsWith('music.')) {
+                hostname = 'music.' + hostname;
+            }
+            
+            return `https://${hostname}/embed${path}${url.search}`;
         }
         return link;
     } catch(e) {
@@ -605,7 +628,6 @@ function renderPlaylists() {
         const previewButton = hasPreview ? `<button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>` : '';
         const openIcon = getOpenButtonIcon(linkType);
         
-        // Setup del Player HTML differenziato per sorgente
         const playerMarkup = linkType === 'spotify'
             ? `<div class="spotify-embed" data-spotify-uri="${p.uriSpotify}" id="embed-${index}"></div>`
             : linkType === 'youtube'
@@ -684,6 +706,38 @@ function initSpotifyPlayers(IFrameAPI) {
         embedElement.setAttribute('data-initialized', 'true');
     });
 }
+
+// Ascolta i messaggi postMessage inviati dall'Iframe di YouTube per far girare le rotelle solo in Play effettivo
+window.addEventListener('message', (event) => {
+    if (!event.origin.includes('youtube')) return;
+    try {
+        let data = event.data;
+        if (typeof data === 'string') {
+            data = JSON.parse(data);
+        }
+        if (data && data.event === 'infoDelivery' && data.info) {
+            const state = data.info.playerState;
+            if (state !== undefined) {
+                const iframes = document.querySelectorAll('.youtube-embed iframe');
+                iframes.forEach(iframe => {
+                    if (iframe.contentWindow === event.source) {
+                        const card = iframe.closest('.playlist-card');
+                        if (card) {
+                            const reels = card.querySelectorAll('.reel');
+                            if (state === 1) { // 1 = in riproduzione (playing)
+                                reels.forEach(r => r.classList.add("spinning"));
+                            } else { // in pausa, buffering o terminato
+                                reels.forEach(r => r.classList.remove("spinning"));
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    } catch (e) {
+        // Ignora gli errori di parsing derivati da altri tipi di messaggi sul canale postMessage
+    }
+});
 
 const modalOverlay = document.getElementById("modal-cd-overlay");
 
@@ -838,6 +892,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchPlaylists(); 
     loadConcertImages('vasco', 'slideshow-vasco');
     loadConcertImages('cristina', 'slideshow-cristina');
+    loadConcertImages('gemboy', 'slideshow-gemboy');
 });
 </script>
 
