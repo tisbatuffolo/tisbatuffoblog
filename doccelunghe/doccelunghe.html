@@ -35,7 +35,7 @@
     .brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(1.8rem, 7vw, 3.5rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
     .brand-subtitle { font-weight: 700; font-size: clamp(0.75rem, 2.5vw, 1.1rem); color: var(--theme-color); text-transform: lowercase; }
 
-    /* --- DIVISORI (Aggiornati come pandaccessori) --- */
+    /* --- DIVISORI --- */
     .section-divider {
       max-width: 200px;
       height: 3px;
@@ -128,13 +128,38 @@
     }
     canvas#docce-trend { width: 100% !important; height: auto !important; display: block; }
     
+    .message-box {
+        font-family: 'Grandstander', cursive;
+        font-weight: 900;
+        font-size: clamp(1rem, 3.5vw, 1.3rem);
+      color: var(--heart-red);
+        text-align: center;
+        margin-top: 5px;
+        line-height: 1.2;
+    }
+
+    /* Frase principale colorata in arancione */
+    #last-shower-msg { color: #ff8c00; }
+
     #trend-image { 
         display: block !important;
-        width: 100%; 
-        max-width: 280px; 
-        height: auto; 
-        object-fit: contain; 
-        margin-top: 5px;
+        width: 100%;
+        max-width: 260px;
+        height: auto;
+        object-fit: contain;
+        margin: 12px auto 0;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    @media (max-width: 800px) {
+      #trend-image { max-width: 220px; margin-top: 8px; }
+    }
+
+    @media (max-width: 800px) {
+      .main-layout { flex-direction: column; gap: 14px; }
+      .months-grid { grid-template-columns: repeat(3, 1fr); }
+      .visual-col { align-items: center; }
     }
 
     .btn-container { width: 100%; text-align: center; margin: 30px 0 40px; }
@@ -154,15 +179,15 @@
     }
     #btn-aggiungi:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--stroke); }
 
-    /* FOOTER AGGIORNATO (Stile pandaccessori) */
+    /* FOOTER */
     footer { 
-      padding: 40px 10px; /* Padding come pandaccessori */
+      padding: 40px 10px; 
       text-align: center; 
       font-family: 'Grandstander'; 
-      font-weight: 600; /* Font-weight come pandaccessori */
+      font-weight: 600; 
       color: #666; 
-      font-size: 1.1rem; /* Dimensione come pandaccessori */
-      border-top: 2px solid #eee; /* Spessore bordo come pandaccessori */
+      font-size: 1.1rem; 
+      border-top: 2px solid #eee; 
     }
     .footer-home-link { 
       text-decoration: none; 
@@ -175,7 +200,7 @@
     }
     .footer-home-link:hover { transform: scale(1.05); }
     .footer-home-link img { 
-      width: clamp(40px, 8vw, 60px); /* Grandezza immagine come pandaccessori */
+      width: clamp(40px, 8vw, 60px); 
       height: auto; 
     }
   </style>
@@ -185,7 +210,6 @@
   <header>
     <div class="header-container">
       <div>
-        <!-- Aggiunto link alla homepage su SbatuffoBlog -->
         <a href="../index.html" class="brand-title">SbatuffoBlog</a>
         <div class="brand-subtitle">doccelunghe</div>
       </div>
@@ -213,6 +237,8 @@
       </div>
     </div>
 
+    <div id="last-shower-msg" class="message-box" style="max-width:980px;margin:18px auto 8px;padding:0 16px;text-align:center;"></div>
+
     <div class="btn-container">
       <button id="btn-aggiungi">Aggiungi Doccia 🚿</button>
     </div>
@@ -232,6 +258,38 @@
     const d = new Date();
     const curY = d.getFullYear(), curM = d.getMonth() + 1;
     let dataDocce = {};
+
+    function calcolaGiorni(lastDateIso) {
+      const msgEl = document.getElementById('last-shower-msg');
+      const imgEl = document.getElementById('trend-image');
+
+      if (!lastDateIso) {
+        msgEl.textContent = "Nessuna doccia registrata!";
+        imgEl.src = "img/docciatriste.png";
+        return;
+      }
+
+      const lastD = new Date(lastDateIso);
+      const now = new Date();
+      
+      // Resetta l'orario a mezzanotte per calcolare i giorni "puliti"
+      const lastDay = new Date(lastD.getFullYear(), lastD.getMonth(), lastD.getDate());
+      const currentDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      const diffTime = Math.abs(currentDay - lastDay);
+      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) {
+        msgEl.textContent = "Che bello abbiamo fatto un'altra doccia insieme!";
+        imgEl.src = "img/docciafelice.png";
+      } else if (diffDays === 1) {
+        msgEl.textContent = "Che bello ieri abbiamo fatto una doccia insieme!";
+        imgEl.src = "img/docciafelice.png";
+      } else {
+        msgEl.textContent = `Che triste sono ${diffDays} giorni che non facciamo una doccia insieme!`;
+        imgEl.src = "img/docciatriste.png";
+      }
+    }
 
     function render() {
       const annoData = dataDocce[curY] || {};
@@ -296,9 +354,8 @@
         ctx.fillText(mesi[i].substring(0,3), x, h + p + 52);
       });
 
-      const trendImg = document.getElementById('trend-image');
-      const docceMesePrec = annoData[curM - 1] || 0;
-      trendImg.src = (annoData[curM] >= docceMesePrec) ? "img/docciafelice.png" : "img/docciatriste.png";
+      // Aggiornamento dei giorni e dell'immagine in base all'ultima doccia
+      calcolaGiorni(dataDocce.lastShowerDate);
     }
 
     fetch('docce.json').then(r => r.json()).then(d => { dataDocce = d; render(); });
@@ -307,8 +364,10 @@
       const btn = document.getElementById('btn-aggiungi');
       btn.disabled = true;
       
+      // Aggiorna visivamente istantaneamente il client
       if(!dataDocce[curY]) dataDocce[curY] = {};
       dataDocce[curY][curM] = (dataDocce[curY][curM] || 0) + 1;
+      dataDocce.lastShowerDate = new Date().toISOString(); 
       render();
 
       try {

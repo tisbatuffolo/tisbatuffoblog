@@ -50,7 +50,7 @@ export default async function handler(req, res) {
       docceData = {};
     }
 
-    // 2️⃣ Logica di incremento (ex aggiorna-docce.py)
+    // 2️⃣ Logica di incremento
     const today = new Date();
     const year = String(today.getFullYear());
     const month = String(today.getMonth() + 1);
@@ -63,6 +63,9 @@ export default async function handler(req, res) {
     }
 
     docceData[year][month] = (docceData[year][month] || 0) + 1;
+    
+    // 🔥 NUOVO: Salvataggio della data dell'ultima doccia
+    docceData["lastShowerDate"] = today.toISOString();
 
     // 3️⃣ Commit aggiornato su GitHub
     const updatedContentBase64 = Buffer.from(
