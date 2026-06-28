@@ -135,6 +135,7 @@
       margin-bottom: 18px;
       background: #fdfdfd;
       border: 1px solid #f0f0f0;
+      cursor: pointer;
     }
 
     .album-cover-wrapper img {
@@ -183,7 +184,7 @@
       transform: scale(1.05);
     }
 
-    /* --- LIGHTBOX (Visore Ottimizzato ed Elegante) --- */
+    /* --- LIGHTBOX (Visore) --- */
     .lightbox {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -370,7 +371,7 @@
     }
     
     .lightbox.is-fullscreen .slide {
-      filter: none; /* Rimuove l'ombra per immersione totale */
+      filter: none; 
     }
     
     .lightbox.is-fullscreen .lightbox-title {
@@ -378,7 +379,6 @@
       pointer-events: none;
     }
     
-    /* Adattamento bottoni tema scuro per Fullscreen */
     .lightbox.is-fullscreen .action-btn,
     .lightbox.is-fullscreen .nav-btn,
     .lightbox.is-fullscreen .slide-counter {
@@ -392,12 +392,13 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    /* Logica a "Comparsa" (Fade in/out dei controlli in Fullscreen) */
+    /* Logica a "Comparsa" (Fade in/out dei controlli) */
     .lightbox.is-fullscreen .header-controls,
     .lightbox.is-fullscreen .nav-btn,
     .lightbox.is-fullscreen .slide-counter {
       opacity: 0;
       pointer-events: none;
+      transition: opacity 0.3s ease;
     }
 
     .lightbox.show-controls .header-controls,
@@ -467,7 +468,6 @@
       .action-btn {
         width: 42px; height: 42px;
       }
-      /* Riadatta la posizione in fullscreen su mobile in modo da non sovrapporsi */
       .lightbox.is-fullscreen .nav-btn {
         bottom: 40px;
       }
@@ -495,7 +495,7 @@
 
 <main class="content">
   <section class="album-grid" id="albums-container">
-    </section>
+  </section>
 </main>
 
 <div class="section-divider" style="margin-bottom: 80px;"></div>
@@ -526,7 +526,7 @@
   
   <div class="slider-container">
     <div id="slider-images">
-      </div>
+    </div>
   </div>
   
   <button class="nav-btn prev-btn" onclick="changeSlide(-1)" aria-label="Foto precedente">&#10094;</button>
@@ -583,6 +583,39 @@
     `;
     gridContainer.appendChild(card);
     shrinkTitleToFit(card.querySelector('.album-title'));
+
+    // --- GESTIONE COPERTINA DA MOBILE (Solo tap, no interferenza con lo Scroll) ---
+    const coverWrapper = card.querySelector('.album-cover-wrapper');
+    let touchStartDistY = 0;
+    let touchStartDistX = 0;
+    let isScrollDetected = false;
+
+    coverWrapper.addEventListener('touchstart', function(e) {
+      if (window.innerWidth <= 600) {
+        touchStartDistX = e.touches[0].clientX;
+        touchStartDistY = e.touches[0].clientY;
+        isScrollDetected = false;
+      }
+    }, { passive: true });
+
+    coverWrapper.addEventListener('touchmove', function(e) {
+      if (window.innerWidth <= 600) {
+        const moveX = e.touches[0].clientX;
+        const moveY = e.touches[0].clientY;
+        // Se il dito si sposta di oltre 10 pixel, l'utente sta scrollando la griglia
+        if (Math.abs(moveX - touchStartDistX) > 10 || Math.abs(moveY - touchStartDistY) > 10) {
+          isScrollDetected = true;
+        }
+      }
+    }, { passive: true });
+
+    coverWrapper.addEventListener('touchend', function(e) {
+      if (window.innerWidth <= 600) {
+        if (!isScrollDetected) {
+          openAlbum(album.id);
+        }
+      }
+    });
   });
 
   window.addEventListener('resize', () => {
@@ -621,9 +654,10 @@
     lightbox.classList.add('show-controls');
     document.body.style.overflow = 'hidden';
     
-    // Controlla se il dispositivo è già in orizzontale all'apertura
     if (window.matchMedia("(orientation: landscape)").matches) {
       enterFullscreenCSS();
+    } else {
+      startControlsTimeout();
     }
   }
 
@@ -631,7 +665,6 @@
     lightbox.classList.remove('active');
     exitFullscreenCSS();
     
-    // Esci dal fullscreen nativo se attivo
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(e => console.log(e));
     }
@@ -646,7 +679,6 @@
     const slides = document.querySelectorAll('.slide');
     if(slides.length === 0) return;
 
-    // Logica: Se siamo in Fullscreen e swipiamo avanti dall'ultima foto, si esce dal fullscreen.
     if (direction === 1 && currentSlideIndex === currentAlbum.totalPhotos && lightbox.classList.contains('is-fullscreen')) {
         exitFullscreenCSS();
         if (document.fullscreenElement) document.exitFullscreen().catch(e => console.log(e));
@@ -664,7 +696,10 @@
     
     slides[currentSlideIndex - 1].classList.add('active');
     updateCounter();
-    resetControlsTimeout(); // Risveglia i controlli se nascosti
+    
+    // Mostra sempre i comandi al cambio foto e riavvia il timer di inattività
+    lightbox.classList.add('show-controls');
+    startControlsTimeout();
   }
 
   function updateCounter() {
@@ -688,15 +723,16 @@
 
   function enterFullscreenCSS() {
     lightbox.classList.add('is-fullscreen');
-    resetControlsTimeout();
+    lightbox.classList.add('show-controls');
+    startControlsTimeout();
   }
 
   function exitFullscreenCSS() {
     lightbox.classList.remove('is-fullscreen');
-    lightbox.classList.add('show-controls'); // Mantieni sempre visibili nella vista normale
+    lightbox.classList.add('show-controls'); 
+    clearTimeout(controlsTimeout);
   }
 
-  // Ascolta la rotazione dello schermo (Landscape)
   window.matchMedia("(orientation: landscape)").addEventListener("change", e => {
     if (lightbox.classList.contains('active')) {
       if (e.matches) {
@@ -707,35 +743,63 @@
     }
   });
 
-  // Ascolta l'uscita nativa (es. tasto ESC) per sincronizzare il CSS
   document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && lightbox.classList.contains('is-fullscreen')) {
       exitFullscreenCSS();
     }
   });
 
-  // --- GESTIONE "A COMPARSA" (Fade in/out dei comandi in Fullscreen) ---
+  // --- GESTIONE TIMEOUT "A COMPARSA" IN SCHERMO INTERO ---
   let controlsTimeout;
-  function resetControlsTimeout() {
-    lightbox.classList.add('show-controls');
+  function startControlsTimeout() {
     clearTimeout(controlsTimeout);
-    
-    // Nascondi i controlli solo se siamo in modalità fullscreen
     if (lightbox.classList.contains('is-fullscreen')) {
       controlsTimeout = setTimeout(() => {
-        if (lightbox.classList.contains('is-fullscreen')) {
-          lightbox.classList.remove('show-controls');
-        }
-      }, 3000); // Scompaiono dopo 3 secondi di inattività
+        lightbox.classList.remove('show-controls');
+      }, 3000);
     }
   }
 
-  lightbox.addEventListener('mousemove', resetControlsTimeout);
+  // Movimento mouse su desktop per svegliare i comandi
+  lightbox.addEventListener('mousemove', function() {
+    if (lightbox.classList.contains('is-fullscreen') && !lightbox.classList.contains('show-controls')) {
+      lightbox.classList.add('show-controls');
+    }
+    startControlsTimeout();
+  });
+
+  // --- INTERAZIONE CLICK / TOCCO SULLA FOTO (TOGGLE COMANDI) ---
   lightbox.addEventListener('click', function(e) {
-    resetControlsTimeout();
-    // Chiudi lightbox se si clicca sullo sfondo grigio (solo vista normale)
-    if(e.target === lightbox || e.target.id === 'slider-images') {
-      if(!lightbox.classList.contains('is-fullscreen')) {
+    // Escludi i pulsanti e le frecce per far funzionare i loro click nativi
+    if (e.target.closest('.nav-btn') || e.target.closest('.action-btn')) {
+      return;
+    }
+
+    // Se si clicca/tocca sulla foto stessa (.slide), inverti lo stato di visibilità dei comandi
+    if (e.target.classList.contains('slide')) {
+      if (lightbox.classList.contains('show-controls')) {
+        lightbox.classList.remove('show-controls');
+        clearTimeout(controlsTimeout);
+      } else {
+        lightbox.classList.add('show-controls');
+        startControlsTimeout();
+      }
+      return;
+    }
+
+    // Se si tocca lo sfondo vuoto o il contenitore
+    if (e.target === lightbox || e.target.id === 'slider-images' || e.target.classList.contains('slider-container')) {
+      if (lightbox.classList.contains('is-fullscreen')) {
+        // In Schermo Intero anche lo sfondo fa il toggle dei comandi
+        if (lightbox.classList.contains('show-controls')) {
+          lightbox.classList.remove('show-controls');
+          clearTimeout(controlsTimeout);
+        } else {
+          lightbox.classList.add('show-controls');
+          startControlsTimeout();
+        }
+      } else {
+        // Nella visualizzazione standard, cliccare lo sfondo chiude il visore
         closeLightbox();
       }
     }
@@ -748,7 +812,6 @@
 
   lightbox.addEventListener('touchstart', e => {
     touchStartX = e.changedTouches[0].screenX;
-    resetControlsTimeout(); // Risveglia i controlli al tocco
   }, {passive: true});
 
   lightbox.addEventListener('touchend', e => {
@@ -760,9 +823,9 @@
     let diff = touchStartX - touchEndX;
     if (Math.abs(diff) > SWIPE_THRESHOLD) {
       if (diff > 0) {
-        changeSlide(1); // Swipe sinistra -> Prossima
+        changeSlide(1); 
       } else {
-        changeSlide(-1); // Swipe destra -> Precedente
+        changeSlide(-1); 
       }
     }
   }
@@ -770,7 +833,6 @@
   // Comandi da Tastiera
   document.addEventListener('keydown', function(e) {
     if(!lightbox.classList.contains('active')) return;
-    resetControlsTimeout();
     if(e.key === 'ArrowRight') changeSlide(1);
     if(e.key === 'ArrowLeft') changeSlide(-1);
     if(e.key === 'Escape') closeLightbox();
