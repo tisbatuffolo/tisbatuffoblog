@@ -70,6 +70,11 @@
       "nome": "Max Pezzali",
       "tipo": "festa",
       "ricorrenza": "singola"
+    },
+    {
+      "nome": "Abano mate",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
     }
   ],
   "2026-05-08": [
@@ -104,6 +109,41 @@
     {
       "nome": "Cena con Chiara e Daniele",
       "tipo": "cibo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-07-31": [
+    {
+      "nome": "Fullin",
+      "tipo": "evento",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-07-18": [
+    {
+      "nome": "Tarzaning",
+      "tipo": "giretto",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-07-10": [
+    {
+      "nome": "Abano mare",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-07-11": [
+    {
+      "nome": "Abano mare",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-07-12": [
+    {
+      "nome": "Abano mare",
+      "tipo": "girolungo",
       "ricorrenza": "singola"
     }
   ]

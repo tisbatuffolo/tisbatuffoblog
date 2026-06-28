@@ -32,16 +32,16 @@ const GIRI = [
   {
     "titolo": "Giardino Europa",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/giardino-europa/342097007/",
-    "img": "https://img.oastatic.com/img2/630359005/800x600/variant.webp?revbust=19e5b243cdc"
+    "img": "https://img.oastatic.com/img2/630359005/800x600/variant.webp"
   },
   {
     "titolo": "Monte Lefre",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/monte-lefre/342096060/",
-    "img": "https://img2.oastatic.com/img2/630358593/800x600/variant.webp?revbust=19e5b1ba4e8"
+    "img": "https://img2.oastatic.com/img2/630358593/800x600/variant.webp"
   },
   {
     "titolo": "Castel Ivano",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/valsugana-lagorai-tesino/castel-ivano/342095184/",
-    "img": "https://img3.oastatic.com/img2/630358449/800x600/variant.webp?revbust=19e5b166aa3"
+    "img": "https://img3.oastatic.com/img2/630358449/800x600/variant.webp"
   }
 ]
