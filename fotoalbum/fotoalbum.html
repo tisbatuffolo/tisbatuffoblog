@@ -196,7 +196,7 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.4s ease, background-color 0.4s ease;
     }
 
     .lightbox.active {
@@ -214,6 +214,7 @@
       align-items: center;
       z-index: 1020;
       gap: 20px;
+      transition: all 0.3s ease;
     }
 
     .lightbox-title {
@@ -230,10 +231,16 @@
       opacity: 0.5;
       letter-spacing: 0.5px;
       user-select: none;
+      transition: opacity 0.3s ease;
     }
 
-    .close-btn {
-      font-size: 1.8rem;
+    .header-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .action-btn {
       color: var(--heart-red);
       background: #fff;
       width: 50px; height: 50px;
@@ -243,12 +250,18 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-      transition: transform 0.2s, background-color 0.2s;
+      transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
       flex-shrink: 0;
       border: 1.5px solid var(--light-blue-border);
     }
+    
+    .action-btn svg {
+      width: 22px; height: 22px;
+    }
 
-    .close-btn:hover { 
+    .action-btn.close-btn { font-size: 1.8rem; }
+
+    .action-btn:hover { 
       transform: scale(1.1); 
       background: #fff0f0;
     }
@@ -262,6 +275,7 @@
       align-items: center;
       justify-content: center;
       margin-top: 40px;
+      transition: all 0.4s ease;
     }
 
     #slider-images {
@@ -278,11 +292,10 @@
       top: 0; left: 0;
       width: 100%; height: 100%;
       object-fit: contain;
-      /* Doppio Drop-shadow: micro-bordo per staccare dal bianco + ombra diffusa per la profondità */
       filter: drop-shadow(0 0 2px rgba(0,0,0,0.12)) drop-shadow(0 15px 35px rgba(0,0,0,0.15));
       opacity: 0;
       transform: scale(0.96);
-      transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s ease;
       pointer-events: none;
     }
 
@@ -333,7 +346,67 @@
       border-radius: 50px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.06);
       border: 1.5px solid var(--light-blue-border);
+      transition: all 0.3s ease;
+      z-index: 1010;
     }
+
+    /* --- MODALITÀ SCHERMO INTERO (FULLSCREEN) --- */
+    .lightbox.is-fullscreen {
+      background-color: #000;
+      backdrop-filter: none;
+    }
+    
+    .lightbox.is-fullscreen .lightbox-header {
+      top: 15px;
+      width: 95%;
+      max-width: 100%;
+    }
+    
+    .lightbox.is-fullscreen .slider-container {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      margin-top: 0;
+    }
+    
+    .lightbox.is-fullscreen .slide {
+      filter: none; /* Rimuove l'ombra per immersione totale */
+    }
+    
+    .lightbox.is-fullscreen .lightbox-title {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    /* Adattamento bottoni tema scuro per Fullscreen */
+    .lightbox.is-fullscreen .action-btn,
+    .lightbox.is-fullscreen .nav-btn,
+    .lightbox.is-fullscreen .slide-counter {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .lightbox.is-fullscreen .action-btn:hover,
+    .lightbox.is-fullscreen .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Logica a "Comparsa" (Fade in/out dei controlli in Fullscreen) */
+    .lightbox.is-fullscreen .header-controls,
+    .lightbox.is-fullscreen .nav-btn,
+    .lightbox.is-fullscreen .slide-counter {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .lightbox.show-controls .header-controls,
+    .lightbox.show-controls .nav-btn,
+    .lightbox.show-controls .slide-counter {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
 
     /* --- FOOTER --- */
     footer { 
@@ -370,7 +443,7 @@
     @media (max-width: 600px) {
       .slider-container {
         height: 52vh;
-        width: 94%;
+        width: 100%;
       }
       .nav-btn {
         width: 46px; height: 46px;
@@ -390,6 +463,16 @@
       }
       .lightbox-header {
         top: 15px;
+      }
+      .action-btn {
+        width: 42px; height: 42px;
+      }
+      /* Riadatta la posizione in fullscreen su mobile in modo da non sovrapporsi */
+      .lightbox.is-fullscreen .nav-btn {
+        bottom: 40px;
+      }
+      .lightbox.is-fullscreen .slide-counter {
+        bottom: 100px;
       }
     }
   </style>
@@ -431,7 +514,14 @@
 <div class="lightbox" id="lightbox">
   <div class="lightbox-header">
     <div class="lightbox-title" id="lb-title">Titolo Album</div>
-    <div class="close-btn" onclick="closeLightbox()">✕</div>
+    <div class="header-controls">
+      <div class="action-btn" onclick="toggleFullscreen()" title="Schermo Intero">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+      </div>
+      <div class="action-btn close-btn" onclick="closeLightbox()" title="Chiudi">✕</div>
+    </div>
   </div>
   
   <div class="slider-container">
@@ -454,8 +544,7 @@
       folderPath: "img/2018 - Il nostro primo anno insieme/", 
       extension: ".png",
       totalPhotos: 13
-    }
-    ,
+    },
     {
       id: "album_2019",
       title: "2019 - il nostro secondo anno insieme",
@@ -468,7 +557,6 @@
   // --- GENERATORE CARD ---
   const gridContainer = document.getElementById('albums-container');
 
-  // Riduce dinamicamente la dimensione del titolo finché non entra in una singola riga
   function shrinkTitleToFit(el, minSize = 9) {
     if (!el) return;
     el.style.whiteSpace = 'nowrap';
@@ -494,20 +582,17 @@
       </button>
     `;
     gridContainer.appendChild(card);
-    // Applica l'adattamento del titolo subito dopo l'inserimento
     shrinkTitleToFit(card.querySelector('.album-title'));
   });
 
-  // Riappllica l'adattamento al ridimensionamento della finestra
   window.addEventListener('resize', () => {
     document.querySelectorAll('.album-title').forEach(el => {
-      // Reset a dimensione base prima di ricalcolare
       if (el.dataset.baseFontSize) el.style.fontSize = el.dataset.baseFontSize + 'px';
       shrinkTitleToFit(el);
     });
   });
 
-  // --- CONTROLLO VISORE LIGHTBOX ---
+  // --- CONTROLLO VISORE LIGHTBOX E FULLSCREEN ---
   let currentAlbum = null;
   let currentSlideIndex = 1;
   const lightbox = document.getElementById('lightbox');
@@ -533,11 +618,24 @@
     
     updateCounter();
     lightbox.classList.add('active');
+    lightbox.classList.add('show-controls');
     document.body.style.overflow = 'hidden';
+    
+    // Controlla se il dispositivo è già in orizzontale all'apertura
+    if (window.matchMedia("(orientation: landscape)").matches) {
+      enterFullscreenCSS();
+    }
   }
 
   function closeLightbox() {
     lightbox.classList.remove('active');
+    exitFullscreenCSS();
+    
+    // Esci dal fullscreen nativo se attivo
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(e => console.log(e));
+    }
+    
     document.body.style.overflow = '';
     setTimeout(() => {
       sliderImagesContainer.innerHTML = '';
@@ -547,6 +645,13 @@
   function changeSlide(direction) {
     const slides = document.querySelectorAll('.slide');
     if(slides.length === 0) return;
+
+    // Logica: Se siamo in Fullscreen e swipiamo avanti dall'ultima foto, si esce dal fullscreen.
+    if (direction === 1 && currentSlideIndex === currentAlbum.totalPhotos && lightbox.classList.contains('is-fullscreen')) {
+        exitFullscreenCSS();
+        if (document.fullscreenElement) document.exitFullscreen().catch(e => console.log(e));
+        return; 
+    }
 
     slides[currentSlideIndex - 1].classList.remove('active');
     
@@ -559,20 +664,113 @@
     
     slides[currentSlideIndex - 1].classList.add('active');
     updateCounter();
+    resetControlsTimeout(); // Risveglia i controlli se nascosti
   }
 
   function updateCounter() {
     slideCounter.innerText = `Foto ${currentSlideIndex} di ${currentAlbum.totalPhotos} 🐼`;
   }
 
-  lightbox.addEventListener('click', function(e) {
-    if(e.target === lightbox || e.target.classList.contains('slider-container') || e.target.id === 'slider-images') {
-      closeLightbox();
+  // --- LOGICA FULLSCREEN E ORIENTAMENTO ---
+  function toggleFullscreen() {
+    if (!lightbox.classList.contains('is-fullscreen')) {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(e => console.log(e));
+      }
+      enterFullscreenCSS();
+    } else {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(e => console.log(e));
+      }
+      exitFullscreenCSS();
+    }
+  }
+
+  function enterFullscreenCSS() {
+    lightbox.classList.add('is-fullscreen');
+    resetControlsTimeout();
+  }
+
+  function exitFullscreenCSS() {
+    lightbox.classList.remove('is-fullscreen');
+    lightbox.classList.add('show-controls'); // Mantieni sempre visibili nella vista normale
+  }
+
+  // Ascolta la rotazione dello schermo (Landscape)
+  window.matchMedia("(orientation: landscape)").addEventListener("change", e => {
+    if (lightbox.classList.contains('active')) {
+      if (e.matches) {
+        enterFullscreenCSS();
+      } else {
+        exitFullscreenCSS();
+      }
     }
   });
 
+  // Ascolta l'uscita nativa (es. tasto ESC) per sincronizzare il CSS
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && lightbox.classList.contains('is-fullscreen')) {
+      exitFullscreenCSS();
+    }
+  });
+
+  // --- GESTIONE "A COMPARSA" (Fade in/out dei comandi in Fullscreen) ---
+  let controlsTimeout;
+  function resetControlsTimeout() {
+    lightbox.classList.add('show-controls');
+    clearTimeout(controlsTimeout);
+    
+    // Nascondi i controlli solo se siamo in modalità fullscreen
+    if (lightbox.classList.contains('is-fullscreen')) {
+      controlsTimeout = setTimeout(() => {
+        if (lightbox.classList.contains('is-fullscreen')) {
+          lightbox.classList.remove('show-controls');
+        }
+      }, 3000); // Scompaiono dopo 3 secondi di inattività
+    }
+  }
+
+  lightbox.addEventListener('mousemove', resetControlsTimeout);
+  lightbox.addEventListener('click', function(e) {
+    resetControlsTimeout();
+    // Chiudi lightbox se si clicca sullo sfondo grigio (solo vista normale)
+    if(e.target === lightbox || e.target.id === 'slider-images') {
+      if(!lightbox.classList.contains('is-fullscreen')) {
+        closeLightbox();
+      }
+    }
+  });
+
+  // --- LOGICA SWIPE PER MOBILE ---
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const SWIPE_THRESHOLD = 40;
+
+  lightbox.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    resetControlsTimeout(); // Risveglia i controlli al tocco
+  }, {passive: true});
+
+  lightbox.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, {passive: true});
+
+  function handleSwipe() {
+    let diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > SWIPE_THRESHOLD) {
+      if (diff > 0) {
+        changeSlide(1); // Swipe sinistra -> Prossima
+      } else {
+        changeSlide(-1); // Swipe destra -> Precedente
+      }
+    }
+  }
+
+  // Comandi da Tastiera
   document.addEventListener('keydown', function(e) {
     if(!lightbox.classList.contains('active')) return;
+    resetControlsTimeout();
     if(e.key === 'ArrowRight') changeSlide(1);
     if(e.key === 'ArrowLeft') changeSlide(-1);
     if(e.key === 'Escape') closeLightbox();
