@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Kayak Senaiga",
+    "link": "https://www.outdooractive.com/it/route/kayak/belluno/kayak-senaiga/345130302/",
+    "img": "https://img2.oastatic.com/img2/632808338/800x600/variant.webp?revbust=19f0f726e26"
+  },
+  {
     "titolo": "Francolini",
     "link": "https://www.outdooractive.com/it/route/escursione/altopiano-di-folgaria-lavarone-luserna/francolini/344466189/",
     "img": "https://img1.oastatic.com/img2/632318277/800x600/variant.webp?revbust=19ee5457979"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Monte Lefre",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/monte-lefre/342096060/",
     "img": "https://img2.oastatic.com/img2/630358593/800x600/variant.webp"
-  },
-  {
-    "titolo": "Castel Ivano",
-    "link": "https://www.outdooractive.com/it/route/percorso-urbano/valsugana-lagorai-tesino/castel-ivano/342095184/",
-    "img": "https://img3.oastatic.com/img2/630358449/800x600/variant.webp"
   }
 ]
