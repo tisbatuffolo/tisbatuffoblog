@@ -72,7 +72,7 @@
       "ricorrenza": "singola"
     },
     {
-      "nome": "Abano mate",
+      "nome": "Abano mare",
       "tipo": "girolungo",
       "ricorrenza": "singola"
     }
@@ -144,6 +144,13 @@
     {
       "nome": "Abano mare",
       "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-07-25": [
+    {
+      "nome": "Bobby",
+      "tipo": "compleanno",
       "ricorrenza": "singola"
     }
   ]
