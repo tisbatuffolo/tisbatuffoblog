@@ -32,7 +32,7 @@ const GIRI = [
   {
     "titolo": "Lago di Ledro",
     "link": "https://www.outdooractive.com/it/route/nuoto/garda-trentino/lago-di-ledro/342709933/",
-    "img": "https://img0.oastatic.com/img2/630911706/800x600/variant.webp?revbust=19e7e1f99af"
+    "img": "https://img0.oastatic.com/img2/630911706/800x600/variant.webp"
   },
   {
     "titolo": "Giardino Europa",
