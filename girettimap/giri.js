@@ -27,7 +27,7 @@ const GIRI = [
   {
     "titolo": "Toraro",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/vicenza/toraro/342790081/",
-    "img": "https://img.oastatic.com/img2/630976895/800x600/variant.webp?revbust=19e8285706c"
+    "img": "https://img.oastatic.com/img2/630976895/800x600/variant.webp"
   },
   {
     "titolo": "Lago di Ledro",
