@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Corno Bianco di Sarentino",
+    "link": "https://www.outdooractive.com/it/route/escursione/alto-adige/corno-bianco-di-sarentino/345689343/",
+    "img": "https://img3.oastatic.com/img2/633316134/800x600/variant.webp?revbust=19f3310b3ba"
+  },
+  {
     "titolo": "Kayak Senaiga",
     "link": "https://www.outdooractive.com/it/route/kayak/belluno/kayak-senaiga/345130302/",
     "img": "https://img2.oastatic.com/img2/632808338/800x600/variant.webp?revbust=19f0f726e26"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Giardino Europa",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/giardino-europa/342097007/",
     "img": "https://img.oastatic.com/img2/630359005/800x600/variant.webp"
-  },
-  {
-    "titolo": "Monte Lefre",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/valsugana-lagorai-tesino/monte-lefre/342096060/",
-    "img": "https://img2.oastatic.com/img2/630358593/800x600/variant.webp"
   }
 ]
