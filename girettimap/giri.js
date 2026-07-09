@@ -27,7 +27,7 @@ const GIRI = [
   {
     "titolo": "Monte Brento",
     "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/monte-brento/343346247/",
-    "img": "https://img3.oastatic.com/img2/631417204/800x600/variant.webp?revbust=19ea2af7aa4"
+    "img": "https://img3.oastatic.com/img2/631417204/800x600/variant.webp"
   },
   {
     "titolo": "Toraro",
