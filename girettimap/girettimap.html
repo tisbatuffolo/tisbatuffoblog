@@ -413,6 +413,17 @@
     }
     .legend-item strong { font-weight: 700; } 
 
+    .comparison-category-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 400;
+      font-size: 0.8em;
+      color: #111;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
     .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
     .filter-area {
@@ -587,6 +598,7 @@
       align-items: stretch;
       gap: 10px;
       min-height: 48px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .li-testo {
@@ -598,12 +610,13 @@
     }
 
     .li-icon {
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       flex-shrink: 0;
       object-fit: contain;
       align-self: center;
       display: block;
+      transform: scale(1.50);
     }
 
     /* --- MEDIA QUERIES --- */
@@ -985,11 +998,25 @@ function gestisciClickLegenda(categoria) {
   }
 }
 
+function getColorForCategoria(categoria) {
+  if (!chartTortaObj || !chartTortaObj.data || !Array.isArray(chartTortaObj.data.labels)) {
+    return 'var(--color-theme)';
+  }
+
+  const index = chartTortaObj.data.labels.indexOf(categoria);
+  return index >= 0 ? paletteColori[index % paletteColori.length] : 'var(--color-theme)';
+}
+
 // Genera e mostra i dettagli dei giri nel modale
 function apriModaleDettaglio(categoria, anno) {
   const dettagli = datiPerAnno[anno] ? datiPerAnno[anno].giriDettagli[categoria] : [];
+  const modalTitolo = document.getElementById('modal-titolo');
+  const coloreCategoria = getColorForCategoria(categoria);
+  const modalLista = document.getElementById('modal-lista');
   
-  document.getElementById('modal-titolo').innerText = `Dettaglio ${categoria} (${dettagli ? dettagli.length : 0}) - ${anno}`;
+  modalTitolo.innerText = `Dettaglio ${categoria} (${dettagli ? dettagli.length : 0}) - ${anno}`;
+  modalTitolo.style.backgroundColor = coloreCategoria;
+  modalTitolo.style.color = '#111';
   
   let html = '';
   if (dettagli && dettagli.length > 0) {
@@ -998,7 +1025,7 @@ function apriModaleDettaglio(categoria, anno) {
       let dateHtml = giro.dataStr ? `<span style="display: block; font-size: 0.85em; color: var(--main-blue); font-weight: bold; margin-bottom: 4px;">📅 ${giro.dataStr}</span>` : '';
       let amiciIcon = giro.amici ? `<img src="img/giriamici.png" class="li-icon" alt="Giro con amici" title="Giro con amici">` : '';
       
-      html += `<li>
+      html += `<li style="border-color: ${coloreCategoria}; border-left-color: ${coloreCategoria}; box-shadow: 0 0 0 1px ${coloreCategoria}22;">
                  <div class="li-testo">${dateHtml}${giro.dove}</div>
                  ${amiciIcon}
                </li>`;
@@ -1008,7 +1035,7 @@ function apriModaleDettaglio(categoria, anno) {
     html += `<p style="text-align: center; color: #777; font-family: 'Fredoka', sans-serif;">Nessun giro trovato.</p>`;
   }
   
-  document.getElementById('modal-lista').innerHTML = html;
+  modalLista.innerHTML = html;
   modal.style.display = "flex";
 }
 
@@ -1044,7 +1071,7 @@ function aggiornaSezioneConfronto(selectedAnni) {
     <table id="tabella-confronto">
       <thead>
         <tr class="header-row">
-          <th style="text-align: left; padding-left: 20px; width: 40%;">Tipologia</th>`;
+          <th style="text-align: left; padding-left: 20px; width: 40%;">Tipo Giretto</th>`;
   
   const anniOrdinatiDecrescente = [...selectedAnni].sort((a, b) => b - a);
   const colWidth = Math.floor(60 / anniOrdinatiDecrescente.length); // Sarà sempre 30%
@@ -1058,8 +1085,9 @@ function aggiornaSezioneConfronto(selectedAnni) {
       <tbody>`;
   
   categorieOrdinate.forEach((cat) => {
+    const coloreCat = getColorForCategoria(cat);
     html += `<tr>
-      <td style="text-align: left; padding-left: 20px; font-weight: 700;">${cat}</td>`;
+      <td style="text-align: left; padding-left: 20px; font-weight: 700;"><span class="comparison-category-badge" style="background-color: ${coloreCat};">${cat}</span></td>`;
     
     anniOrdinatiDecrescente.forEach(anno => {
       const count = (datiPerAnno[anno] && datiPerAnno[anno].tipi[cat]) || 0;
