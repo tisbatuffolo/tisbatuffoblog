@@ -278,6 +278,12 @@ header {
     text-shadow: 0 0 5px #fff, 0 0 15px #d0ff01, 0 0 30px #d0ff01;
 }
 
+.pass-max { border-color: #0145ff; box-shadow: 0 0 20px rgba(208, 255, 1, 0.15), inset 0 0 15px rgba(208, 255, 1, 0.1); }
+.pass-max .concert-header h2 {
+    color: #fff; font-family: 'Grandstander', cursive; font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
+    text-shadow: 0 0 5px #fff, 0 0 15px #0145ff, 0 0 30px #0145ff;
+}
+
 .slideshow-container {
     padding: 15px 15px 5px 15px; 
     background: #1e1e1e;
@@ -413,6 +419,19 @@ footer {
       </div>
       <div class="slideshow-container">
           <div class="slideshow" id="slideshow-gemboy"></div>
+      </div>
+  </div>
+
+    <div class="concert-card pass-max">
+      <div class="concert-header">
+          <div class="pass-badge">VIP - ALL ACCESS</div>
+          <h2>Max Pezzali</h2>
+          <div class="pass-details">
+              <span>📍 Padova</span> • <span>📅 09 luglio 2026</span>
+          </div>
+      </div>
+      <div class="slideshow-container">
+          <div class="slideshow" id="slideshow-max"></div>
       </div>
   </div>
 
@@ -893,6 +912,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadConcertImages('vasco', 'slideshow-vasco');
     loadConcertImages('cristina', 'slideshow-cristina');
     loadConcertImages('gemboy', 'slideshow-gemboy');
+    loadConcertImages('max', 'slideshow-max');
 });
 </script>
 

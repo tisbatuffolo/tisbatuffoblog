@@ -17,7 +17,7 @@
       --light-blue-border: #bde0fe;
       --bg-soft: #fdfdfd;
       --heart-red: #ff4d4d;
-      --color-theme: #5eb5ff; /* Colore "Giretti" salvato come variabile principale */
+      --color-theme: #5eb5ff;
     }
 
     body {
@@ -49,7 +49,7 @@
       align-items: center;
       gap: 30px;
       position: relative;
-      min-height: 100px; /* Assicura altezza per allineamento */
+      min-height: 100px;
     }
 
     .brand-title {
@@ -74,15 +74,15 @@
 
     /* --- DIVISORI CON CUORICINO --- */
     .section-divider {
-      width: 100%; /* Fix per flex child (1° separatore) che collassava a 0 di larghezza */
-      max-width: 200px; /* Leggermente più largo per visibilità */
+      width: 100%;
+      max-width: 200px;
       height: 3px;
-      background: linear-gradient(to right, var(--color-theme) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--color-theme) calc(50% + 30px) 100%); /* Linee del divisorio con color-theme */
+      background: linear-gradient(to right, var(--color-theme) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--color-theme) calc(50% + 30px) 100%);
       margin: 40px auto;
       border-radius: 50px;
       position: relative;
       clear: both;
-      display: block; /* Garantisce il rendering */
+      display: block;
     }
     .section-divider::after {
       content: "♥";
@@ -120,7 +120,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-wrap: wrap; /* Adattabile su mobile */
+      flex-wrap: wrap;
       gap: 6px;
     }
 
@@ -139,7 +139,7 @@
     }
 
     .footer-link img {
-      width: clamp(40px, 8vw, 50px); /* Ottimizzato in proporzione al testo */
+      width: clamp(40px, 8vw, 50px);
       height: auto;
       object-fit: contain;
     }
@@ -182,9 +182,7 @@
     }
     .link-box:hover { transform: translateY(-5px); }
     
-    /* Colore Rosso Pastello Tenue */
     .link-box.map-box { background-color: #fff0f0; border-color: #ffdada; } 
-    /* Colore Verde Pastello Tenue */
     .link-box.list-box { background-color: #f0fff4; border-color: #dcfce7;}
 
     .link-box a {
@@ -217,7 +215,7 @@
 
     .riquadro {
       background: #fff;
-      border: 3px solid var(--color-theme); /* Contorno card con color-theme */
+      border: 3px solid var(--color-theme);
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 6px 15px rgba(0,0,0,0.08);
@@ -239,7 +237,7 @@
       font-weight: 600; 
       text-align: center; 
       color: #000; 
-      background: var(--color-theme); /* Sfondo titolo card con color-theme */
+      background: var(--color-theme);
       font-size: 1.2em;
       letter-spacing: 1px;
       word-wrap: break-word;
@@ -270,9 +268,10 @@
     .table-container-wrapper {
       width: 100%;
       margin: 0 auto;
+      overflow-x: auto; 
     }
 
-    table#tabella-giri {
+    table#tabella-giri, table#tabella-confronto {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
@@ -281,6 +280,7 @@
       overflow: hidden;
       box-shadow: 0 10px 25px rgba(26,50,120,0.15);
       margin-bottom: 20px;
+      min-width: 300px;
     }
 
     .icon-row td {
@@ -298,7 +298,6 @@
       margin: 0 auto;
     }
 
-    /* Header tabella con sfumatura basata su color-theme */
     .header-row {
       background: linear-gradient(90deg, #3db0ff, var(--color-theme), #8dd0ff, var(--color-theme), #3db0ff); 
     }
@@ -315,20 +314,20 @@
       border: none;
     }
 
-    #tabella-giri td {
+    #tabella-giri td, #tabella-confronto td {
       padding: 12px 2px;
       text-align: center;
       border-bottom: 1px solid #eee;
       font-family: 'Fredoka', sans-serif;
       font-size: clamp(0.9em, 3vw, 1.1em);
-      font-weight: 400; /* Tolto grassetto */
+      font-weight: 400; 
       color: #222;
     }
 
-    #tabella-giri tbody tr:nth-child(even) { background-color: #f4f8ff; }
-    #tabella-giri tbody tr:hover { background-color: var(--light-blue-border); transition: background 0.2s ease; }
+    #tabella-giri tbody tr:nth-child(even), #tabella-confronto tbody tr:nth-child(even) { background-color: #f4f8ff; }
+    #tabella-giri tbody tr:hover, #tabella-confronto tbody tr:hover { background-color: var(--light-blue-border); transition: background 0.2s ease; }
 
-    /* --- GRAFICI --- */
+    /* --- GRAFICI E TORTA --- */
     .charts-vertical-stack { margin-bottom: 20px; }
     
     .chart-wrapper { 
@@ -362,7 +361,6 @@
 
     .legend-badge.hidden { opacity: 0.2; background-color: #ddd !important; color: #888; }
 
-    /* --- TORTA --- */
     .torta-container {
       background: #fff;
       padding: 25px 15px;
@@ -373,17 +371,28 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 30px;
+      margin-top: 20px;
     }
     
     .torta-container h3 {
       font-family: 'Grandstander', cursive;
       color: #000;
-      font-size: 1.5em; /* Rimpicciolito rispetto a h2 */
+      font-size: 1.5em; 
       margin-top: 0;
+      margin-bottom: 5px;
     }
 
-    .torta-wrapper { width: 100%; max-width: 300px; height: 300px; } /* Leggermente più piccola */
+    .torta-subtitle {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.9em;
+      color: #555;
+      text-align: center;
+      margin: 0 0 20px 0;
+      line-height: 1.4;
+      max-width: 600px;
+    }
+
+    .torta-wrapper { width: 100%; max-width: 300px; height: 300px; cursor: pointer; } 
 
     #grid-legend {
       display: grid;
@@ -400,9 +409,9 @@
         display: flex; 
         align-items: center; 
         gap: 8px; 
-        font-weight: 400; /* Tolto grassetto */
+        font-weight: 400; 
     }
-    .legend-item strong { font-weight: 700; } /* Solo i numeri in grassetto */
+    .legend-item strong { font-weight: 700; } 
 
     .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
@@ -419,12 +428,34 @@
       padding: 6px 12px;
       border-radius: 15px;
       font-size: 0.9em;
-      font-weight: normal; /* Tolto grassetto dalle label anni */
+      font-weight: normal; 
       display: flex;
       align-items: center;
       gap: 5px;
       cursor: pointer;
       border: 1px solid var(--light-blue-border);
+    }
+
+    /* --- CONFRONTO --- */
+    .confronto-container {
+      background: #fff;
+      padding: 25px 15px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      width: 100%;
+      box-sizing: border-box;
+      display: none; /* Nascosto rigorosamente di default */
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    
+    .confronto-container h3 {
+      font-family: 'Grandstander', cursive;
+      color: #000;
+      font-size: 1.5em; 
+      margin-top: 0;
+      margin-bottom: 10px;
     }
 
     .footer-banner {
@@ -444,9 +475,140 @@
       font-size: clamp(1.5em, 5vw, 2.2em);
     }
 
+    /* --- MODALE DETTAGLIO GIRI (Nuova UI) --- */
+    .modal {
+      display: none; 
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5); 
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(3px); 
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh; 
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border: 4px solid var(--color-theme);
+      animation: modalFadeIn 0.3s;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--light-blue-border);
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+
+    .modal-titolo-box {
+      background: var(--color-theme);
+      padding: 8px 15px;
+      border-radius: 15px;
+      font-family: 'Grandstander', cursive;
+      font-weight: 900;
+      font-size: clamp(1em, 4vw, 1.2em);
+      color: #000;
+      margin: 0;
+      flex: 1;
+      text-align: center;
+    }
+
+    .close-btn {
+      background: #f0f0f0;
+      color: #555;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid #ddd;
+      margin-left: 15px;
+      flex-shrink: 0;
+    }
+
+    .close-btn:hover, .close-btn:focus {
+      background: var(--heart-red);
+      color: #fff;
+      border-color: var(--heart-red);
+      text-decoration: none;
+    }
+
+    #modal-lista-container {
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    #modal-lista ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Struttura Riga Modale per ospitare il testo a sinistra e l'icona a destra */
+    #modal-lista li {
+      background: #fdfdfd;
+      padding: 12px 15px;
+      border-radius: 12px;
+      border: 2px solid var(--light-blue-border);
+      border-left: 6px solid var(--color-theme);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95em;
+      color: #333;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 10px;
+      min-height: 48px;
+    }
+
+    .li-testo {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      word-break: break-word;
+      text-align: left;
+    }
+
+    .li-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      object-fit: contain;
+      align-self: center;
+      display: block;
+    }
+
     /* --- MEDIA QUERIES --- */
     @media (max-width: 1200px) {
-      .grid-riquadri, #contagiri, .chart-wrapper { max-width: 980px; }
+      .grid-riquadri, #contagiri, .chart-wrapper, .confronto-container { max-width: 980px; }
     }
 
     @media (max-width: 900px) {
@@ -459,8 +621,19 @@
         padding-right: 5px !important;
       }
       .grid-riquadri { grid-template-columns: 1fr; }
+
+      #modal-lista li {
+        align-items: center;
+        min-height: 52px;
+      }
+
+      .li-icon {
+        width: 40px;
+        height: 40px;
+      }
       .icon-row img { max-width: 75px; }
       #grid-legend { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .modal-content { padding: 15px; }
     }
   </style>
 </head>
@@ -536,11 +709,10 @@
 
     <div class="torta-container">
       <h3>Torta dei Giretti 🍰</h3>
+      <p class="torta-subtitle">Seleziona gli anni per vedere la torta dei giretti. Selezionando un anno singolo, vedi il dettaglio dalla fetta della torta. Seleziona due anni e confronta i giretti nella sezione sotto!</p>
+      
       <div class="filter-area">
-        <div class="anno-item">
-          <input type="checkbox" id="selectAll" checked>
-          <label for="selectAll">TUTTI</label>
-        </div>
+        <!-- Rimosso il tasto TUTTI, inseriti solo i singoli anni -->
         <div id="lista-checkbox-anni" style="display: contents;"></div>
       </div>
       <div class="torta-wrapper">
@@ -548,7 +720,31 @@
       </div>
       <div id="grid-legend"></div>
     </div>
+
+    <!-- Divisore dinamico: scompare se si vedono 2 anni -->
+    <div class="section-divider" id="divisore-pre-confronto"></div>
+
+    <div class="confronto-container" id="sezione-confronto">
+      <h3>Confronta Giri 🔍</h3>
+      <div id="confronto-risultati" style="width: 100%;"></div>
+    </div>
+
+    <div class="section-divider" id="divisore-post-confronto" style="display: none;"></div>
+
   </section>
+
+  <!-- MODALE PER DETTAGLIO GIRI -->
+  <div id="modal-dettaglio" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div id="modal-titolo" class="modal-titolo-box"></div>
+        <div class="close-btn" aria-label="Chiudi modale">&times;</div>
+      </div>
+      <div id="modal-lista-container">
+        <div id="modal-lista"></div>
+      </div>
+    </div>
+  </div>
 
   <div class="footer-banner">
     <h2>Solo posti nuovi e tutti giri belli!</h2>
@@ -570,7 +766,6 @@
 <script src="giri.js"></script>
 
 <script>
-// Logica JavaScript invariata per mantenere funzionalità
 const container = document.getElementById("contenitore-giri");
 if (typeof GIRI !== 'undefined') {
   GIRI.slice(0, 9).forEach(giro => {
@@ -589,8 +784,29 @@ let datiPerAnno = {};
 let chartTortaObj = null;
 const paletteColori = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'];
 
+// Logica per il Modale
+const modal = document.getElementById("modal-dettaglio");
+const btnCloseModal = document.querySelector(".close-btn");
+
+btnCloseModal.onclick = function() { modal.style.display = "none"; }
+window.onclick = function(event) { if (event.target === modal) { modal.style.display = "none"; } }
+
 function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
 function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
+
+// Funzione di formattazione data in GG/MM/ANNO
+function formattaData(str) {
+  if (!str) return "";
+  const parts = str.split("/");
+  if (parts.length === 3) {
+    if (parts[0].length === 4) { 
+      return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+    } else { 
+      return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+    }
+  }
+  return str;
+}
 
 async function init() {
   const anniOrdinati = Object.keys(SHEETS).sort((a, b) => a - b);
@@ -602,23 +818,46 @@ async function init() {
       const res = await fetch(BASE_CSV + SHEETS[anno]);
       const csv = await res.text();
       const rows = parseCSV(csv).slice(1);
-      let tot = rows.length, giretti = 0, lunghi = 0, amici = 0, tipi = {};
+      let tot = rows.length, giretti = 0, lunghi = 0, amici = 0, tipi = {}, giriDettagli = {};
+      
       rows.forEach(r => {
-        const giorni = r[2], amiciCol = (r[3] || "").toUpperCase(), tipo = (r[6] || "Altro").trim() || "Altro";
+        const dataOriginale = (r[0] || "").trim();
+        const dove = (r[1] || "").trim();
+        const giorni = r[2];
+        const amiciCol = (r[3] || "").toUpperCase().trim(); 
+        const tipo = (r[6] || "Altro").trim() || "Altro";
+        
+        const hasAmici = amiciCol === "SI";
+
         tipi[tipo] = (tipi[tipo] || 0) + 1;
+        
+        // Salvataggio per il modale: Luogo, Data Formattata e Flag Amici
+        if (!giriDettagli[tipo]) giriDettagli[tipo] = [];
+        if (dove) giriDettagli[tipo].push({
+          dove: dove,
+          dataStr: formattaData(dataOriginale),
+          amici: hasAmici
+        });
+        
         if (giorni === "1" || giorni === "1/2") giretti++; else if (parseFloat(giorni) > 1) lunghi++;
-        if (amiciCol === "SI") amici++;
-        if (r[0]) { const d = parseDate(r[0]); if (!ultimaData || d > ultimaData) ultimaData = d; }
+        if (hasAmici) amici++;
+        if (dataOriginale) { const d = parseDate(dataOriginale); if (!ultimaData || d > ultimaData) ultimaData = d; }
       });
-      datiPerAnno[anno] = { tot, giretti, lunghi, amici, tipi };
+      datiPerAnno[anno] = { tot, giretti, lunghi, amici, tipi, giriDettagli };
     } catch (e) { console.error(e); }
   }));
+
+  const masterItem = document.createElement("div");
+  masterItem.className = "anno-item";
+  masterItem.innerHTML = `<input type="checkbox" class="anno-cb anno-master-cb" checked id="cb-tutti"><label for="cb-tutti">TUTTI</label>`;
+  containerAnni.appendChild(masterItem);
 
   anniOrdinati.slice().reverse().forEach(anno => {
     if(datiPerAnno[anno]) {
       const item = document.createElement("div");
       item.className = "anno-item";
-      item.innerHTML = `<input type="checkbox" class="anno-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
+      // Lasciamo spuntati di default per mostrare la torta globale all'inizio
+      item.innerHTML = `<input type="checkbox" class="anno-cb anno-year-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
       containerAnni.appendChild(item);
     }
   });
@@ -634,13 +873,27 @@ async function init() {
   });
 
   renderTrend(summary);
+  aggiornaStatoMaster();
   updateTorta();
   
-  document.querySelectorAll('.anno-cb').forEach(cb => cb.addEventListener('change', updateTorta));
-  document.getElementById('selectAll').addEventListener('change', (e) => {
-    document.querySelectorAll('.anno-cb').forEach(cb => cb.checked = e.target.checked);
-    updateTorta();
+  // Event Listener per riaggiornare la torta e il confronto
+  document.querySelectorAll('.anno-year-cb').forEach(cb => {
+    cb.addEventListener('change', () => {
+      aggiornaStatoMaster();
+      updateTorta();
+    });
   });
+
+  const masterCb = document.querySelector('.anno-master-cb');
+  if (masterCb) {
+    masterCb.addEventListener('change', () => {
+      document.querySelectorAll('.anno-year-cb').forEach(cb => {
+        cb.checked = masterCb.checked;
+      });
+      aggiornaStatoMaster();
+      updateTorta();
+    });
+  }
 
   if (ultimaData) {
     const diff = Math.floor((new Date().setHours(0,0,0,0) - new Date(ultimaData).setHours(0,0,0,0)) / 86400000);
@@ -652,28 +905,175 @@ async function init() {
   }
 }
 
+function aggiornaStatoMaster() {
+  const anniCheckboxes = Array.from(document.querySelectorAll('.anno-year-cb'));
+  const masterCb = document.querySelector('.anno-master-cb');
+  if (!masterCb || anniCheckboxes.length === 0) return;
+
+  const checkedCount = anniCheckboxes.filter(cb => cb.checked).length;
+  masterCb.checked = checkedCount === anniCheckboxes.length;
+  masterCb.indeterminate = checkedCount > 0 && checkedCount < anniCheckboxes.length;
+}
+
 function updateTorta() {
-  const selectedAnni = Array.from(document.querySelectorAll('.anno-cb:checked')).map(cb => cb.value);
+  const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
   let aggregatoTipi = {};
+  
   selectedAnni.forEach(anno => {
     if(datiPerAnno[anno]) {
       const tipi = datiPerAnno[anno].tipi;
       for (let t in tipi) { aggregatoTipi[t] = (aggregatoTipi[t] || 0) + tipi[t]; }
     }
   });
+  
   const labels = Object.keys(aggregatoTipi), valori = Object.values(aggregatoTipi);
   const ctx = document.getElementById('chartTorta').getContext('2d');
+  
   if (chartTortaObj) chartTortaObj.destroy();
+  
   chartTortaObj = new Chart(ctx, {
     type: 'pie',
     data: { labels: labels, datasets: [{ data: valori, backgroundColor: paletteColori, borderWidth: 1 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    options: { 
+      responsive: true, 
+      maintainAspectRatio: false, 
+      plugins: { 
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let label = context.label || '';
+              if (label) { label += ': '; }
+              if (context.parsed !== null) { label += context.parsed; }
+              
+              const selAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+              if (selAnni.length === 1) {
+                label += ' (Clicca per dettagli)';
+              }
+              return label;
+            }
+          }
+        }
+      },
+      onClick: (event, elements) => {
+        if (elements && elements.length > 0) {
+          const index = elements[0].index;
+          const label = chartTortaObj.data.labels[index];
+          gestisciClickLegenda(label);
+        }
+      }
+    }
   });
+  
   const legendGrid = document.getElementById('grid-legend');
   legendGrid.innerHTML = '';
   labels.forEach((l, i) => {
-    legendGrid.innerHTML += `<div class="legend-item"><div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div><span>${l}: <strong>${valori[i]}</strong></span></div>`;
+    legendGrid.innerHTML += `<div class="legend-item" style="cursor: pointer;" onclick="gestisciClickLegenda('${l}')">
+      <div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div>
+      <span>${l}: <strong>${valori[i]}</strong></span>
+    </div>`;
   });
+
+  // Aggiorna la visibilità di Confronta Giri 
+  aggiornaSezioneConfronto(selectedAnni);
+}
+
+function gestisciClickLegenda(categoria) {
+  const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+  if (selectedAnni.length === 1) {
+    apriModaleDettaglio(categoria, selectedAnni[0]);
+  }
+}
+
+// Genera e mostra i dettagli dei giri nel modale
+function apriModaleDettaglio(categoria, anno) {
+  const dettagli = datiPerAnno[anno] ? datiPerAnno[anno].giriDettagli[categoria] : [];
+  
+  document.getElementById('modal-titolo').innerText = `Dettaglio ${categoria} (${dettagli ? dettagli.length : 0}) - ${anno}`;
+  
+  let html = '';
+  if (dettagli && dettagli.length > 0) {
+    html += `<ul>`;
+    dettagli.forEach(giro => {
+      let dateHtml = giro.dataStr ? `<span style="display: block; font-size: 0.85em; color: var(--main-blue); font-weight: bold; margin-bottom: 4px;">📅 ${giro.dataStr}</span>` : '';
+      let amiciIcon = giro.amici ? `<img src="img/giriamici.png" class="li-icon" alt="Giro con amici" title="Giro con amici">` : '';
+      
+      html += `<li>
+                 <div class="li-testo">${dateHtml}${giro.dove}</div>
+                 ${amiciIcon}
+               </li>`;
+    });
+    html += `</ul>`;
+  } else {
+    html += `<p style="text-align: center; color: #777; font-family: 'Fredoka', sans-serif;">Nessun giro trovato.</p>`;
+  }
+  
+  document.getElementById('modal-lista').innerHTML = html;
+  modal.style.display = "flex";
+}
+
+// Visualizza il confronto rigorosamente SOLO se si selezionano 2 anni (e toglie il divisore)
+function aggiornaSezioneConfronto(selectedAnni) {
+  const containerSezione = document.getElementById('sezione-confronto');
+  const containerRisultati = document.getElementById('confronto-risultati');
+  const divisore = document.getElementById('divisore-pre-confronto');
+  
+  const divisorePost = document.getElementById('divisore-post-confronto');
+
+  if (selectedAnni.length === 2) {
+    containerSezione.style.display = 'flex';
+    divisore.style.display = 'none'; // Nascondi divisore sopra per fondere le sezioni
+    divisorePost.style.display = 'block'; // Mostra divisore sotto il confronto
+  } else {
+    containerSezione.style.display = 'none';
+    divisore.style.display = 'block'; // Ripristina divisore normale
+    divisorePost.style.display = 'none';
+    containerRisultati.innerHTML = "";
+    return;
+  }
+  
+  let tutteLeCategorie = new Set();
+  selectedAnni.forEach(anno => {
+    if (datiPerAnno[anno]) {
+      Object.keys(datiPerAnno[anno].tipi).forEach(cat => tutteLeCategorie.add(cat));
+    }
+  });
+  const categorieOrdinate = Array.from(tutteLeCategorie).sort();
+  
+  let html = `<div class="table-container-wrapper" style="margin-top: 15px;">
+    <table id="tabella-confronto">
+      <thead>
+        <tr class="header-row">
+          <th style="text-align: left; padding-left: 20px; width: 40%;">Tipologia</th>`;
+  
+  const anniOrdinatiDecrescente = [...selectedAnni].sort((a, b) => b - a);
+  const colWidth = Math.floor(60 / anniOrdinatiDecrescente.length); // Sarà sempre 30%
+  
+  anniOrdinatiDecrescente.forEach(anno => {
+    html += `<th style="width: ${colWidth}%;">${anno}</th>`;
+  });
+  
+  html += `</tr>
+      </thead>
+      <tbody>`;
+  
+  categorieOrdinate.forEach((cat) => {
+    html += `<tr>
+      <td style="text-align: left; padding-left: 20px; font-weight: 700;">${cat}</td>`;
+    
+    anniOrdinatiDecrescente.forEach(anno => {
+      const count = (datiPerAnno[anno] && datiPerAnno[anno].tipi[cat]) || 0;
+      html += `<td>${count}</td>`;
+    });
+    
+    html += `</tr>`;
+  });
+  
+  html += `</tbody>
+    </table>
+  </div>`;
+  
+  containerRisultati.innerHTML = html;
 }
 
 function renderTrend(data) {
