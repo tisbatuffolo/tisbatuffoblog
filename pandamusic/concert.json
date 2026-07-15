@@ -5,7 +5,18 @@
     "location": "Trento",
     "date": "20 maggio 2022",
     "color": "#01f9a6",
-    "images": []
+    "images": [
+      "img/concerto_1/concerto_1 (1).jpg",
+      "img/concerto_1/concerto_1 (2).jpg",
+      "img/concerto_1/concerto_1 (3).jpg",
+      "img/concerto_1/concerto_1 (4).jpg",
+      "img/concerto_1/concerto_1 (5).jpg",
+      "img/concerto_1/concerto_1 (6).jpg",
+      "img/concerto_1/concerto_1 (7).jpg",
+      "img/concerto_1/concerto_1 (8).jpg",
+      "img/concerto_1/concerto_1 (9).jpg",
+      "img/concerto_1/concerto_1 (10).jpg"
+    ]
   },
   {
     "id": "concerto_2",
@@ -13,7 +24,10 @@
     "location": "Bussolengo",
     "date": "30 giugno 2023",
     "color": "#ff4757",
-    "images": []
+    "images": [
+      "img/concerto_2/concerto_2 (1).jpg",
+      "img/concerto_2/concerto_2 (2).jpg"
+    ]
   },
   {
     "id": "concerto_3",
@@ -21,14 +35,27 @@
     "location": "Pergine",
     "date": "13 giugno 2026",
     "color": "#d0ff01",
-    "images": []
+    "images": [
+      "img/concerto_3/concerto_3 (1).jpg",
+      "img/concerto_3/concerto_3 (2).jpg",
+      "img/concerto_3/concerto_3 (3).jpg"
+    ]
   },
   {
     "id": "concerto_4",
     "title": "Max Pezzali",
     "location": "Padova",
     "date": "09 luglio 2026",
-    "color": "#0145ff",
-    "images": []
+    "color": "#000f63",
+    "images": [
+      "img/concerto_4/concerto_4 (1).jpg",
+      "img/concerto_4/concerto_4 (2).jpg",
+      "img/concerto_4/concerto_4 (3).jpg",
+      "img/concerto_4/concerto_4 (4).jpg",
+      "img/concerto_4/concerto_4 (5).jpg",
+      "img/concerto_4/concerto_4 (6).jpg",
+      "img/concerto_4/concerto_4 (7).jpg",
+      "img/concerto_4/concerto_4 (8).jpg"
+    ]
   }
 ]
