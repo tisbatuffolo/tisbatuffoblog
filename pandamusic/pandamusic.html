@@ -1019,18 +1019,27 @@ document.getElementById("btn-concert-delete").onclick = async () => {
 };
 
 // --- LOGICA PLAYLIST ---
+function setReelsState(card, isPlaying) {
+    const reels = card.querySelectorAll('.reel');
+    reels.forEach(reel => {
+        if (isPlaying) {
+            reel.classList.add('spinning');
+        } else {
+            reel.classList.remove('spinning');
+        }
+    });
+}
+
 function togglePlayerVisibility(btn) {
     const card = btn.closest('.playlist-card');
     const player = card.querySelector('.player-container');
-    const reels = card.querySelectorAll('.reel');
     
     if (player.style.display === "none" || player.style.display === "") {
         player.style.display = "block"; 
         btn.innerHTML = "Chiudi ⏹️";
     } else {
         player.style.display = "none"; 
-        btn.innerHTML = "Preview 🎧"; 
-        reels.forEach(r => r.classList.remove("spinning"));
+        btn.innerHTML = "Preview 🎧";
     }
 }
 
@@ -1226,25 +1235,29 @@ function initSpotifyPlayers(IFrameAPI) {
 }
 
 window.addEventListener('message', (event) => {
-    if (!event.origin.includes('youtube')) return;
-    try { 
-        let data = event.data; 
-        if (typeof data === 'string') data = JSON.parse(data);
-        if (data && data.event === 'infoDelivery' && data.info && data.info.playerState !== undefined) {
-            document.querySelectorAll('.youtube-embed iframe').forEach(iframe => {
-                if (iframe.contentWindow === event.source) {
-                    const card = iframe.closest('.playlist-card'); 
-                    if (card) {
-                        const reels = card.querySelectorAll('.reel');
-                        if (data.info.playerState === 1) {
-                            reels.forEach(r => r.classList.add("spinning")); 
-                        } else {
-                            reels.forEach(r => r.classList.remove("spinning"));
-                        }
-                    }
-                }
-            });
+    const origin = event.origin || '';
+    if (!origin.includes('youtube') && !origin.includes('youtu.be')) return;
+    try {
+        let data = event.data;
+        if (typeof data === 'string') {
+            try {
+                data = JSON.parse(data);
+            } catch (e) {
+                return;
+            }
         }
+
+        const playerState = data?.info?.playerState ?? data?.playerState ?? data?.data;
+        if (playerState === undefined) return;
+
+        document.querySelectorAll('.youtube-embed iframe').forEach(iframe => {
+            if (iframe.contentWindow === event.source) {
+                const card = iframe.closest('.playlist-card');
+                if (card) {
+                    setReelsState(card, playerState === 1);
+                }
+            }
+        });
     } catch (e) {}
 });
 

@@ -112,7 +112,8 @@
     .album-card {
       background: #fff;
       border-radius: 24px;
-      border: 2px solid var(--light-blue-border);
+      /* Modifica: Contorno giallo applicato alla card esterna */
+      border: 3px solid var(--primary);
       padding: 20px;
       box-shadow: 0 10px 20px rgba(0,0,0,0.03);
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s;
@@ -134,6 +135,7 @@
       overflow: hidden;
       margin-bottom: 18px;
       background: #fdfdfd;
+      /* Modifica: Ripristinato il bordo originale per la copertina */
       border: 1px solid #f0f0f0;
       cursor: pointer;
     }
@@ -296,7 +298,7 @@
       filter: drop-shadow(0 0 2px rgba(0,0,0,0.12)) drop-shadow(0 15px 35px rgba(0,0,0,0.15));
       opacity: 0;
       transform: scale(0.96);
-      transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s ease;
+      transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.8s ease;
       pointer-events: none;
     }
 
@@ -514,6 +516,16 @@
   <div class="lightbox-header">
     <div class="lightbox-title" id="lb-title">Titolo Album</div>
     <div class="header-controls">
+      <div class="action-btn" onclick="togglePlay()" title="Riproduzione Automatica (Play/Pausa)">
+        <svg id="play-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+        </svg>
+        <svg id="pause-icon" style="display: none;" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="4" width="4" height="16" fill="currentColor"></rect>
+          <rect x="14" y="4" width="4" height="16" fill="currentColor"></rect>
+        </svg>
+      </div>
+      
       <div class="action-btn" onclick="toggleFullscreen()" title="Schermo Intero">
         <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
@@ -551,8 +563,7 @@
       extension: ".png",
       totalPhotos: 14
     },
-
-      {
+    {
       id: "album_2020",
       title: "2020 - il nostro terzo anno insieme",
       folderPath: "img/2020 - il nostro terzo anno insieme/",
@@ -615,11 +626,9 @@
       }
     }, { passive: true });
 
-    // Rimosso il "{ passive: true }" da qui per permettere il preventDefault()
     coverWrapper.addEventListener('touchend', function(e) {
       if (window.innerWidth <= 600) {
         if (!isCardScrollDetected) {
-          // Previene il 'click fantasma' generato da browser mobile, mantenendo aperti i controlli!
           if (e.cancelable) e.preventDefault(); 
           openAlbum(album.id);
         }
@@ -637,17 +646,19 @@
   // --- CONTROLLO VISORE LIGHTBOX E FULLSCREEN ---
   let currentAlbum = null;
   let currentSlideIndex = 1;
-  let controlsTimeout = null; // Gestore del timer di scomparsa automatica
+  let controlsTimeout = null; 
+  
+  // Variabili Slideshow
+  let isPlaying = false;
+  let slideshowInterval = null;
   
   const lightbox = document.getElementById('lightbox');
   const sliderImagesContainer = document.getElementById('slider-images');
   const lbTitle = document.getElementById('lb-title');
   const slideCounter = document.getElementById('slide-counter');
 
-  // Funzioni per la gestione dei 3 secondi di scomparsa automatica (SOLO MOBILE)
   function startControlsTimeout() {
     clearControlsTimeout();
-    // Il timer si attiva SOLO su mobile e SOLO se i controlli sono attualmente visibili
     if (window.innerWidth <= 600 && lightbox.classList.contains('show-controls')) {
       controlsTimeout = setTimeout(() => {
         lightbox.classList.remove('show-controls');
@@ -662,9 +673,52 @@
     }
   }
 
+  // --- LOGICA SLIDESHOW ---
+  function togglePlay() {
+    if (isPlaying) {
+      stopSlideshow();
+    } else {
+      startSlideshow();
+    }
+  }
+
+  function startSlideshow() {
+    isPlaying = true;
+    document.getElementById('play-icon').style.display = 'none';
+    document.getElementById('pause-icon').style.display = 'block';
+    
+    // Entra in fullscreen automaticamente se non ci siamo
+    if (!lightbox.classList.contains('is-fullscreen')) {
+        toggleFullscreen();
+    }
+
+    // Passa immediatamente alla foto successiva non appena clicchi play
+    changeSlide(1);
+
+    // Inizia l'intervallo automatico ogni 5 secondi
+    slideshowInterval = setInterval(() => {
+        changeSlide(1);
+    }, 5000); 
+  }
+
+  function stopSlideshow() {
+    isPlaying = false;
+    document.getElementById('play-icon').style.display = 'block';
+    document.getElementById('pause-icon').style.display = 'none';
+    
+    if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+    }
+  }
+
+
   function openAlbum(albumId) {
     currentAlbum = albums.find(a => a.id === albumId);
     currentSlideIndex = 1;
+    
+    // Assicurati che lo slideshow sia fermo alla nuova apertura
+    stopSlideshow();
     
     lbTitle.innerText = currentAlbum.title;
     sliderImagesContainer.innerHTML = '';
@@ -681,11 +735,9 @@
     updateCounter();
     lightbox.classList.add('active');
     
-    // I comandi sono subito visibili all'apertura
     lightbox.classList.add('show-controls');
     document.body.style.overflow = 'hidden';
     
-    // Al primo accesso entra SUBITO in modalità schermo intero (se supportato dal browser)
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen().then(() => {
          const activeImg = document.querySelector('.slide.active');
@@ -693,14 +745,13 @@
       }).catch(e => console.log("Fullscreen automatico bloccato dal browser:", e));
     }
     
-    // Applica subito le classi CSS del fullscreen
     enterFullscreenCSS();
-
-    // Avvia il timer di scomparsa (agirà solo se siamo su mobile)
     startControlsTimeout();
   }
 
   function closeLightbox() {
+    stopSlideshow(); // Stoppa lo slideshow se in riproduzione
+    
     lightbox.classList.remove('active');
     exitFullscreenCSS();
     
@@ -718,13 +769,23 @@
     const slides = document.querySelectorAll('.slide');
     if(slides.length === 0) return;
 
-    // Se siamo a schermo intero e stiamo andando avanti dall'ultima foto
-    if (direction === 1 && currentSlideIndex === currentAlbum.totalPhotos && lightbox.classList.contains('is-fullscreen')) {
-        exitFullscreenCSS();
-        if (document.fullscreenElement) {
-            document.exitFullscreen().catch(e => console.log(e));
+    let isWrapping = false; // Indica se stiamo tornando alla prima foto dopo l'ultima
+
+    // Se stiamo andando avanti dall'ultima foto (Fine Album)
+    if (direction === 1 && currentSlideIndex === currentAlbum.totalPhotos) {
+        isWrapping = true;
+        
+        if (isPlaying) {
+            stopSlideshow(); // Ferma la riproduzione automatica
         }
-        // Il codice continua a procedere qua sotto, cambiando così alla foto 1.
+        
+        // Esci dallo schermo intero
+        if (lightbox.classList.contains('is-fullscreen')) {
+            exitFullscreenCSS();
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(e => console.log(e));
+            }
+        }
     }
 
     slides[currentSlideIndex - 1].classList.remove('active');
@@ -740,9 +801,14 @@
     newActiveSlide.classList.add('active');
     updateCounter();
     
-    // Se i comandi sono visibili, resettiamo il timer di inattività (solo su mobile agirà)
-    if (lightbox.classList.contains('show-controls')) {
-      startControlsTimeout();
+    if (isWrapping) {
+        // Se siamo appena tornati alla prima foto dopo l'ultima:
+        // Mostriamo i comandi in alto e BLOCHIAMO il timer, così restano visibili.
+        lightbox.classList.add('show-controls');
+        clearControlsTimeout();
+    } else if (lightbox.classList.contains('show-controls')) {
+        // Altrimenti gestiamo il timer normalmente
+        startControlsTimeout();
     }
     
     lockOrientationBasedOnImage(newActiveSlide);
@@ -822,7 +888,6 @@
     }
   });
 
-
   // --- LOGICA SWIPE PER MOBILE & TOGGLE COMANDI ---
   let touchStartX = 0;
   let touchStartY = 0;
@@ -860,12 +925,10 @@
     }
   }, {passive: true});
 
-
   // --- INTERAZIONE CLICK / TOCCO SULLA FOTO (TOGGLE COMANDI) ---
   lightbox.addEventListener('click', function(e) {
     if (isSwiping) return;
 
-    // Escludi bottoni e frecce dalla logica del toggle generico dello sfondo
     if (e.target.closest('.nav-btn') || e.target.closest('.action-btn')) {
       return;
     }
@@ -874,10 +937,8 @@
         
       if (lightbox.classList.contains('is-fullscreen') || window.innerWidth <= 600 || e.target.classList.contains('slide')) {
           
-          // TOGGLE ESPLICITO
           lightbox.classList.toggle('show-controls');
           
-          // Se mostro i comandi, avvio il timer di scomparsa (che agirà solo su mobile)
           if (lightbox.classList.contains('show-controls')) {
             startControlsTimeout();
           } else {
@@ -891,7 +952,7 @@
     }
   });
 
-  // Comandi da Tastiera
+  // --- Comandi da Tastiera ---
   document.addEventListener('keydown', function(e) {
     if(!lightbox.classList.contains('active')) return;
     if(e.key === 'ArrowRight') changeSlide(1);
