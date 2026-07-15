@@ -10,13 +10,13 @@
 
 <style>
 :root {
-  --primary: #ffcbfe; 
-  --sbatuffo-blue: #0000ff; 
-  --accent: #ff4757;
-  --bg-soft: #fdfdfd;
-  --text: #1a1a1a;
-  --stroke: #1a1a1a;
-  --heart-red: #ff4d4d;
+    --primary: #ffcbfe; 
+    --sbatuffo-blue: #0000ff; 
+    --accent: #ff4757;
+    --bg-soft: #fdfdfd;
+    --text: #1a1a1a;
+    --stroke: #1a1a1a;
+    --heart-red: #ff4d4d;
 }
 
 body { 
@@ -33,6 +33,7 @@ header {
     padding: 25px 15px 15px; 
     text-align: center; 
 }
+
 .header-container { 
     display: flex; 
     justify-content: center; 
@@ -41,20 +42,72 @@ header {
     max-width: 900px;
     margin: 0 auto;
 }
+
 .brand-wrapper {
     text-align: center;
 }
-.brand-title { font-family: 'Grandstander', cursive; font-weight: 900; font-size: clamp(2rem, 6vw, 4.2rem); color: var(--sbatuffo-blue); text-decoration: none; line-height: 1; }
-.brand-subtitle { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--primary); font-weight: 700; margin-top: 5px; text-transform: lowercase; }
+
+.brand-title { 
+    font-family: 'Grandstander', cursive; 
+    font-weight: 900; 
+    font-size: clamp(2rem, 6vw, 4.2rem); 
+    color: var(--sbatuffo-blue); 
+    text-decoration: none; 
+    line-height: 1; 
+}
+
+.brand-subtitle { 
+    font-size: clamp(0.9rem, 3vw, 1.2rem); 
+    color: var(--primary); 
+    font-weight: 700; 
+    margin-top: 5px; 
+    text-transform: lowercase; 
+}
 
 /* --- DIVISORE --- */
-.section-divider { max-width: 200px; height: 3px; background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%); margin: 30px auto; border-radius: 50px; position: relative; }
-.section-divider::after { content: "♥"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: transparent; padding: 0 15px; color: var(--heart-red); font-size: 1.5rem; }
+.section-divider { 
+    max-width: 200px; 
+    height: 3px; 
+    background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%); 
+    margin: 30px auto; 
+    border-radius: 50px; 
+    position: relative; 
+}
 
-.divider-concerti { margin-top: 80px; margin-bottom: 50px; }
+.section-divider::after { 
+    content: "♥"; 
+    position: absolute; 
+    top: -14px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: transparent; 
+    padding: 0 15px; 
+    color: var(--heart-red); 
+    font-size: 1.5rem; 
+}
 
-.container { width: 100%; max-width: 900px; margin: 0 auto; padding: 15px; box-sizing: border-box; min-height: 50vh; }
-.section-title { font-family: 'Grandstander', cursive; font-size: 1.9rem; font-weight: 900; margin: 20px 0 30px 0; border-left: 6px solid var(--primary); padding-left: 12px; }
+.divider-concerti { 
+    margin-top: 80px; 
+    margin-bottom: 50px; 
+}
+
+.container { 
+    width: 100%; 
+    max-width: 900px; 
+    margin: 0 auto; 
+    padding: 15px; 
+    box-sizing: border-box; 
+    min-height: 50vh; 
+}
+
+.section-title { 
+    font-family: 'Grandstander', cursive; 
+    font-size: 1.9rem; 
+    font-weight: 900; 
+    margin: 20px 0 30px 0; 
+    border-left: 6px solid var(--primary); 
+    padding-left: 12px; 
+}
 
 /* --- GRIGLIA PLAYLIST --- */
 .playlist-grid {
@@ -76,9 +129,19 @@ header {
     flex-direction: column;
 }
 
-/* Tasto Modifica (Matita) */
-.btn-edit {
+/* Tasti Modifica Generici */
+.btn-edit, .btn-edit-concert {
     position: absolute;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.15s;
+    z-index: 20;
+    padding: 0;
+}
+
+.btn-edit {
     top: 15px;
     right: 15px;
     background: #fff;
@@ -86,31 +149,37 @@ header {
     border-radius: 50%;
     width: 38px;
     height: 38px;
-    cursor: pointer;
     font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     box-shadow: 3px 3px 0 var(--stroke);
-    transition: 0.15s;
-    z-index: 10;
-    padding: 0;
 }
-.btn-edit:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0 var(--stroke); }
 
-.card-content { display: flex; gap: 20px; align-items: center; }
+.btn-edit:active, .btn-edit-concert:active { 
+    transform: translate(3px, 3px); 
+    box-shadow: 0px 0px 0 transparent !important; 
+}
+
+.card-content { 
+    display: flex; 
+    gap: 20px; 
+    align-items: center; 
+}
 
 .cover-art {
-    width: 110px; height: 110px;
+    width: 110px; 
+    height: 110px;
     border: 3px solid var(--stroke);
     border-radius: 18px;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-shrink: 0;
     position: relative;
     box-sizing: border-box;
     padding: 10px;
     background-color: var(--cover-base, transparent);
     container-type: inline-size;
 }
+
 .cover-883 { background: linear-gradient(135deg, var(--cover-base, var(--sbatuffo-blue)), var(--primary)); }
 .cover-cartoni { background: linear-gradient(135deg, var(--cover-base, var(--accent)), #ffb8b8); }
 .cover-gemboy { background: linear-gradient(135deg, var(--cover-base, #636c00), #d0ff01); }
@@ -120,8 +189,12 @@ header {
 .cover-random3 { background: linear-gradient(135deg, var(--cover-base, #f12711), #f5af19); }
 
 .cover-text { 
-    font-family: 'Grandstander', cursive; font-weight: 900;
-    line-height: 1.1; color: #fff; text-shadow: 2px 2px 0 var(--stroke); text-align: center;
+    font-family: 'Grandstander', cursive; 
+    font-weight: 900;
+    line-height: 1.1; 
+    color: #fff; 
+    text-shadow: 2px 2px 0 var(--stroke); 
+    text-align: center;
     word-break: break-word;
     overflow: hidden;
     display: -webkit-box;
@@ -132,79 +205,254 @@ header {
 }
 
 .cassette-mechanism {
-    background: #e0e0e0; border: 3px solid var(--stroke); border-radius: 15px;
-    margin-top: 15px; padding: 12px; display: flex; justify-content: center; gap: 60px;
+    background: #e0e0e0; 
+    border: 3px solid var(--stroke); 
+    border-radius: 15px;
+    margin-top: 15px; 
+    padding: 12px; 
+    display: flex; 
+    justify-content: center; 
+    gap: 60px;
     box-shadow: inset 0 4px 8px rgba(0,0,0,0.1);
 }
-.reel { width: 45px; height: 45px; background: #222; border-radius: 50%; border: 4px solid #555; position: relative; }
+
+.reel { 
+    width: 45px; 
+    height: 45px; 
+    background: #222; 
+    border-radius: 50%; 
+    border: 4px solid #555; 
+    position: relative; 
+}
+
 .reel::after {
-    content: ''; position: absolute; width: 100%; height: 100%;
+    content: ''; 
+    position: absolute; 
+    width: 100%; 
+    height: 100%;
     background: repeating-conic-gradient(from 0deg, transparent 0deg 30deg, #444 31deg 60deg);
     border-radius: 50%;
 }
-.spinning { animation: spinReel 2.5s linear infinite; }
-@keyframes spinReel { 100% { transform: rotate(360deg); } }
 
-.playlist-info { flex: 1; padding-right: 25px; }
-.btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+.spinning { 
+    animation: spinReel 2.5s linear infinite; 
+}
+
+@keyframes spinReel { 
+    100% { transform: rotate(360deg); } 
+}
+
+.playlist-info { 
+    flex: 1; 
+    padding-right: 25px; 
+}
+
+.btn-group { 
+    display: flex; 
+    gap: 10px; 
+    flex-wrap: wrap; 
+    margin-top: 15px; 
+}
+
 .btn {
-    font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.85rem; padding: 10px 15px;
-    border: 2.5px solid var(--stroke); border-radius: 12px;
-    cursor: pointer; text-decoration: none; transition: 0.15s;
+    font-family: 'Fredoka', sans-serif; 
+    font-weight: 700; 
+    font-size: 0.85rem; 
+    padding: 10px 15px;
+    border: 2.5px solid var(--stroke); 
+    border-radius: 12px;
+    cursor: pointer; 
+    text-decoration: none; 
+    transition: 0.15s;
     box-shadow: 3px 3px 0 var(--stroke);
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 6px;
     text-align: center;
 }
-.btn:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0 var(--stroke); }
-.btn-link { background: #fff; color: var(--text); }
-.btn-play { background: var(--primary); color: var(--stroke); }
+
+.btn-link { 
+    background: #fff; 
+    color: var(--text); 
+}
+
+.btn-play { 
+    background: var(--primary); 
+    color: var(--stroke); 
+}
 
 .player-container {
     margin-top: 20px;
     display: none;
     animation: slideDown 0.4s ease-out forwards;
 }
+
 .youtube-embed iframe, .amazon-embed iframe {
     width: 100%;
     border: 0;
     border-radius: 16px;
 }
+
 .youtube-embed iframe {
     aspect-ratio: 16 / 9;
 }
+
 .amazon-embed iframe {
     height: 350px;
 }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- SEZIONE AGGIUNGI PLAYLIST & MODAL CD --- */
-.btn-add-container { text-align: center; margin: 40px 0; }
+@keyframes slideDown { 
+    from { opacity: 0; transform: translateY(-10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
 
-.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
+/* --- SEZIONE AGGIUNGI & MODALI --- */
+.btn-add-container { 
+    text-align: center; 
+    margin: 40px 0; 
+}
+
+.overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.7); 
+    display: none; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 1000; 
+    backdrop-filter: blur(3px); 
+}
+
 .cd-shape { 
-    background: #e0e0e0; border-radius: 50%; 
-    width: 95vw; max-width: 550px;
-    aspect-ratio: 1; display: flex; flex-direction: column; 
-    align-items: center; justify-content: center; 
-    border: 15px solid #bbb; position: relative; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; 
+    background: #e0e0e0; 
+    border-radius: 50%; 
+    width: 95vw; 
+    max-width: 550px;
+    aspect-ratio: 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    border: 15px solid #bbb; 
+    position: relative; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    box-sizing: border-box; 
     max-height: 95vh;
 }
-.cd-hole { position: absolute; width: 15%; aspect-ratio: 1; background: rgba(0,0,0,0.6); border-radius: 50%; border: 5px solid #999; z-index: 0; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+
+.cd-hole { 
+    position: absolute; 
+    width: 15%; 
+    aspect-ratio: 1; 
+    background: rgba(0,0,0,0.6); 
+    border-radius: 50%; 
+    border: 5px solid #999; 
+    z-index: 0; 
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8); 
+}
+
+.modal-rect {
+    background: #fdfdfd; 
+    width: 95vw; 
+    max-width: 550px; 
+    max-height: 90vh;
+    border-radius: 20px; 
+    border: 4px solid var(--stroke); 
+    box-shadow: 8px 8px 0 var(--primary);
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+    overflow: hidden;
+}
+
 .modal-content { 
-    z-index: 1; text-align: center; width: 85%; 
-    background: rgba(255,255,255,0.95); padding: 20px 20px; 
-    border-radius: 15px; border: 2px dashed #999; 
+    z-index: 1; 
+    text-align: center; 
+    width: 85%; 
+    background: rgba(255,255,255,0.95); 
+    padding: 20px 20px; 
+    border-radius: 15px; 
+    border: 2px dashed #999; 
     box-sizing: border-box;
     max-height: 75vh; 
     overflow-y: auto; 
 }
+
+.modal-rect .modal-content {
+    width: 100%; 
+    border: none; 
+    background: transparent; 
+    padding: 25px;
+    max-height: calc(90vh - 50px);
+}
+
 .modal-content::-webkit-scrollbar { width: 6px; }
 .modal-content::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
 .form-group { margin-bottom: 12px; }
-.form-group input { width: 100%; padding: 12px; border: 2px solid var(--stroke); border-radius: 8px; font-family: 'Fredoka', sans-serif; box-sizing: border-box; font-size: 0.95rem; }
-.modal-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+.form-group input { 
+    width: 100%; 
+    padding: 12px; 
+    border: 2px solid var(--stroke); 
+    border-radius: 8px; 
+    font-family: 'Fredoka', sans-serif; 
+    box-sizing: border-box; 
+    font-size: 0.95rem; 
+}
+
+.modal-btns { 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    margin-top: 15px; 
+}
+
+/* Editor foto concerti */
+.photo-editor-grid {
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px; 
+    margin-top: 10px; 
+    margin-bottom: 15px;
+}
+
+.photo-thumb-container {
+    position: relative; 
+    aspect-ratio: 1; 
+    border-radius: 8px; 
+    border: 2px solid var(--stroke);
+    overflow: hidden; 
+    background: #eee;
+}
+
+.photo-thumb-container img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.btn-delete-photo {
+    position: absolute; 
+    top: 4px; 
+    right: 4px; 
+    background: var(--accent); 
+    color: white;
+    border: none; 
+    border-radius: 50%; 
+    width: 22px; 
+    height: 22px; 
+    font-size: 10px;
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
 
 /* --- CONCERTI --- */
 .concert-card {
@@ -218,9 +466,37 @@ header {
 }
 
 .concert-card::before {
-    content: ''; position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-    width: 70px; height: 16px; background: var(--bg-soft); border-radius: 20px;
-    box-shadow: inset 0 3px 8px rgba(0,0,0,0.8); z-index: 5; border: 2px solid #333;
+    content: ''; 
+    position: absolute; 
+    top: 15px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 70px; 
+    height: 16px; 
+    background: var(--bg-soft); 
+    border-radius: 20px;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.8); 
+    z-index: 5; 
+    border: 2px solid #333;
+}
+
+.btn-edit-concert {
+    top: 12px; 
+    left: 15px; 
+    background: #ffd700; 
+    color: #000; 
+    border: 3px solid #000;
+    border-radius: 50%; 
+    width: 38px; 
+    height: 38px; 
+    font-size: 1.8rem; 
+    font-weight: 900;
+    line-height: 1;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font-family: 'Arial Black', Arial, sans-serif;
+    box-shadow: 2px 2px 0 #000;
 }
 
 .concert-header {
@@ -232,6 +508,7 @@ header {
     border-top-right-radius: 16px;
     background: repeating-linear-gradient(45deg, #181818, #181818 10px, #111 10px, #111 20px);
     border-bottom: 2px dashed #444;
+    border-bottom-color: inherit;
 }
 
 .pass-badge {
@@ -240,8 +517,11 @@ header {
     right: -65px;
     width: 180px;
     transform: rotate(45deg);
-    background: #ffd700; color: #000;
-    font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.75rem;
+    background: #ffd700; 
+    color: #000;
+    font-family: 'Fredoka', sans-serif; 
+    font-weight: 700; 
+    font-size: 0.75rem;
     padding: 6px 0;
     letter-spacing: 1px;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
@@ -258,80 +538,91 @@ header {
     text-transform: uppercase; 
     letter-spacing: 1px;
 }
-.pass-details span { margin: 0 8px; }
 
-.pass-vasco { border-color: #01f9a6; box-shadow: 0 0 20px rgba(1, 249, 166, 0.15), inset 0 0 15px rgba(1, 249, 166, 0.1); }
-.pass-vasco .concert-header h2 {
-    color: #fff; font-family: 'Grandstander', cursive; font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
-    text-shadow: 0 0 5px #fff, 0 0 15px #01f9a6, 0 0 30px #01f9a6;
+.pass-details span { 
+    margin: 0 8px; 
 }
 
-.pass-cristina { border-color: #ff4757; box-shadow: 0 0 20px rgba(255, 71, 87, 0.15), inset 0 0 15px rgba(255, 71, 87, 0.1); }
-.pass-cristina .concert-header h2 {
-    color: #fff; font-family: 'Grandstander', cursive; font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
-    text-shadow: 0 0 5px #fff, 0 0 15px #ff4757, 0 0 30px #ff4757;
-}
-
-.pass-gemboy { border-color: #d0ff01; box-shadow: 0 0 20px rgba(208, 255, 1, 0.15), inset 0 0 15px rgba(208, 255, 1, 0.1); }
-.pass-gemboy .concert-header h2 {
-    color: #fff; font-family: 'Grandstander', cursive; font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
-    text-shadow: 0 0 5px #fff, 0 0 15px #d0ff01, 0 0 30px #d0ff01;
-}
-
-.pass-max { border-color: #0145ff; box-shadow: 0 0 20px rgba(208, 255, 1, 0.15), inset 0 0 15px rgba(208, 255, 1, 0.1); }
-.pass-max .concert-header h2 {
-    color: #fff; font-family: 'Grandstander', cursive; font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
-    text-shadow: 0 0 5px #fff, 0 0 15px #0145ff, 0 0 30px #0145ff;
+.concert-card .concert-header h2 {
+    color: #fff; 
+    font-family: 'Grandstander', cursive; 
+    font-size: 2.2rem; 
+    margin: 0; 
+    text-transform: uppercase; 
+    letter-spacing: 2px;
 }
 
 .slideshow-container {
     padding: 15px 15px 5px 15px; 
     background: #1e1e1e;
-    border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px; 
+    border-bottom-right-radius: 16px;
 }
 
 .slideshow {
-    display: flex; gap: 20px; overflow-x: auto;
-    scroll-snap-type: x mandatory; padding: 10px 5px 10px 5px; 
+    display: flex; 
+    gap: 20px; 
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; 
+    padding: 10px 5px 10px 5px; 
 }
+
 .slideshow::-webkit-scrollbar { height: 10px; }
-.slideshow::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; border: 2px solid #1e1e1e; }
+.slideshow::-webkit-scrollbar-thumb { 
+    background: #555; 
+    border-radius: 10px; 
+    border: 2px solid #1e1e1e; 
+}
 
 .slideshow img {
-    height: 220px; width: auto; max-width: 80vw; object-fit: cover;
-    background: #fdfdfd; padding: 10px 10px 15px 10px; 
+    height: 220px; 
+    width: auto; 
+    max-width: 80vw; 
+    object-fit: cover;
+    background: #fdfdfd; 
+    padding: 10px 10px 15px 10px; 
     border-radius: 3px;
-    scroll-snap-align: center; flex-shrink: 0;
+    scroll-snap-align: center; 
+    flex-shrink: 0;
     box-shadow: 4px 6px 15px rgba(0,0,0,0.6);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.slideshow img:hover { transform: scale(1.05) rotate(0deg) !important; z-index: 10; position: relative; }
+
+.slideshow img:hover { 
+    transform: scale(1.05) rotate(0deg) !important; 
+    z-index: 10; 
+    position: relative; 
+}
+
 .slideshow img:nth-child(odd) { transform: rotate(-3deg); }
 .slideshow img:nth-child(even) { transform: rotate(3deg); }
 
 /* --- FOOTER --- */
 footer { 
-  padding: 40px 10px; 
-  text-align: center; 
-  font-family: 'Grandstander', cursive; 
-  font-weight: 600; 
-  color: #666; 
-  font-size: 1.1rem; 
-  border-top: 2px solid #eee; 
+    padding: 40px 10px; 
+    text-align: center; 
+    font-family: 'Grandstander', cursive; 
+    font-weight: 600; 
+    color: #666; 
+    font-size: 1.1rem; 
+    border-top: 2px solid #eee; 
 }
+
 .footer-home-link { 
-  text-decoration: none; 
-  color: inherit; 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 8px; 
-  vertical-align: middle;
-  transition: transform 0.2s ease;
+    text-decoration: none; 
+    color: inherit; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px; 
+    vertical-align: middle;
+    transition: transform 0.2s ease;
 }
+
 .footer-home-link:hover { transform: scale(1.05); }
+
 .footer-home-link img { 
-  width: clamp(40px, 8vw, 60px); 
-  height: auto; 
+    width: clamp(40px, 8vw, 60px); 
+    height: auto; 
 }
 
 @media (max-width: 700px) { 
@@ -347,9 +638,10 @@ footer {
     .reel { width: 35px; height: 35px; }
     .playlist-card { padding: 15px; }
     .btn-edit { width: 32px; height: 32px; font-size: 0.85rem; top: 12px; right: 12px; }
+    .btn-edit-concert { width: 32px; height: 32px; font-size: 1.2rem; top: 12px; left: 12px; }
     .concert-header { padding-top: 48px; } 
     .pass-badge { top: 25px; right: -60px; width: 190px; font-size: 0.65rem; }
-    .concert-header h2 { font-size: 1.6rem !important; }
+    .concert-card .concert-header h2 { font-size: 1.6rem !important; }
     .pass-details { font-size: 0.85rem; }
     .slideshow img { height: 180px; }
 }
@@ -370,9 +662,9 @@ footer {
 
 <main class="container">
   <div class="section-title">Le nostre playlist 🎵</div>
-
+  
   <div class="playlist-grid" id="playlist-container"></div> 
-
+  
   <div class="btn-add-container">
       <button id="btn-add-playlist" class="btn btn-play" style="padding: 15px 30px; font-size: 1.1rem;">
           ➕ Aggiungi nuova Playlist
@@ -383,56 +675,13 @@ footer {
 
   <div class="section-title">I nostri concerti 🎸</div>
   
-  <div class="concert-card pass-vasco">
-      <div class="concert-header">
-          <div class="pass-badge">VIP - ALL ACCESS</div>
-          <h2>Vasco</h2>
-          <div class="pass-details">
-              <span>📍 Trento</span> • <span>📅 20 maggio 2022</span>
-          </div>
+  <div id="concerts-container">
       </div>
-      <div class="slideshow-container">
-          <div class="slideshow" id="slideshow-vasco"></div>
-      </div>
-  </div>
 
-  <div class="concert-card pass-cristina">
-      <div class="concert-header">
-          <div class="pass-badge">VIP - ALL ACCESS</div>
-          <h2>Cristina</h2>
-          <div class="pass-details">
-              <span>📍 Bussolengo</span> • <span>📅 30 giugno 2023</span>
-          </div>
-      </div>
-      <div class="slideshow-container">
-          <div class="slideshow" id="slideshow-cristina"></div>
-      </div>
-  </div>
-
-  <div class="concert-card pass-gemboy">
-      <div class="concert-header">
-          <div class="pass-badge">VIP - ALL ACCESS</div>
-          <h2>GemBoy</h2>
-          <div class="pass-details">
-              <span>📍 Pergine</span> • <span>📅 13 giugno 2026</span>
-          </div>
-      </div>
-      <div class="slideshow-container">
-          <div class="slideshow" id="slideshow-gemboy"></div>
-      </div>
-  </div>
-
-    <div class="concert-card pass-max">
-      <div class="concert-header">
-          <div class="pass-badge">VIP - ALL ACCESS</div>
-          <h2>Max Pezzali</h2>
-          <div class="pass-details">
-              <span>📍 Padova</span> • <span>📅 09 luglio 2026</span>
-          </div>
-      </div>
-      <div class="slideshow-container">
-          <div class="slideshow" id="slideshow-max"></div>
-      </div>
+  <div class="btn-add-container">
+      <button id="btn-add-concert" class="btn btn-play" style="padding: 15px 30px; font-size: 1.1rem; background: #ffd700; color: #000;">
+          ➕ Aggiungi Concerto
+      </button>
   </div>
 
 </main>
@@ -468,61 +717,347 @@ footer {
     </div>
 </div>
 
+<div id="modal-concert-overlay" class="overlay">
+    <div class="modal-rect">
+        <div class="modal-content">
+            <h3 id="modal-concert-title" style="font-family: 'Grandstander'; font-size: 1.8rem; margin-top: 0; margin-bottom: 15px;">Nuovo Concerto</h3>
+            
+            <div class="form-group"><input id="concert-nome" placeholder="Artista / Titolo (es. Vasco)" required></div>
+            <div class="form-group"><input id="concert-luogo" placeholder="Luogo (es. Trento)" required></div>
+            <div class="form-group"><input id="concert-data" placeholder="Data (es. 20 maggio 2022)" required></div>
+            <div class="form-group">
+                <label for="concert-color" style="display:block; text-align:left; margin-bottom:6px; font-size:0.95rem; font-weight: bold;">Colore Tema (Striscia & Testo)</label>
+                <input id="concert-color" type="color" value="#01f9a6" style="width:100%; height:44px; border: 2px solid var(--stroke); border-radius: 12px; padding: 0;" />
+            </div>
+            
+            <div class="form-group" style="text-align: left; margin-top: 20px;">
+                <label style="display:block; margin-bottom:6px; font-size:0.95rem; font-weight: bold;">Gestisci Foto</label>
+                <div class="photo-editor-grid" id="photo-editor-grid">
+                    </div>
+                <input type="file" id="concert-photos-input" multiple accept="image/*" style="font-size: 0.85rem; padding: 8px;">
+                <small style="display:block; color:#666; font-size:0.75rem; margin-top: 4px;">Le immagini verranno ridimensionate automaticamente per il web.</small>
+            </div>
+            
+            <div class="modal-btns" style="margin-top: 25px;">
+                <button id="btn-concert-ok" class="btn btn-play" style="background: #ffd700; color: #000; border-color: #000;">Salva Concerto 🎸</button>
+                <button id="btn-concert-delete" class="btn btn-play" style="background: #260506 ; color: white; display: none;">Elimina Concerto 🗑️</button>
+                <button id="btn-concert-cancel" class="btn btn-link" style="background: var(--accent); color: white;">Annulla ✖</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+// --- DATI E STATI GLOBALI ---
 let playlistsData = [];
+let concertsData = [];
 let isSpotifyApiReady = false;
 let editingIndex = -1;
+let editingConcertIndex = -1;
+let tempConcertImages = [];
 
+const apiMusicURL = "https://tisbatuffoblog.vercel.app/api/update_musicAPI";
+const apiConcertURL = "https://tisbatuffoblog.vercel.app/api/update_concertAPI"; 
+
+// --- UTILITIES FOTO CONCERTI ---
+function loadLegacyConcertImages(concert, callback) {
+    if (concert.images.length > 0 && concert.images.some(img => img.includes(concert.id))) {
+        if (callback) callback();
+        return;
+    }
+    let currentIndex = 1;
+    function tryLoadNextImage() {
+        const imagePath = `img/${concert.id}/${concert.id} (${currentIndex}).jpg`;
+        const img = new Image();
+        img.onload = function() {
+            if (!concert.images.includes(imagePath)) { 
+                concert.images.push(imagePath); 
+            }
+            currentIndex++;
+            if (currentIndex <= 50) { 
+                tryLoadNextImage(); 
+            } else { 
+                if(callback) callback(); 
+            }
+        };
+        img.onerror = function() { 
+            if(callback) callback(); 
+        }
+        img.src = imagePath;
+    }
+    tryLoadNextImage();
+}
+
+function resizeImage(file, maxWidth = 800) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > maxWidth) { 
+                    height = Math.round((height * maxWidth) / width); 
+                    width = maxWidth; 
+                }
+                
+                canvas.width = width; 
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', 0.8));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// --- FETCH & RENDER CONCERTI ---
+async function fetchConcerts() {
+    try {
+        const res = await fetch(`concert.json?v=${new Date().getTime()}`);
+        if(res.ok) {
+            concertsData = await res.json();
+            let loaders = concertsData.map(c => new Promise(resolve => loadLegacyConcertImages(c, resolve)));
+            await Promise.all(loaders); 
+            renderConcerts();
+        }
+    } catch(err) { 
+        console.error("Errore recupero concert.json:", err); 
+    }
+}
+
+function renderConcerts() {
+    const container = document.getElementById('concerts-container');
+    container.innerHTML = '';
+
+    concertsData.forEach((concert, index) => {
+        let imagesHtml = concert.images.map((src, imgIdx) => `<img src="${src}" alt="Foto ${concert.title} ${imgIdx}">`).join('');
+        
+        const html = `
+        <div class="concert-card" style="border-color: ${concert.color}; box-shadow: 0 0 20px ${concert.color}25, inset 0 0 15px ${concert.color}15;">
+            <button class="btn-edit-concert" onclick="openEditConcertModal(${index})" title="Modifica Concerto">+</button>
+            <div class="concert-header" style="border-bottom-color: ${concert.color}50;">
+                <div class="pass-badge">VIP - ALL ACCESS</div>
+                <h2 style="text-shadow: 0 0 5px #fff, 0 0 15px ${concert.color}, 0 0 30px ${concert.color};">${concert.title}</h2>
+                <div class="pass-details">
+                    <span>📍 ${concert.location}</span> • <span>📅 ${concert.date}</span>
+                </div>
+            </div>
+            <div class="slideshow-container">
+                <div class="slideshow">${imagesHtml}</div>
+            </div>
+        </div>`;
+        container.innerHTML += html;
+    });
+}
+
+// --- LOGICA MODALE CONCERTI ---
+const modalConcertOverlay = document.getElementById("modal-concert-overlay");
+
+function renderPhotoEditorGrid() {
+    const grid = document.getElementById('photo-editor-grid');
+    grid.innerHTML = '';
+    tempConcertImages.forEach((src, idx) => {
+        grid.innerHTML += `
+            <div class="photo-thumb-container">
+                <img src="${src}" alt="Thumb">
+                <button class="btn-delete-photo" onclick="deleteTempPhoto(${idx})" title="Elimina foto">✖</button>
+            </div>
+        `;
+    });
+}
+
+window.deleteTempPhoto = function(idx) {
+    tempConcertImages.splice(idx, 1);
+    renderPhotoEditorGrid();
+};
+
+document.getElementById('concert-photos-input').addEventListener('change', async (e) => {
+    const files = e.target.files;
+    if (!files.length) return;
+    
+    const btnInput = document.getElementById('concert-photos-input');
+    btnInput.disabled = true;
+    
+    for (let i = 0; i < files.length; i++) {
+        const base64Img = await resizeImage(files[i]);
+        tempConcertImages.push(base64Img);
+    }
+    
+    renderPhotoEditorGrid();
+    btnInput.value = ''; 
+    btnInput.disabled = false;
+});
+
+document.getElementById("btn-add-concert").onclick = () => {
+    editingConcertIndex = -1;
+    document.getElementById("modal-concert-title").innerText = "Nuovo Concerto";
+    document.getElementById("btn-concert-ok").innerHTML = "Salva Concerto 🎸";
+    document.getElementById("btn-concert-delete").style.display = "none";
+    
+    document.getElementById("concert-nome").value = "";
+    document.getElementById("concert-luogo").value = "";
+    document.getElementById("concert-data").value = "";
+    document.getElementById("concert-color").value = "#01f9a6";
+    
+    tempConcertImages = [];
+    renderPhotoEditorGrid();
+    modalConcertOverlay.style.display = "flex";
+};
+
+window.openEditConcertModal = function(index) {
+    editingConcertIndex = index;
+    const c = concertsData[index];
+    
+    document.getElementById("modal-concert-title").innerText = "Modifica Concerto";
+    document.getElementById("btn-concert-ok").innerHTML = "Aggiorna Concerto 🔄";
+    document.getElementById("btn-concert-delete").style.display = "inline-flex";
+    
+    document.getElementById("concert-nome").value = c.title;
+    document.getElementById("concert-luogo").value = c.location;
+    document.getElementById("concert-data").value = c.date;
+    document.getElementById("concert-color").value = c.color;
+    
+    tempConcertImages = [...c.images]; 
+    renderPhotoEditorGrid();
+    modalConcertOverlay.style.display = "flex";
+};
+
+document.getElementById("btn-concert-cancel").onclick = () => {
+    modalConcertOverlay.style.display = "none";
+};
+
+document.getElementById("btn-concert-ok").onclick = async () => {
+    const btnOk = document.getElementById("btn-concert-ok");
+    const title = document.getElementById("concert-nome").value;
+    const location = document.getElementById("concert-luogo").value;
+    const date = document.getElementById("concert-data").value;
+    const color = document.getElementById("concert-color").value;
+
+    if (!title || !location || !date) { 
+        alert("Compila titolo, luogo e data!"); 
+        return; 
+    }
+
+    btnOk.innerText = "Salvataggio...";
+    btnOk.disabled = true;
+
+    let arrayAggiornato = [...concertsData];
+
+    if (editingConcertIndex === -1) {
+        const newId = 'concerto_' + new Date().getTime();
+        arrayAggiornato.push({ 
+            id: newId, 
+            title: title, 
+            location: location, 
+            date: date, 
+            color: color, 
+            images: [...tempConcertImages] 
+        });
+    } else {
+        arrayAggiornato[editingConcertIndex].title = title;
+        arrayAggiornato[editingConcertIndex].location = location;
+        arrayAggiornato[editingConcertIndex].date = date;
+        arrayAggiornato[editingConcertIndex].color = color;
+        arrayAggiornato[editingConcertIndex].images = [...tempConcertImages];
+    }
+
+    try {
+        const res = await fetch(apiConcertURL, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(arrayAggiornato)
+        });
+        
+        if (res.ok) {
+            concertsData = arrayAggiornato;
+            renderConcerts();
+            modalConcertOverlay.style.display = "none";
+        } else { 
+            alert("Errore nel salvataggio su Vercel/GitHub."); 
+        }
+    } catch(err) { 
+        alert("Errore di connessione."); 
+    } finally {
+        btnOk.innerText = editingConcertIndex === -1 ? "Salva Concerto 🎸" : "Aggiorna Concerto 🔄";
+        btnOk.disabled = false;
+    }
+};
+
+document.getElementById("btn-concert-delete").onclick = async () => {
+    if (confirm("Sei sicuro di voler eliminare l'intero concerto?")) {
+        const btnDel = document.getElementById("btn-concert-delete");
+        btnDel.innerText = "Eliminazione...";
+        btnDel.disabled = true;
+        
+        let arrayAggiornato = [...concertsData];
+        arrayAggiornato.splice(editingConcertIndex, 1);
+
+        try {
+            const res = await fetch(apiConcertURL, { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify(arrayAggiornato) 
+            });
+            
+            if (res.ok) {
+                concertsData = arrayAggiornato;
+                renderConcerts();
+                modalConcertOverlay.style.display = "none";
+            }
+        } catch(err) { 
+            alert("Errore."); 
+        } finally { 
+            btnDel.innerText = "Elimina Concerto 🗑️"; 
+            btnDel.disabled = false; 
+        }
+    }
+};
+
+// --- LOGICA PLAYLIST ---
 function togglePlayerVisibility(btn) {
     const card = btn.closest('.playlist-card');
     const player = card.querySelector('.player-container');
     const reels = card.querySelectorAll('.reel');
-
+    
     if (player.style.display === "none" || player.style.display === "") {
-        player.style.display = "block";
+        player.style.display = "block"; 
         btn.innerHTML = "Chiudi ⏹️";
     } else {
-        player.style.display = "none";
+        player.style.display = "none"; 
         btn.innerHTML = "Preview 🎧"; 
         reels.forEach(r => r.classList.remove("spinning"));
     }
 }
 
-// Genera l'URI corretto per Spotify
 function generateSpotifyUri(link) {
     if (link.startsWith('spotify:')) return link;
-    try {
-        const url = new URL(link);
-        const host = url.hostname.toLowerCase();
-        
-        if (host.includes('spotify.com') || link.includes('spotify.com')) {
-            const pathParts = url.pathname.split('/').filter(p => p);
-            if (pathParts.length >= 2) {
-                const type = pathParts[0];
-                const id = pathParts[1];
-                return `spotify:${type}:${id}`;
-            }
-        }
+    try { 
+        const url = new URL(link); 
+        if (url.hostname.includes('spotify.com') || link.includes('spotify.com')) { 
+            const pathParts = url.pathname.split('/').filter(p => p); 
+            if (pathParts.length >= 2) return `spotify:${pathParts[0]}:${pathParts[1]}`; 
+        } 
         return link;
-    } catch(e) {
-        return link;
+    } catch(e) { 
+        return link; 
     }
 }
 
-// Capisce che tipo di link è stato inserito
 function getLinkType(link) {
-    try {
-        if (link.startsWith('spotify:')) return 'spotify';
-        const url = new URL(link);
-        const host = url.hostname.toLowerCase();
-        
-        if (host.includes('spotify.com') || link.includes('spotify.com')) return 'spotify';
-        if (host.includes('youtube.com') || host.includes('youtu.be')) return 'youtube';
-        if (host.includes('amazon') || host.includes('amzn.to')) return 'amazon'; 
-        
-        return 'web';
-    } catch(e) {
-        return 'web';
+    try { 
+        if (link.startsWith('spotify:')) return 'spotify'; 
+        const url = new URL(link); 
+        if (url.hostname.includes('spotify.com') || link.includes('spotify.com')) return 'spotify'; 
+        if (url.hostname.includes('youtube') || url.hostname.includes('youtu.be')) return 'youtube'; 
+        if (url.hostname.includes('amazon') || url.hostname.includes('amzn')) return 'amazon'; 
+        return 'web'; 
+    } catch(e) { 
+        return 'web'; 
     }
 }
 
@@ -536,127 +1071,99 @@ function getOpenButtonIcon(type) {
     return icons[type] || icons.web;
 }
 
-// Estrae in modo intelligente gli ID dei video, shorts o delle playlist di YouTube abilitando le JS API
 function getYoutubeEmbedUrl(link) {
-    try {
-        let resUrl = link;
-        if (link.includes('<iframe') && link.includes('src="')) {
-            const match = link.match(/src="([^"]+)"/);
-            if (match) resUrl = match[1];
-        }
-
-        if (!resUrl.startsWith('http://') && !resUrl.startsWith('https://')) {
-            if (resUrl.includes('youtube.com') || resUrl.includes('youtu.be')) {
-                resUrl = 'https://' + resUrl;
-            } else {
-                return link;
-            }
-        }
-
-        const url = new URL(resUrl);
-        const host = url.hostname.toLowerCase();
-        let videoId = "";
-        let listId = url.searchParams.get('list');
+    try { 
+        let resUrl = link; 
+        if (link.includes('<iframe') && link.includes('src="')) { 
+            const match = link.match(/src="([^"]+)"/); 
+            if (match) resUrl = match[1]; 
+        } 
+        if (!resUrl.startsWith('http://') && !resUrl.startsWith('https://')) { 
+            if (resUrl.includes('youtube') || resUrl.includes('youtu.be')) resUrl = 'https://' + resUrl; 
+            else return link; 
+        } 
         
-        if (host.includes('youtu.be')) {
-            videoId = url.pathname.split('/').filter(p => p)[0];
-        } else if (host.includes('youtube.com')) {
-            if (url.pathname.includes('/shorts/')) {
-                videoId = url.pathname.split('/shorts/')[1].split('/')[0];
-            } else if (url.pathname.includes('/embed/')) {
-                videoId = url.pathname.split('/embed/')[1].split('?')[0];
-            } else {
-                videoId = url.searchParams.get('v');
-            }
-        }
-
-        let embedBase = "";
-        if (listId && videoId) {
-            embedBase = `https://www.youtube-nocookie.com/embed/${videoId}?list=${listId}`;
-        } else if (listId) {
-            embedBase = `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}`;
-        } else if (videoId) {
-            embedBase = `https://www.youtube-nocookie.com/embed/${videoId}`;
-        } else {
-            embedBase = resUrl.replace('youtube.com', 'youtube-nocookie.com');
-        }
+        const url = new URL(resUrl); 
+        const host = url.hostname.toLowerCase(); 
+        let videoId = ""; 
+        let listId = url.searchParams.get('list'); 
         
-        const finalUrl = new URL(embedBase);
-        finalUrl.searchParams.set('enablejsapi', '1');
-        return finalUrl.toString();
-    } catch(e) {
-        return link;
+        if (host.includes('youtu.be')) { 
+            videoId = url.pathname.split('/').filter(p => p)[0]; 
+        } else if (host.includes('youtube.com')) { 
+            if (url.pathname.includes('/shorts/')) videoId = url.pathname.split('/shorts/')[1].split('/')[0]; 
+            else if (url.pathname.includes('/embed/')) videoId = url.pathname.split('/embed/')[1].split('?')[0]; 
+            else videoId = url.searchParams.get('v'); 
+        } 
+        
+        let embedBase = ""; 
+        if (listId && videoId) embedBase = `https://www.youtube-nocookie.com/embed/${videoId}?list=${listId}`; 
+        else if (listId) embedBase = `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}`; 
+        else if (videoId) embedBase = `https://www.youtube-nocookie.com/embed/${videoId}`; 
+        else embedBase = resUrl.replace('youtube.com', 'youtube-nocookie.com'); 
+        
+        const finalUrl = new URL(embedBase); 
+        finalUrl.searchParams.set('enablejsapi', '1'); 
+        return finalUrl.toString(); 
+    } catch(e) { 
+        return link; 
     }
 }
 
-// Converte i link web standard di Amazon Music (inclusi quelli con /music/player/) in sorgenti embed funzionanti
 function getAmazonEmbedUrl(link) {
-    try {
-        if (link.includes('<iframe') && link.includes('src="')) {
-            const match = link.match(/src="([^"]+)"/);
-            if (match) return match[1];
-        }
-        const url = new URL(link);
-        if (url.pathname.includes('/embed/')) return link;
-        
-        if (url.hostname.includes('music.amazon') || url.hostname.includes('amazon.')) {
-            let path = url.pathname;
-            
-            // Rimuove la sottocartella /music/player se presente nei link moderni copiati da browser/app
-            if (path.includes('/music/player')) {
-                path = path.replace('/music/player', '');
-            }
-            
-            // Amazon embed player richiede tassativamente /playlists/ invece di /user-playlists/
-            if (path.includes('/user-playlists/')) {
-                path = path.replace('/user-playlists/', '/playlists/');
-            }
-            
-            let hostname = url.hostname;
-            if (!hostname.startsWith('music.')) {
-                hostname = 'music.' + hostname;
-            }
-            
-            return `https://${hostname}/embed${path}${url.search}`;
-        }
-        return link;
-    } catch(e) {
-        return link;
+    try { 
+        if (link.includes('<iframe') && link.includes('src="')) { 
+            const match = link.match(/src="([^"]+)"/); 
+            if (match) return match[1]; 
+        } 
+        const url = new URL(link); 
+        if (url.pathname.includes('/embed/')) return link; 
+        if (url.hostname.includes('amazon.')) { 
+            let path = url.pathname; 
+            if (path.includes('/music/player')) path = path.replace('/music/player', ''); 
+            if (path.includes('/user-playlists/')) path = path.replace('/user-playlists/', '/playlists/'); 
+            let hostname = url.hostname; 
+            if (!hostname.startsWith('music.')) hostname = 'music.' + hostname; 
+            return `https://${hostname}/embed${path}${url.search}`; 
+        } 
+        return link; 
+    } catch(e) { 
+        return link; 
     }
 }
 
 async function fetchPlaylists() {
-    try {
-        const res = await fetch(`playlist.json?v=${new Date().getTime()}`);
-        if(res.ok) {
-            playlistsData = await res.json();
-            renderPlaylists();
-        }
-    } catch(err) {
-        console.error("Errore di rete durante il fetch:", err);
+    try { 
+        const res = await fetch(`playlist.json?v=${new Date().getTime()}`); 
+        if(res.ok) { 
+            playlistsData = await res.json(); 
+            renderPlaylists(); 
+        } 
+    } catch(err) { 
+        console.error("Errore fetch playlist:", err); 
     }
 }
 
 function renderPlaylists() {
     const container = document.getElementById('playlist-container');
     container.innerHTML = ''; 
-
+    
     playlistsData.forEach((p, index) => {
-        const linkType = getLinkType(p.linkSpotify);
+        const linkType = getLinkType(p.linkSpotify); 
         const hasPreview = linkType === 'spotify' || linkType === 'youtube' || linkType === 'amazon';
-        const previewButton = hasPreview ? `<button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>` : '';
+        const previewButton = hasPreview ? `<button class="btn btn-play" onclick="togglePlayerVisibility(this)">Preview 🎧</button>` : ''; 
         const openIcon = getOpenButtonIcon(linkType);
         
-        const playerMarkup = linkType === 'spotify'
-            ? `<div class="spotify-embed" data-spotify-uri="${p.uriSpotify}" id="embed-${index}"></div>`
-            : linkType === 'youtube'
-                ? `<div class="youtube-embed"><iframe src="${getYoutubeEmbedUrl(p.linkSpotify)}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>`
-                : linkType === 'amazon'
-                    ? `<div class="amazon-embed"><iframe src="${getAmazonEmbedUrl(p.linkSpotify)}" title="Amazon Music player" frameborder="0" allow="autoplay" loading="lazy"></iframe></div>`
+        const playerMarkup = linkType === 'spotify' 
+            ? `<div class="spotify-embed" data-spotify-uri="${p.uriSpotify}" id="embed-${index}"></div>` 
+            : linkType === 'youtube' 
+                ? `<div class="youtube-embed"><iframe src="${getYoutubeEmbedUrl(p.linkSpotify)}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>` 
+                : linkType === 'amazon' 
+                    ? `<div class="amazon-embed"><iframe src="${getAmazonEmbedUrl(p.linkSpotify)}" title="Amazon Music player" frameborder="0" allow="autoplay" loading="lazy"></iframe></div>` 
                     : '';
-                
+        
         const coverStyle = `--cover-base: ${p.stile.color};`;
-
+        
         const html = `
         <div class="playlist-card">
             <button class="btn-edit" onclick="openEditModal(${index})" title="Modifica Cassetta">✏️</button>
@@ -668,10 +1175,7 @@ function renderPlaylists() {
                     <h3 style="font-family: 'Grandstander'; font-size: 1.5rem; margin:0; color: ${p.stile.color};">${p.nome}</h3>
                     <p style="color:#666; margin: 8px 0;">${p.descrizione}</p>
                     <div class="btn-group">
-                        <a href="${p.linkSpotify}" target="_blank" class="btn btn-link">
-                            ${openIcon}
-                            Apri
-                        </a>
+                        <a href="${p.linkSpotify}" target="_blank" class="btn btn-link">${openIcon} Apri</a>
                         ${previewButton}
                     </div>
                 </div>
@@ -680,239 +1184,199 @@ function renderPlaylists() {
                 <div class="reel"></div>
                 <div class="reel"></div>
             </div>
-            <div class="player-container">
-              ${playerMarkup}
-            </div>
+            <div class="player-container">${playerMarkup}</div>
         </div>`;
         container.innerHTML += html;
     });
-
-    if (isSpotifyApiReady && window.SpotifyIframeApi) {
-        initSpotifyPlayers(window.SpotifyIframeApi);
+    
+    if (isSpotifyApiReady && window.SpotifyIframeApi) { 
+        initSpotifyPlayers(window.SpotifyIframeApi); 
     }
 }
 
-window.onSpotifyIframeApiReady = (IFrameAPI) => {
-    isSpotifyApiReady = true;
-    window.SpotifyIframeApi = IFrameAPI;
-    if(playlistsData.length > 0) {
-        initSpotifyPlayers(IFrameAPI);
-    }
+window.onSpotifyIframeApiReady = (IFrameAPI) => { 
+    isSpotifyApiReady = true; 
+    window.SpotifyIframeApi = IFrameAPI; 
+    if(playlistsData.length > 0) { 
+        initSpotifyPlayers(IFrameAPI); 
+    } 
 };
 
 function initSpotifyPlayers(IFrameAPI) {
     const cards = document.querySelectorAll('.playlist-card');
     cards.forEach(card => {
-        const embedElement = card.querySelector('.spotify-embed');
-        if (!embedElement) return; 
-        if (embedElement.hasAttribute('data-initialized')) return; 
-
-        const uri = embedElement.getAttribute('data-spotify-uri');
+        const embedElement = card.querySelector('.spotify-embed'); 
+        if (!embedElement || embedElement.hasAttribute('data-initialized')) return; 
+        
+        const uri = embedElement.getAttribute('data-spotify-uri'); 
         const reels = card.querySelectorAll('.reel');
         const options = { width: '100%', height: '80', uri: uri };
         
-        const callback = (EmbedController) => {
+        IFrameAPI.createController(embedElement, options, (EmbedController) => {
             EmbedController.addListener('playback_update', e => {
-                if (e.data.isPaused || e.data.isBuffering) {
-                    reels.forEach(r => r.classList.remove("spinning"));
-                } else {
-                    reels.forEach(r => r.classList.add("spinning"));
+                if (e.data.isPaused || e.data.isBuffering) { 
+                    reels.forEach(r => r.classList.remove("spinning")); 
+                } else { 
+                    reels.forEach(r => r.classList.add("spinning")); 
                 }
             });
-        };
-        
-        IFrameAPI.createController(embedElement, options, callback);
+        });
         embedElement.setAttribute('data-initialized', 'true');
     });
 }
 
-// Ascolta i messaggi postMessage inviati dall'Iframe di YouTube per far girare le rotelle solo in Play effettivo
 window.addEventListener('message', (event) => {
     if (!event.origin.includes('youtube')) return;
-    try {
-        let data = event.data;
-        if (typeof data === 'string') {
-            data = JSON.parse(data);
-        }
-        if (data && data.event === 'infoDelivery' && data.info) {
-            const state = data.info.playerState;
-            if (state !== undefined) {
-                const iframes = document.querySelectorAll('.youtube-embed iframe');
-                iframes.forEach(iframe => {
-                    if (iframe.contentWindow === event.source) {
-                        const card = iframe.closest('.playlist-card');
-                        if (card) {
-                            const reels = card.querySelectorAll('.reel');
-                            if (state === 1) { // 1 = in riproduzione (playing)
-                                reels.forEach(r => r.classList.add("spinning"));
-                            } else { // in pausa, buffering o terminato
-                                reels.forEach(r => r.classList.remove("spinning"));
-                            }
+    try { 
+        let data = event.data; 
+        if (typeof data === 'string') data = JSON.parse(data);
+        if (data && data.event === 'infoDelivery' && data.info && data.info.playerState !== undefined) {
+            document.querySelectorAll('.youtube-embed iframe').forEach(iframe => {
+                if (iframe.contentWindow === event.source) {
+                    const card = iframe.closest('.playlist-card'); 
+                    if (card) {
+                        const reels = card.querySelectorAll('.reel');
+                        if (data.info.playerState === 1) {
+                            reels.forEach(r => r.classList.add("spinning")); 
+                        } else {
+                            reels.forEach(r => r.classList.remove("spinning"));
                         }
                     }
-                });
-            }
+                }
+            });
         }
-    } catch (e) {
-        // Ignora gli errori di parsing derivati da altri tipi di messaggi sul canale postMessage
-    }
+    } catch (e) {}
 });
 
-const modalOverlay = document.getElementById("modal-cd-overlay");
+const modalCdOverlay = document.getElementById("modal-cd-overlay");
 
 document.getElementById("btn-add-playlist").onclick = () => {
-    editingIndex = -1;
+    editingIndex = -1; 
     document.getElementById("modal-title").innerText = "Nuova Playlist";
-    document.getElementById("btn-cd-ok").innerHTML = "Salva ⏺️";
+    document.getElementById("btn-cd-ok").innerHTML = "Salva ⏺️"; 
     document.getElementById("btn-cd-delete").style.display = "none";
-    document.getElementById("new-nome").value = "";
-    document.getElementById("new-desc").value = "";
-    document.getElementById("new-link").value = "";
+    document.getElementById("new-nome").value = ""; 
+    document.getElementById("new-desc").value = ""; 
+    document.getElementById("new-link").value = ""; 
     document.getElementById("new-color").value = "#0000ff";
-    modalOverlay.style.display = "flex";
+    modalCdOverlay.style.display = "flex";
 };
 
 window.openEditModal = function(index) {
-    editingIndex = index;
+    editingIndex = index; 
     const p = playlistsData[index];
-    document.getElementById("modal-title").innerText = "Modifica Playlist";
-    document.getElementById("btn-cd-ok").innerHTML = "Aggiorna 🔄";
+    document.getElementById("modal-title").innerText = "Modifica Playlist"; 
+    document.getElementById("btn-cd-ok").innerHTML = "Aggiorna 🔄"; 
     document.getElementById("btn-cd-delete").style.display = "inline-flex";
-    document.getElementById("new-nome").value = p.nome;
-    document.getElementById("new-desc").value = p.descrizione;
-    document.getElementById("new-link").value = p.linkSpotify;
+    document.getElementById("new-nome").value = p.nome; 
+    document.getElementById("new-desc").value = p.descrizione; 
+    document.getElementById("new-link").value = p.linkSpotify; 
     document.getElementById("new-color").value = p.stile?.color || '#0000ff';
-    modalOverlay.style.display = "flex";
+    modalCdOverlay.style.display = "flex";
 };
 
 document.getElementById("btn-cd-cancel").onclick = () => {
-    modalOverlay.style.display = "none";
+    modalCdOverlay.style.display = "none";
 };
 
 document.getElementById("btn-cd-ok").onclick = async () => {
     const btnOk = document.getElementById("btn-cd-ok");
     const nome = document.getElementById("new-nome").value;
-    const desc = document.getElementById("new-desc").value;
-    const link = document.getElementById("new-link").value;
+    const desc = document.getElementById("new-desc").value; 
+    const link = document.getElementById("new-link").value; 
     const color = document.getElementById("new-color").value || '#0000ff';
-
-    if (!nome || !desc || !link) {
-        alert("Ops! Compila tutti i campi prima di procedere.");
-        return;
+    
+    if (!nome || !desc || !link) { 
+        alert("Ops! Compila tutti i campi prima di procedere."); 
+        return; 
     }
-
-    const generatedUri = generateSpotifyUri(link);
-    btnOk.innerText = "Salvataggio...";
+    
+    btnOk.innerText = "Salvataggio..."; 
     btnOk.disabled = true;
-
+    
     let arrayAggiornato = [...playlistsData];
-
+    
     if (editingIndex === -1) {
         const stiliPossibili = [
-            { classe: "cover-883", color: "#0000ff" },
-            { classe: "cover-cartoni", color: "#ff4757" },
-            { classe: "cover-gemboy", color: "#b8af00" },
-            { classe: "cover-vasco", color: "#004f2a" },
-            { classe: "cover-random1", color: "#fd1d1d" },
-            { classe: "cover-random2", color: "#00C9FF" },
+            { classe: "cover-883", color: "#0000ff" }, 
+            { classe: "cover-cartoni", color: "#ff4757" }, 
+            { classe: "cover-gemboy", color: "#b8af00" }, 
+            { classe: "cover-vasco", color: "#004f2a" }, 
+            { classe: "cover-random1", color: "#fd1d1d" }, 
+            { classe: "cover-random2", color: "#00C9FF" }, 
             { classe: "cover-random3", color: "#f5af19" }
         ];
         const stileRandom = stiliPossibili[Math.floor(Math.random() * stiliPossibili.length)];
-
-        arrayAggiornato.push({
-            nome: nome,
-            descrizione: desc,
-            linkSpotify: link,
-            uriSpotify: generatedUri,
-            stile: {
-                classe: stileRandom.classe,
-                color: color
-            }
+        
+        arrayAggiornato.push({ 
+            nome: nome, 
+            descrizione: desc, 
+            linkSpotify: link, 
+            uriSpotify: generateSpotifyUri(link), 
+            stile: { classe: stileRandom.classe, color: color } 
         });
     } else {
-        arrayAggiornato[editingIndex].nome = nome;
-        arrayAggiornato[editingIndex].descrizione = desc;
-        arrayAggiornato[editingIndex].linkSpotify = link;
-        arrayAggiornato[editingIndex].uriSpotify = generatedUri;
-        arrayAggiornato[editingIndex].stile = {
-            ...arrayAggiornato[editingIndex].stile,
-            color: color
-        };
+        arrayAggiornato[editingIndex].nome = nome; 
+        arrayAggiornato[editingIndex].descrizione = desc; 
+        arrayAggiornato[editingIndex].linkSpotify = link; 
+        arrayAggiornato[editingIndex].uriSpotify = generateSpotifyUri(link); 
+        arrayAggiornato[editingIndex].stile = { ...arrayAggiornato[editingIndex].stile, color: color };
     }
-
+    
     try {
-        const apiURL = "https://tisbatuffoblog.vercel.app/api/update_musicAPI"; 
-        const res = await fetch(apiURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(arrayAggiornato)
+        const res = await fetch(apiMusicURL, { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json" }, 
+            body: JSON.stringify(arrayAggiornato) 
         });
-        if (res.ok) {
-            playlistsData = arrayAggiornato;
-            renderPlaylists();
-            modalOverlay.style.display = "none";
+        
+        if (res.ok) { 
+            playlistsData = arrayAggiornato; 
+            renderPlaylists(); 
+            modalCdOverlay.style.display = "none"; 
         }
-    } catch(err) {
-        alert("Errore di connessione.");
-    } finally {
-        btnOk.innerText = editingIndex === -1 ? "Registra ⏺️" : "Aggiorna 🔄";
-        btnOk.disabled = false;
+    } catch(err) { 
+        alert("Errore di connessione."); 
+    } finally { 
+        btnOk.innerText = editingIndex === -1 ? "Registra ⏺️" : "Aggiorna 🔄"; 
+        btnOk.disabled = false; 
     }
 };
 
 document.getElementById("btn-cd-delete").onclick = async () => {
     if (confirm("Sei sicuro di voler eliminare questa cassetta?")) {
-        const btnDelete = document.getElementById("btn-cd-delete");
-        btnDelete.innerText = "Eliminazione...";
+        const btnDelete = document.getElementById("btn-cd-delete"); 
+        btnDelete.innerText = "Eliminazione..."; 
         btnDelete.disabled = true;
-
-        let arrayAggiornato = [...playlistsData];
+        
+        let arrayAggiornato = [...playlistsData]; 
         arrayAggiornato.splice(editingIndex, 1);
-
+        
         try {
-            const apiURL = "https://tisbatuffoblog.vercel.app/api/update_musicAPI"; 
-            const res = await fetch(apiURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(arrayAggiornato)
+            const res = await fetch(apiMusicURL, { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify(arrayAggiornato) 
             });
-            if (res.ok) {
-                playlistsData = arrayAggiornato;
-                renderPlaylists();
-                modalOverlay.style.display = "none";
+            
+            if (res.ok) { 
+                playlistsData = arrayAggiornato; 
+                renderPlaylists(); 
+                modalCdOverlay.style.display = "none"; 
             }
-        } catch(err) {
-            alert("Errore.");
-        } finally {
-            btnDelete.innerText = "Elimina 🗑️";
-            btnDelete.disabled = false;
+        } catch(err) { 
+            alert("Errore."); 
+        } finally { 
+            btnDelete.innerText = "Elimina 🗑️"; 
+            btnDelete.disabled = false; 
         }
     }
 };
 
-function loadConcertImages(folderName, containerId) {
-    const container = document.getElementById(containerId);
-    let currentIndex = 1;
-    function tryLoadNextImage() {
-        const img = new Image();
-        const imagePath = `img/${folderName}/${folderName} (${currentIndex}).jpg`;
-        img.onload = function() {
-            img.alt = `Foto ${folderName} ${currentIndex}`;
-            container.appendChild(img);
-            currentIndex++;
-            if (currentIndex <= 50) { tryLoadNextImage(); } 
-        };
-        img.src = imagePath;
-    }
-    tryLoadNextImage();
-}
-
+// --- INIT ---
 document.addEventListener("DOMContentLoaded", () => {
     fetchPlaylists(); 
-    loadConcertImages('vasco', 'slideshow-vasco');
-    loadConcertImages('cristina', 'slideshow-cristina');
-    loadConcertImages('gemboy', 'slideshow-gemboy');
-    loadConcertImages('max', 'slideshow-max');
+    fetchConcerts();
 });
 </script>
 
