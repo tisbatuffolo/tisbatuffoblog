@@ -9,10 +9,6 @@ const dati_pandabox = [
         "immagine": "Baby Appandini.jpg"
     },
     {
-        "titolo": "Baby Portachiavi",
-        "immagine": "Baby Portachiavi.jpg"
-    },
-    {
         "titolo": "Fasciacavi Orsetti",
         "immagine": "Fasciacavi Orsetti.jpg"
     },
@@ -33,19 +29,7 @@ const dati_pandabox = [
         "immagine": "Pandoni Adesivi.jpg"
     },
     {
-        "titolo": "Passacavi",
-        "immagine": "Passacavi.jpg"
-    },
-    {
-        "titolo": "Profumatori Auto",
-        "immagine": "Profumatori Auto.jpg"
-    },
-    {
         "titolo": "Stickers",
         "immagine": "Stickers.jpg"
-    },
-    {
-        "titolo": "Salvacavo",
-        "immagine": "Salvacavo.jpg"
     }
 ];

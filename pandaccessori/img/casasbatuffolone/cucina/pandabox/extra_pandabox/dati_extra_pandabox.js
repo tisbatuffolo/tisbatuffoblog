@@ -1,4 +1,4 @@
-// Dati generati automaticamente per extra-pandabox
+// Dati generati automaticamente per extra_pandabox
 const dati_extra_pandabox = [
     {
         "titolo": "Campanello",
@@ -19,6 +19,22 @@ const dati_extra_pandabox = [
     {
         "titolo": "Lettere Sbrilluccicose",
         "immagine": "Lettere Sbrilluccicose.jpg"
+    },
+    {
+        "titolo": "Passacavi",
+        "immagine": "Passacavi.jpg"
+    },
+        {
+        "titolo": "Baby Portachiavi",
+        "immagine": "Baby Portachiavi.jpg"
+    },
+    {
+        "titolo": "Profumatori Auto",
+        "immagine": "Profumatori Auto.jpg"
+    },
+    {
+        "titolo": "Salvacavo",
+        "immagine": "Salvacavo.jpg"
     },
     {
         "titolo": "Smaortphone Rings",
