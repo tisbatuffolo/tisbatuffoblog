@@ -42,6 +42,6 @@ const GIRI = [
   {
     "titolo": "Ponte Tibetano di Gresta",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-fiemme/ponte-tibetano-di-gresta/343986313/",
-    "img": "https://img2.oastatic.com/img2/631917503/800x600/variant.webp?revbust=19ec76fb906"
+    "img": "https://img2.oastatic.com/img2/631917503/800x600/variant.webp"
   }
 ]
