@@ -1,5 +1,15 @@
 const GIRI = [
   {
+    "titolo": "Lago Montagnoli",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/madonna-di-campiglio-pinzolo-val-rendena/lago-montagnoli/346882170/",
+    "img": "https://img3.oastatic.com/img2/634223854/800x600/variant.webp?revbust=19f75a804fb"
+  },
+  {
+    "titolo": "Tarzaning San Biagio",
+    "link": "https://www.outdooractive.com/it/route/via-ferrata/val-di-sole-pejo-e-rabbi/tarzaning-san-biagio/346849711/",
+    "img": "https://img0.oastatic.com/img2/634223771/800x600/variant.webp?revbust=19f75a5247b"
+  },
+  {
     "titolo": "Laguna di Venezia",
     "link": "https://www.outdooractive.com/it/route/giro-in-barca/venezia/laguna-di-venezia/346309146/",
     "img": "https://img3.oastatic.com/img2/633787569/800x600/variant.webp?revbust=19f5667e98c"
@@ -33,15 +43,5 @@ const GIRI = [
     "titolo": "Kayak Senaiga",
     "link": "https://www.outdooractive.com/it/route/kayak/belluno/kayak-senaiga/345130302/",
     "img": "https://img2.oastatic.com/img2/632808338/800x600/variant.webp?revbust=19f0f726e26"
-  },
-  {
-    "titolo": "Francolini",
-    "link": "https://www.outdooractive.com/it/route/escursione/altopiano-di-folgaria-lavarone-luserna/francolini/344466189/",
-    "img": "https://img1.oastatic.com/img2/632318277/800x600/variant.webp?revbust=19ee5457979"
-  },
-  {
-    "titolo": "Ponte Tibetano di Gresta",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-fiemme/ponte-tibetano-di-gresta/343986313/",
-    "img": "https://img2.oastatic.com/img2/631917503/800x600/variant.webp"
   }
 ]

@@ -153,5 +153,12 @@
       "tipo": "compleanno",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-08-01": [
+    {
+      "nome": "Bici val di sole",
+      "tipo": "giretto",
+      "ricorrenza": "singola"
+    }
   ]
 }
