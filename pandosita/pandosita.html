@@ -221,15 +221,15 @@
     position: relative; 
   }
   
-  .ai-theme-container { position: relative; max-width: 900px; margin: 40px auto 0; display: flex; justify-content: center; }
+  .ai-theme-container { position: relative; max-width: 900px; margin: 20px auto 0; display: flex; justify-content: center; }
 
   .tablet-container { padding: 30px 40px; perspective: 1000px; z-index: 2; position: relative; }
   
   .tablet-bezel { 
-    width: 650px; height: 450px; 
+    width: 720px; height: 520px; 
     background: linear-gradient(145deg, #2c2c2c 0%, #111111 100%); 
     border-radius: 35px; 
-    padding: 40px 20px 20px 20px; 
+    padding: 42px 24px 18px 24px; 
     box-shadow: 
       0 0 0 3px #555, 
       0 25px 50px rgba(0,0,0,0.8), 
@@ -274,37 +274,47 @@
   
   .tablet-gallery { 
     width: 100%; height: 100%; display: flex; 
-    overflow-x: auto; scroll-snap-type: x mandatory; 
+    overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; 
     scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; 
     position: relative; z-index: 3; align-items: center; 
   }
   .tablet-gallery::-webkit-scrollbar { display: none; }
   
   .ai-frame { 
-    flex: 0 0 100%; height: 100%; display: flex; align-items: center; justify-content: center; 
+    width: 100%;
+    height: 100%;
+    flex: 0 0 100%;
+    display: flex; align-items: center; justify-content: center; 
     scroll-snap-align: center; 
-    padding: 40px 60px; /* Incrementato padding verticale per spazio Matrix */
+    padding: 14px 50px; /* Meno spazio interno per immagini più grandi */
     box-sizing: border-box; 
     background: transparent;
+    min-height: 0;
+    min-width: 0;
   }
   
   .ai-image-wrapper {
-    background: #000; 
-    padding: 15px; box-sizing: border-box;
+    background: transparent; 
+    padding: 6px; box-sizing: border-box;
     border-radius: 15px;
-    display: inline-flex; 
+    display: flex; 
     align-items: center; justify-content: center;
-    box-shadow: 0 0 25px rgba(0,0,0,0.9);
-    border: 1px solid rgba(0, 255, 65, 0.3);
-    max-width: 90%; /* Limita l'espansione per avere bordo libero */
-    max-height: 90%;
+    box-shadow: 0 0 25px rgba(0,0,0,0.55);
+    width: 100%;
+    height: 100%;
+    max-width: calc(100% - 16px);
+    max-height: calc(100% - 24px);
   }
   
   .ai-image-wrapper img { 
-    max-width: 100%; 
-    max-height: 100%; 
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 12px);
+    max-height: calc(100% - 20px);
     object-fit: contain; 
     border-radius: 8px; 
+    border: 4px solid var(--matrix-green);
+    box-sizing: border-box;
     display: block; 
   }
 
@@ -316,12 +326,19 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 24px; font-weight: bold; font-family: monospace; transition: all 0.3s;
   }
-  .tablet-nav-btn:hover { background: var(--matrix-green); color: #000; box-shadow: 0 0 15px var(--matrix-green); transform: translateY(-50%) scale(1.1); }
+  .tablet-nav-btn:hover:not(:disabled) { background: var(--matrix-green); color: #000; box-shadow: 0 0 15px var(--matrix-green); transform: translateY(-50%) scale(1.1); }
+  .tablet-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-color: rgba(0,255,65,0.3);
+    color: rgba(0,255,65,0.5);
+    box-shadow: none;
+  }
   .tablet-prev-btn { left: -20px; } 
   .tablet-next-btn { right: -20px; }
 
   /* --- LULU SOFA --- */
-  .lulu-sofa-section { padding: 30px 0 60px 0; background: #fff; } 
+  .lulu-sofa-section { padding: 30px 0 45px 0; background: #fff; } 
   .sofa-external-wrapper { position: relative; padding: 20px 80px; max-width: 750px; margin: 0 auto; transition: all 0.3s ease; }
   .sofa-main-body { position: relative; background: #004d40; border-radius: 50px 50px 10px 10px; box-shadow: inset 0 15px 40px rgba(0,0,0,0.6); padding: 40px 30px 15px 30px; z-index: 2; }
   .armrest { position: absolute; bottom: 0; width: 100px; height: 240px; background: linear-gradient(to bottom, #00332c, #002621); border-radius: 40px 40px 15px 15px; box-shadow: 10px 15px 30px rgba(0,0,0,0.5), inset 0 10px 15px rgba(255,255,255,0.05); z-index: 4; transition: width 0.3s ease, height 0.3s ease; }
@@ -383,8 +400,9 @@
     .armrest { width: 70px; height: 200px; }
     
     .tablet-bezel { 
-      width: 85vw; height: 60vw; padding: 30px 15px 15px 15px; 
-      transform: scale(0.9);
+      width: 85vw; height: 62vw; padding: 28px 14px 14px 14px; 
+      transform: scale(0.92);
+      box-shadow: 0 20px 35px rgba(0,0,0,0.45), inset 0 2px 5px rgba(255,255,255,0.12);
     }
     
     /* Manteniamo uno spazio decente anche su tablet */
@@ -413,21 +431,23 @@
     .brush { width: 110px; height: 10px; }
     .easel-crossbar { bottom: 18%; }
     
-    .tablet-container { padding: 10px; }
+    .tablet-container { padding: 20px 18px; margin: 0 auto; overflow: visible; }
     .tablet-bezel { 
-      width: 90vw; height: 65vw; padding: 30px 10px 10px 10px; border-radius: 20px; 
-      transform: scale(0.85); 
+      width: 88vw; height: 62vw; padding: 24px 10px 10px 10px; border-radius: 20px; 
+      transform: none; overflow: visible;
+      box-shadow: 0 18px 30px rgba(0,0,0,0.35), inset 0 2px 5px rgba(255,255,255,0.12);
     }
     /* Fotocamera per mobile riproporzionata e definita */
-    .tablet-camera { top: 12px; width: 10px; height: 10px; border: 2px solid #333; }
+    .tablet-camera { top: 8px; width: 10px; height: 10px; border: 2px solid #333; }
     
-    .tablet-nav-btn { width: 30px; height: 30px; font-size: 16px; }
-    .tablet-prev-btn { left: -15px; } 
-    .tablet-next-btn { right: -15px; }
+    .tablet-nav-btn { width: 34px; height: 34px; font-size: 16px; }
+    .tablet-prev-btn { left: -10px; } 
+    .tablet-next-btn { right: -10px; }
     
     /* Spazio libero forzato su mobile per far vedere il Matrix */
-    .ai-frame { padding: 30px 20px; }
-    .ai-image-wrapper { padding: 10px; }
+    .ai-frame { padding: 10px 14px; }
+    .ai-image-wrapper { padding: 3px; max-height: calc(100% - 14px); max-width: calc(100% - 12px); }
+    .ai-image-wrapper img { max-width: calc(100% - 6px); max-height: calc(100% - 6px); }
   }
 </style>
 </head>
@@ -548,7 +568,7 @@
   </div>
 </section>
 
-<div class="section-divider" style="margin: 40px auto;"></div>
+<div class="section-divider" style="margin: 30px auto;"></div>
 
 <section class="lulu-sofa-section">
   <h2 class="section-title">Lulu meno male che ci sei tu</h2>
@@ -780,6 +800,18 @@
       container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
     });
 
+    function updateTabletNavButtons() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const currentScroll = container.scrollLeft;
+      const threshold = 4;
+
+      prevBtn.disabled = currentScroll <= threshold;
+      nextBtn.disabled = currentScroll >= maxScroll - threshold;
+    }
+
+    container.addEventListener('scroll', updateTabletNavButtons);
+    window.addEventListener('resize', updateTabletNavButtons);
+
     const MAX   = 200;
     const BATCH = 10;
     const FAIL_STOP = 5;
@@ -806,11 +838,13 @@
           `;
           container.appendChild(div);
           consecutiveFails = 0;
+          updateTabletNavButtons();
         } else {
           consecutiveFails++;
         }
       }
     }
+    updateTabletNavButtons();
   }
 
   /* ── Sfigatini: pre-verifica in parallelo, poi costruisce il loop ────── */
@@ -956,21 +990,35 @@
       ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, width, height);
 
-      ctx.fillStyle = '#00ff41'; // Verde Matrix per il testo standard
       ctx.font = fontSize + 'px monospace';
+      const primaryColor = getComputedStyle(canvas.parentElement || document.body).getPropertyValue('--primary').trim() || '#00cec9';
+
+      const edgeColumns = Math.max(1, Math.floor(columns * 0.22));
+      const specialWords = ['TVB', 'TI SBATUFFOLO', 'IO E TE', 'INSIEME'];
 
       for (let i = 0; i < drops.length; i++) {
         const r = Math.random();
         let text = '';
-        
-        // Percentuali ricalibrate per cuori e panda
-        if (r < 0.04) text = '♥'; // 4% Cuori Matrix (verdi)
-        else if (r < 0.08) text = '❤️'; // 4% Cuori rossi classici
-        else if (r < 0.14) text = '🐼'; // 6% Panda
-        else if (r < 0.24) text = ' ';  // 10% Spazi vuoti per variare il flusso
+        let color = '#00ff41';
+        let x = i * fontSize;
+
+        // Parole speciali in colore --primary: privilegiamo le colonne ai bordi
+        if (r < 0.02) {
+          const useLeft = Math.random() < 0.5;
+          const edgeIndex = useLeft
+            ? Math.floor(Math.random() * edgeColumns)
+            : Math.floor(columns - edgeColumns + Math.random() * edgeColumns);
+          x = edgeIndex * fontSize;
+          text = specialWords[Math.floor(Math.random() * specialWords.length)];
+          color = primaryColor;
+        } else if (r < 0.06) text = '♥'; // 4% Cuori Matrix (verdi)
+        else if (r < 0.10) text = '❤️'; // 4% Cuori rossi classici
+        else if (r < 0.16) text = '🐼'; // 6% Panda
+        else if (r < 0.26) text = ' ';  // 10% Spazi vuoti per variare il flusso
         else text = chars[Math.floor(Math.random() * chars.length)]; // Caratteri alfanumerici
 
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, drops[i] * fontSize);
 
         if (drops[i] * fontSize > height && Math.random() > 0.95) {
           drops[i] = 0;
