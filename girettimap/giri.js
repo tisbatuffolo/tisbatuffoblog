@@ -5,8 +5,8 @@ const GIRI = [
     "img": "https://img3.oastatic.com/img2/634223854/800x600/variant.webp?revbust=19f75a804fb"
   },
   {
-    "titolo": "Tarzaning San Biagio",
-    "link": "https://www.outdooractive.com/it/route/via-ferrata/val-di-sole-pejo-e-rabbi/tarzaning-san-biagio/346849711/",
+    "titolo": "Tarzaning Dimaro",
+    "link": "https://www.outdooractive.com/it/route/via-ferrata/val-di-sole-pejo-e-rabbi/tarzaning-dimaro/346849711/",
     "img": "https://img0.oastatic.com/img2/634223771/800x600/variant.webp?revbust=19f75a5247b"
   },
   {
