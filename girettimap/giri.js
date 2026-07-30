@@ -42,6 +42,6 @@ const GIRI = [
   {
     "titolo": "Kayak Senaiga",
     "link": "https://www.outdooractive.com/it/route/kayak/belluno/kayak-senaiga/345130302/",
-    "img": "https://img2.oastatic.com/img2/632808338/800x600/variant.webp?revbust=19f0f726e26"
+    "img": "https://img2.oastatic.com/img2/632808338/800x600/variant.webp"
   }
 ]
