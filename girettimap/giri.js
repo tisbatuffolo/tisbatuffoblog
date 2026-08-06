@@ -32,7 +32,7 @@ const GIRI = [
   {
     "titolo": "Corno Bianco di Sarentino",
     "link": "https://www.outdooractive.com/it/route/escursione/alto-adige/corno-bianco-di-sarentino/345689343/",
-    "img": "https://img3.oastatic.com/img2/633316134/800x600/variant.webp?revbust=19f3310b3ba"
+    "img": "https://img3.oastatic.com/img2/633316134/800x600/variant.webp"
   },
   {
     "titolo": "Kayak Senaiga",
