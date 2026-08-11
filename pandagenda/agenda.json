@@ -160,5 +160,12 @@
       "tipo": "giretto",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-08-20": [
+    {
+      "nome": "Il nostro anniversario  ❤️",
+      "tipo": "evento",
+      "ricorrenza": "annuale"
+    }
   ]
 }

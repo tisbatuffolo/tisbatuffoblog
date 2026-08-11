@@ -1,10 +1,5 @@
 const GIRI = [
   {
-    "titolo": "Tarzaning Dimaro",
-    "link": "https://www.outdooractive.com/it/route/via-ferrata/val-di-sole-pejo-e-rabbi/tarzaning-dimaro/346849711/",
-    "img": "https://img0.oastatic.com/img2/634223771/800x600/variant.webp?revbust=19f75a5247b"
-  },
-  {
     "titolo": "Laguna di Venezia",
     "link": "https://www.outdooractive.com/it/route/giro-in-barca/venezia/laguna-di-venezia/346309146/",
     "img": "https://img3.oastatic.com/img2/633787569/800x600/variant.webp?revbust=19f5667e98c"
@@ -43,5 +38,10 @@ const GIRI = [
     "titolo": "Francolini",
     "link": "https://www.outdooractive.com/it/route/escursione/altopiano-di-folgaria-lavarone-luserna/francolini/344466189/",
     "img": "https://img1.oastatic.com/img2/632318277/800x600/variant.webp"
+  },
+  {
+    "titolo": "Ponte Tibetano di Gresta",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-fiemme/ponte-tibetano-di-gresta/343986313/",
+    "img": "https://img2.oastatic.com/img2/631917503/800x600/variant.webp"
   }
 ]
