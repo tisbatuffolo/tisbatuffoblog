@@ -428,6 +428,22 @@
     }
     .legend-item strong { font-weight: 700; } 
 
+    .legend-lens {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
+      font-size: 1.05em;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      user-select: none;
+    }
+    .legend-lens:hover {
+      transform: scale(1.12);
+      opacity: 1;
+    }
+
     .comparison-category-badge {
       display: inline-block;
       padding: 4px 10px;
@@ -996,9 +1012,14 @@ function updateTorta() {
   const legendGrid = document.getElementById('grid-legend');
   legendGrid.innerHTML = '';
   labels.forEach((l, i) => {
-    legendGrid.innerHTML += `<div class="legend-item" style="cursor: pointer;" onclick="gestisciClickLegenda('${l}')">
+    const safeLabel = l.replace(/'/g, "\\'");
+    const lensHtml = selectedAnni.length === 1
+      ? `<span class="legend-lens" title="Apri dettagli di ${l}" onclick="event.stopPropagation(); gestisciClickLegenda('${safeLabel}');" aria-label="Apri dettagli di ${l}">🔎</span>`
+      : '';
+
+    legendGrid.innerHTML += `<div class="legend-item" style="cursor: pointer;" onclick="gestisciClickLegenda('${safeLabel}')">
       <div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div>
-      <span>${l}: <strong>${valori[i]}</strong></span>
+      <span>${l}: <strong>${valori[i]}</strong></span>${lensHtml}
     </div>`;
   });
 
