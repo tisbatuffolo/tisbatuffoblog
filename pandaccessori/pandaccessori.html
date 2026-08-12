@@ -151,15 +151,20 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--cartoon-yellow); border: 5px solid var(--cartoon-border); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-family: 'Luckiest Guy'; font-size: 20px; z-index: 100; display:flex; align-items:center; justify-content:center;}
 .btn-p { left: -15px; } .btn-n { right: -15px; }
 .close-x { position: absolute; top: -15px; right: -15px; background: #ff4747; color: #fff; border: 4px solid var(--cartoon-border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: 900; display:flex; align-items:center; justify-content:center;}
-/* NUOVO: Matitina per Edit Modale */
+
 .edit-btn { position: absolute; top: -15px; left: -15px; background: #3498db; color: #fff; border: 4px solid var(--cartoon-border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; font-weight: 900; display:flex; align-items:center; justify-content:center; transition: transform 0.2s; }
 .edit-btn:hover { transform: scale(1.1); }
 
 /* --- EDIT CONTROLS IN MODAL --- */
 .m-edit-area { display: none; margin-top: 15px; background: #f1f2f6; border: 3px dashed #ccc; padding: 15px; border-radius: 20px; }
 .m-edit-area input, .m-edit-area select { width: 100%; margin-bottom: 10px; padding: 8px; border: 2px solid var(--cartoon-border); border-radius: 10px; font-family: 'Fredoka', sans-serif; text-align: center; font-size: 0.95rem; }
-.m-edit-area button { background: #2ecc71; color: #fff; font-family: 'Grandstander'; font-weight: 900; font-size: 1.1rem; border: 3px solid var(--cartoon-border); border-radius: 12px; padding: 8px 20px; cursor: pointer; box-shadow: 2px 2px 0px var(--cartoon-border); }
-.m-edit-area button:hover { transform: translateY(-2px); box-shadow: 4px 4px 0px var(--cartoon-border); }
+
+/* NUOVO: Stile per i due bottoni di modifica/eliminazione */
+.edit-actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.edit-actions button { flex: 1; min-width: 150px; background: #2ecc71; color: #fff; font-family: 'Grandstander'; font-weight: 900; font-size: 1.1rem; border: 3px solid var(--cartoon-border); border-radius: 12px; padding: 8px 10px; cursor: pointer; box-shadow: 2px 2px 0px var(--cartoon-border); transition: transform 0.1s, box-shadow 0.1s; }
+.edit-actions button:hover { transform: translateY(-2px); box-shadow: 4px 4px 0px var(--cartoon-border); }
+.edit-actions .btn-delete { background: #222; border-color: #000; box-shadow: 2px 2px 0px #000; }
+.edit-actions .btn-delete:hover { background: #000; box-shadow: 4px 4px 0px #000; }
 
 /* ============================================== */
 /* --- DESIGN PANDA FORM --- */
@@ -447,7 +452,10 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                 <option value="si">Sì, è nella PandaBox!</option>
             </select>
 
-            <button id="btn-save-edit" onclick="submitEdit()">Salva Modifica ✔️</button>
+            <div class="edit-actions">
+                <button id="btn-delete" class="btn-delete" onclick="deleteItem()">🗑️ Elimina Oggetto</button>
+                <button id="btn-save-edit" onclick="submitEdit()">Salva Modifica ✔️</button>
+            </div>
         </div>
     </div>
 </div>
@@ -476,13 +484,12 @@ const roomColors = {
     'corridoio': '#ffb3ba', 'bagno': '#b2ebf2', 'lettone': '#e1bee7', 'cantina': '#cfd8dc'
 };
 
-/* CRITICAL: Aggiornata per mappare le directory esatte per la modifica */
 function formatData(arr, path, room = null, cat = "", displayTitle = null, rawArrayName = "") {
     if (!arr) return [];
     return arr.map(i => ({
         ...i, 
         imgSrc: path + i.immagine,
-        targetDir: path.replace(/\/$/, ""), // es. img/casasbatuffolone/terrazzo
+        targetDir: path.replace(/\/$/, ""), 
         jsFilePath: path + "dati_" + rawArrayName + ".js",
         arrayName: "dati_" + rawArrayName,
         room, 
@@ -544,7 +551,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* NUOVO: Funzione per pulire l'UI prima di un Optimistic Update */
 function clearUI() {
     for(let k in DB) {
         const g = document.getElementById(`grid-${k}`);
@@ -641,7 +647,6 @@ function scrollToRoom(roomName) {
     if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.transform = 'scale(1.1)'; el.style.boxShadow = '0 0 20px var(--primary)'; setTimeout(() => { el.style.transform = ''; el.style.boxShadow = ''; }, 1500); }
 }
 
-// LOGICA FORM AGGIUNGI STANDARD
 document.getElementById('add-ambiente').addEventListener('change', function(e) {
     const val = e.target.value; const divStanza = document.getElementById('div-stanza');
     if (val === 'casasbatuffolone') divStanza.style.display = 'block';
@@ -674,8 +679,6 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
         
         if (res.ok) { 
             alert("Salvato! 🐼"); 
-            
-            // OPTIMISTIC UI: Aggiorniamo le variabili in locale per riflettere le modifiche all'istante
             const newItem = {
                 titolo: n,
                 immagine: "",
@@ -703,8 +706,6 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
                 }
             }
 
-            // --- FIX RIORDINAMENTO ---
-            // Ordiniamo "casa" cosicché il nuovo oggetto si raggruppi subito nella sua stanza
             if (DB.casa) {
                 const casaOrder = [
                     'dati_terrazzo', 'dati_salotto', 'dati_mondo', 
@@ -722,8 +723,6 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
             
             clearUI();
             initApp();
-            
-            // Svuota i campi per esser pronti ad un altro inserimento
             document.getElementById('add-nome').value = '';
             f.value = '';
             
@@ -744,7 +743,6 @@ function toggleEditMode() {
         const it = activeSet[activeIdx];
         document.getElementById('edit-nome').value = it.titolo || it.foro;
         
-        // Auto-Seleziona il luogo basato su targetDir
         const tDir = it.targetDir;
         const ambSel = document.getElementById('edit-ambiente');
         if (tDir.includes('casasbatuffolone')) {
@@ -801,11 +799,14 @@ async function submitEdit() {
     } else { t = `img/${a}`; j = `img/${a}/dati_${a}.js`; arr = `dati_${a}`; }
 
     const it = activeSet[activeIdx];
-    const btn = document.getElementById('btn-save-edit');
-    btn.innerText = "⏳ Sto Salvando..."; btn.disabled = true;
+    const btnS = document.getElementById('btn-save-edit');
+    const btnD = document.getElementById('btn-delete');
+    
+    btnS.innerText = "⏳ Sto Salvando..."; btnS.disabled = true; btnD.disabled = true;
 
     try {
         const payload = {
+            action: "update",
             oldTitolo: it.titolo || it.foro, oldImmagine: it.immagine,
             oldTargetDir: it.targetDir, oldJsFilePath: it.jsFilePath, oldArrayName: it.arrayName,
             newTitolo: newName, newTargetDir: t, newJsFilePath: j, newArrayName: arr
@@ -816,25 +817,15 @@ async function submitEdit() {
         });
 
         if (res.ok) { 
-            // --- INIZIO AGGIORNAMENTO OTTIMISTICO ---
-            
             const dbKeyOld = (it.category === 'Casa Sbatuffolone') ? 'casa' : (it.category ? it.category.toLowerCase() : '');
             const dbKeyNew = (a === 'casasbatuffolone') ? 'casa' : a;
-            
-            // Verifichiamo se l'utente ha effettivamente cambiato categoria o stanza
             const roomChanged = (dbKeyOld !== dbKeyNew) || (it.arrayName !== arr);
 
             if (roomChanged) {
-                // 1. Rimuoviamo il vecchio riferimento da tutti i database locali SOLO se è stata cambiata posizione
-                for (let key in DB) {
-                    DB[key] = DB[key].filter(item => item !== it);
-                }
-                for (let key in specialDB) {
-                    specialDB[key] = specialDB[key].filter(item => item !== it);
-                }
+                for (let key in DB) DB[key] = DB[key].filter(item => item !== it);
+                for (let key in specialDB) specialDB[key] = specialDB[key].filter(item => item !== it);
             }
 
-            // 2. Aggiorniamo le proprietà dell'oggetto in memoria
             it.titolo = newName;
             it.targetDir = t;
             it.jsFilePath = j;
@@ -844,11 +835,9 @@ async function submitEdit() {
             it.displayTitle = null;
 
             if (roomChanged) {
-                // 3. Lo inseriamo nel nuovo "cassetto" corretto
                 if (!DB[dbKeyNew]) DB[dbKeyNew] = [];
                 DB[dbKeyNew].push(it);
 
-                // Gestione Special Box (Mondo/PandaBox)
                 if (a === 'casasbatuffolone') {
                     if (s === 'salotto' && isM === 'si') {
                         it.displayTitle = 'Salotto - Mondo';
@@ -862,8 +851,6 @@ async function submitEdit() {
                 }
             }
 
-            // --- FIX RIORDINAMENTO ---
-            // Riordiniamo in modo universale l'array di casa per evitare che le card finiscano "slegate" in fondo!
             if (DB.casa) {
                 const casaOrder = [
                     'dati_terrazzo', 'dati_salotto', 'dati_mondo', 
@@ -879,16 +866,59 @@ async function submitEdit() {
                 });
             }
 
-            // 4. RESET VISIVO TOTALE E RE-INIT
             clearUI(); 
             initApp(); 
-            
             closeModal(); 
             alert("Modifica completata con successo! 🐼✨"); 
             
         } else { const errText = await res.text(); throw new Error(errText); }
     } catch (e) { alert("Errore durante la modifica: " + e.message); } 
-    finally { btn.innerText = "Salva Modifica ✔️"; btn.disabled = false; }
+    finally { btnS.innerText = "Salva Modifica ✔️"; btnS.disabled = false; btnD.disabled = false; }
+}
+
+async function deleteItem() {
+    if(!confirm("Sei sicuro di voler eliminare questo Pandaccessorio? L'azione è irreversibile! 🐼🗑️")) return;
+    
+    const it = activeSet[activeIdx];
+    const btnD = document.getElementById('btn-delete');
+    const btnS = document.getElementById('btn-save-edit');
+    
+    btnD.innerText = "⏳ Eliminazione..."; btnD.disabled = true; btnS.disabled = true;
+
+    try {
+        const payload = {
+            action: "delete",
+            oldImmagine: it.immagine,
+            oldTargetDir: it.targetDir,
+            oldJsFilePath: it.jsFilePath,
+            oldArrayName: it.arrayName
+        };
+
+        const res = await fetch("https://tisbatuffoblog.vercel.app/api/update_pandaccessorioAPI", { 
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) 
+        });
+
+        if (res.ok) { 
+            for (let key in DB) {
+                DB[key] = DB[key].filter(item => item !== it);
+            }
+            for (let key in specialDB) {
+                specialDB[key] = specialDB[key].filter(item => item !== it);
+            }
+            
+            clearUI(); 
+            initApp(); 
+            closeModal(); 
+            alert("Oggetto eliminato con successo! 🗑️"); 
+            
+        } else { 
+            const errText = await res.text(); throw new Error(errText); 
+        }
+    } catch (e) { 
+        alert("Errore durante l'eliminazione: " + e.message); 
+    } finally { 
+        btnD.innerText = "🗑️ Elimina Oggetto"; btnD.disabled = false; btnS.disabled = false; 
+    }
 }
 
 </script>

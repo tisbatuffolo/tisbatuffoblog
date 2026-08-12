@@ -122,6 +122,16 @@
     letter-spacing: 1.5px;
   }
 
+  /* Interattività per Condivisione */
+  .clickable-media {
+    cursor: pointer !important;
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  .clickable-media:hover {
+    transform: scale(1.05);
+    filter: brightness(1.05);
+  }
+
   /* --- PANDA STICKERS --- */
   .stickers-section { background: #fff; padding: 40px 0 60px 0; position: relative; overflow: hidden; }
   .phone-wrapper { position: relative; display: inline-block; margin: 0 auto; }
@@ -213,7 +223,7 @@
   .art-scrollbar::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff4500, #ffd700, #32cd32, #1e90ff, #9400d3); border-radius: 5px; }
   .art-scrollbar::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: #fff; border: 4px solid #333; border-radius: 50%; margin-top: -7px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
-  /* --- SBATUFFOLAI (INTELLIGENZA ARTIFICIALE - REVISIONE MATRIX & TABLET REALISTICO) --- */
+  /* --- SBATUFFOLAI (INTELLIGENZA ARTIFICIALE) --- */
   .sbatuffolai-section { 
     padding: 60px 0; 
     background: var(--bg-soft); 
@@ -238,7 +248,6 @@
     display: flex; align-items: center; 
   }
   
-  /* Fotocamera tablet più grande, definita ed evidente */
   .tablet-camera { 
     position: absolute; left: 50%; top: 14px; transform: translateX(-50%); 
     width: 14px; height: 14px; 
@@ -286,7 +295,7 @@
     flex: 0 0 100%;
     display: flex; align-items: center; justify-content: center; 
     scroll-snap-align: center; 
-    padding: 14px 50px; /* Meno spazio interno per immagini più grandi */
+    padding: 14px 50px;
     box-sizing: border-box; 
     background: transparent;
     min-height: 0;
@@ -388,6 +397,113 @@
   .cross::after { content: ""; width: 30px; height: 10px; background: #222; position: absolute; top: 12px; left: -10px; }
   @keyframes zombieSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
 
+  /* --- MODALE CONDIVISIONE --- */
+  .share-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    padding: 15px;
+  }
+  .share-modal-overlay.active { display: flex; }
+  .share-modal-card {
+    background: #ffffff;
+    border-radius: 25px;
+    padding: 25px 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border: 4px solid var(--primary);
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes modalPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .share-modal-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: var(--heart-red);
+    color: #fff;
+    border: 3px solid #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-weight: 900;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .share-modal-title {
+    font-family: 'Grandstander', cursive;
+    font-size: 1.6rem;
+    margin: 0 0 5px 0;
+    color: var(--sbatuffo-blue);
+  }
+  .share-modal-sub {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #555;
+    margin: 0 0 15px 0;
+  }
+  .share-preview-box {
+    max-height: 200px;
+    margin: 10px 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #f5f5f5;
+    border: 2px dashed #ccc;
+    padding: 8px;
+  }
+  .share-preview-box img, .share-preview-box video {
+    max-width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  .share-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 10px;
+    border-radius: 14px;
+    border: none;
+    color: white;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, filter 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .share-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+  }
+  .btn-wa { background-color: #25D366; }
+  .btn-wa svg { fill: #ffffff; width: 22px; height: 22px; }
+  .btn-native { background-color: var(--primary); }
+
   /* --- FOOTER --- */
   footer { background: #fff; padding: 20px 10px 40px; border-top: 2px solid #eee; }
   .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
@@ -405,7 +521,6 @@
       box-shadow: 0 20px 35px rgba(0,0,0,0.45), inset 0 2px 5px rgba(255,255,255,0.12);
     }
     
-    /* Manteniamo uno spazio decente anche su tablet */
     .ai-frame { padding: 30px 40px; }
   }
   
@@ -437,17 +552,17 @@
       transform: none; overflow: visible;
       box-shadow: 0 18px 30px rgba(0,0,0,0.35), inset 0 2px 5px rgba(255,255,255,0.12);
     }
-    /* Fotocamera per mobile riproporzionata e definita */
     .tablet-camera { top: 8px; width: 10px; height: 10px; border: 2px solid #333; }
     
     .tablet-nav-btn { width: 34px; height: 34px; font-size: 16px; }
     .tablet-prev-btn { left: -10px; } 
     .tablet-next-btn { right: -10px; }
     
-    /* Spazio libero forzato su mobile per far vedere il Matrix */
     .ai-frame { padding: 10px 14px; }
     .ai-image-wrapper { padding: 3px; max-height: calc(100% - 14px); max-width: calc(100% - 12px); }
     .ai-image-wrapper img { max-width: calc(100% - 6px); max-height: calc(100% - 6px); }
+
+    .share-buttons-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -467,7 +582,7 @@
 
 <section class="stickers-section">
   <h2 class="section-title">Panda Stickers</h2>
-  <p class="section-subtitle">Scorri verso il basso per vedere tutti i nostri panda stickers!</p>
+  <p class="section-subtitle">Scorri verso il basso per vedere tutti i nostri panda stickers! (Clicca per condividere)</p>
   <div class="phone-wrapper">
     <div class="floating-heart" style="top: 10%; left: -110px;">❤️</div>
     <div class="floating-heart" style="top: 50%; left: -130px; animation-delay: 1s;">💖</div>
@@ -487,7 +602,7 @@
 
 <section class="gif-section">
   <h2 class="section-title">Panda Gif</h2>
-  <p class="section-subtitle">Ti sbatuffolo animatamente</p>
+  <p class="section-subtitle">Ti sbatuffolo animatamente (Clicca una GIF per condividerla)</p>
   <div class="camera-display-container">
     <div class="film-roll-container" id="gif-scroll-container">
       <div class="film-strip-gifs" id="gif-gallery"></div>
@@ -506,7 +621,7 @@
 
 <section class="sbatuffolart-section">
   <h2 class="section-title">Sbatuffolart</h2>
-  <p class="section-subtitle">Quando sbatuffolare diventa arte</p>
+  <p class="section-subtitle">Quando sbatuffolare diventa arte (Clicca l'opera per condividerla)</p>
   <div class="art-container">
       <div class="easel">
           <div class="easel-back-leg"></div>
@@ -544,10 +659,10 @@
 
 <div class="section-divider" style="margin: 40px auto 10px;"></div>
 
-<!-- NUOVA SEZIONE SBATUFFOLAI (INTELLIGENZA ARTIFICIALE) -->
+<!-- SEZIONE SBATUFFOLAI (INTELLIGENZA ARTIFICIALE) -->
 <section class="sbatuffolai-section">
   <h2 class="section-title">Ti sbatuffolAI</h2>
-  <p class="section-subtitle">Ti sbatuffolo intelligentemente e artificialmente</p>
+  <p class="section-subtitle">Ti sbatuffolo intelligentemente e artificialmente (Clicca per condividere)</p>
   
   <div class="ai-theme-container">
     <div class="tablet-container">
@@ -572,7 +687,7 @@
 
 <section class="lulu-sofa-section">
   <h2 class="section-title">Lulu meno male che ci sei tu</h2>
-  <p class="section-subtitle">Dove starà dormendo adesso la Lulu?</p>
+  <p class="section-subtitle">Dove starà dormendo adesso la Lulu? (Clicca la foto per condividerla)</p>
   <div class="sofa-external-wrapper">
     <div class="armrest arm-l"></div>
     <div class="armrest arm-r"></div>
@@ -606,7 +721,7 @@
         <h2 class="section-title" style="color: #900; font-family: 'Courier New', Courier; margin: 0;">GLI SFIGATINI</h2>
         <div class="ghost-icon">👻</div>
     </div>
-    <p class="section-subtitle" style="color: var(--zombie-eye); margin-top: 10px;">Ricordi da film horror</p>
+    <p class="section-subtitle" style="color: var(--zombie-eye); margin-top: 10px;">Ricordi da film horror (Clicca una pellicola per condividerla)</p>
     
     <div class="cinema-container">
         <div class="web-corner"></div>
@@ -631,6 +746,27 @@
 
 <div class="section-divider" style="margin-bottom: 80px;"></div>
 
+<!-- MODALE DI CONDIVISIONE UNIVERSALE -->
+<div class="share-modal-overlay" id="share-modal-overlay" onclick="if(event.target === this) closeShareModal()">
+  <div class="share-modal-card">
+    <button class="share-modal-close" onclick="closeShareModal()">&times;</button>
+    <h3 class="share-modal-title" id="share-modal-title">Condividi</h3>
+    <p class="share-modal-sub">Condividi questa pandosità 🐼</p>
+    
+    <div class="share-preview-box" id="share-preview-content"></div>
+    
+    <div class="share-buttons-grid">
+      <button class="share-btn btn-wa" onclick="shareTo('whatsapp')">
+        <svg viewBox="0 0 24 24"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.333 4.993L2 22l5.233-1.237a9.96 9.96 0 004.779 1.221h.004c5.505 0 9.988-4.478 9.989-9.985A9.98 9.98 0 0012.012 2zm0 18.332h-.003a8.3 8.3 0 01-4.232-1.161l-.304-.181-3.146.743.754-3.067-.198-.315a8.29 8.29 0 01-1.272-4.367c.001-4.582 3.73-8.31 8.312-8.31 2.22 0 4.306.865 5.875 2.437a8.27 8.27 0 012.432 5.871c-.001 4.583-3.73 8.311-8.217 8.311zm4.557-6.221c-.25-.125-1.482-.731-1.711-.814-.23-.083-.397-.125-.563.125-.167.25-.647.814-.793.981-.146.167-.292.187-.542.062a6.85 6.85 0 01-2.013-1.243 7.56 7.56 0 01-1.393-1.734c-.146-.25-.016-.386.109-.51.113-.112.25-.292.375-.438.125-.146.167-.25.25-.417.083-.167.042-.313-.021-.438-.063-.125-.563-1.356-.771-1.856-.203-.487-.41-.421-.563-.429l-.48-.008c-.167 0-.437.062-.667.313-.229.25-.875.855-.875 2.085 0 1.23.896 2.418 1.021 2.585.125.167 1.763 2.693 4.27 3.777.596.257 1.062.41 1.425.526.598.19 1.142.163 1.572.099.48-.071 1.482-.605 1.69-1.189.208-.584.208-1.084.146-1.189-.063-.105-.229-.167-.479-.292z"/></svg>
+        WhatsApp
+      </button>
+      <button class="share-btn btn-native" onclick="shareTo('native')">
+        📲 Altro
+      </button>
+    </div>
+  </div>
+</div>
+
 <footer>
     <div class="footer-container">
     <div class="footer-text" style="display: flex; align-items: center; justify-content: center;">
@@ -648,6 +784,89 @@
 </svg>
 
 <script>
+  /* ── Gestore Condivisione ─────────────────────────────────────────────── */
+  let currentShareData = { url: '', absoluteUrl: '', type: 'image', title: '' };
+
+  function openShareModal(mediaSrc, mediaType, sectionTitle) {
+    // Risoluzione URL Assoluto per compatibilità Mobile e Desktop
+    const dummyAnchor = document.createElement('a');
+    dummyAnchor.href = mediaSrc;
+    const absoluteUrl = dummyAnchor.href;
+
+    currentShareData = {
+      url: mediaSrc,
+      absoluteUrl: absoluteUrl,
+      type: mediaType,
+      title: sectionTitle || 'Pandosità'
+    };
+
+    const previewBox = document.getElementById('share-preview-content');
+    if (mediaType === 'video') {
+      previewBox.innerHTML = `<video autoplay loop muted playsinline><source src="${absoluteUrl}" type="video/mp4"></video>`;
+    } else {
+      previewBox.innerHTML = `<img src="${absoluteUrl}" alt="Anteprima">`;
+    }
+
+    document.getElementById('share-modal-title').innerText = `Condividi ${sectionTitle || 'Immagine'}`;
+    document.getElementById('share-modal-overlay').classList.add('active');
+  }
+
+  function closeShareModal() {
+    document.getElementById('share-modal-overlay').classList.remove('active');
+  }
+
+  async function shareTo(platform) {
+    const textMessage = `Guarda questo contenuto da SbatuffoBlog (${currentShareData.title}): ${currentShareData.absoluteUrl}`;
+    const encodedText = encodeURIComponent(textMessage);
+
+    if (platform === 'whatsapp') {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const waUrl = isMobile 
+        ? `whatsapp://send?text=${encodedText}`
+        : `https://api.whatsapp.com/send?text=${encodedText}`;
+      window.open(waUrl, '_blank');
+
+    } else if (platform === 'native') {
+      if (navigator.share) {
+        try {
+          let fileShared = false;
+          // Tentativo condivisione file reale se supportato
+          if (navigator.canShare && currentShareData.type === 'image') {
+            try {
+              const res = await fetch(currentShareData.absoluteUrl);
+              const blob = await res.blob();
+              const extension = blob.type.split('/')[1] || 'jpg';
+              const file = new File([blob], `pandosita.${extension}`, { type: blob.type });
+              if (navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                  title: `SbatuffoBlog - ${currentShareData.title}`,
+                  text: `Guarda questo contenuto su SbatuffoBlog!`,
+                  files: [file]
+                });
+                fileShared = true;
+              }
+            } catch (fileErr) {
+              // Fallback se il fetch fallisce per CORS locale
+            }
+          }
+          if (!fileShared) {
+            await navigator.share({
+              title: `SbatuffoBlog - ${currentShareData.title}`,
+              text: `Guarda questo contenuto su SbatuffoBlog! 🐼`,
+              url: currentShareData.absoluteUrl
+            });
+          }
+        } catch (e) {
+          if (e.name !== 'AbortError') {
+            alert('Condivisione non riuscita.');
+          }
+        }
+      } else {
+        alert('La condivisione nativa non è supportata dal browser desktop in uso. Usa WhatsApp o un browser mobile.');
+      }
+    }
+  }
+
   /* ── Utility: verifica esistenza immagine/video in parallelo ─────────── */
   function probeImage(src) {
     return new Promise(resolve => {
@@ -678,9 +897,11 @@
   function loadPhoneStickers() {
     const container = document.getElementById('sticker-phone-gallery');
     for (let i = 1; i <= 116; i++) {
+      const stickerSrc = `img/sticker/sticker (${i}).webp`;
       const div = document.createElement('div');
-      div.className = 'sticker-item-phone';
-      div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" onerror="this.parentElement.remove()">`;
+      div.className = 'sticker-item-phone clickable-media';
+      div.innerHTML = `<img src="${stickerSrc}" onerror="this.parentElement.remove()">`;
+      div.onclick = () => openShareModal(stickerSrc, 'image', 'Panda Sticker');
       container.appendChild(div);
     }
   }
@@ -697,13 +918,15 @@
 
     function appendFrame(result) {
       const div = document.createElement('div');
-      div.className = 'film-frame-gif';
+      div.className = 'film-frame-gif clickable-media';
       if (result.type === 'mp4') {
         div.innerHTML = `<video autoplay loop muted playsinline>
           <source src="${result.src}" type="video/mp4">
         </video>`;
+        div.onclick = () => openShareModal(result.src, 'video', 'Panda Gif');
       } else {
         div.innerHTML = `<img src="${result.src}" style="width:100%;height:100%;object-fit:cover;">`;
+        div.onclick = () => openShareModal(result.src, 'image', 'Panda Gif');
       }
       container.appendChild(div);
     }
@@ -769,9 +992,11 @@
 
       for (const { i, ok } of results) {
         if (ok) {
+          const artSrc = `img/sbatuffolart/sbatuffolart (${i}).jpg`;
           const div = document.createElement('div');
-          div.className = 'art-frame';
-          div.innerHTML = `<img src="img/sbatuffolart/sbatuffolart (${i}).jpg">`;
+          div.className = 'art-frame clickable-media';
+          div.innerHTML = `<img src="${artSrc}">`;
+          div.onclick = () => openShareModal(artSrc, 'image', 'Sbatuffolart');
           container.appendChild(div);
           consecutiveFails = 0;
           syncScrollbar();
@@ -829,11 +1054,12 @@
 
       for (const { i, ok } of results) {
         if (ok) {
+          const aiSrc = `img/sbatuffolAI/sbatuffolai (${i}).jpg`;
           const div = document.createElement('div');
           div.className = 'ai-frame';
           div.innerHTML = `
-            <div class="ai-image-wrapper">
-              <img src="img/sbatuffolAI/sbatuffolai (${i}).jpg" alt="AI Panda ${i}">
+            <div class="ai-image-wrapper clickable-media" onclick="openShareModal('${aiSrc}', 'image', 'Ti sbatuffolAI')">
+              <img src="${aiSrc}" alt="AI Panda ${i}">
             </div>
           `;
           container.appendChild(div);
@@ -863,9 +1089,14 @@
 
     function appendFrames() {
       for (const i of validIndices) {
+        const sfigaSrc = `img/sfigatini/sfigatini (${i}).jpg`;
         const frame = document.createElement('div');
-        frame.className = 'film-frame';
-        frame.innerHTML = `<img src="img/sfigatini/sfigatini (${i}).jpg">`;
+        frame.className = 'film-frame clickable-media';
+        frame.innerHTML = `<img src="${sfigaSrc}">`;
+        frame.onclick = (e) => {
+          e.stopPropagation();
+          openShareModal(sfigaSrc, 'image', 'Gli Sfigatini');
+        };
         engine.appendChild(frame);
       }
     }
@@ -896,6 +1127,11 @@
     const img2     = document.getElementById('lulu-c-2');
     const seam     = document.getElementById('lulu-sofa-seam');
     const catThumb = document.getElementById('sofa-cat-thumb');
+
+    img1.classList.add('clickable-media');
+    img2.classList.add('clickable-media');
+    img1.onclick = () => { if (img1.src) openShareModal(img1.src, 'image', 'Lulu Meno Male Che Ci Sei Tu'); };
+    img2.onclick = () => { if (img2.src) openShareModal(img2.src, 'image', 'Lulu Meno Male Che Ci Sei Tu'); };
 
     const MAX_LULU = 200;
     const BATCH    = 15;
@@ -983,10 +1219,9 @@
     const fontSize = 18;
     const columns = Math.floor(width / fontSize) + 1;
     const drops = [];
-    for (let x = 0; x < columns; x++) drops[x] = Math.random() * -100; // Inizia fuori schermo sfalsato
+    for (let x = 0; x < columns; x++) drops[x] = Math.random() * -100;
 
     function draw() {
-      // Sfondo traslucido per lasciare la scia
       ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, width, height);
 
@@ -1002,7 +1237,6 @@
         let color = '#00ff41';
         let x = i * fontSize;
 
-        // Parole speciali in colore --primary: privilegiamo le colonne ai bordi
         if (r < 0.02) {
           const useLeft = Math.random() < 0.5;
           const edgeIndex = useLeft
@@ -1011,11 +1245,11 @@
           x = edgeIndex * fontSize;
           text = specialWords[Math.floor(Math.random() * specialWords.length)];
           color = primaryColor;
-        } else if (r < 0.06) text = '♥'; // 4% Cuori Matrix (verdi)
-        else if (r < 0.10) text = '❤️'; // 4% Cuori rossi classici
-        else if (r < 0.16) text = '🐼'; // 6% Panda
-        else if (r < 0.26) text = ' ';  // 10% Spazi vuoti per variare il flusso
-        else text = chars[Math.floor(Math.random() * chars.length)]; // Caratteri alfanumerici
+        } else if (r < 0.06) text = '♥';
+        else if (r < 0.10) text = '❤️';
+        else if (r < 0.16) text = '🐼';
+        else if (r < 0.26) text = ' ';
+        else text = chars[Math.floor(Math.random() * chars.length)];
 
         ctx.fillStyle = color;
         ctx.fillText(text, x, drops[i] * fontSize);
