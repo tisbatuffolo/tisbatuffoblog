@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SbatuffoBlog - Pandosità</title>
 
-<link href="[https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap)" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --primary: #00cec9;
+    --primary: #00cec9; /* Color Theme Pandosità */
     --sbatuffo-blue: #0000ff;
     --bg-soft: #fdfdfd;
     --text: #1a1a1a;
     --heart-red: #ff4d4d;
-    --zombie-eye: #a0ff00;
+    --zombie-eye: #a0ff00; /* Variabile per il colore degli occhi zombie/sottotitolo */
     --ai-cyan: #00f0ff;
     --ai-pink: #ff00ea;
-    --matrix-green: #00ff41;
+    --matrix-green: #00ff41; /* Nuovo colore Matrix */
   }
 
   body {
@@ -122,16 +122,6 @@
     letter-spacing: 1.5px;
   }
 
-  /* Interattività per Condivisione */
-  .clickable-media {
-    cursor: pointer !important;
-    transition: transform 0.2s ease, filter 0.2s ease;
-  }
-  .clickable-media:hover {
-    transform: scale(1.05);
-    filter: brightness(1.05);
-  }
-
   /* --- PANDA STICKERS --- */
   .stickers-section { background: #fff; padding: 40px 0 60px 0; position: relative; overflow: hidden; }
   .phone-wrapper { position: relative; display: inline-block; margin: 0 auto; }
@@ -223,7 +213,7 @@
   .art-scrollbar::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff4500, #ffd700, #32cd32, #1e90ff, #9400d3); border-radius: 5px; }
   .art-scrollbar::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: #fff; border: 4px solid #333; border-radius: 50%; margin-top: -7px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
-  /* --- SBATUFFOLAI (INTELLIGENZA ARTIFICIALE) --- */
+  /* --- SBATUFFOLAI (INTELLIGENZA ARTIFICIALE - REVISIONE MATRIX & TABLET REALISTICO) --- */
   .sbatuffolai-section { 
     padding: 60px 0; 
     background: var(--bg-soft); 
@@ -248,6 +238,7 @@
     display: flex; align-items: center; 
   }
   
+  /* Fotocamera tablet più grande, definita ed evidente */
   .tablet-camera { 
     position: absolute; left: 50%; top: 14px; transform: translateX(-50%); 
     width: 14px; height: 14px; 
@@ -295,7 +286,7 @@
     flex: 0 0 100%;
     display: flex; align-items: center; justify-content: center; 
     scroll-snap-align: center; 
-    padding: 14px 50px;
+    padding: 14px 50px; /* Meno spazio interno per immagini più grandi */
     box-sizing: border-box; 
     background: transparent;
     min-height: 0;
@@ -359,7 +350,7 @@
   .cushion { width: var(--cushion-w, 240px); height: var(--cushion-h, 220px); background: radial-gradient(circle at 50% 50%, #fffdf5 0%, #fefae0 70%, #f5f5dc 100%); clip-path: url(#concave-cushion-shape); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
   .cushion img { width: 86%; height: 86%; object-fit: cover; opacity: 0; transition: opacity 0.3s ease; clip-path: url(#concave-cushion-shape); }
   .sofa-seam-scroll-container { width: 100%; height: 18px; background: #002621; border-radius: 10px; position: relative; box-shadow: inset 0 3px 5px rgba(0,0,0,0.7); margin-top: 25px; touch-action: none; }
-  #sofa-cat-thumb { position: absolute; top: -45px; width: 110px; height: 80px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="120" height="80" viewBox="0 0 120 80"><text y="60" x="10" font-size="65" filter="grayscale(1) brightness(0.8)" transform="scale(-1, 1) translate(-120, 0)">🐈‍⬛</text></svg>'); background-repeat: no-repeat; background-position: center; cursor: grab; z-index: 5; left: 0; }
+  #sofa-cat-thumb { position: absolute; top: -45px; width: 110px; height: 80px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80" viewBox="0 0 120 80"><text y="60" x="10" font-size="65" filter="grayscale(1) brightness(0.8)" transform="scale(-1, 1) translate(-120, 0)">🐈‍⬛</text></svg>'); background-repeat: no-repeat; background-position: center; cursor: grab; z-index: 5; left: 0; }
   .sofa-base { height: 40px; background: linear-gradient(to bottom, #1a1a1a, #0d0d0d); width: 100%; border-radius: 0 0 20px 20px; position: relative; top: -10px; }
 
   /* --- GLI SFIGATINI --- */
@@ -397,113 +388,6 @@
   .cross::after { content: ""; width: 30px; height: 10px; background: #222; position: absolute; top: 12px; left: -10px; }
   @keyframes zombieSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
 
-  /* --- MODALE CONDIVISIONE --- */
-  .share-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(6px);
-    padding: 15px;
-  }
-  .share-modal-overlay.active { display: flex; }
-  .share-modal-card {
-    background: #ffffff;
-    border-radius: 25px;
-    padding: 25px 20px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    border: 4px solid var(--primary);
-    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  @keyframes modalPop {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .share-modal-close {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    background: var(--heart-red);
-    color: #fff;
-    border: 3px solid #fff;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    font-weight: 900;
-    cursor: pointer;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  .share-modal-title {
-    font-family: 'Grandstander', cursive;
-    font-size: 1.6rem;
-    margin: 0 0 5px 0;
-    color: var(--sbatuffo-blue);
-  }
-  .share-modal-sub {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #555;
-    margin: 0 0 15px 0;
-  }
-  .share-preview-box {
-    max-height: 200px;
-    margin: 10px 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 15px;
-    overflow: hidden;
-    background: #f5f5f5;
-    border: 2px dashed #ccc;
-    padding: 8px;
-  }
-  .share-preview-box img, .share-preview-box video {
-    max-width: 100%;
-    max-height: 180px;
-    object-fit: contain;
-    border-radius: 8px;
-  }
-  .share-buttons-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-  .share-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 10px;
-    border-radius: 14px;
-    border: none;
-    color: white;
-    font-family: 'Fredoka', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-    text-decoration: none;
-    transition: transform 0.2s, filter 0.2s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-  .share-btn:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.08);
-  }
-  .btn-wa { background-color: #25D366; }
-  .btn-wa svg { fill: #ffffff; width: 22px; height: 22px; }
-  .btn-native { background-color: var(--primary); }
-
   /* --- FOOTER --- */
   footer { background: #fff; padding: 20px 10px 40px; border-top: 2px solid #eee; }
   .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
@@ -521,6 +405,7 @@
       box-shadow: 0 20px 35px rgba(0,0,0,0.45), inset 0 2px 5px rgba(255,255,255,0.12);
     }
     
+    /* Manteniamo uno spazio decente anche su tablet */
     .ai-frame { padding: 30px 40px; }
   }
   
@@ -552,17 +437,17 @@
       transform: none; overflow: visible;
       box-shadow: 0 18px 30px rgba(0,0,0,0.35), inset 0 2px 5px rgba(255,255,255,0.12);
     }
+    /* Fotocamera per mobile riproporzionata e definita */
     .tablet-camera { top: 8px; width: 10px; height: 10px; border: 2px solid #333; }
     
     .tablet-nav-btn { width: 34px; height: 34px; font-size: 16px; }
     .tablet-prev-btn { left: -10px; } 
     .tablet-next-btn { right: -10px; }
     
+    /* Spazio libero forzato su mobile per far vedere il Matrix */
     .ai-frame { padding: 10px 14px; }
     .ai-image-wrapper { padding: 3px; max-height: calc(100% - 14px); max-width: calc(100% - 12px); }
     .ai-image-wrapper img { max-width: calc(100% - 6px); max-height: calc(100% - 6px); }
-
-    .share-buttons-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -582,7 +467,7 @@
 
 <section class="stickers-section">
   <h2 class="section-title">Panda Stickers</h2>
-  <p class="section-subtitle">Scorri verso il basso per vedere tutti i nostri panda stickers! (Clicca per condividere)</p>
+  <p class="section-subtitle">Scorri verso il basso per vedere tutti i nostri panda stickers!</p>
   <div class="phone-wrapper">
     <div class="floating-heart" style="top: 10%; left: -110px;">❤️</div>
     <div class="floating-heart" style="top: 50%; left: -130px; animation-delay: 1s;">💖</div>
@@ -602,7 +487,7 @@
 
 <section class="gif-section">
   <h2 class="section-title">Panda Gif</h2>
-  <p class="section-subtitle">Ti sbatuffolo animatamente (Clicca una GIF per condividerla)</p>
+  <p class="section-subtitle">Ti sbatuffolo animatamente</p>
   <div class="camera-display-container">
     <div class="film-roll-container" id="gif-scroll-container">
       <div class="film-strip-gifs" id="gif-gallery"></div>
@@ -621,7 +506,7 @@
 
 <section class="sbatuffolart-section">
   <h2 class="section-title">Sbatuffolart</h2>
-  <p class="section-subtitle">Quando sbatuffolare diventa arte (Clicca l'opera per condividerla)</p>
+  <p class="section-subtitle">Quando sbatuffolare diventa arte</p>
   <div class="art-container">
       <div class="easel">
           <div class="easel-back-leg"></div>
@@ -659,10 +544,10 @@
 
 <div class="section-divider" style="margin: 40px auto 10px;"></div>
 
-<!-- SEZIONE SBATUFFOLAI (INTELLIGENZA ARTIFICIALE) -->
+<!-- NUOVA SEZIONE SBATUFFOLAI (INTELLIGENZA ARTIFICIALE) -->
 <section class="sbatuffolai-section">
   <h2 class="section-title">Ti sbatuffolAI</h2>
-  <p class="section-subtitle">Ti sbatuffolo intelligentemente e artificialmente (Clicca per condividere)</p>
+  <p class="section-subtitle">Ti sbatuffolo intelligentemente e artificialmente</p>
   
   <div class="ai-theme-container">
     <div class="tablet-container">
@@ -687,7 +572,7 @@
 
 <section class="lulu-sofa-section">
   <h2 class="section-title">Lulu meno male che ci sei tu</h2>
-  <p class="section-subtitle">Dove starà dormendo adesso la Lulu? (Clicca la foto per condividerla)</p>
+  <p class="section-subtitle">Dove starà dormendo adesso la Lulu?</p>
   <div class="sofa-external-wrapper">
     <div class="armrest arm-l"></div>
     <div class="armrest arm-r"></div>
@@ -721,7 +606,7 @@
         <h2 class="section-title" style="color: #900; font-family: 'Courier New', Courier; margin: 0;">GLI SFIGATINI</h2>
         <div class="ghost-icon">👻</div>
     </div>
-    <p class="section-subtitle" style="color: var(--zombie-eye); margin-top: 10px;">Ricordi da film horror (Clicca una pellicola per condividerla)</p>
+    <p class="section-subtitle" style="color: var(--zombie-eye); margin-top: 10px;">Ricordi da film horror</p>
     
     <div class="cinema-container">
         <div class="web-corner"></div>
@@ -746,430 +631,412 @@
 
 <div class="section-divider" style="margin-bottom: 80px;"></div>
 
-<!-- MODALE DI CONDIVISIONE UNIVERSALE -->
-<div class="share-modal-overlay" id="share-modal-overlay" onclick="if(event.target === this) closeShareModal()">
-  <div class="share-modal-card">
-    <button class="share-modal-close" onclick="closeShareModal()">&times;</button>
-    <h3 class="share-modal-title" id="share-modal-title">Condividi</h3>
-    <p class="share-modal-sub">Condividi questa pandosità 🐼</p>
-    
-    <div class="share-preview-box" id="share-preview-content"></div>
-    
-    <div class="share-buttons-grid">
-      <button class="share-btn btn-wa" onclick="shareTo('whatsapp')">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        WhatsApp
-      </button>
-      <button class="share-btn btn-native" onclick="shareTo('native')">
-        <svg fill="#ffffff" viewBox="0 0 24 24" width="22px" height="22px"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
-        Altro
-      </button>
+<footer>
+    <div class="footer-container">
+    <div class="footer-text" style="display: flex; align-items: center; justify-content: center;">
+        @SbatuffoBlog 2026 - &nbsp;<a href="../index.html" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px;">Home <img src="img/home.png" alt="Home" style="width: 50px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>
     </div>
   </div>
-</div>
+</footer>
 
-<svg width="0" height="0" style="position:absolute;">
+<svg width="0" height="0" style="position: absolute;">
   <defs>
     <clipPath id="concave-cushion-shape" clipPathUnits="objectBoundingBox">
-      <path d="M 0,0.1 C 0.3,0 0.7,0 1,0.1 L 1,0.9 C 0.7,1 0.3,1 0,0.9 Z" />
+      <path d="M 0,0 Q 0.5,0.12 1,0 Q 0.88,0.5 1,1 Q 0.5,0.88 0,1 Q 0.12,0.5 0,0 Z" />
     </clipPath>
   </defs>
 </svg>
 
-<footer>
-  <div class="footer-container">
-    <div class="footer-text">© 2026 SbatuffoBlog - Fatto con 🐼</div>
-  </div>
-</footer>
-
 <script>
-  /* --- GESTIONE LOGICA AGGIORNATA CONDIVISIONE (JS) --- */
+  /* ── Utility: verifica esistenza immagine/video in parallelo ─────────── */
+  function probeImage(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload  = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src;
+    });
+  }
 
-  let currentShareData = { url: '', absoluteUrl: '', type: 'image', title: '' };
+  function probeMedia(index) {
+    const mp4Src = `img/gif/pandagif (${index}).mp4`;
+    const gifSrc = `img/gif/pandagif (${index}).gif`;
+    return new Promise(resolve => {
+      const video = document.createElement('video');
+      video.src = mp4Src;
+      video.onloadeddata = () => resolve({ index, type: 'mp4', src: mp4Src });
+      video.onerror = () => {
+        const img = new Image();
+        img.src = gifSrc;
+        img.onload  = () => resolve({ index, type: 'gif', src: gifSrc });
+        img.onerror = () => resolve({ index, type: null });
+      };
+    });
+  }
 
-  function openShareModal(mediaUrl, type, title) {
-    const isAbsolute = mediaUrl.startsWith('http');
-    currentShareData = {
-      url: mediaUrl,
-      absoluteUrl: isAbsolute ? mediaUrl : new URL(mediaUrl, window.location.href).href,
-      type: type,
-      title: title || 'Pandosità'
-    };
-
-    const previewContainer = document.getElementById('share-preview-content');
-    previewContainer.innerHTML = '';
-    
-    if (type === 'video') {
-      const vid = document.createElement('video');
-      vid.src = mediaUrl;
-      vid.autoplay = true; vid.loop = true; vid.muted = true;
-      previewContainer.appendChild(vid);
-    } else {
-      const img = document.createElement('img');
-      img.src = mediaUrl;
-      previewContainer.appendChild(img);
+  /* ── Panda Stickers ──────────────────────────────────────────────────── */
+  function loadPhoneStickers() {
+    const container = document.getElementById('sticker-phone-gallery');
+    for (let i = 1; i <= 116; i++) {
+      const div = document.createElement('div');
+      div.className = 'sticker-item-phone';
+      div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" onerror="this.parentElement.remove()">`;
+      container.appendChild(div);
     }
-    
-    document.getElementById('share-modal-overlay').classList.add('active');
   }
 
-  function closeShareModal() {
-    document.getElementById('share-modal-overlay').classList.remove('active');
-  }
+  /* ── Panda Gif: caricamento parallelo a batch, mostra subito i primi ── */
+  async function loadGifs() {
+    const container      = document.getElementById('gif-gallery');
+    const scrollContainer = document.getElementById('gif-scroll-container');
+    const scrollbar      = document.getElementById('camera-scrollbar');
 
-  async function shareTo(platform) {
-    const shareModalTitle = document.getElementById('share-modal-title');
-    const originalTitle = shareModalTitle.innerText;
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    const textMessage = `Guarda questo contenuto da SbatuffoBlog (${currentShareData.title}):\n`;
-    
-    // ⚠️ SOSTITUISCI IL DOMINIO QUI SOTTO CON IL TUO VERCEL
-    const API_URL = 'https://tisbatuffoblog.vercel.app/api/condividi_pandositaAPI'; 
-    
-    try {
-      // 1. Feedback visivo utente
-      shareModalTitle.innerText = "⏳ Preparazione immagine...";
+    const MAX_GIFS  = 200;
+    const BATCH     = 8;   
+    const FAIL_STOP = 5;   
 
-      // 2. Chiamiamo la nostra API Vercel facendole scaricare e "proxare" l'immagine bypassando i CORS
-      const fetchUrl = `${API_URL}?imageUrl=${encodeURIComponent(currentShareData.absoluteUrl)}`;
-      const res = await fetch(fetchUrl);
-      
-      if (!res.ok) throw new Error("Errore durante il recupero del media dall'API.");
-
-      const blob = await res.blob();
-      
-      // Determiniamo l'estensione base 
-      let extension = 'jpg';
-      if (blob.type.includes('webp')) extension = 'webp';
-      else if (blob.type.includes('png')) extension = 'png';
-      else if (blob.type.includes('gif')) extension = 'gif';
-      else if (blob.type.includes('mp4')) extension = 'mp4';
-      
-      // 3. Creiamo l'oggetto File fisico per passarlo all'App
-      const file = new File([blob], `pandosita_share.${extension}`, { type: blob.type });
-
-      // 4. METODO A: Web Share API (Perfetto per WhatsApp da Mobile)
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        shareModalTitle.innerText = originalTitle;
-        await navigator.share({
-          title: `SbatuffoBlog - ${currentShareData.title}`,
-          text: `Guarda questa pandosità! 🐼`, // Whatsapp concatenerà l'immagine e questo testo
-          files: [file]
-        });
-        return; // Completato con successo!
-      }
-      
-      // 5. METODO B: Fallback Desktop (Copia negli Appunti)
-      // Su Desktop la Web Share API con File spesso fallisce per app di terze parti come Whatsapp. 
-      // L'UX migliore qui è copiare negli appunti per permettere "Incolla".
-      if (!blob.type.includes('video') && navigator.clipboard && navigator.clipboard.write) {
-        try {
-          const item = new ClipboardItem({ [blob.type]: blob });
-          await navigator.clipboard.write([item]);
-          shareModalTitle.innerText = originalTitle;
-          alert("✅ Immagine copiata negli appunti!\n\nSe sei da PC, apri la chat di WhatsApp Web e premi Incolla (Ctrl+V / Cmd+V).");
-          return;
-        } catch (clipErr) {
-          console.warn("Clipboard API ha rifiutato l'inserimento (potrebbe richiedere PNG):", clipErr);
-        }
-      }
-      
-      // Nessun metodo per i file ha funzionato, mandiamo all'URL di fallback
-      throw new Error("Invio file nativo non supportato, passo al link.");
-
-    } catch (e) {
-      console.warn("Uso fallback testuale standard:", e);
-      shareModalTitle.innerText = originalTitle;
-      
-      // Fallback Estremo: se tutto fallisce apriamo il link testuale originale come facevi prima
-      const fallbackText = encodeURIComponent(textMessage + currentShareData.absoluteUrl);
-      
-      if (platform === 'whatsapp') {
-        const waUrl = isMobile 
-          ? `whatsapp://send?text=${fallbackText}`
-          : `[https://api.whatsapp.com/send?text=$](https://api.whatsapp.com/send?text=$){fallbackText}`;
-        window.open(waUrl, '_blank');
+    function appendFrame(result) {
+      const div = document.createElement('div');
+      div.className = 'film-frame-gif';
+      if (result.type === 'mp4') {
+        div.innerHTML = `<video autoplay loop muted playsinline>
+          <source src="${result.src}" type="video/mp4">
+        </video>`;
       } else {
-         if (navigator.share) {
-            navigator.share({
-              title: `SbatuffoBlog - ${currentShareData.title}`,
-              text: textMessage + currentShareData.absoluteUrl
-            }).catch(() => {});
-         } else {
-            alert(`Link: ${currentShareData.absoluteUrl}`);
-         }
+        div.innerHTML = `<img src="${result.src}" style="width:100%;height:100%;object-fit:cover;">`;
+      }
+      container.appendChild(div);
+    }
+
+    function syncScrollbar() {
+      const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      scrollbar.max = Math.max(0, maxScroll);
+    }
+
+    scrollbar.addEventListener('input', () => { scrollContainer.scrollLeft = +scrollbar.value; });
+    scrollContainer.addEventListener('scroll', () => { scrollbar.value = scrollContainer.scrollLeft; });
+
+    let consecutiveFails = 0;
+    for (let start = 1; start <= MAX_GIFS && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX_GIFS);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
+
+      const results = await Promise.all(indices.map(i => probeMedia(i)));
+      results.sort((a, b) => a.index - b.index);
+
+      for (const result of results) {
+        if (result.type) {
+          appendFrame(result);
+          consecutiveFails = 0;
+          syncScrollbar();
+        } else {
+          consecutiveFails++;
+        }
       }
     }
+
+    syncScrollbar();
   }
 
+  /* ── SbatuffolArt: probe parallelo, inserisce in ordine ─────────────── */
+  async function loadSbatuffolart() {
+    const container = document.getElementById('sbatuffolart-gallery');
+    const scrollbar = document.getElementById('art-scrollbar');
 
-  /* --- SCRIPT SEZIONI (INVARIATI PER EVITARE REGRESSIONI) --- */
-  document.addEventListener('DOMContentLoaded', () => {
+    const MAX   = 300;
+    const BATCH = 10;
+    const FAIL_STOP = 5;
 
-      // PANDA STICKERS
-      const stickerGallery = document.getElementById('sticker-phone-gallery');
-      const totalStickers = 24; 
-      for(let i=1; i<=totalStickers; i++) {
+    function syncScrollbar() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      scrollbar.max = Math.max(0, maxScroll);
+    }
+
+    scrollbar.addEventListener('input', () => { container.scrollLeft = +scrollbar.value; });
+    container.addEventListener('scroll', () => { scrollbar.value = container.scrollLeft; });
+
+    let consecutiveFails = 0;
+    for (let start = 1; start <= MAX && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
+
+      const results = await Promise.all(
+        indices.map(i => probeImage(`img/sbatuffolart/sbatuffolart (${i}).jpg`).then(ok => ({ i, ok })))
+      );
+      results.sort((a, b) => a.i - b.i);
+
+      for (const { i, ok } of results) {
+        if (ok) {
           const div = document.createElement('div');
-          div.className = 'sticker-item-phone clickable-media';
-          const img = document.createElement('img');
-          const stickerUrl = `img/sticker/sticker (${i}).webp`;
-          img.src = stickerUrl;
-          img.alt = `Panda Sticker ${i}`;
-          img.loading = "lazy";
-          div.onclick = () => openShareModal(stickerUrl, 'image', `Panda Sticker ${i}`);
-          div.appendChild(img);
-          stickerGallery.appendChild(div);
-      }
-
-      // PANDA GIF
-      const gifGallery = document.getElementById('gif-gallery');
-      const totalGifs = 23;
-      const scrollContainer = document.getElementById('gif-scroll-container');
-      const cameraScrollbar = document.getElementById('camera-scrollbar');
-
-      for(let i=1; i<=totalGifs; i++) {
-          const frame = document.createElement('div');
-          frame.className = 'film-frame-gif clickable-media';
-          const gifUrl = `img/gif/sbatuffo (${i}).mp4`;
-          
-          const vid = document.createElement('video');
-          vid.src = gifUrl;
-          vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
-          vid.loading = "lazy";
-          
-          frame.onclick = () => openShareModal(gifUrl, 'video', `Panda Animazione ${i}`);
-          frame.appendChild(vid);
-          gifGallery.appendChild(frame);
-      }
-      
-      setTimeout(() => {
-        cameraScrollbar.max = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-      }, 500);
-
-      scrollContainer.addEventListener('scroll', () => {
-          cameraScrollbar.value = scrollContainer.scrollLeft;
-      });
-
-      cameraScrollbar.addEventListener('input', (e) => {
-          scrollContainer.scrollLeft = e.target.value;
-      });
-
-      // SBATUFFOLART
-      const artGallery = document.getElementById('sbatuffolart-gallery');
-      const totalArts = 20;
-      const artScrollbar = document.getElementById('art-scrollbar');
-
-      for(let i=1; i<=totalArts; i++) {
-          const frame = document.createElement('div');
-          frame.className = 'art-frame clickable-media';
-          const img = document.createElement('img');
-          const artUrl = `img/art/art (${i}).jpeg`;
-          img.src = artUrl;
-          img.alt = `Sbatuffolart ${i}`;
-          img.loading = "lazy";
-          
-          frame.onclick = () => openShareModal(artUrl, 'image', `Opera Sbatuffolart ${i}`);
-          frame.appendChild(img);
-          artGallery.appendChild(frame);
-      }
-
-      setTimeout(() => {
-        artScrollbar.max = artGallery.scrollWidth - artGallery.clientWidth;
-      }, 500);
-
-      artGallery.addEventListener('scroll', () => {
-          artScrollbar.value = artGallery.scrollLeft;
-      });
-
-      artScrollbar.addEventListener('input', (e) => {
-          artGallery.scrollLeft = e.target.value;
-      });
-
-      // LULU SOFA
-      const luluImg1 = document.getElementById('lulu-c-1');
-      const luluImg2 = document.getElementById('lulu-c-2');
-      const luluBaseUrl = 'img/lulu/lulu (1).jpeg'; 
-      const luluBaseUrl2 = 'img/lulu/lulu (2).jpeg'; 
-      
-      luluImg1.src = luluBaseUrl; luluImg1.style.opacity = '1';
-      luluImg1.parentElement.classList.add('clickable-media');
-      luluImg1.parentElement.onclick = () => openShareModal(luluBaseUrl, 'image', 'Lulu Divano 1');
-      
-      luluImg2.src = luluBaseUrl2; luluImg2.style.opacity = '1';
-      luluImg2.parentElement.classList.add('clickable-media');
-      luluImg2.parentElement.onclick = () => openShareModal(luluBaseUrl2, 'image', 'Lulu Divano 2');
-
-      const sofaSeam = document.getElementById('lulu-sofa-seam');
-      const catThumb = document.getElementById('sofa-cat-thumb');
-      let isDraggingCat = false;
-
-      catThumb.addEventListener('mousedown', () => isDraggingCat = true);
-      catThumb.addEventListener('touchstart', () => isDraggingCat = true, {passive: true});
-      window.addEventListener('mouseup', () => isDraggingCat = false);
-      window.addEventListener('touchend', () => isDraggingCat = false);
-
-      function moveCat(clientX) {
-          if(!isDraggingCat) return;
-          const rect = sofaSeam.getBoundingClientRect();
-          let x = clientX - rect.left - (catThumb.offsetWidth / 2);
-          x = Math.max(0, Math.min(x, rect.width - catThumb.offsetWidth));
-          catThumb.style.left = `${x}px`;
-      }
-      
-      window.addEventListener('mousemove', (e) => moveCat(e.clientX));
-      window.addEventListener('touchmove', (e) => moveCat(e.touches[0].clientX), {passive: true});
-
-      // SFIGATINI
-      const engine = document.getElementById('sfigatini-engine');
-      const totalHorror = 28;
-      
-      for(let i=1; i<=totalHorror; i++) {
-          const frame = document.createElement('div');
-          frame.className = 'film-frame clickable-media';
-          const imgUrl = `img/sfigatini/sfigatini (${i}).jpeg`;
-          frame.innerHTML = `<img src="${imgUrl}" alt="Horror ${i}" loading="lazy">`;
-          frame.onclick = () => openShareModal(imgUrl, 'image', `Gli Sfigatini ${i}`);
-          engine.appendChild(frame);
-      }
-
-      let isDraggingCinema = false;
-      let startX, currentTranslate = 0, prevTranslate = 0;
-      const cinemaScreen = document.getElementById('cinema-interact');
-
-      cinemaScreen.addEventListener('mousedown', (e) => {
-        isDraggingCinema = true;
-        startX = e.clientX;
-        cinemaScreen.style.cursor = 'grabbing';
-      });
-
-      cinemaScreen.addEventListener('mousemove', (e) => {
-        if (!isDraggingCinema) return;
-        const delta = e.clientX - startX;
-        currentTranslate = prevTranslate + delta;
-        // Limiti approssimativi
-        const maxScroll = -(engine.scrollWidth - cinemaScreen.clientWidth);
-        if(currentTranslate > 0) currentTranslate = 0;
-        if(currentTranslate < maxScroll) currentTranslate = maxScroll;
-        
-        engine.style.transform = `translateX(${currentTranslate}px)`;
-      });
-
-      window.addEventListener('mouseup', () => {
-        if(isDraggingCinema) {
-            isDraggingCinema = false;
-            prevTranslate = currentTranslate;
-            cinemaScreen.style.cursor = 'grab';
+          div.className = 'art-frame';
+          div.innerHTML = `<img src="img/sbatuffolart/sbatuffolart (${i}).jpg">`;
+          container.appendChild(div);
+          consecutiveFails = 0;
+          syncScrollbar();
+        } else {
+          consecutiveFails++;
         }
-      });
-      
-      cinemaScreen.addEventListener('touchstart', (e) => {
-        isDraggingCinema = true;
-        startX = e.touches[0].clientX;
-      }, {passive: true});
-      
-      cinemaScreen.addEventListener('touchmove', (e) => {
-        if (!isDraggingCinema) return;
-        const delta = e.touches[0].clientX - startX;
-        currentTranslate = prevTranslate + delta;
-        const maxScroll = -(engine.scrollWidth - cinemaScreen.clientWidth);
-        if(currentTranslate > 0) currentTranslate = 0;
-        if(currentTranslate < maxScroll) currentTranslate = maxScroll;
-        engine.style.transform = `translateX(${currentTranslate}px)`;
-      }, {passive: true});
-      
-      window.addEventListener('touchend', () => {
-        if(isDraggingCinema) {
-            isDraggingCinema = false;
-            prevTranslate = currentTranslate;
+      }
+    }
+
+    syncScrollbar();
+  }
+
+  /* ── SbatuffolAI (Intelligenza Artificiale) ─────────────────────────── */
+  async function loadSbatuffolai() {
+    const container = document.getElementById('sbatuffolai-gallery');
+    
+    // Controlli Desktop aggiuntivi (Pulsanti)
+    const prevBtn = document.querySelector('.tablet-prev-btn');
+    const nextBtn = document.querySelector('.tablet-next-btn');
+
+    prevBtn.addEventListener('click', () => {
+      container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
+    });
+
+    function updateTabletNavButtons() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const currentScroll = container.scrollLeft;
+      const threshold = 4;
+
+      prevBtn.disabled = currentScroll <= threshold;
+      nextBtn.disabled = currentScroll >= maxScroll - threshold;
+    }
+
+    container.addEventListener('scroll', updateTabletNavButtons);
+    window.addEventListener('resize', updateTabletNavButtons);
+
+    const MAX   = 200;
+    const BATCH = 10;
+    const FAIL_STOP = 5;
+
+    let consecutiveFails = 0;
+    for (let start = 1; start <= MAX && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
+
+      const results = await Promise.all(
+        indices.map(i => probeImage(`img/sbatuffolAI/sbatuffolai (${i}).jpg`).then(ok => ({ i, ok })))
+      );
+      results.sort((a, b) => a.i - b.i);
+
+      for (const { i, ok } of results) {
+        if (ok) {
+          const div = document.createElement('div');
+          div.className = 'ai-frame';
+          div.innerHTML = `
+            <div class="ai-image-wrapper">
+              <img src="img/sbatuffolAI/sbatuffolai (${i}).jpg" alt="AI Panda ${i}">
+            </div>
+          `;
+          container.appendChild(div);
+          consecutiveFails = 0;
+          updateTabletNavButtons();
+        } else {
+          consecutiveFails++;
         }
-      });
-
-      // --- SBATUFFOLAI (MATRIX & GALLERY) ---
-      const matrixCanvas = document.getElementById('matrix-canvas');
-      const mCtx = matrixCanvas.getContext('2d');
-      
-      function resizeMatrix() {
-          matrixCanvas.width = matrixCanvas.parentElement.clientWidth;
-          matrixCanvas.height = matrixCanvas.parentElement.clientHeight;
       }
-      resizeMatrix();
-      window.addEventListener('resize', resizeMatrix);
+    }
+    updateTabletNavButtons();
+  }
 
-      const matrixChars = "SbatuffolAI 01 Pandosità 🐼 ✨ 🤖".split("");
-      const fontSize = 14;
-      const columns = matrixCanvas.width / fontSize;
-      const drops = [];
-      for(let x = 0; x < columns; x++) drops[x] = 1; 
+  /* ── Sfigatini: pre-verifica in parallelo, poi costruisce il loop ────── */
+  async function buildSfigatini() {
+    const engine = document.getElementById('sfigatini-engine');
+    const screen = document.getElementById('cinema-interact');
 
-      function drawMatrix() {
-          mCtx.fillStyle = "rgba(0, 0, 0, 0.05)";
-          mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-          
-          mCtx.fillStyle = "#0F0";
-          mCtx.font = fontSize + "px monospace";
-          
-          for(let i = 0; i < drops.length; i++) {
-              const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
-              mCtx.fillText(text, i * fontSize, drops[i] * fontSize);
-              
-              if(drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975)
-                  drops[i] = 0;
-              drops[i]++;
-          }
-      }
-      setInterval(drawMatrix, 40);
+    const total = 53;
+    const checks = await Promise.all(
+      Array.from({ length: total }, (_, k) => {
+        const i = k + 1;
+        return probeImage(`img/sfigatini/sfigatini (${i}).jpg`).then(ok => ok ? i : null);
+      })
+    );
+    const validIndices = checks.filter(i => i !== null);
 
-      const aiGallery = document.getElementById('sbatuffolai-gallery');
-      const totalAiImages = 21;
-      
-      for(let i = 1; i <= totalAiImages; i++) {
-          const frame = document.createElement('div');
-          frame.className = 'ai-frame';
-          
-          const wrapper = document.createElement('div');
-          wrapper.className = 'ai-image-wrapper clickable-media';
-          
-          const img = document.createElement('img');
-          const aiUrl = `img/ai/ai (${i}).webp`;
-          img.src = aiUrl;
-          img.alt = `SbatuffolAI Immagine ${i}`;
-          img.loading = "lazy";
-          
-          wrapper.onclick = () => openShareModal(aiUrl, 'image', `Generazione SbatuffolAI ${i}`);
-          
-          wrapper.appendChild(img);
-          frame.appendChild(wrapper);
-          aiGallery.appendChild(frame);
+    function appendFrames() {
+      for (const i of validIndices) {
+        const frame = document.createElement('div');
+        frame.className = 'film-frame';
+        frame.innerHTML = `<img src="img/sfigatini/sfigatini (${i}).jpg">`;
+        engine.appendChild(frame);
       }
-      
-      const prevBtn = document.querySelector('.tablet-prev-btn');
-      const nextBtn = document.querySelector('.tablet-next-btn');
-      
-      function updateNavButtons() {
-        if (!aiGallery.firstElementChild) return;
-        const scrollPos = aiGallery.scrollLeft;
-        const maxScroll = aiGallery.scrollWidth - aiGallery.clientWidth;
-        
-        prevBtn.disabled = scrollPos <= 10;
-        nextBtn.disabled = scrollPos >= maxScroll - 10;
+    }
+    appendFrames();          
+    appendFrames();          
+
+    let currentX = 0, baseSpeed = 1, currentSpeed = 1, targetSpeed = 1;
+
+    screen.addEventListener('mousedown', () => { targetSpeed = 15; });
+    screen.addEventListener('touchstart', () => { targetSpeed = 15; }, { passive: true });
+    window.addEventListener('mouseup', () => { targetSpeed = baseSpeed; });
+    window.addEventListener('touchend', () => { targetSpeed = baseSpeed; });
+    window.addEventListener('touchcancel', () => { targetSpeed = baseSpeed; });
+
+    function animate() {
+      currentSpeed += (targetSpeed - currentSpeed) * 0.05;
+      currentX -= currentSpeed;
+      if (Math.abs(currentX) >= engine.scrollWidth / 2) currentX = 0;
+      engine.style.transform = `translateX(${currentX}px)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+
+  /* ── Lulu Sofa: probe parallelo a batch, poi avvia l'interazione ─────── */
+  (async function initLuluSofa() {
+    const img1     = document.getElementById('lulu-c-1');
+    const img2     = document.getElementById('lulu-c-2');
+    const seam     = document.getElementById('lulu-sofa-seam');
+    const catThumb = document.getElementById('sofa-cat-thumb');
+
+    const MAX_LULU = 200;
+    const BATCH    = 15;
+    const FAIL_STOP = 3;
+
+    const availableImages = [];
+    let consecutiveFails = 0;
+
+    for (let start = 1; start <= MAX_LULU && consecutiveFails < FAIL_STOP; start += BATCH) {
+      const end = Math.min(start + BATCH - 1, MAX_LULU);
+      const indices = [];
+      for (let i = start; i <= end; i++) indices.push(i);
+
+      const results = await Promise.all(
+        indices.map(i => probeImage(`img/lulu/lulu (${i}).jpg`).then(ok => ({ i, ok })))
+      );
+      results.sort((a, b) => a.i - b.i);
+
+      for (const { i, ok } of results) {
+        if (ok) { availableImages.push(`img/lulu/lulu (${i}).jpg`); consecutiveFails = 0; }
+        else { consecutiveFails++; }
       }
-      
-      aiGallery.addEventListener('scroll', updateNavButtons);
-      setTimeout(updateNavButtons, 200);
-      window.addEventListener('resize', updateNavButtons);
-      
-      prevBtn.addEventListener('click', () => {
-        const itemWidth = aiGallery.firstElementChild.clientWidth;
-        aiGallery.scrollBy({ left: -itemWidth, behavior: 'smooth' });
-      });
-      
-      nextBtn.addEventListener('click', () => {
-        const itemWidth = aiGallery.firstElementChild.clientWidth;
-        aiGallery.scrollBy({ left: itemWidth, behavior: 'smooth' });
-      });
-  });
+    }
+
+    const count = availableImages.length;
+
+    function updateSofaPhotos(scrollX) {
+      if (count < 1) return;
+      const scrollRange = seam.clientWidth - catThumb.clientWidth;
+      const scrollPercent = Math.max(0, Math.min(1, scrollX / scrollRange));
+      let maxIndex = Math.max(0, count - 2);
+      let index1 = Math.floor(scrollPercent * maxIndex);
+      let index2 = index1 + 1;
+      if (index1 >= 0 && index1 < count) { img1.src = availableImages[index1]; img1.style.opacity = 1; }
+      if (index2 < count) { img2.src = availableImages[index2]; img2.style.opacity = 1; }
+      else { img2.style.opacity = 0; }
+    }
+
+    let isDragging = false, startX, initialLeft;
+
+    const startAction = (e) => {
+      isDragging = true;
+      startX = e.clientX || e.touches[0].clientX;
+      initialLeft = catThumb.offsetLeft;
+      document.body.style.userSelect = 'none';
+    };
+    const moveAction = (e) => {
+      if (!isDragging) return;
+      const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+      let newLeft = initialLeft + (currentX - startX);
+      const maxLeft = seam.clientWidth - catThumb.clientWidth;
+      newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+      catThumb.style.left = newLeft + 'px';
+      updateSofaPhotos(newLeft);
+    };
+    const stopAction = () => { isDragging = false; document.body.style.userSelect = 'auto'; };
+
+    catThumb.addEventListener('mousedown', startAction);
+    catThumb.addEventListener('touchstart', startAction, { passive: true });
+    window.addEventListener('mousemove', moveAction);
+    window.addEventListener('touchmove', moveAction, { passive: false });
+    window.addEventListener('mouseup', stopAction);
+    window.addEventListener('touchend', stopAction);
+
+    setTimeout(() => updateSofaPhotos(0), 100);
+  })();
+
+  /* ── Animazione Matrix Background ────────────────────────────────────── */
+  function initMatrix() {
+    const canvas = document.getElementById('matrix-canvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    function resize() {
+      width = canvas.parentElement.clientWidth;
+      height = canvas.parentElement.clientHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+    const fontSize = 18;
+    const columns = Math.floor(width / fontSize) + 1;
+    const drops = [];
+    for (let x = 0; x < columns; x++) drops[x] = Math.random() * -100; // Inizia fuori schermo sfalsato
+
+    function draw() {
+      // Sfondo traslucido per lasciare la scia
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.font = fontSize + 'px monospace';
+      const primaryColor = getComputedStyle(canvas.parentElement || document.body).getPropertyValue('--primary').trim() || '#00cec9';
+
+      const edgeColumns = Math.max(1, Math.floor(columns * 0.22));
+      const specialWords = ['TVB', 'TI SBATUFFOLO', 'IO E TE', 'INSIEME'];
+
+      for (let i = 0; i < drops.length; i++) {
+        const r = Math.random();
+        let text = '';
+        let color = '#00ff41';
+        let x = i * fontSize;
+
+        // Parole speciali in colore --primary: privilegiamo le colonne ai bordi
+        if (r < 0.02) {
+          const useLeft = Math.random() < 0.5;
+          const edgeIndex = useLeft
+            ? Math.floor(Math.random() * edgeColumns)
+            : Math.floor(columns - edgeColumns + Math.random() * edgeColumns);
+          x = edgeIndex * fontSize;
+          text = specialWords[Math.floor(Math.random() * specialWords.length)];
+          color = primaryColor;
+        } else if (r < 0.06) text = '♥'; // 4% Cuori Matrix (verdi)
+        else if (r < 0.10) text = '❤️'; // 4% Cuori rossi classici
+        else if (r < 0.16) text = '🐼'; // 6% Panda
+        else if (r < 0.26) text = ' ';  // 10% Spazi vuoti per variare il flusso
+        else text = chars[Math.floor(Math.random() * chars.length)]; // Caratteri alfanumerici
+
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > height && Math.random() > 0.95) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(draw, 50);
+  }
+
+  // Avvio Funzioni
+  loadPhoneStickers();
+  loadGifs();
+  loadSbatuffolart();
+  loadSbatuffolai();
+  buildSfigatini();
+  initMatrix(); 
 </script>
+
 </body>
 </html>
