@@ -13,12 +13,32 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { imageUrl, platform, title } = req.query || req.body || {};
+    const { imageUrl, platform, title, proxy } = req.query || req.body || {};
 
     if (!imageUrl) {
       return res.status(400).json({ success: false, error: 'Parametro imageUrl mancante.' });
     }
 
+    // [NUOVA FUNZIONE PROXY]
+    // Se il frontend ci chiede di fare da proxy (proxy=true), scarichiamo 
+    // fisicamente il file e lo restituiamo al client in formato binario.
+    // Questo evita i blocchi CORS e permette al client di inviare l'immagine su WhatsApp.
+    if (proxy === 'true' || proxy === '1') {
+      const fetchResult = await fetch(imageUrl);
+      
+      if (!fetchResult.ok) {
+        throw new Error(`Errore HTTP durante il fetch: ${fetchResult.status}`);
+      }
+      
+      const contentType = fetchResult.headers.get('content-type') || 'application/octet-stream';
+      const arrayBuffer = await fetchResult.arrayBuffer();
+      
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // Mettiamo in cache per 24h
+      return res.send(Buffer.from(arrayBuffer));
+    }
+
+    // [VECCHIA LOGICA MANTENUTA PER RETROCOMPATIBILITÀ / FALLBACK TESTUALE]
     const shareTitle = title || 'Pandosità';
     const textMsg = `Guarda questo contenuto da SbatuffoBlog - ${shareTitle}: ${imageUrl}`;
     const encodedText = encodeURIComponent(textMsg);
