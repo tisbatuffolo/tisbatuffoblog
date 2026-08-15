@@ -1050,45 +1050,110 @@
   }
 
   async function inviaPandosita(e) {
-    e.preventDefault();
-    const fileInput = document.getElementById('filePandosita');
-    const sezione = document.getElementById('sezionePandosita').value;
-    const file = fileInput.files[0];
-    
-    if (!file) return alert("Seleziona un'immagine!");
+      e.preventDefault();
+      const fileInput = document.getElementById('filePandosita');
+      const sezione = document.getElementById('sezionePandosita').value;
+      const file = fileInput.files[0];
+      
+      if (!file) return alert("Seleziona un'immagine!");
 
-    document.getElementById('btnSubmitPandosita').style.display = 'none';
-    document.getElementById('loadingPandosita').style.display = 'block';
+      // REGOLA: Il formato GIF è esclusivo solo per la sezione Panda Gif
+      if (file.type === 'image/gif' && sezione !== 'gif') {
+          return alert("Il formato GIF è consentito esclusivamente nella sezione Panda Gif!");
+      }
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async function () {
-        const base64Data = reader.result.split(',')[1];
-        
-        try {
-            // Usa il path relativo della tua API in Vercel
-            const response = await fetch('/api/add_pandositaAPI', { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    sezione: sezione,
-                    imageB64: base64Data
-                })
-            });
-            
-            const result = await response.json();
-            if (response.ok) {
-                alert('Pandosità aggiunta con successo! La pagina si aggiornerà per mostrare le nuove immagini in coda.');
-                location.reload();
-            } else {
-                alert('Errore: ' + result.error);
-            }
-        } catch (err) {
-            alert('Errore di connessione: ' + err.message);
-        } finally {
-            chiudiFormPandosita();
-        }
-    };
+      document.getElementById('btnSubmitPandosita').style.display = 'none';
+      document.getElementById('loadingPandosita').style.display = 'block';
+
+      const fileType = file.type;
+      const isResizable = (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png' || fileType === 'image/webp');
+
+      // Se è ridimensionabile E NON è una GIF (le GIF animate perse nel canvas)
+      if (isResizable && fileType !== 'image/gif') {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function(event) {
+              const img = new Image();
+              img.src = event.target.result;
+              img.onload = async function() {
+                  const MAX_WIDTH = 1200;
+                  const MAX_HEIGHT = 1200;
+                  let width = img.width;
+                  let height = img.height;
+
+                  if (width > height) {
+                      if (width > MAX_WIDTH) {
+                          height = Math.round(height * (MAX_WIDTH / width));
+                          width = MAX_WIDTH;
+                      }
+                  } else {
+                      if (height > MAX_HEIGHT) {
+                          width = Math.round(width * (MAX_HEIGHT / height));
+                          height = MAX_HEIGHT;
+                      }
+                  }
+
+                  const canvas = document.createElement('canvas');
+                  canvas.width = width;
+                  canvas.height = height;
+                  const ctx = canvas.getContext('2d');
+                  ctx.drawImage(img, 0, 0, width, height);
+
+                  // REGOLA: Trasformazione in base alla sezione
+                  let targetMime = 'image/jpeg'; // Sbatuffolart, AI, Lulu, Sfigatini
+                  if (sezione === 'sticker') {
+                      targetMime = 'image/webp'; // Sticker usa webp
+                  }
+
+                  const dataUrl = canvas.toDataURL(targetMime, 0.85);
+                  const base64Data = dataUrl.split(',')[1];
+                  
+                  await inviaDatiApi(sezione, base64Data, targetMime);
+              };
+          };
+      } else {
+          // GIF o formati non supportati dal canvas
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = async function () {
+              const base64Data = reader.result.split(',')[1];
+              await inviaDatiApi(sezione, base64Data, fileType);
+          };
+      }
+  }
+
+  async function inviaDatiApi(sezione, base64Data, mimeType) {
+      try {
+          const response = await fetch('/api/add_pandositaAPI', { 
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  sezione: sezione,
+                  imageB64: base64Data,
+                  mimeType: mimeType
+              })
+          });
+          
+          if (response.ok) {
+              alert('Pandosità aggiunta con successo! La pagina si aggiornerà per mostrare le nuove immagini.');
+              location.reload();
+          } else {
+              // Intercetta l'errore HTML invece di schiantarsi
+              let errMsg = "Errore sconosciuto";
+              const text = await response.text();
+              try {
+                  const json = JSON.parse(text);
+                  errMsg = json.error || errMsg;
+              } catch (e) {
+                  errMsg = `Errore di connessione (L'API ha risposto con codice ${response.status}). Assicurati che l'API esista e non sia in errore.`;
+              }
+              alert('Errore: ' + errMsg);
+              chiudiFormPandosita();
+          }
+      } catch (err) {
+          alert('Errore di connessione: ' + err.message);
+          chiudiFormPandosita();
+      }
   }
 
   // Avvio Funzioni

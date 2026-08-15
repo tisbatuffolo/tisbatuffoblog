@@ -1,93 +1,101 @@
-async function inviaPandosita(e) {
-    e.preventDefault();
-    const fileInput = document.getElementById('filePandosita');
-    const sezione = document.getElementById('sezionePandosita').value;
-    const file = fileInput.files[0];
-    
-    if (!file) return alert("Seleziona un'immagine!");
-
-    document.getElementById('btnSubmitPandosita').style.display = 'none';
-    document.getElementById('loadingPandosita').style.display = 'block';
-
-    const fileType = file.type;
-    // Controlla se il file è JPG o PNG per applicare il ridimensionamento
-    const isResizable = (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png');
-
-    if (isResizable) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function(event) {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = async function() {
-                // Dimensione massima per il ridimensionamento
-                const MAX_WIDTH = 1200;
-                const MAX_HEIGHT = 1200;
-                let width = img.width;
-                let height = img.height;
-
-                // Calcola le nuove dimensioni mantenendo l'aspect ratio
-                if (width > height) {
-                    if (width > MAX_WIDTH) {
-                        height = Math.round(height * (MAX_WIDTH / width));
-                        width = MAX_WIDTH;
-                    }
-                } else {
-                    if (height > MAX_HEIGHT) {
-                        width = Math.round(width * (MAX_HEIGHT / height));
-                        height = MAX_HEIGHT;
-                    }
-                }
-
-                const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-
-                // Forza l'esportazione a jpeg (che l'API interpreta come jpg) o png
-                let mimeType = (fileType === 'image/png') ? 'image/png' : 'image/jpeg';
-                
-                // Estrae la stringa base64 dall'immagine ridimensionata (qualità 85% per jpeg)
-                const dataUrl = canvas.toDataURL(mimeType, 0.85);
-                const base64Data = dataUrl.split(',')[1];
-                
-                await inviaDatiApi(sezione, base64Data);
-            };
-        };
-    } else {
-        // GIF, WEBP o altri file non vengono toccati dal canvas, saltiamo il ridimensionamento
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async function () {
-            const base64Data = reader.result.split(',')[1];
-            await inviaDatiApi(sezione, base64Data);
-        };
+export default async function handler(req, res) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Metodo non consentito' });
     }
-  }
 
-  // Funzione helper per evitare codice duplicato
-  async function inviaDatiApi(sezione, base64Data) {
-      try {
-          const response = await fetch('/api/add_pandositaAPI', { 
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                  sezione: sezione,
-                  imageB64: base64Data
-              })
-          });
-          
-          const result = await response.json();
-          if (response.ok) {
-              alert('Pandosità aggiunta con successo! La pagina si aggiornerà per mostrare le nuove immagini in coda.');
-              location.reload();
-          } else {
-              alert('Errore: ' + result.error);
-              chiudiFormPandosita();
-          }
-      } catch (err) {
-          alert('Errore di connessione: ' + err.message);
-          chiudiFormPandosita();
-      }
-  }
+    const { sezione, imageB64, mimeType } = req.body;
+    if (!sezione || !imageB64) {
+        return res.status(400).json({ error: 'Dati mancanti' });
+    }
+
+    // Parametri GitHub da impostare come Variabili d'Ambiente su Vercel
+    const GITHUB_TOKEN = process.env.GITHUB_TOKEN; 
+    const GITHUB_OWNER = process.env.GITHUB_OWNER; // Es: "Tuonomeutente"
+    const GITHUB_REPO = process.env.GITHUB_REPO;   // Es: "tisbatuffolo"
+    const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main'; // O 'master'
+
+    if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
+        return res.status(500).json({ error: 'Configurazione GitHub (Variabili d\'ambiente) mancante in Vercel.' });
+    }
+
+    // Configurazione dettagliata per ogni sezione (Gestione cartelle, nomi ed estensioni)
+    const mapSezioni = {
+        'sticker':      { path: 'pandosita/img/sticker',      prefix: 'sticker',      ext: 'webp' },
+        'gif':          { path: 'pandosita/img/gif',          prefix: 'pandagif',     ext: mimeType === 'image/gif' ? 'gif' : 'jpg' },
+        'sbatuffolart': { path: 'pandosita/img/sbatuffolart', prefix: 'sbatuffolart', ext: 'jpg' },
+        'sbatuffolai':  { path: 'pandosita/img/sbatuffolAI',  prefix: 'sbatuffolai',  ext: 'jpg' },
+        'lulu':         { path: 'pandosita/img/lulu',         prefix: 'lulu',         ext: 'jpg' },
+        'sfigatini':    { path: 'pandosita/img/sfigatini',    prefix: 'sfigatini',    ext: 'jpg' }
+    };
+
+    const config = mapSezioni[sezione];
+    if (!config) return res.status(400).json({ error: 'Sezione non valida' });
+
+    try {
+        // 1. Legge la cartella su GitHub per capire quale sia il numero massimo
+        const repoPathUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${config.path}?ref=${GITHUB_BRANCH}`;
+        const responseList = await fetch(repoPathUrl, {
+            headers: { 
+                'Authorization': `Bearer ${GITHUB_TOKEN}`, 
+                'Accept': 'application/vnd.github.v3+json' 
+            }
+        });
+
+        let maxIndex = 0;
+        
+        if (responseList.ok) {
+            const files = await responseList.json();
+            
+            // Regex per trovare il numero nel nome (es: "sbatuffolart (120).jpg")
+            const regex = new RegExp(`^${config.prefix} \\((\\d+)\\)\\.`);
+            
+            for (const file of files) {
+                const match = file.name.match(regex);
+                if (match) {
+                    const num = parseInt(match[1], 10);
+                    if (num > maxIndex) maxIndex = num;
+                }
+            }
+        } else if (responseList.status !== 404) {
+            // Se c'è un errore e non è "Cartella non trovata", fallisce
+            throw new Error('Impossibile scansionare i file esistenti.');
+        }
+
+        // Limite di 1000 elementi
+        if (maxIndex >= 1000) {
+            return res.status(400).json({ error: 'Raggiunto il limite massimo di 1000 elementi per questa sezione.' });
+        }
+
+        // 2. Prepara il nuovo file
+        const nextIndex = maxIndex + 1;
+        const newFileName = `${config.prefix} (${nextIndex}).${config.ext}`;
+        const newFilePath = `${config.path}/${newFileName}`;
+
+        // 3. Salva l'immagine tramite commit su GitHub
+        const uploadUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${newFilePath}`;
+        const uploadRes = await fetch(uploadUrl, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: `Upload automatico: aggiunta pandosita ${newFileName}`,
+                content: imageB64,
+                branch: GITHUB_BRANCH
+            })
+        });
+
+        if (!uploadRes.ok) {
+            const errJson = await uploadRes.json();
+            throw new Error(errJson.message || 'Errore durante l\'upload su GitHub');
+        }
+
+        res.status(200).json({ success: true, fileName: newFileName });
+        
+    } catch (error) {
+        console.error("Errore API upload:", error);
+        res.status(500).json({ error: error.message });
+    }
+}
