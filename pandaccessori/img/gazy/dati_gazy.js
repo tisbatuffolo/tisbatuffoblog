@@ -19,5 +19,9 @@ const dati_gazy = [
     {
         "titolo": "Pandino Box",
         "immagine": "Pandino Box.jpg"
+    },
+    {
+        "titolo": "Gazy PandaCucciolatori",
+        "immagine": "Gazy PandaCucciolatori.jpg"
     }
 ];
