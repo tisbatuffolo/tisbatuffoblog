@@ -1133,7 +1133,7 @@
 
   async function inviaDatiApi(sezione, base64Data, mimeType) {
       try {
-          const response = await fetch('/api/add_pandositaAPI', { 
+          const response = await fetch('https://tisbatuffoblog.vercel.app/api/add_pandositaAPI', { 
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
