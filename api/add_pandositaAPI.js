@@ -1,5 +1,5 @@
 module.exports = async function handler(req, res) {
-    // ✅ Aggiunta Configurazione CORS
+    // ✅ Configurazione CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -18,23 +18,34 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Dati mancanti' });
     }
 
-    // Parametri GitHub da impostare come Variabili d'Ambiente su Vercel
+    // SOLUZIONE: Uniformato al file API funzionante. 
+    // Leggiamo solo il TOKEN dalle variabili d'ambiente, owner e repo sono hardcoded.
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN; 
-    const GITHUB_OWNER = process.env.GITHUB_OWNER; // Es: "Tuonomeutente"
-    const GITHUB_REPO = process.env.GITHUB_REPO;   // Es: "tisbatuffolo"
-    const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main'; // O 'master'
+    const GITHUB_OWNER = "tisbatuffolo"; 
+    const GITHUB_REPO = "tisbatuffoblog";   
+    const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 
-    if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
-        return res.status(500).json({ error: 'Configurazione GitHub (Variabili d\'ambiente) mancante in Vercel.' });
+    if (!GITHUB_TOKEN) {
+        return res.status(500).json({ error: 'Configurazione GitHub (GITHUB_TOKEN) mancante in Vercel.' });
     }
 
-    // Configurazione dettagliata per ogni sezione (Gestione cartelle, nomi ed estensioni)
+    // Funzione per ricavare l'estensione corretta dal mimeType in modo dinamico
+    const getExtFromMime = (mime, defaultExt = 'jpg') => {
+        if (!mime) return defaultExt;
+        if (mime.includes('png')) return 'png';
+        if (mime.includes('webp')) return 'webp';
+        if (mime.includes('gif')) return 'gif';
+        if (mime.includes('jpeg') || mime.includes('jpg')) return 'jpg';
+        return defaultExt;
+    };
+
+    // Configurazione dettagliata per ogni sezione con estensione dinamica basata sul file caricato
     const mapSezioni = {
-        'sticker':      { path: 'pandosita/img/sticker',      prefix: 'sticker',      ext: 'webp' },
-        'gif':          { path: 'pandosita/img/gif',          prefix: 'pandagif',     ext: mimeType === 'image/gif' ? 'gif' : 'jpg' },
-        'sbatuffolart': { path: 'pandosita/img/sbatuffolart', prefix: 'sbatuffolart', ext: 'jpg' },
-        'sbatuffolai':  { path: 'pandosita/img/sbatuffolAI',  prefix: 'sbatuffolai',  ext: 'jpg' },
-        'lulu':         { path: 'pandosita/img/lulu',         prefix: 'lulu',         ext: 'jpg' },
+        'sticker':      { path: 'pandosita/img/sticker',      prefix: 'sticker',      ext: getExtFromMime(mimeType, 'webp') },
+        'gif':          { path: 'pandosita/img/gif',          prefix: 'pandagif',     ext: getExtFromMime(mimeType, 'gif') },
+        'sbatuffolart': { path: 'pandosita/img/sbatuffolart', prefix: 'sbatuffolart', ext: getExtFromMime(mimeType, 'jpg') },
+        'sbatuffolai':  { path: 'pandosita/img/sbatuffolAI',  prefix: 'sbatuffolai',  ext: getExtFromMime(mimeType, 'jpg') },
+        'lulu':         { path: 'pandosita/img/lulu',         prefix: 'lulu',         ext: getExtFromMime(mimeType, 'jpg') },
         'sfigatini':    { path: 'pandosita/img/sfigatini',    prefix: 'sfigatini',    ext: 'jpg' }
     };
 
@@ -42,7 +53,7 @@ module.exports = async function handler(req, res) {
     if (!config) return res.status(400).json({ error: 'Sezione non valida' });
 
     try {
-        // 1. Legge la cartella su GitHub per capire quale sia il numero massimo
+        // 1. Legge la cartella su GitHub per calcolare il numero progressivo massimo
         const repoPathUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${config.path}?ref=${GITHUB_BRANCH}`;
         const responseList = await fetch(repoPathUrl, {
             headers: { 
@@ -55,8 +66,6 @@ module.exports = async function handler(req, res) {
         
         if (responseList.ok) {
             const files = await responseList.json();
-            
-            // Regex per trovare il numero nel nome (es: "sbatuffolart (120).jpg")
             const regex = new RegExp(`^${config.prefix} \\((\\d+)\\)\\.`);
             
             for (const file of files) {
@@ -67,16 +76,14 @@ module.exports = async function handler(req, res) {
                 }
             }
         } else if (responseList.status !== 404) {
-            // Se c'è un errore e non è "Cartella non trovata", fallisce
             throw new Error('Impossibile scansionare i file esistenti.');
         }
 
-        // Limite di 1000 elementi
         if (maxIndex >= 1000) {
             return res.status(400).json({ error: 'Raggiunto il limite massimo di 1000 elementi per questa sezione.' });
         }
 
-        // 2. Prepara il nuovo file
+        // 2. Prepara il nuovo file con estensione corretta
         const nextIndex = maxIndex + 1;
         const newFileName = `${config.prefix} (${nextIndex}).${config.ext}`;
         const newFilePath = `${config.path}/${newFileName}`;
@@ -108,4 +115,4 @@ module.exports = async function handler(req, res) {
         console.error("Errore API upload:", error);
         res.status(500).json({ error: error.message });
     }
-}
+};

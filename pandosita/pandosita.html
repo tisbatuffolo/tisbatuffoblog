@@ -386,7 +386,7 @@
     .modal-form label { font-size: 0.9em; }
     .modal-form select, .modal-form input { padding: 10px 12px; margin: 6px 0 12px; border-width: 2px; }
     .modal-btn { padding: 12px; border-width: 3px; }
-  }
+    
     #sofa-cat-thumb { width: 90px; top: -38px; }
 
     .camera-body { width: 200px; height: 130px; }
@@ -1133,7 +1133,8 @@
 
   async function inviaDatiApi(sezione, base64Data, mimeType) {
       try {
-          const response = await fetch('https://tisbatuffoblog.vercel.app/api/add_pandositaAPI', { 
+          // SOLUZIONE FRONTEND: Utilizzo path relativo per risolvere i problemi di domini CORS asimmetrici
+          const response = await fetch('/api/add_pandositaAPI', { 
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
