@@ -84,6 +84,18 @@
       clear: both;
       display: block;
     }
+    
+    /* Divider dopo top-links: vicino al sottotitolo come in pandaccessori */
+    .top-links + .section-divider {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    
+    /* Divider prima della torta con spazio aumentato sopra */
+    .charts-vertical-stack + .section-divider {
+      margin-top: 80px;
+    }
+    
     .section-divider::after {
       content: "♥";
       position: absolute;
@@ -343,7 +355,7 @@
     #tabella-giri tbody tr:hover, #tabella-confronto tbody tr:hover { background-color: var(--light-blue-border); transition: background 0.2s ease; }
 
     /* --- GRAFICI E TORTA --- */
-    .charts-vertical-stack { margin-bottom: 20px; }
+    .charts-vertical-stack { margin-bottom: 40px; }
     
     .chart-wrapper { 
       width: 100%;
@@ -389,12 +401,14 @@
       margin-top: 20px;
     }
     
-    .torta-container h3 {
+    .torta-container h2 {
       font-family: 'Grandstander', cursive;
       color: #000;
-      font-size: 1.5em; 
+      font-size: clamp(1.8em, 6vw, 2.5em);
+      font-weight: 900;
+      letter-spacing: 1px;
       margin-top: 0;
-      margin-bottom: 5px;
+      margin-bottom: 20px;
     }
 
     .torta-subtitle {
@@ -575,8 +589,8 @@
     }
 
     .close-btn {
-      background: #f0f0f0;
-      color: #555;
+      background: var(--heart-red);
+      color: #fff;
       width: 44px;
       height: 44px;
       border-radius: 50%;
@@ -587,7 +601,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: all 0.2s;
-      border: 2px solid #ddd;
+      border: 2px solid var(--heart-red);
       margin-left: 15px;
       flex-shrink: 0;
     }
@@ -751,9 +765,11 @@
       </div>
     </div>
 
+    <div class="section-divider"></div>
+
     <div class="torta-container">
-      <h3>Torta dei Giretti 🍰</h3>
-      <p class="torta-subtitle">Seleziona gli anni per vedere la torta dei giretti. Selezionando un anno singolo, vedi il dettaglio dalla fetta della torta. Seleziona due anni e confronta i giretti nella sezione sotto!</p>
+      <h2>Torta dei Giretti 🍰</h2>
+      <p class="torta-subtitle">Seleziona gli anni per vedere la distribuzione dei giretti.<br>Se selezioni un anno solo vedi il dettaglio dei giri.<br>Se selezioni due anni puoi vederne il confronto sotto!</p>
       
       <div class="filter-area">
         <!-- Rimosso il tasto TUTTI, inseriti solo i singoli anni -->
