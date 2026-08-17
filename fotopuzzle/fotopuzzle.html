@@ -87,7 +87,7 @@
   }
 
   /* --- SEZIONI PUZZLE --- */
-  #puzzles-container { padding-bottom: 60px; }
+  #puzzles-container { padding-bottom: 0; } /* Rimosso il padding-bottom di 60px per eguagliare la distanza dell'ultimo divisore */
 
   .puzzle-section {
     padding: 5px 15px 10px;
@@ -254,7 +254,8 @@
   </div>
 </header>
 
-<div class="section-divider"></div>
+<!-- Aggiunto margin-top maggiore per distanziare il divisore dal titolo -->
+<div class="section-divider" style="margin-top: 60px;"></div>
 
 <div id="puzzles-container"></div>
 

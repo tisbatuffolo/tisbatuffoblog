@@ -140,7 +140,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 /* --- MODALE --- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 15px; }
 .modal-overlay.active { display: flex; }
-.modal-content { background: #fff; border: 7px solid var(--cartoon-border); border-radius: 35px; padding: 15px; width: 100%; max-width: 700px; position: relative; text-align: center; box-shadow: 10px 10px 0px var(--primary); }
+.modal-content { background: #fff; border: 7px solid var(--cartoon-border); border-radius: 35px; padding: 15px; width: 100%; max-width: 700px; position: relative; text-align: center; box-shadow: 10px 10px 0px var(--primary); transition: background-color 0.2s; }
 
 .m-img-box { width: fit-content; max-width: 100%; margin: 0 auto; border: 6px solid var(--cartoon-border); border-radius: 25px; overflow: hidden; background: transparent; }
 .m-img-box img { display: block; max-width: 100%; max-height: 50vh; width: auto; height: auto; object-fit: contain; }
@@ -159,7 +159,7 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .m-edit-area { display: none; margin-top: 15px; background: #f1f2f6; border: 3px dashed #ccc; padding: 15px; border-radius: 20px; }
 .m-edit-area input, .m-edit-area select { width: 100%; margin-bottom: 10px; padding: 8px; border: 2px solid var(--cartoon-border); border-radius: 10px; font-family: 'Fredoka', sans-serif; text-align: center; font-size: 0.95rem; }
 
-/* NUOVO: Stile per i due bottoni di modifica/eliminazione */
+/* Bottoni di modifica/eliminazione */
 .edit-actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
 .edit-actions button { flex: 1; min-width: 150px; background: var(--primary); color: #fff; font-family: 'Grandstander'; font-weight: 900; font-size: 1.1rem; border: 3px solid var(--cartoon-border); border-radius: 12px; padding: 8px 10px; cursor: pointer; box-shadow: 2px 2px 0px var(--cartoon-border); transition: transform 0.1s, box-shadow 0.1s; }
 .edit-actions button:hover { transform: translateY(-2px); box-shadow: 4px 4px 0px var(--cartoon-border); }
@@ -640,6 +640,19 @@ function updateModal() {
     else if(it.room) { sub.innerText = it.room; sub.style.color = roomColors[it.room] || 'var(--primary)'; } 
     else { sub.innerText = it.category; sub.style.color = 'var(--primary)'; }
     document.getElementById('l-comment').innerText = it.commento || "";
+
+    // GESTIONE VISIBILITÀ PULSANTE E SFONDO INTERNO DEL MODALE PER GLI EXTRA PANDACCESSORI
+    const isExtra = it.arrayName === 'dati_extra_mondo' || it.arrayName === 'dati_extra_pandabox';
+    const editBtn = document.querySelector('.edit-btn');
+    const modalBox = document.getElementById('m-box');
+
+    if (isExtra) {
+        editBtn.style.display = 'none';
+        modalBox.style.backgroundColor = '#e0e0e0'; // Grigio più scuro per gli extra
+    } else {
+        editBtn.style.display = 'flex';
+        modalBox.style.backgroundColor = '#fff'; // Bianco standard
+    }
 }
 
 function scrollToRoom(roomName) {

@@ -435,7 +435,7 @@
 
 <section class="stickers-section">
   <h2 class="section-title">Panda Stickers</h2>
-  <p class="section-subtitle">Scorri verso il basso per vedere tutti i nostri panda stickers!</p>
+  <p class="section-subtitle">Scorri verso il basso per vedere tutti i nostri <span id="tot-stickers">...</span> panda stickers!</p>
   <div class="phone-wrapper">
     <div class="floating-heart" style="top: 10%; left: -110px;">❤️</div>
     <div class="floating-heart" style="top: 50%; left: -130px; animation-delay: 1s;">💖</div>
@@ -455,7 +455,7 @@
 
 <section class="gif-section">
   <h2 class="section-title">Panda Gif</h2>
-  <p class="section-subtitle">Ti sbatuffolo animatamente</p>
+  <p class="section-subtitle">Ti sbatuffolo animatamente <span id="tot-gifs">...</span> volte</p>
   <div class="camera-display-container">
     <div class="film-roll-container" id="gif-scroll-container">
       <div class="film-strip-gifs" id="gif-gallery"></div>
@@ -473,8 +473,8 @@
 <div class="section-divider"></div>
 
 <section class="sbatuffolart-section">
-  <h2 class="section-title">Sbatuffolart</h2>
-  <p class="section-subtitle">L'arte di sbatuffolare e dell'accoccolamento</p>
+  <h2 class="section-title">SbatuffolART</h2>
+  <p class="section-subtitle"><span id="tot-sbatuffolart">...</span> opere d'arte di coccolosa sbatuffolosità</p>
   <div class="art-container">
       <div class="easel">
           <div class="easel-back-leg"></div>
@@ -572,7 +572,7 @@
         <h2 class="section-title" style="color: #900; font-family: 'Courier New', Courier; margin: 0;">GLI SFIGATINI</h2>
         <div class="ghost-icon">👻</div>
     </div>
-    <p class="section-subtitle" style="color: var(--zombie-eye); margin-top: 10px;">Ricordi da film horror</p>
+    <p class="section-subtitle" style="color: var(--zombie-eye); margin-top: 10px;"><span id="tot-sfigatini">...</span> ricordi insieme da film horror</p>
     
     <div class="cinema-container">
         <div class="web-corner"></div>
@@ -683,6 +683,7 @@
     const BATCH = 10;
     const FAIL_STOP = 5;
     let consecutiveFails = 0;
+    let totalCount = 0;
 
     for (let start = 1; start <= MAX && consecutiveFails < FAIL_STOP; start += BATCH) {
       const end = Math.min(start + BATCH - 1, MAX);
@@ -701,11 +702,15 @@
           div.innerHTML = `<img src="img/sticker/sticker (${i}).webp" onerror="this.parentElement.remove()">`;
           container.appendChild(div);
           consecutiveFails = 0;
+          totalCount++;
         } else {
           consecutiveFails++;
         }
       }
     }
+    
+    const totElement = document.getElementById('tot-stickers');
+    if(totElement) totElement.innerText = totalCount;
   }
 
   /* ── Panda Gif: caricamento parallelo a batch ── */
@@ -740,6 +745,8 @@
     scrollContainer.addEventListener('scroll', () => { scrollbar.value = scrollContainer.scrollLeft; });
 
     let consecutiveFails = 0;
+    let totalCount = 0;
+
     for (let start = 1; start <= MAX_GIFS && consecutiveFails < FAIL_STOP; start += BATCH) {
       const end = Math.min(start + BATCH - 1, MAX_GIFS);
       const indices = [];
@@ -753,12 +760,16 @@
           appendFrame(result);
           consecutiveFails = 0;
           syncScrollbar();
+          totalCount++;
         } else {
           consecutiveFails++;
         }
       }
     }
     syncScrollbar();
+
+    const totElement = document.getElementById('tot-gifs');
+    if(totElement) totElement.innerText = totalCount;
   }
 
   /* ── SbatuffolArt ─────────────── */
@@ -779,6 +790,8 @@
     container.addEventListener('scroll', () => { scrollbar.value = container.scrollLeft; });
 
     let consecutiveFails = 0;
+    let totalCount = 0;
+
     for (let start = 1; start <= MAX && consecutiveFails < FAIL_STOP; start += BATCH) {
       const end = Math.min(start + BATCH - 1, MAX);
       const indices = [];
@@ -797,12 +810,16 @@
           container.appendChild(div);
           consecutiveFails = 0;
           syncScrollbar();
+          totalCount++;
         } else {
           consecutiveFails++;
         }
       }
     }
     syncScrollbar();
+
+    const totElement = document.getElementById('tot-sbatuffolart');
+    if(totElement) totElement.innerText = totalCount;
   }
 
   /* ── SbatuffolAI (Intelligenza Artificiale) ─────────────────────────── */
@@ -881,6 +898,9 @@
         else { consecutiveFails++; }
       }
     }
+
+    const totElement = document.getElementById('tot-sfigatini');
+    if(totElement) totElement.innerText = validIndices.length;
 
     function appendFrames() {
       for (const i of validIndices) {
