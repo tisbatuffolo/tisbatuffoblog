@@ -248,11 +248,25 @@
 
     /* --- FOOTER --- */
     footer {
-      text-align: center;
       padding: 20px 10px 40px;
-      font-family: 'Fredoka', sans-serif;
-      color: #aaa;
-      font-size: 0.9rem;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      font-family: 'Grandstander', cursive;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #444;
+      text-align: center;
+      line-height: 1.7;
     }
 
     /* --- MOBILE --- */
@@ -376,7 +390,12 @@
   </main>
 
   <footer>
-    @SbatuffoBlog 2026
+    <div class="footer-container">
+      <div class="footer-text">
+        Fatto con tanto ❤️ (e tanta pandosità)<br>
+        <small>© 2026 SbatuffoBlog - Tutti i baci riservati</small>
+      </div>
+    </div>
   </footer>
 
   <script>
