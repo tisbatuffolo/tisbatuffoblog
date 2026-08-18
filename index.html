@@ -267,6 +267,7 @@
       color: #444;
       text-align: center;
       line-height: 1.7;
+      white-space: nowrap; /* Aggiunto per forzare le frasi su un'unica riga */
     }
 
     /* --- MOBILE --- */
@@ -280,6 +281,9 @@
       .logo-wrapper {
         max-width: 90px;
         width: 45%;
+      }
+      .footer-text {
+        font-size: 4.2vw; /* Riduce il font proporzionalmente su mobile per far stare la frase su una riga senza tagliare i bordi */
       }
     }
 
