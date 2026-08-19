@@ -39,9 +39,5 @@ const dati_extra_pandabox = [
     {
         "titolo": "Smaortphone Rings",
         "immagine": "Smaortphone Rings.jpg"
-    },
-    {
-        "titolo": "Test",
-        "immagine": "Test.jpg"
     }
 ];
