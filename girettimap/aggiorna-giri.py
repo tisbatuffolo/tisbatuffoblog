@@ -26,6 +26,7 @@ print(f"Trovati {len(items)} elementi totali")
 
 giri = []
 
+# Limita a 9 elementi per una perfetta griglia 3x3
 for item in items[:9]:
     try:
         # LINK

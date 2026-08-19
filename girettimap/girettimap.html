@@ -85,13 +85,11 @@
       display: block;
     }
     
-    /* Divider dopo top-links: vicino al sottotitolo come in pandaccessori */
     .top-links + .section-divider {
       margin-top: 40px;
       margin-bottom: 40px;
     }
     
-    /* Divider prima della torta con spazio aumentato sopra */
     .charts-vertical-stack + .section-divider {
       margin-top: 80px;
     }
@@ -151,7 +149,6 @@
     }
 
     .footer-link img { width: 60px; height: auto; }
-
 
     /* =======================================================
        STILI SPECIFICI GIRETTI MAP
@@ -215,7 +212,8 @@
     /* --- GRID CARD --- */
     .grid-riquadri {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      /* Modificato in repeat(3, 1fr) per forzare esattamente 3 colonne desktop su 9 elementi */
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       max-width: 1100px;
       margin: 0 auto 40px auto;
@@ -500,7 +498,7 @@
       box-shadow: 0 5px 20px rgba(0,0,0,0.08);
       width: 100%;
       box-sizing: border-box;
-      display: none; /* Nascosto rigorosamente di default */
+      display: none; 
       flex-direction: column;
       align-items: center;
       margin-top: 20px;
@@ -531,7 +529,7 @@
       font-size: clamp(1.5em, 5vw, 2.2em);
     }
 
-    /* --- MODALE DETTAGLIO GIRI (Nuova UI) --- */
+    /* --- MODALE DETTAGLIO GIRI --- */
     .modal {
       display: none; 
       position: fixed;
@@ -627,7 +625,6 @@
       gap: 10px;
     }
 
-    /* Struttura Riga Modale per ospitare il testo a sinistra e l'icona a destra */
     #modal-lista li {
       background: #fdfdfd;
       padding: 12px 15px;
@@ -664,12 +661,13 @@
       transform: scale(1.50);
     }
 
-    /* --- MEDIA QUERIES --- */
+    /* --- MEDIA QUERIES (Modificate per layout 3x3) --- */
     @media (max-width: 1200px) {
       .grid-riquadri, #contagiri, .chart-wrapper, .confronto-container { max-width: 980px; }
     }
 
     @media (max-width: 900px) {
+      /* Su tablet passa a 2 colonne */
       .grid-riquadri { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -678,7 +676,8 @@
         padding-left: 5px !important;
         padding-right: 5px !important;
       }
-      .grid-riquadri { grid-template-columns: 1fr; }
+      /* Su smartphone Realme (verticale) passa a 1 singola colonna per la massima visibilità */
+      .grid-riquadri { grid-template-columns: repeat(1, 1fr); }
 
       #modal-lista li {
         align-items: center;
@@ -772,7 +771,6 @@
       <p class="torta-subtitle">Seleziona gli anni per vedere la distribuzione dei giretti che abbiamo fatto.<br>Se selezioni un anno solo puoi vedierne il dettaglio.<br>Se selezioni due anni puoi vedere il confronto sotto!</p>
       
       <div class="filter-area">
-        <!-- Rimosso il tasto TUTTI, inseriti solo i singoli anni -->
         <div id="lista-checkbox-anni" style="display: contents;"></div>
       </div>
       <div class="torta-wrapper">
@@ -781,7 +779,6 @@
       <div id="grid-legend"></div>
     </div>
 
-    <!-- Divisore dinamico: scompare se si vedono 2 anni -->
     <div class="section-divider" id="divisore-pre-confronto"></div>
 
     <div class="confronto-container" id="sezione-confronto">
@@ -793,7 +790,6 @@
 
   </section>
 
-  <!-- MODALE PER DETTAGLIO GIRI -->
   <div id="modal-dettaglio" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -844,7 +840,6 @@ let datiPerAnno = {};
 let chartTortaObj = null;
 const paletteColori = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'];
 
-// Logica per il Modale
 const modal = document.getElementById("modal-dettaglio");
 const btnCloseModal = document.querySelector(".close-btn");
 
@@ -854,7 +849,6 @@ window.onclick = function(event) { if (event.target === modal) { modal.style.dis
 function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
 function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
 
-// Funzione di formattazione data in GG/MM/ANNO
 function formattaData(str) {
   if (!str) return "";
   const parts = str.split("/");
@@ -891,7 +885,6 @@ async function init() {
 
         tipi[tipo] = (tipi[tipo] || 0) + 1;
         
-        // Salvataggio per il modale: Luogo, Data Formattata e Flag Amici
         if (!giriDettagli[tipo]) giriDettagli[tipo] = [];
         if (dove) giriDettagli[tipo].push({
           dove: dove,
@@ -916,7 +909,6 @@ async function init() {
     if(datiPerAnno[anno]) {
       const item = document.createElement("div");
       item.className = "anno-item";
-      // Lasciamo spuntati di default per mostrare la torta globale all'inizio
       item.innerHTML = `<input type="checkbox" class="anno-cb anno-year-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
       containerAnni.appendChild(item);
     }
@@ -936,7 +928,6 @@ async function init() {
   aggiornaStatoMaster();
   updateTorta();
   
-  // Event Listener per riaggiornare la torta e il confronto
   document.querySelectorAll('.anno-year-cb').forEach(cb => {
     cb.addEventListener('change', () => {
       aggiornaStatoMaster();
@@ -1039,7 +1030,6 @@ function updateTorta() {
     </div>`;
   });
 
-  // Aggiorna la visibilità di Confronta Giri 
   aggiornaSezioneConfronto(selectedAnni);
 }
 
@@ -1059,7 +1049,6 @@ function getColorForCategoria(categoria) {
   return index >= 0 ? paletteColori[index % paletteColori.length] : 'var(--color-theme)';
 }
 
-// Genera e mostra i dettagli dei giri nel modale
 function apriModaleDettaglio(categoria, anno) {
   const dettagli = datiPerAnno[anno] ? datiPerAnno[anno].giriDettagli[categoria] : [];
   const modalTitolo = document.getElementById('modal-titolo');
@@ -1091,7 +1080,6 @@ function apriModaleDettaglio(categoria, anno) {
   modal.style.display = "flex";
 }
 
-// Visualizza il confronto rigorosamente SOLO se si selezionano 2 anni (e toglie il divisore)
 function aggiornaSezioneConfronto(selectedAnni) {
   const containerSezione = document.getElementById('sezione-confronto');
   const containerRisultati = document.getElementById('confronto-risultati');
@@ -1101,11 +1089,11 @@ function aggiornaSezioneConfronto(selectedAnni) {
 
   if (selectedAnni.length === 2) {
     containerSezione.style.display = 'flex';
-    divisore.style.display = 'none'; // Nascondi divisore sopra per fondere le sezioni
-    divisorePost.style.display = 'block'; // Mostra divisore sotto il confronto
+    divisore.style.display = 'none'; 
+    divisorePost.style.display = 'block'; 
   } else {
     containerSezione.style.display = 'none';
-    divisore.style.display = 'block'; // Ripristina divisore normale
+    divisore.style.display = 'block'; 
     divisorePost.style.display = 'none';
     containerRisultati.innerHTML = "";
     return;
@@ -1126,7 +1114,7 @@ function aggiornaSezioneConfronto(selectedAnni) {
           <th style="text-align: left; padding-left: 20px; width: 40%;">Tipo Giretto</th>`;
   
   const anniOrdinatiDecrescente = [...selectedAnni].sort((a, b) => b - a);
-  const colWidth = Math.floor(60 / anniOrdinatiDecrescente.length); // Sarà sempre 30%
+  const colWidth = Math.floor(60 / anniOrdinatiDecrescente.length); 
   
   anniOrdinatiDecrescente.forEach(anno => {
     html += `<th style="width: ${colWidth}%;">${anno}</th>`;
