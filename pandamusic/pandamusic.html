@@ -700,9 +700,11 @@ footer {
             <div class="form-group"><input id="new-nome" placeholder="Nome Playlist (es. Rock)" required></div>
             <div class="form-group"><input id="new-desc" placeholder="Breve descrizione..." required></div>
             <div class="form-group"><input id="new-link" placeholder="Link web (Spotify / YouTube / Amazon Music)" required></div>
-            <div class="form-group">
-                <label for="new-color" style="display:block; text-align:left; margin-bottom:6px; font-size:0.95rem;">Colore Playlist</label>
-                <input id="new-color" type="color" value="#0000ff" style="width:100%; height:44px; border: 2px solid var(--stroke); border-radius: 12px; padding: 0;" />
+            
+            <!-- Modifica applicata qui per avere label e colore sulla stessa riga -->
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <label for="new-color" style="margin-bottom:0; font-size:0.95rem; font-weight: 600;">Colore Playlist</label>
+                <input id="new-color" type="color" value="#0000ff" style="width: 60px; height: 40px; border: 2px solid var(--stroke); border-radius: 8px; padding: 0; cursor: pointer;" />
             </div>
             
             <div class="modal-btns">

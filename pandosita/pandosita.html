@@ -138,9 +138,14 @@
   .phone-screen { width: 100%; height: 465px; background: #e0f7fa; border-radius: 38px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 3px solid #1a1a1a; margin-top: 10px; }
   .phone-screen::before { content: ""; position: absolute; top: 10px; right: 15px; width: 60px; height: 120px; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%); transform: rotate(-10deg); border-radius: 15px; z-index: 10; pointer-events: none; }
   
-  .stickers-display { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; overflow-y: auto; gap: 30px; background-image: radial-gradient(rgba(255,255,255,0.4) 2px, transparent 2px); background-size: 30px 30px; }
-  .stickers-display::-webkit-scrollbar { width: 5px; }
-  .stickers-display::-webkit-scrollbar-thumb { background: #ff8fab; border-radius: 10px; }
+  /* Modificate solo queste regole per la scrollbar stile ombra */
+  .stickers-display { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; overflow-y: auto; gap: 30px; background-image: radial-gradient(rgba(255,255,255,0.4) 2px, transparent 2px); background-size: 30px 30px; scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.15) transparent; }
+  .stickers-display::-webkit-scrollbar { width: 3px; }
+  .stickers-display::-webkit-scrollbar-track { background: transparent; }
+  .stickers-display::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
+  .stickers-display::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+  /* Fine modifiche scrollbar */
+
   .sticker-item-phone { width: 155px; flex-shrink: 0; filter: drop-shadow(0 5px 12px rgba(0,0,0,0.12)); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .sticker-item-phone:hover { transform: scale(1.1) rotate(-3deg); }
   .sticker-item-phone img { width: 100%; height: auto; display: block; }
@@ -614,6 +619,7 @@
       
       <label>Sezione di atterraggio:</label>
       <select id="sezionePandosita" required>
+        <option value="" disabled selected>-- Scegli Sezione --</option>
         <option value="sticker">Panda Stickers</option>
         <option value="gif">Panda Gif</option>
         <option value="sbatuffolart">SbatuffolART</option>
@@ -1084,6 +1090,8 @@
       const sezione = document.getElementById('sezionePandosita').value;
       const file = fileInput.files[0];
       
+      // Controllo di fallback JavaScript oltre a quello HTML
+      if (!sezione) return alert("Scegli una sezione di atterraggio!");
       if (!file) return alert("Seleziona un'immagine!");
 
       // REGOLA: Il formato GIF è esclusivo solo per la sezione Panda Gif
