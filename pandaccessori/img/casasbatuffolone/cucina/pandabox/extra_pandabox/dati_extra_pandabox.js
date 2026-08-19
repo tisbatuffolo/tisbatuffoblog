@@ -24,7 +24,7 @@ const dati_extra_pandabox = [
         "titolo": "Passacavi",
         "immagine": "Passacavi.jpg"
     },
-        {
+    {
         "titolo": "Baby Portachiavi",
         "immagine": "Baby Portachiavi.jpg"
     },
