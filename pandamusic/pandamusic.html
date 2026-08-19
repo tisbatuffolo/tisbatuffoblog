@@ -390,6 +390,11 @@ header {
     max-height: calc(90vh - 50px);
 }
 
+.cd-shape .modal-content {
+    background: transparent;
+    border-color: transparent;
+}
+
 .modal-content::-webkit-scrollbar { width: 6px; }
 .modal-content::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
@@ -704,7 +709,7 @@ footer {
             <!-- Modifica applicata qui per avere label e colore sulla stessa riga -->
             <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <label for="new-color" style="margin-bottom:0; font-size:0.95rem; font-weight: 600;">Colore Playlist</label>
-                <input id="new-color" type="color" value="#0000ff" style="width: 60px; height: 40px; border: 2px solid var(--stroke); border-radius: 8px; padding: 0; cursor: pointer;" />
+                <input id="new-color" type="color" value="#0000ff" style="flex: 0 0 50%; width: 50%; height: 40px; border: 2px solid var(--stroke); border-radius: 8px; padding: 0; cursor: pointer;" />
             </div>
             
             <div class="modal-btns">
