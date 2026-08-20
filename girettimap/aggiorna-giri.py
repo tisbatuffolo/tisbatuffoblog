@@ -20,8 +20,12 @@ headers = {
 }
 
 print("🔄 Scarico la pagina...")
-response = requests.get(URL, headers=headers)
-response.raise_for_status()
+try:
+    response = requests.get(URL, headers=headers, timeout=15)
+    response.raise_for_status()
+except Exception as err:
+    print(f"❌ Errore durante il caricamento di Outdooractive: {err}")
+    exit(1)
 
 soup = BeautifulSoup(response.text, "html.parser")
 items = soup.find_all("div", class_="oax-listImage-snippet")
@@ -29,9 +33,8 @@ print(f"Trovati {len(items)} elementi totali")
 
 giri = []
 downloaded_files = []
-# i primi 9 giri della GirettiMap 
-# for idx, item in enumerate(items[:9]): 
-# gli ultimi 9 della GirettiMap     
+
+# Prendiamo gli ultimi 9 della GirettiMap
 for idx, item in enumerate(items[::-1][:9]):
     try:
         # LINK
@@ -41,6 +44,10 @@ for idx, item in enumerate(items[::-1][:9]):
         # TITOLO
         titolo_tag = item.find("strong", class_="oax-region-title")
         titolo = titolo_tag.get_text(strip=True) if titolo_tag else "Senza titolo"
+
+        # ESTRAI L'ID UNICO DAL LINK (Es: /350310622/ -> 350310622)
+        match_id = re.search(r'/(\d+)/?$', link)
+        giro_id = match_id.group(1) if match_id else f"index_{idx + 1}"
 
         # IMMAGINE REMOTE URL
         img_remote = ""
@@ -52,25 +59,25 @@ for idx, item in enumerate(items[::-1][:9]):
             input_tag = item.select_one("output input.oax-load-path")
             if input_tag:
                 value = html.unescape(input_tag.get("value", ""))
-                match = re.search(r'src:\s*"([^"]+)"', value)
-                if match:
-                    img_remote = match.group(1)
+                match_src = re.search(r'src:\s*"([^"]+)"', value)
+                if match_src:
+                    img_remote = match_src.group(1)
 
         local_img_path = ""
         if img_remote:
             img_remote = img_remote.replace("120x120r", "800x600").replace("120x120", "800x600")
             
-            # Determina l'estensione del file
             ext = "webp"
             if ".jpg" in img_remote.lower():
                 ext = "jpg"
             elif ".png" in img_remote.lower():
                 ext = "png"
 
-            filename = f"giro_{idx + 1}.{ext}"
+            # Il file avrà il nome univoco basato sull'ID del giro
+            filename = f"giro_{giro_id}.{ext}"
             filepath = os.path.join(img_dir, filename)
 
-            # Download dell'immagine in locale
+            # Download dell'immagine
             try:
                 img_res = requests.get(img_remote, headers=headers, timeout=10)
                 if img_res.status_code == 200:
@@ -80,7 +87,7 @@ for idx, item in enumerate(items[::-1][:9]):
                     downloaded_files.append(filename)
                     print(f"✔ Scaricata anteprima locale: {filename}")
                 else:
-                    local_img_path = img_remote # fallback su URL remoto
+                    local_img_path = img_remote
             except Exception as download_err:
                 print(f"⚠️ Impossibile scaricare l'immagine per {titolo}:", download_err)
                 local_img_path = img_remote
@@ -94,13 +101,12 @@ for idx, item in enumerate(items[::-1][:9]):
     except Exception as e:
         print("Errore:", e)
 
-# Pulizia di vecchie immagini non più necessarie
+# Pulizia di vecchie immagini non più nei primi 9 (esclusa l'eccezione .gitkeep)
 for file_in_dir in os.listdir(img_dir):
-    # Ignoriamo il file .gitkeep per mantenere la cartella sincronizzata
     if file_in_dir not in downloaded_files and file_in_dir != ".gitkeep":
         try:
             os.remove(os.path.join(img_dir, file_in_dir))
-            print(f"🗑 Rimossa vecchia immagine: {file_in_dir}")
+            print(f"🗑 Rimossa vecchia immagine non più utilizzata: {file_in_dir}")
         except Exception as e:
             print("Errore durante la pulizia:", e)
 
