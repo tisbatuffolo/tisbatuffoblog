@@ -95,7 +95,7 @@
     }
     
     .section-divider::after {
-      content: "♥";
+      content: "❤";
       position: absolute;
       top: -14px; left: 50%;
       transform: translateX(-50%);
@@ -212,7 +212,6 @@
     /* --- GRID CARD --- */
     .grid-riquadri {
       display: grid;
-      /* Modificato in repeat(3, 1fr) per forzare esattamente 3 colonne desktop su 9 elementi */
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       max-width: 1100px;
@@ -661,13 +660,12 @@
       transform: scale(1.50);
     }
 
-    /* --- MEDIA QUERIES (Modificate per layout 3x3) --- */
+    /* --- MEDIA QUERIES --- */
     @media (max-width: 1200px) {
       .grid-riquadri, #contagiri, .chart-wrapper, .confronto-container { max-width: 980px; }
     }
 
     @media (max-width: 900px) {
-      /* Su tablet passa a 2 colonne */
       .grid-riquadri { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -676,7 +674,6 @@
         padding-left: 5px !important;
         padding-right: 5px !important;
       }
-      /* Su smartphone Realme (verticale) passa a 1 singola colonna per la massima visibilità */
       .grid-riquadri { grid-template-columns: repeat(1, 1fr); }
 
       #modal-lista li {
@@ -726,10 +723,13 @@
 
   <div class="section-divider"></div>
 
-  <h2>Ultimi Giri</h2>
-  <div class="grid-riquadri" id="contenitore-giri"></div>
-
-  <div class="section-divider"></div>
+  <!-- Inizio Sezione Ultimi Giri protetta dalla variabile globale -->
+  <div id="sezione-ultimi-giri">
+    <h2>Ultimi Giri</h2>
+    <div class="grid-riquadri" id="contenitore-giri"></div>
+    <div class="section-divider"></div>
+  </div>
+  <!-- Fine Sezione Ultimi Giri -->
 
   <section id="contagiri">
     <h2>Conta Giri</h2>
@@ -767,7 +767,7 @@
     <div class="section-divider"></div>
 
     <div class="torta-container">
-      <h2>Torta dei Giretti 🍰</h2>
+      <h2>Torta dei Giretti 🥧</h2>
       <p class="torta-subtitle">Seleziona gli anni per vedere la distribuzione dei giretti che abbiamo fatto.<br>Se selezioni un anno solo puoi vedierne il dettaglio.<br>Se selezioni due anni puoi vedere il confronto sotto!</p>
       
       <div class="filter-area">
@@ -782,7 +782,7 @@
     <div class="section-divider" id="divisore-pre-confronto"></div>
 
     <div class="confronto-container" id="sezione-confronto">
-      <h3>Confronta Giri 🔍</h3>
+      <h3>Confronta Giri ⚖️</h3>
       <div id="confronto-risultati" style="width: 100%;"></div>
     </div>
 
@@ -821,392 +821,439 @@
 
 <script src="giri.js"></script>
 
+<!-- SCRIPT 1: GESTIONE OUTDOORACTIVE -->
 <script>
-const container = document.getElementById("contenitore-giri");
-if (typeof GIRI !== 'undefined') {
-  GIRI.slice(0, 9).forEach(giro => {
-    const card = document.createElement("div");
-    card.className = "riquadro";
-    const imgSrc = giro.img && giro.img !== "" ? giro.img : "https://via.placeholder.com/800x600?text=No+Image";
-    card.innerHTML = `<a href="${giro.link}" target="_blank" class="riquadro-link"><div class="riquadro-titolo">${giro.titolo}</div><img src="${imgSrc}" alt="${giro.titolo}"></a>`;
-    container.appendChild(card);
-  });
-}
+  // Usa "window." per aggirare qualsiasi conflitto di variabili col file giri.js
+  window.AttivaOutdooractive = true; 
 
-const BASE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS25gFAneadaRaQQHKaNq-dZLFD0dx1mQw5nxZj7fHc2XWZH6zxHn8A4rRgPJ_XH5eujTrhTr6x36vq/pub?output=csv&gid=";
-const SHEETS = { 2018: 0, 2019: 1139420899, 2020: 2024853702, 2021: 1564840008, 2022: 1211406438, 2023: 47473263, 2024: 203674235, 2025: 1106825116, 2026: 232828694 };
-
-let datiPerAnno = {}; 
-let chartTortaObj = null;
-const paletteColori = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'];
-
-const modal = document.getElementById("modal-dettaglio");
-const btnCloseModal = document.querySelector(".close-btn");
-
-btnCloseModal.onclick = function() { modal.style.display = "none"; }
-window.onclick = function(event) { if (event.target === modal) { modal.style.display = "none"; } }
-
-function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
-function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
-
-function formattaData(str) {
-  if (!str) return "";
-  const parts = str.split("/");
-  if (parts.length === 3) {
-    if (parts[0].length === 4) { 
-      return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
-    } else { 
-      return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
-    }
-  }
-  return str;
-}
-
-async function init() {
-  const anniOrdinati = Object.keys(SHEETS).sort((a, b) => a - b);
-  const containerAnni = document.getElementById("lista-checkbox-anni");
-  let ultimaData = null;
-
-  await Promise.all(anniOrdinati.map(async (anno) => {
+  document.addEventListener("DOMContentLoaded", () => {
     try {
-      const res = await fetch(BASE_CSV + SHEETS[anno]);
-      const csv = await res.text();
-      const rows = parseCSV(csv).slice(1);
-      let tot = rows.length, giretti = 0, lunghi = 0, amici = 0, tipi = {}, giriDettagli = {};
-      
-      rows.forEach(r => {
-        const dataOriginale = (r[0] || "").trim();
-        const dove = (r[1] || "").trim();
-        const giorni = r[2];
-        const amiciCol = (r[3] || "").toUpperCase().trim(); 
-        const tipo = (r[6] || "Altro").trim() || "Altro";
-        
-        const hasAmici = amiciCol === "SI";
+      const sezioneUltimiGiri = document.getElementById("sezione-ultimi-giri");
+      const containerGiri = document.getElementById("contenitore-giri");
 
-        tipi[tipo] = (tipi[tipo] || 0) + 1;
+      if (window.AttivaOutdooractive === false) {
+        if (sezioneUltimiGiri) {
+          // Invece di nasconderla, la ELIMINIAMO fisicamente dal DOM per sicurezza totale
+          sezioneUltimiGiri.remove();
+        }
+      } else {
+        if (typeof GIRI !== 'undefined' && containerGiri) {
+          GIRI.slice(0, 9).forEach(giro => {
+            const card = document.createElement("div");
+            card.className = "riquadro";
+            const imgSrc = giro.img && giro.img !== "" ? giro.img : "https://via.placeholder.com/800x600?text=No+Image";
+            card.innerHTML = `<a href="${giro.link}" target="_blank" class="riquadro-link"><div class="riquadro-titolo">${giro.titolo}</div><img src="${imgSrc}" alt="${giro.titolo}"></a>`;
+            containerGiri.appendChild(card);
+          });
+        }
+      }
+    } catch(e) {
+      console.error("Si è verificato un errore innocuo nella sezione Ultimi Giri:", e);
+    }
+  });
+</script>
+
+<!-- SCRIPT 2: GESTIONE GIRETTILIST COMPLETAMENTE ISOLATA -->
+<script>
+// Questa è una IIFE (Immediately Invoked Function Expression). 
+// Isola tutto il codice al suo interno, impedendo che le variabili vadano in conflitto con il resto della pagina.
+(function() {
+  const BASE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS25gFAneadaRaQQHKaNq-dZLFD0dx1mQw5nxZj7fHc2XWZH6zxHn8A4rRgPJ_XH5eujTrhTr6x36vq/pub?output=csv&gid=";
+  const SHEETS = { 2018: 0, 2019: 1139420899, 2020: 2024853702, 2021: 1564840008, 2022: 1211406438, 2023: 47473263, 2024: 203674235, 2025: 1106825116, 2026: 232828694 };
+
+  let datiPerAnno = {}; 
+  let chartTortaObj = null;
+  const paletteColori = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'];
+
+  const modal = document.getElementById("modal-dettaglio");
+  const btnCloseModal = document.querySelector(".close-btn");
+
+  if(btnCloseModal) btnCloseModal.onclick = function() { modal.style.display = "none"; }
+  window.onclick = function(event) { if (event.target === modal) { modal.style.display = "none"; } }
+
+  function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
+  function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
+
+  function formattaData(str) {
+    if (!str) return "";
+    const parts = str.split("/");
+    if (parts.length === 3) {
+      if (parts[0].length === 4) { 
+        return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+      } else { 
+        return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+      }
+    }
+    return str;
+  }
+
+  async function init() {
+    const anniOrdinati = Object.keys(SHEETS).sort((a, b) => a - b);
+    const containerAnni = document.getElementById("lista-checkbox-anni");
+    let ultimaData = null;
+
+    await Promise.all(anniOrdinati.map(async (anno) => {
+      try {
+        const res = await fetch(BASE_CSV + SHEETS[anno]);
+        const csv = await res.text();
+        const rows = parseCSV(csv).slice(1);
+        let tot = rows.length, giretti = 0, lunghi = 0, amici = 0, tipi = {}, giriDettagli = {};
         
-        if (!giriDettagli[tipo]) giriDettagli[tipo] = [];
-        if (dove) giriDettagli[tipo].push({
-          dove: dove,
-          dataStr: formattaData(dataOriginale),
-          amici: hasAmici
+        rows.forEach(r => {
+          const dataOriginale = (r[0] || "").trim();
+          const dove = (r[1] || "").trim();
+          const giorni = r[2];
+          const amiciCol = (r[3] || "").toUpperCase().trim(); 
+          const tipo = (r[6] || "Altro").trim() || "Altro";
+          
+          const hasAmici = amiciCol === "SI";
+
+          tipi[tipo] = (tipi[tipo] || 0) + 1;
+          
+          if (!giriDettagli[tipo]) giriDettagli[tipo] = [];
+          if (dove) giriDettagli[tipo].push({
+            dove: dove,
+            dataStr: formattaData(dataOriginale),
+            amici: hasAmici
+          });
+          
+          if (giorni === "1" || giorni === "1/2") giretti++; else if (parseFloat(giorni) > 1) lunghi++;
+          if (hasAmici) amici++;
+          if (dataOriginale) { const d = parseDate(dataOriginale); if (!ultimaData || d > ultimaData) ultimaData = d; }
         });
-        
-        if (giorni === "1" || giorni === "1/2") giretti++; else if (parseFloat(giorni) > 1) lunghi++;
-        if (hasAmici) amici++;
-        if (dataOriginale) { const d = parseDate(dataOriginale); if (!ultimaData || d > ultimaData) ultimaData = d; }
+        datiPerAnno[anno] = { tot, giretti, lunghi, amici, tipi, giriDettagli };
+      } catch (e) { console.error("Impossibile caricare foglio:", e); }
+    }));
+
+    if(containerAnni) {
+      const masterItem = document.createElement("div");
+      masterItem.className = "anno-item";
+      masterItem.innerHTML = `<input type="checkbox" class="anno-cb anno-master-cb" checked id="cb-tutti"><label for="cb-tutti">TUTTI</label>`;
+      containerAnni.appendChild(masterItem);
+
+      anniOrdinati.slice().reverse().forEach(anno => {
+        if(datiPerAnno[anno]) {
+          const item = document.createElement("div");
+          item.className = "anno-item";
+          item.innerHTML = `<input type="checkbox" class="anno-cb anno-year-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
+          containerAnni.appendChild(item);
+        }
       });
-      datiPerAnno[anno] = { tot, giretti, lunghi, amici, tipi, giriDettagli };
-    } catch (e) { console.error(e); }
-  }));
-
-  const masterItem = document.createElement("div");
-  masterItem.className = "anno-item";
-  masterItem.innerHTML = `<input type="checkbox" class="anno-cb anno-master-cb" checked id="cb-tutti"><label for="cb-tutti">TUTTI</label>`;
-  containerAnni.appendChild(masterItem);
-
-  anniOrdinati.slice().reverse().forEach(anno => {
-    if(datiPerAnno[anno]) {
-      const item = document.createElement("div");
-      item.className = "anno-item";
-      item.innerHTML = `<input type="checkbox" class="anno-cb anno-year-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
-      containerAnni.appendChild(item);
     }
-  });
 
-  const tbody = document.querySelector("#tabella-giri tbody");
-  const summary = { anni: [], totali: [], giretti: [], lunghi: [], amici: [] };
-  [...anniOrdinati].reverse().forEach(anno => {
-    const d = datiPerAnno[anno];
-    if(d) {
-      summary.anni.push(anno); summary.totali.push(d.tot); summary.giretti.push(d.giretti); summary.lunghi.push(d.lunghi); summary.amici.push(d.amici);
-      tbody.innerHTML += `<tr><td>${anno}</td><td>${d.tot}</td><td>${d.giretti}</td><td>${d.lunghi}</td><td>${d.amici}</td></tr>`;
-    }
-  });
-
-  renderTrend(summary);
-  aggiornaStatoMaster();
-  updateTorta();
-  
-  document.querySelectorAll('.anno-year-cb').forEach(cb => {
-    cb.addEventListener('change', () => {
-      aggiornaStatoMaster();
-      updateTorta();
-    });
-  });
-
-  const masterCb = document.querySelector('.anno-master-cb');
-  if (masterCb) {
-    masterCb.addEventListener('change', () => {
-      document.querySelectorAll('.anno-year-cb').forEach(cb => {
-        cb.checked = masterCb.checked;
+    const tbody = document.querySelector("#tabella-giri tbody");
+    const summary = { anni: [], totali: [], giretti: [], lunghi: [], amici: [] };
+    
+    if(tbody) {
+      [...anniOrdinati].reverse().forEach(anno => {
+        const d = datiPerAnno[anno];
+        if(d) {
+          summary.anni.push(anno); summary.totali.push(d.tot); summary.giretti.push(d.giretti); summary.lunghi.push(d.lunghi); summary.amici.push(d.amici);
+          tbody.innerHTML += `<tr><td>${anno}</td><td>${d.tot}</td><td>${d.giretti}</td><td>${d.lunghi}</td><td>${d.amici}</td></tr>`;
+        }
       });
-      aggiornaStatoMaster();
-      updateTorta();
+    }
+
+    renderTrend(summary);
+    aggiornaStatoMaster();
+    updateTorta();
+    
+    document.querySelectorAll('.anno-year-cb').forEach(cb => {
+      cb.addEventListener('change', () => {
+        aggiornaStatoMaster();
+        updateTorta();
+      });
     });
+
+    const masterCb = document.querySelector('.anno-master-cb');
+    if (masterCb) {
+      masterCb.addEventListener('change', () => {
+        document.querySelectorAll('.anno-year-cb').forEach(cb => {
+          cb.checked = masterCb.checked;
+        });
+        aggiornaStatoMaster();
+        updateTorta();
+      });
+    }
+
+    if (ultimaData) {
+      const diff = Math.floor((new Date().setHours(0,0,0,0) - new Date(ultimaData).setHours(0,0,0,0)) / 86400000);
+      const el = document.getElementById("frase-giri");
+      if(el) {
+        if (diff === 0) { el.innerText = "Che bello oggi abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+        else if (diff === 1) { el.innerText = "Che bello ieri abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+        else if (diff <= 6) { el.innerText = "Che bello questa settimana abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+        else { el.innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`; el.style.color = "var(--heart-red)"; }
+      }
+    }
   }
 
-  if (ultimaData) {
-    const diff = Math.floor((new Date().setHours(0,0,0,0) - new Date(ultimaData).setHours(0,0,0,0)) / 86400000);
-    const el = document.getElementById("frase-giri");
-    if (diff === 0) { el.innerText = "Che bello oggi abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
-    else if (diff === 1) { el.innerText = "Che bello ieri abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
-    else if (diff <= 6) { el.innerText = "Che bello questa settimana abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
-    else { el.innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`; el.style.color = "var(--heart-red)"; }
+  function aggiornaStatoMaster() {
+    const anniCheckboxes = Array.from(document.querySelectorAll('.anno-year-cb'));
+    const masterCb = document.querySelector('.anno-master-cb');
+    if (!masterCb || anniCheckboxes.length === 0) return;
+
+    const checkedCount = anniCheckboxes.filter(cb => cb.checked).length;
+    masterCb.checked = checkedCount === anniCheckboxes.length;
+    masterCb.indeterminate = checkedCount > 0 && checkedCount < anniCheckboxes.length;
   }
-}
 
-function aggiornaStatoMaster() {
-  const anniCheckboxes = Array.from(document.querySelectorAll('.anno-year-cb'));
-  const masterCb = document.querySelector('.anno-master-cb');
-  if (!masterCb || anniCheckboxes.length === 0) return;
+  function updateTorta() {
+    const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+    let aggregatoTipi = {};
+    
+    selectedAnni.forEach(anno => {
+      if(datiPerAnno[anno]) {
+        const tipi = datiPerAnno[anno].tipi;
+        for (let t in tipi) { aggregatoTipi[t] = (aggregatoTipi[t] || 0) + tipi[t]; }
+      }
+    });
+    
+    const labels = Object.keys(aggregatoTipi), valori = Object.values(aggregatoTipi);
+    const canvas = document.getElementById('chartTorta');
+    if(!canvas) return;
 
-  const checkedCount = anniCheckboxes.filter(cb => cb.checked).length;
-  masterCb.checked = checkedCount === anniCheckboxes.length;
-  masterCb.indeterminate = checkedCount > 0 && checkedCount < anniCheckboxes.length;
-}
-
-function updateTorta() {
-  const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
-  let aggregatoTipi = {};
-  
-  selectedAnni.forEach(anno => {
-    if(datiPerAnno[anno]) {
-      const tipi = datiPerAnno[anno].tipi;
-      for (let t in tipi) { aggregatoTipi[t] = (aggregatoTipi[t] || 0) + tipi[t]; }
-    }
-  });
-  
-  const labels = Object.keys(aggregatoTipi), valori = Object.values(aggregatoTipi);
-  const ctx = document.getElementById('chartTorta').getContext('2d');
-  
-  if (chartTortaObj) chartTortaObj.destroy();
-  
-  chartTortaObj = new Chart(ctx, {
-    type: 'pie',
-    data: { labels: labels, datasets: [{ data: valori, backgroundColor: paletteColori, borderWidth: 1 }] },
-    options: { 
-      responsive: true, 
-      maintainAspectRatio: false, 
-      plugins: { 
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              let label = context.label || '';
-              if (label) { label += ': '; }
-              if (context.parsed !== null) { label += context.parsed; }
-              
-              const selAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
-              if (selAnni.length === 1) {
-                label += ' (Clicca per dettagli)';
+    const ctx = canvas.getContext('2d');
+    
+    if (chartTortaObj) chartTortaObj.destroy();
+    
+    chartTortaObj = new Chart(ctx, {
+      type: 'pie',
+      data: { labels: labels, datasets: [{ data: valori, backgroundColor: paletteColori, borderWidth: 1 }] },
+      options: { 
+        responsive: true, 
+        maintainAspectRatio: false, 
+        plugins: { 
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.label || '';
+                if (label) { label += ': '; }
+                if (context.parsed !== null) { label += context.parsed; }
+                
+                const selAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+                if (selAnni.length === 1) {
+                  label += ' (Clicca per dettagli)';
+                }
+                return label;
               }
-              return label;
             }
           }
-        }
-      },
-      onClick: (event, elements) => {
-        if (elements && elements.length > 0) {
-          const index = elements[0].index;
-          const label = chartTortaObj.data.labels[index];
-          gestisciClickLegenda(label);
+        },
+        onClick: (event, elements) => {
+          if (elements && elements.length > 0) {
+            const index = elements[0].index;
+            const label = chartTortaObj.data.labels[index];
+            window.gestisciClickLegenda(label);
+          }
         }
       }
-    }
-  });
-  
-  const legendGrid = document.getElementById('grid-legend');
-  legendGrid.innerHTML = '';
-  labels.forEach((l, i) => {
-    const safeLabel = l.replace(/'/g, "\\'");
-    const lensHtml = selectedAnni.length === 1
-      ? `<span class="legend-lens" title="Apri dettagli di ${l}" onclick="event.stopPropagation(); gestisciClickLegenda('${safeLabel}');" aria-label="Apri dettagli di ${l}">🔎</span>`
-      : '';
-
-    legendGrid.innerHTML += `<div class="legend-item" style="cursor: pointer;" onclick="gestisciClickLegenda('${safeLabel}')">
-      <div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div>
-      <span>${l}: <strong>${valori[i]}</strong></span>${lensHtml}
-    </div>`;
-  });
-
-  aggiornaSezioneConfronto(selectedAnni);
-}
-
-function gestisciClickLegenda(categoria) {
-  const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
-  if (selectedAnni.length === 1) {
-    apriModaleDettaglio(categoria, selectedAnni[0]);
-  }
-}
-
-function getColorForCategoria(categoria) {
-  if (!chartTortaObj || !chartTortaObj.data || !Array.isArray(chartTortaObj.data.labels)) {
-    return 'var(--color-theme)';
-  }
-
-  const index = chartTortaObj.data.labels.indexOf(categoria);
-  return index >= 0 ? paletteColori[index % paletteColori.length] : 'var(--color-theme)';
-}
-
-function apriModaleDettaglio(categoria, anno) {
-  const dettagli = datiPerAnno[anno] ? datiPerAnno[anno].giriDettagli[categoria] : [];
-  const modalTitolo = document.getElementById('modal-titolo');
-  const coloreCategoria = getColorForCategoria(categoria);
-  const modalLista = document.getElementById('modal-lista');
-  
-  modalTitolo.innerText = `Dettaglio ${categoria} (${dettagli ? dettagli.length : 0}) - ${anno}`;
-  modalTitolo.style.backgroundColor = coloreCategoria;
-  modalTitolo.style.color = '#111';
-  
-  let html = '';
-  if (dettagli && dettagli.length > 0) {
-    html += `<ul>`;
-    dettagli.forEach(giro => {
-      let dateHtml = giro.dataStr ? `<span style="display: block; font-size: 0.85em; color: var(--main-blue); font-weight: bold; margin-bottom: 4px;">📅 ${giro.dataStr}</span>` : '';
-      let amiciIcon = giro.amici ? `<img src="img/giriamici.png" class="li-icon" alt="Giro con amici" title="Giro con amici">` : '';
-      
-      html += `<li style="border-color: ${coloreCategoria}; border-left-color: ${coloreCategoria}; box-shadow: 0 0 0 1px ${coloreCategoria}22;">
-                 <div class="li-testo">${dateHtml}${giro.dove}</div>
-                 ${amiciIcon}
-               </li>`;
     });
-    html += `</ul>`;
-  } else {
-    html += `<p style="text-align: center; color: #777; font-family: 'Fredoka', sans-serif;">Nessun giro trovato.</p>`;
-  }
-  
-  modalLista.innerHTML = html;
-  modal.style.display = "flex";
-}
+    
+    const legendGrid = document.getElementById('grid-legend');
+    if(legendGrid) {
+      legendGrid.innerHTML = '';
+      labels.forEach((l, i) => {
+        const safeLabel = l.replace(/'/g, "\\'");
+        const lensHtml = selectedAnni.length === 1
+          ? `<span class="legend-lens" title="Apri dettagli di ${l}" onclick="event.stopPropagation(); window.gestisciClickLegenda('${safeLabel}');" aria-label="Apri dettagli di ${l}">🔍</span>`
+          : '';
 
-function aggiornaSezioneConfronto(selectedAnni) {
-  const containerSezione = document.getElementById('sezione-confronto');
-  const containerRisultati = document.getElementById('confronto-risultati');
-  const divisore = document.getElementById('divisore-pre-confronto');
-  
-  const divisorePost = document.getElementById('divisore-post-confronto');
-
-  if (selectedAnni.length === 2) {
-    containerSezione.style.display = 'flex';
-    divisore.style.display = 'none'; 
-    divisorePost.style.display = 'block'; 
-  } else {
-    containerSezione.style.display = 'none';
-    divisore.style.display = 'block'; 
-    divisorePost.style.display = 'none';
-    containerRisultati.innerHTML = "";
-    return;
-  }
-  
-  let tutteLeCategorie = new Set();
-  selectedAnni.forEach(anno => {
-    if (datiPerAnno[anno]) {
-      Object.keys(datiPerAnno[anno].tipi).forEach(cat => tutteLeCategorie.add(cat));
+        legendGrid.innerHTML += `<div class="legend-item" style="cursor: pointer;" onclick="window.gestisciClickLegenda('${safeLabel}')">
+          <div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div>
+          <span>${l}: <strong>${valori[i]}</strong></span>${lensHtml}
+        </div>`;
+      });
     }
-  });
-  const categorieOrdinate = Array.from(tutteLeCategorie).sort();
-  
-  let html = `<div class="table-container-wrapper" style="margin-top: 15px;">
-    <table id="tabella-confronto">
-      <thead>
-        <tr class="header-row">
-          <th style="text-align: left; padding-left: 20px; width: 40%;">Tipo Giretto</th>`;
-  
-  const anniOrdinatiDecrescente = [...selectedAnni].sort((a, b) => b - a);
-  const colWidth = Math.floor(60 / anniOrdinatiDecrescente.length); 
-  
-  anniOrdinatiDecrescente.forEach(anno => {
-    html += `<th style="width: ${colWidth}%;">${anno}</th>`;
-  });
-  
-  html += `</tr>
-      </thead>
-      <tbody>`;
-  
-  categorieOrdinate.forEach((cat) => {
-    const coloreCat = getColorForCategoria(cat);
-    html += `<tr>
-      <td style="text-align: left; padding-left: 20px; font-weight: 700;"><span class="comparison-category-badge" style="background-color: ${coloreCat};">${cat}</span></td>`;
+
+    aggiornaSezioneConfronto(selectedAnni);
+  }
+
+  // Esportiamo solo la funzione necessaria agli inline HTML onclick (per le lenti della torta)
+  window.gestisciClickLegenda = function(categoria) {
+    const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+    if (selectedAnni.length === 1) {
+      apriModaleDettaglio(categoria, selectedAnni[0]);
+    }
+  };
+
+  function getColorForCategoria(categoria) {
+    if (!chartTortaObj || !chartTortaObj.data || !Array.isArray(chartTortaObj.data.labels)) {
+      return 'var(--color-theme)';
+    }
+    const index = chartTortaObj.data.labels.indexOf(categoria);
+    return index >= 0 ? paletteColori[index % paletteColori.length] : 'var(--color-theme)';
+  }
+
+  function apriModaleDettaglio(categoria, anno) {
+    const dettagli = datiPerAnno[anno] ? datiPerAnno[anno].giriDettagli[categoria] : [];
+    const modalTitolo = document.getElementById('modal-titolo');
+    const coloreCategoria = getColorForCategoria(categoria);
+    const modalLista = document.getElementById('modal-lista');
+    
+    if(modalTitolo) {
+      modalTitolo.innerText = `Dettaglio ${categoria} (${dettagli ? dettagli.length : 0}) - ${anno}`;
+      modalTitolo.style.backgroundColor = coloreCategoria;
+      modalTitolo.style.color = '#111';
+    }
+    
+    let html = '';
+    if (dettagli && dettagli.length > 0) {
+      html += `<ul>`;
+      dettagli.forEach(giro => {
+        let dateHtml = giro.dataStr ? `<span style="display: block; font-size: 0.85em; color: var(--main-blue); font-weight: bold; margin-bottom: 4px;">🗓 ${giro.dataStr}</span>` : '';
+        let amiciIcon = giro.amici ? `<img src="img/giriamici.png" class="li-icon" alt="Giro con amici" title="Giro con amici">` : '';
+        
+        html += `<li style="border-color: ${coloreCategoria}; border-left-color: ${coloreCategoria}; box-shadow: 0 0 0 1px ${coloreCategoria}22;">
+                   <div class="li-testo">${dateHtml}${giro.dove}</div>
+                   ${amiciIcon}
+                 </li>`;
+      });
+      html += `</ul>`;
+    } else {
+      html += `<p style="text-align: center; color: #777; font-family: 'Fredoka', sans-serif;">Nessun giro trovato.</p>`;
+    }
+    
+    if(modalLista) modalLista.innerHTML = html;
+    if(modal) modal.style.display = "flex";
+  }
+
+  function aggiornaSezioneConfronto(selectedAnni) {
+    const containerSezione = document.getElementById('sezione-confronto');
+    const containerRisultati = document.getElementById('confronto-risultati');
+    const divisore = document.getElementById('divisore-pre-confronto');
+    const divisorePost = document.getElementById('divisore-post-confronto');
+
+    if(!containerSezione) return;
+
+    if (selectedAnni.length === 2) {
+      containerSezione.style.display = 'flex';
+      if(divisore) divisore.style.display = 'none'; 
+      if(divisorePost) divisorePost.style.display = 'block'; 
+    } else {
+      containerSezione.style.display = 'none';
+      if(divisore) divisore.style.display = 'block'; 
+      if(divisorePost) divisorePost.style.display = 'none';
+      if(containerRisultati) containerRisultati.innerHTML = "";
+      return;
+    }
+    
+    let tutteLeCategorie = new Set();
+    selectedAnni.forEach(anno => {
+      if (datiPerAnno[anno]) {
+        Object.keys(datiPerAnno[anno].tipi).forEach(cat => tutteLeCategorie.add(cat));
+      }
+    });
+    const categorieOrdinate = Array.from(tutteLeCategorie).sort();
+    
+    let html = `<div class="table-container-wrapper" style="margin-top: 15px;">
+      <table id="tabella-confronto">
+        <thead>
+          <tr class="header-row">
+            <th style="text-align: left; padding-left: 20px; width: 40%;">Tipo Giretto</th>`;
+    
+    const anniOrdinatiDecrescente = [...selectedAnni].sort((a, b) => b - a);
+    const colWidth = Math.floor(60 / anniOrdinatiDecrescente.length); 
     
     anniOrdinatiDecrescente.forEach(anno => {
-      const count = (datiPerAnno[anno] && datiPerAnno[anno].tipi[cat]) || 0;
-      html += `<td>${count}</td>`;
+      html += `<th style="width: ${colWidth}%;">${anno}</th>`;
     });
     
-    html += `</tr>`;
-  });
-  
-  html += `</tbody>
-    </table>
-  </div>`;
-  
-  containerRisultati.innerHTML = html;
-}
+    html += `</tr>
+        </thead>
+        <tbody>`;
+    
+    categorieOrdinate.forEach((cat) => {
+      const coloreCat = getColorForCategoria(cat);
+      html += `<tr>
+        <td style="text-align: left; padding-left: 20px; font-weight: 700;"><span class="comparison-category-badge" style="background-color: ${coloreCat};">${cat}</span></td>`;
+      
+      anniOrdinatiDecrescente.forEach(anno => {
+        const count = (datiPerAnno[anno] && datiPerAnno[anno].tipi[cat]) || 0;
+        html += `<td>${count}</td>`;
+      });
+      
+      html += `</tr>`;
+    });
+    
+    html += `</tbody>
+      </table>
+    </div>`;
+    
+    if(containerRisultati) containerRisultati.innerHTML = html;
+  }
 
-function renderTrend(data) {
-  const ctxTrend = document.getElementById('chartTrend').getContext('2d');
-  
-  const datasets = [
-    { label: 'Insieme', data: data.totali.slice().reverse(), color: '#2332bb', width: 3 },
-    { label: 'Giretti', data: data.giretti.slice().reverse(), color: '#4caf50', width: 2 },
-    { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), color: '#ff9800', width: 2 },
-    { label: 'Amici', data: data.amici.slice().reverse(), color: '#e91e63', width: 2 }
-  ];
+  function renderTrend(data) {
+    const canvas = document.getElementById('chartTrend');
+    if(!canvas) return;
+    const ctxTrend = canvas.getContext('2d');
+    
+    const datasets = [
+      { label: 'Insieme', data: data.totali.slice().reverse(), color: '#2332bb', width: 3 },
+      { label: 'Giretti', data: data.giretti.slice().reverse(), color: '#4caf50', width: 2 },
+      { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), color: '#ff9800', width: 2 },
+      { label: 'Amici', data: data.amici.slice().reverse(), color: '#e91e63', width: 2 }
+    ];
 
-  const chartTrend = new Chart(ctxTrend, {
-    type: 'line',
-    data: {
-      labels: data.anni.slice().reverse(),
-      datasets: datasets.map(d => ({
-        label: d.label,
-        data: d.data,
-        borderColor: d.color,
-        backgroundColor: d.color,
-        tension: 0.3,
-        borderWidth: d.width,
-        pointRadius: 3
-      }))
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: {
-        padding: { bottom: 10 }
+    const chartTrend = new Chart(ctxTrend, {
+      type: 'line',
+      data: {
+        labels: data.anni.slice().reverse(),
+        datasets: datasets.map(d => ({
+          label: d.label,
+          data: d.data,
+          borderColor: d.color,
+          backgroundColor: d.color,
+          tension: 0.3,
+          borderWidth: d.width,
+          pointRadius: 3
+        }))
       },
-      plugins: {
-        legend: { display: false }
-      },
-      scales: {
-        y: { beginAtZero: true }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: { bottom: 10 }
+        },
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
       }
+    });
+
+    const legendContainer = document.getElementById('trend-legend-custom');
+    if(legendContainer) {
+      legendContainer.innerHTML = ''; 
+
+      datasets.forEach((d, index) => {
+        const badge = document.createElement('div');
+        badge.className = 'legend-badge';
+        badge.style.backgroundColor = d.color;
+        badge.innerText = d.label;
+
+        badge.onclick = () => {
+          const isVisible = chartTrend.isDatasetVisible(index);
+          if (isVisible) {
+            chartTrend.hide(index);
+            badge.classList.add('hidden');
+          } else {
+            chartTrend.show(index);
+            badge.classList.remove('hidden');
+          }
+        };
+        legendContainer.appendChild(badge);
+      });
     }
-  });
+  }
 
-  const legendContainer = document.getElementById('trend-legend-custom');
-  legendContainer.innerHTML = ''; 
+  // Lanciamo lo script
+  init();
 
-  datasets.forEach((d, index) => {
-    const badge = document.createElement('div');
-    badge.className = 'legend-badge';
-    badge.style.backgroundColor = d.color;
-    badge.innerText = d.label;
-
-    badge.onclick = () => {
-      const isVisible = chartTrend.isDatasetVisible(index);
-      if (isVisible) {
-        chartTrend.hide(index);
-        badge.classList.add('hidden');
-      } else {
-        chartTrend.show(index);
-        badge.classList.remove('hidden');
-      }
-    };
-    legendContainer.appendChild(badge);
-  });
-}
-
-init();
+})();
 </script>
 
 </body>
