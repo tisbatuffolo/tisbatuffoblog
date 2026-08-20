@@ -1,10 +1,18 @@
-export default async function handler(req, res) {
-    // ✅ Configurazione CORS
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+// Configurazione per aumentare la dimensione massima del body accettato (previene l'errore 405/413 con stringhe Base64 grandi)
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '10mb',
+        },
+    },
+};
 
-    // ✅ Gestione della richiesta preflight (OPTIONS)
+export default async function handler(req, res) {
+    // Configurazione CORS completa
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
@@ -13,7 +21,7 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Metodo non consentito' });
     }
 
-    const { sezione, imageB64, mimeType } = req.body;
+    const { sezione, imageB64, mimeType } = req.body || {};
     if (!sezione || !imageB64) {
         return res.status(400).json({ error: 'Dati mancanti' });
     }
@@ -24,10 +32,10 @@ export default async function handler(req, res) {
     const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 
     if (!GITHUB_TOKEN) {
-        return res.status(500).json({ error: 'Configurazione GitHub (GITHUB_TOKEN) mancante in Vercel.' });
+        return res.status(500).json({ error: 'Configurazione GitHub mancante.' });
     }
 
-    // Funzione per ricavare l'estensione corretta dal mimeType in modo dinamico
+    // Ricava l'estensione corretta
     const getExtFromMime = (mime, defaultExt = 'jpg') => {
         if (!mime) return defaultExt;
         if (mime.includes('png')) return 'png';
@@ -37,7 +45,6 @@ export default async function handler(req, res) {
         return defaultExt;
     };
 
-    // Configurazione dettagliata per ogni sezione con estensione dinamica basata sul file caricato
     const mapSezioni = {
         'sticker':      { path: 'pandosita/img/sticker',      prefix: 'sticker',      ext: getExtFromMime(mimeType, 'webp') },
         'gif':          { path: 'pandosita/img/gif',          prefix: 'pandagif',     ext: getExtFromMime(mimeType, 'gif') },
@@ -47,16 +54,16 @@ export default async function handler(req, res) {
         'sfigatini':    { path: 'pandosita/img/sfigatini',    prefix: 'sfigatini',    ext: 'jpg' }
     };
 
-    const config = mapSezioni[sezione];
-    if (!config) return res.status(400).json({ error: 'Sezione non valida' });
+    const configSection = mapSezioni[sezione];
+    if (!configSection) return res.status(400).json({ error: 'Sezione non valida' });
 
     try {
-        // 1. Legge la cartella su GitHub per calcolare il numero progressivo massimo
-        const repoPathUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${config.path}?ref=${GITHUB_BRANCH}`;
+        const repoPathUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${configSection.path}?ref=${GITHUB_BRANCH}&t=${Date.now()}`;
         const responseList = await fetch(repoPathUrl, {
             headers: { 
-                'Authorization': `Bearer ${GITHUB_TOKEN}`, 
-                'Accept': 'application/vnd.github.v3+json' 
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github+json',
+                'User-Agent': 'SbatuffoBlog-App'
             }
         });
 
@@ -64,13 +71,15 @@ export default async function handler(req, res) {
         
         if (responseList.ok) {
             const files = await responseList.json();
-            const regex = new RegExp(`^${config.prefix} \\((\\d+)\\)\\.`);
+            const regex = new RegExp(`^${configSection.prefix} \\((\\d+)\\)\\.`);
             
-            for (const file of files) {
-                const match = file.name.match(regex);
-                if (match) {
-                    const num = parseInt(match[1], 10);
-                    if (num > maxIndex) maxIndex = num;
+            if (Array.isArray(files)) {
+                for (const file of files) {
+                    const match = file.name.match(regex);
+                    if (match) {
+                        const num = parseInt(match[1], 10);
+                        if (num > maxIndex) maxIndex = num;
+                    }
                 }
             }
         } else if (responseList.status !== 404) {
@@ -78,25 +87,26 @@ export default async function handler(req, res) {
         }
 
         if (maxIndex >= 1000) {
-            return res.status(400).json({ error: 'Raggiunto il limite massimo di 1000 elementi per questa sezione.' });
+            return res.status(400).json({ error: 'Raggiunto il limite di 1000 file.' });
         }
 
-        // 2. Prepara il nuovo file con estensione corretta
+        // Calcola nuovo file
         const nextIndex = maxIndex + 1;
-        const newFileName = `${config.prefix} (${nextIndex}).${config.ext}`;
-        const newFilePath = `${config.path}/${newFileName}`;
+        const newFileName = `${configSection.prefix} (${nextIndex}).${configSection.ext}`;
+        const newFilePath = `${configSection.path}/${newFileName}`;
 
-        // 3. Salva l'immagine tramite commit su GitHub
+        // Salva Immagine
         const uploadUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${newFilePath}`;
         const uploadRes = await fetch(uploadUrl, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github+json',
+                'Content-Type': 'application/json',
+                'User-Agent': 'SbatuffoBlog-App'
             },
             body: JSON.stringify({
-                message: `Upload automatico: aggiunta pandosita ${newFileName}`,
+                message: `Aggiunta Pandosità: ${newFileName}`,
                 content: imageB64,
                 branch: GITHUB_BRANCH
             })
@@ -104,13 +114,13 @@ export default async function handler(req, res) {
 
         if (!uploadRes.ok) {
             const errJson = await uploadRes.json();
-            throw new Error(errJson.message || 'Errore durante l\'upload su GitHub');
+            throw new Error(errJson.message || 'Errore upload GitHub');
         }
 
-        res.status(200).json({ success: true, fileName: newFileName });
+        return res.status(200).json({ success: true, fileName: newFileName });
         
     } catch (error) {
         console.error("Errore API upload:", error);
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
-};
+}
