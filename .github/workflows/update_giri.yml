@@ -34,8 +34,10 @@ jobs:
 
       - name: Commit file aggiornato
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add girettimap/giri.js girettimap/img_giri/
-          git commit -m "Aggiornamento automatico giri.js e anteprime locali" || echo "Nessuna modifica"
-          git push
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add girettimap/giri.js
+          # Il parametro || true assorbe l'errore se la cartella ha problemi temporanei
+          git add girettimap/img_giri/ || true
+          # Verifica in sicurezza che ci siano veri cambiamenti prima di procedere
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Aggiornamento automatico giri.js e anteprime" && git push)
