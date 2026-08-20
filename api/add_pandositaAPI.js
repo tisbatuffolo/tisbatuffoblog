@@ -1,4 +1,4 @@
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
     // ✅ Configurazione CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -18,8 +18,6 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Dati mancanti' });
     }
 
-    // SOLUZIONE: Uniformato al file API funzionante. 
-    // Leggiamo solo il TOKEN dalle variabili d'ambiente, owner e repo sono hardcoded.
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN; 
     const GITHUB_OWNER = "tisbatuffolo"; 
     const GITHUB_REPO = "tisbatuffoblog";   
