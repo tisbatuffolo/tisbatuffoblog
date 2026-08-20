@@ -96,10 +96,11 @@ for idx, item in enumerate(items[::-1][:9]):
 
 # Pulizia di vecchie immagini non più necessarie
 for file_in_dir in os.listdir(img_dir):
-    if file_in_dir not in downloaded_files:
+    # Ignoriamo il file .gitkeep per mantenere la cartella sincronizzata
+    if file_in_dir not in downloaded_files and file_in_dir != ".gitkeep":
         try:
             os.remove(os.path.join(img_dir, file_in_dir))
-            print(f"🗑 Rimossa vecchia immagine non utilizzata: {file_in_dir}")
+            print(f"🗑 Rimossa vecchia immagine: {file_in_dir}")
         except Exception as e:
             print("Errore durante la pulizia:", e)
 
