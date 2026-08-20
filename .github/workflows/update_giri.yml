@@ -36,6 +36,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add girettimap/giri.js
-          git commit -m "Aggiornamento automatico giri.js" || echo "Nessuna modifica"
+          git add girettimap/giri.js girettimap/img_giri/
+          git commit -m "Aggiornamento automatico giri.js e anteprime locali" || echo "Nessuna modifica"
           git push

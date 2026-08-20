@@ -833,7 +833,7 @@
 
       if (window.AttivaOutdooractive === false) {
         if (sezioneUltimiGiri) {
-          // Invece di nasconderla, la ELIMINIAMO fisicamente dal DOM per sicurezza totale
+          // Eliminazione fisica dal DOM
           sezioneUltimiGiri.remove();
         }
       } else {
@@ -841,14 +841,26 @@
           GIRI.slice(0, 9).forEach(giro => {
             const card = document.createElement("div");
             card.className = "riquadro";
-            const imgSrc = giro.img && giro.img !== "" ? giro.img : "https://via.placeholder.com/800x600?text=No+Image";
-            card.innerHTML = `<a href="${giro.link}" target="_blank" class="riquadro-link"><div class="riquadro-titolo">${giro.titolo}</div><img src="${imgSrc}" alt="${giro.titolo}"></a>`;
+            
+            // In caso di immagine mancante o errore di caricamento, usa pandamappa.png come fallback sicuro
+            const fallbackImg = "img/pandamappa.png";
+            const imgSrc = giro.img && giro.img.trim() !== "" ? giro.img : fallbackImg;
+            
+            card.innerHTML = `
+              <a href="${giro.link}" target="_blank" class="riquadro-link">
+                <div class="riquadro-titolo">${giro.titolo}</div>
+                <img src="${imgSrc}" 
+                     alt="${giro.titolo}" 
+                     loading="lazy" 
+                     decoding="async" 
+                     onerror="this.onerror=null; this.src='${fallbackImg}';">
+              </a>`;
             containerGiri.appendChild(card);
           });
         }
       }
     } catch(e) {
-      console.error("Si è verificato un errore innocuo nella sezione Ultimi Giri:", e);
+      console.error("Si è verificato un errore nella sezione Ultimi Giri:", e);
     }
   });
 </script>
