@@ -135,7 +135,6 @@
       margin-bottom: 18px;
       background: #fdfdfd;
       border: 1px solid #f0f0f0;
-      cursor: pointer;
     }
 
     .album-cover-wrapper img {
@@ -162,29 +161,44 @@
       text-overflow: ellipsis;
     }
 
-    .btn-apri {
-      background: rgba(255, 222, 89, 0.7);
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .btn-action {
+      background: rgba(255, 222, 89, 1);
       color: var(--heart-red);
       border: 2px solid var(--heart-red);
-      padding: 10px 28px;
+      padding: 10px 15px;
       border-radius: 50px;
       font-family: 'Fredoka', sans-serif;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.3s ease;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 6px;
+      flex: 1; /* Permette ai tasti di occupare il 50% dello spazio ciascuno */
+      white-space: nowrap;
     }
 
-    .btn-apri:hover {
-      background: rgba(255, 222, 89, 0.7);
-      color: var(--heart-red);
+    .btn-action:hover {
       transform: scale(1.05);
+      background: var(--primary);
     }
 
-    /* --- LIGHTBOX (Visore) --- */
+    .btn-action svg {
+      width: 18px; height: 18px;
+      stroke: currentColor;
+    }
+
+    /* --- LIGHTBOX (Visore Foto) --- */
     .lightbox {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -351,7 +365,7 @@
       z-index: 1010;
     }
 
-    /* --- MODALITÀ SCHERMO INTERO (FULLSCREEN) --- */
+    /* --- MODALITÀ SCHERMO INTERO (FULLSCREEN) FOTO --- */
     .lightbox.is-fullscreen {
       background-color: #000;
       backdrop-filter: none;
@@ -408,6 +422,59 @@
       pointer-events: auto;
     }
 
+    /* --- VIDEO LIGHTBOX --- */
+    .video-lightbox {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #000;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .video-lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #album-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      outline: none;
+    }
+
+    .video-controls {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2010;
+    }
+
+    .video-controls.show {
+      opacity: 1;
+    }
+
+    .close-video-btn {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      pointer-events: auto; 
+    }
+
+    .close-video-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     /* --- FOOTER --- */
     footer { 
       background: #fff; 
@@ -441,6 +508,10 @@
 
     /* --- MOBILE RESPONSIVE --- */
     @media (max-width: 600px) {
+      .btn-action {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+      }
       .slider-container {
         height: 52vh;
         width: 100%;
@@ -472,6 +543,10 @@
       }
       .lightbox.is-fullscreen .slide-counter {
         bottom: 100px;
+      }
+      .close-video-btn {
+        top: 15px;
+        right: 15px;
       }
     }
   </style>
@@ -510,6 +585,7 @@
   </div>
 </footer>
 
+<!-- LIGHTBOX FOTO -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-header">
     <div class="lightbox-title" id="lb-title">Titolo Album</div>
@@ -544,6 +620,14 @@
   <div class="slide-counter" id="slide-counter">Foto 1 di X 🐼</div>
 </div>
 
+<!-- LIGHTBOX VIDEO SLIDESHOW -->
+<div class="video-lightbox" id="video-lightbox">
+  <video id="album-video" playsinline></video>
+  <div class="video-controls" id="video-controls">
+    <div class="action-btn close-btn close-video-btn" onclick="closeVideo()" title="Chiudi Video">✕</div>
+  </div>
+</div>
+
 <script>
   // --- CONFIGURAZIONE DATA BASE ALBUM ---
   const albums = [
@@ -552,42 +636,48 @@
       title: "2018 - l'inizio",
       folderPath: "img/2018 - l'inizio/", 
       extension: ".png",
-      totalPhotos: 13
+      totalPhotos: 13,
+      videoPath: "slideshow/Slideshow_Fotoalbum2018.mp4"
     },
     {
       id: "album_2019",
       title: "2019 - il nostro primo anno insieme",
       folderPath: "img/2019 - il nostro primo anno insieme/",
       extension: ".png",
-      totalPhotos: 14
+      totalPhotos: 14,
+      videoPath: "slideshow/Slideshow_Fotoalbum2019.mp4"
     },
     {
       id: "album_2020",
       title: "2020 - il nostro secondo anno insieme",
       folderPath: "img/2020 - il nostro secondo anno insieme/",
       extension: ".png",
-      totalPhotos: 36
+      totalPhotos: 36,
+      videoPath: "slideshow/Slideshow_Fotoalbum2020.mp4"
     },
-        {
+    {
       id: "album_2021",
       title: "2021 - il nostro terzo anno insieme",
       folderPath: "img/2021 - il nostro terzo anno insieme/",
       extension: ".png",
-      totalPhotos: 43
+      totalPhotos: 43,
+      videoPath: "slideshow/Slideshow_Fotoalbum2021.mp4"
     },
-            {
+    {
       id: "album_2022",
       title: "2022 - il nostro quarto anno insieme",
       folderPath: "img/2022 - il nostro quarto anno insieme/",
       extension: ".png",
-      totalPhotos: 49
+      totalPhotos: 49,
+      videoPath: "slideshow/Slideshow_Fotoalbum2022.mp4"
     },
-                {
+    {
       id: "album_2023",
       title: "2023 - il nostro quinto anno insieme",
       folderPath: "img/2023 - il nostro quinto anno insieme/",
       extension: ".png",
-      totalPhotos: 45
+      totalPhotos: 45,
+      videoPath: "slideshow/Slideshow_Fotoalbum2023.mp4"
     }
   ];
 
@@ -614,45 +704,29 @@
         <img src="${coverSrc}" alt="${album.title}" loading="lazy">
       </div>
       <div class="album-title">${album.title}</div>
-      <button class="btn-apri" onclick="openAlbum('${album.id}')">
-        ♥ Apri Album
-      </button>
+      <div class="card-actions">
+        <!-- Bottone Album statico (Libro) -->
+        <button class="btn-action" onclick="openAlbum('${album.id}')" title="Apri Album Foto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          Album
+        </button>
+        <!-- Bottone Slideshow (Ciak) -->
+        <button class="btn-action" onclick="playVideo('${album.id}')" title="Guarda Video Slideshow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.4-2.2 1.5-2.5l13.5-4c1.1-.3 2.2.4 2.5 1.5l.6 1.4Z"></path>
+            <path d="m6.2 5.3 3.1 3.9"></path>
+            <path d="m12.4 3.4 3.1 4"></path>
+            <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z"></path>
+          </svg>
+          Slideshow
+        </button>
+      </div>
     `;
     gridContainer.appendChild(card);
     shrinkTitleToFit(card.querySelector('.album-title'));
-
-    // --- GESTIONE COPERTINA DA MOBILE ---
-    const coverWrapper = card.querySelector('.album-cover-wrapper');
-    let cardTouchStartX = 0;
-    let cardTouchStartY = 0;
-    let isCardScrollDetected = false;
-
-    coverWrapper.addEventListener('touchstart', function(e) {
-      if (window.innerWidth <= 600) {
-        cardTouchStartX = e.touches[0].clientX;
-        cardTouchStartY = e.touches[0].clientY;
-        isCardScrollDetected = false;
-      }
-    }, { passive: true });
-
-    coverWrapper.addEventListener('touchmove', function(e) {
-      if (window.innerWidth <= 600) {
-        const moveX = e.touches[0].clientX;
-        const moveY = e.touches[0].clientY;
-        if (Math.abs(moveX - cardTouchStartX) > 10 || Math.abs(moveY - cardTouchStartY) > 10) {
-          isCardScrollDetected = true;
-        }
-      }
-    }, { passive: true });
-
-    coverWrapper.addEventListener('touchend', function(e) {
-      if (window.innerWidth <= 600) {
-        if (!isCardScrollDetected) {
-          if (e.cancelable) e.preventDefault(); 
-          openAlbum(album.id);
-        }
-      }
-    });
   });
 
   window.addEventListener('resize', () => {
@@ -662,14 +736,20 @@
     });
   });
 
-  // --- CONTROLLO VISORE LIGHTBOX E FULLSCREEN ---
+  // --- CONTROLLO VISORE LIGHTBOX FOTO E FULLSCREEN ---
   let currentAlbum = null;
   let currentSlideIndex = 1;
   let controlsTimeout = null; 
   
-  // Variabili Slideshow
   let isPlaying = false;
   let slideshowInterval = null;
+
+  // --- CONTROLLO VIDEO LIGHTBOX ---
+  const videoLightbox = document.getElementById('video-lightbox');
+  const albumVideo = document.getElementById('album-video');
+  const videoControls = document.getElementById('video-controls');
+  let currentVideoAlbumId = null;
+  let videoControlsTimeout = null;
 
   // --- VARIABILI E FUNZIONI WAKE LOCK ---
   let wakeLock = null;
@@ -697,8 +777,10 @@
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (wakeLock !== null && document.visibilityState === 'visible' && isPlaying) {
-      requestWakeLock();
+    if (document.visibilityState === 'visible') {
+      if (isPlaying || videoLightbox.classList.contains('active')) {
+        requestWakeLock();
+      }
     }
   });
   // ----------------------------------------
@@ -724,7 +806,62 @@
     }
   }
 
-  // --- LOGICA SLIDESHOW ---
+  // --- LOGICA VIDEO SLIDESHOW (MP4) ---
+  function playVideo(albumId) {
+    const album = albums.find(a => a.id === albumId);
+    if(!album || !album.videoPath) return;
+    
+    currentVideoAlbumId = albumId;
+    albumVideo.src = album.videoPath;
+    videoLightbox.classList.add('active');
+    
+    videoControls.classList.remove('show');
+    
+    albumVideo.play().catch(e => console.log("Autoplay video bloccato:", e));
+    
+    // Prova ad avviare il fullscreen nativo al click, se supportato
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(e => console.log(e));
+    }
+    
+    requestWakeLock();
+  }
+
+  function closeVideo() {
+    albumVideo.pause();
+    albumVideo.src = "";
+    videoLightbox.classList.remove('active');
+    
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(e => console.log(e));
+    }
+    
+    releaseWakeLock();
+    clearTimeout(videoControlsTimeout);
+  }
+
+  albumVideo.addEventListener('ended', () => {
+    closeVideo();
+    // Torna all'album, slide iniziale come richiesto
+    openAlbum(currentVideoAlbumId);
+  });
+
+  videoLightbox.addEventListener('click', (e) => {
+    // Se l'utente clicca esattamente sulla X, ignoriamo qui perché gestito dall'onclick
+    if (e.target.closest('.close-video-btn')) return;
+    
+    if (videoControls.classList.contains('show')) {
+      videoControls.classList.remove('show');
+    } else {
+      videoControls.classList.add('show');
+      clearTimeout(videoControlsTimeout);
+      videoControlsTimeout = setTimeout(() => {
+        videoControls.classList.remove('show');
+      }, 3000);
+    }
+  });
+
+  // --- LOGICA SLIDESHOW IMMAGINI ---
   function togglePlay() {
     if (isPlaying) {
       stopSlideshow();
@@ -738,20 +875,16 @@
     document.getElementById('play-icon').style.display = 'none';
     document.getElementById('pause-icon').style.display = 'block';
     
-    // Entra in fullscreen automaticamente se non ci siamo
     if (!lightbox.classList.contains('is-fullscreen')) {
         toggleFullscreen();
     }
 
-    // Passa immediatamente alla foto successiva non appena clicchi play
     changeSlide(1);
 
-    // Inizia l'intervallo automatico ogni 5 secondi
     slideshowInterval = setInterval(() => {
         changeSlide(1);
     }, 5000); 
 
-    // Richiedi di mantenere lo schermo acceso
     requestWakeLock();
   }
 
@@ -765,16 +898,13 @@
         slideshowInterval = null;
     }
 
-    // Rilascia il blocco dello schermo
     releaseWakeLock();
   }
-
 
   function openAlbum(albumId) {
     currentAlbum = albums.find(a => a.id === albumId);
     currentSlideIndex = 1;
     
-    // Assicurati che lo slideshow sia fermo alla nuova apertura
     stopSlideshow();
     
     lbTitle.innerText = currentAlbum.title;
@@ -807,7 +937,7 @@
   }
 
   function closeLightbox() {
-    stopSlideshow(); // Stoppa lo slideshow se in riproduzione
+    stopSlideshow(); 
     
     lightbox.classList.remove('active');
     exitFullscreenCSS();
@@ -826,17 +956,15 @@
     const slides = document.querySelectorAll('.slide');
     if(slides.length === 0) return;
 
-    let isWrapping = false; // Indica se stiamo tornando alla prima foto dopo l'ultima
+    let isWrapping = false; 
 
-    // Se stiamo andando avanti dall'ultima foto (Fine Album)
     if (direction === 1 && currentSlideIndex === currentAlbum.totalPhotos) {
         isWrapping = true;
         
         if (isPlaying) {
-            stopSlideshow(); // Ferma la riproduzione automatica
+            stopSlideshow();
         }
         
-        // Esci dallo schermo intero
         if (lightbox.classList.contains('is-fullscreen')) {
             exitFullscreenCSS();
             if (document.fullscreenElement) {
@@ -859,12 +987,9 @@
     updateCounter();
     
     if (isWrapping) {
-        // Se siamo appena tornati alla prima foto dopo l'ultima:
-        // Mostriamo i comandi in alto e BLOCHIAMO il timer, così restano visibili.
         lightbox.classList.add('show-controls');
         clearControlsTimeout();
     } else if (lightbox.classList.contains('show-controls')) {
-        // Altrimenti gestiamo il timer normalmente
         startControlsTimeout();
     }
     
@@ -982,7 +1107,6 @@
     }
   }, {passive: true});
 
-  // --- INTERAZIONE CLICK / TOCCO SULLA FOTO (TOGGLE COMANDI) ---
   lightbox.addEventListener('click', function(e) {
     if (isSwiping) return;
 
@@ -1011,10 +1135,17 @@
 
   // --- Comandi da Tastiera ---
   document.addEventListener('keydown', function(e) {
-    if(!lightbox.classList.contains('active')) return;
-    if(e.key === 'ArrowRight') changeSlide(1);
-    if(e.key === 'ArrowLeft') changeSlide(-1);
-    if(e.key === 'Escape') closeLightbox();
+    // Comandi per Lightbox Foto
+    if(lightbox.classList.contains('active')) {
+      if(e.key === 'ArrowRight') changeSlide(1);
+      if(e.key === 'ArrowLeft') changeSlide(-1);
+      if(e.key === 'Escape') closeLightbox();
+    }
+    
+    // Comandi per Lightbox Video
+    if(videoLightbox.classList.contains('active')) {
+      if(e.key === 'Escape') closeVideo();
+    }
   });
 </script>
 
