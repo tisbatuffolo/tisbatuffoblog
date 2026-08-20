@@ -138,11 +138,13 @@
   .phone-screen { width: 100%; height: 465px; background: #e0f7fa; border-radius: 38px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 3px solid #1a1a1a; margin-top: 10px; }
   .phone-screen::before { content: ""; position: absolute; top: 10px; right: 15px; width: 60px; height: 120px; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%); transform: rotate(-10deg); border-radius: 15px; z-index: 10; pointer-events: none; }
   
+  /* Modificate solo queste regole per la scrollbar stile ombra */
   .stickers-display { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; overflow-y: auto; gap: 30px; background-image: radial-gradient(rgba(255,255,255,0.4) 2px, transparent 2px); background-size: 30px 30px; scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.15) transparent; }
   .stickers-display::-webkit-scrollbar { width: 3px; }
   .stickers-display::-webkit-scrollbar-track { background: transparent; }
   .stickers-display::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
   .stickers-display::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+  /* Fine modifiche scrollbar */
 
   .sticker-item-phone { width: 155px; flex-shrink: 0; filter: drop-shadow(0 5px 12px rgba(0,0,0,0.12)); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .sticker-item-phone:hover { transform: scale(1.1) rotate(-3deg); }
@@ -329,7 +331,7 @@
   .film-frame::after { bottom: -20px; }
   .film-frame img { max-width: 90%; max-height: 90%; object-fit: contain; filter: sepia(0.3) contrast(1.1); border: 1px solid #333; pointer-events: none; }
   
-  .zombie-fallback { position: absolute; bottom: -10px; width: 100%; display: flex; justify-style: space-around; align-items: flex-end; pointer-events: none; z-index: 20; padding: 0 20px; box-sizing: border-box; }
+  .zombie-fallback { position: absolute; bottom: -10px; width: 100%; display: flex; justify-content: space-around; align-items: flex-end; pointer-events: none; z-index: 20; padding: 0 20px; box-sizing: border-box; }
   .zombie-container { display: flex; flex-direction: column; align-items: center; position: relative; }
   .zombie-head { width: 50px; height: 70px; background: #1a1e12; border-radius: 40% 40% 10% 10%; position: relative; box-shadow: 0 0 15px black; transform-origin: bottom; animation: zombieSway 3s infinite ease-in-out alternate; z-index: 2; }
   .zombie-head::after { content: "° °"; color: var(--zombie-eye); font-size: 16px; position: absolute; top: 15px; left: 13px; text-shadow: 0 0 8px var(--zombie-eye); }
@@ -1088,10 +1090,11 @@
       const sezione = document.getElementById('sezionePandosita').value;
       const file = fileInput.files[0];
       
+      // Controllo di fallback JavaScript oltre a quello HTML
       if (!sezione) return alert("Scegli una sezione di atterraggio!");
       if (!file) return alert("Seleziona un'immagine!");
 
-      // REGOLA: Il formato GIF è consentito solo nella sezione Panda Gif
+      // REGOLA: Il formato GIF è esclusivo solo per la sezione Panda Gif
       if (file.type === 'image/gif' && sezione !== 'gif') {
           return alert("Il formato GIF è consentito esclusivamente nella sezione Panda Gif!");
       }
@@ -1100,12 +1103,10 @@
       document.getElementById('loadingPandosita').style.display = 'block';
 
       const fileType = file.type;
+      const isResizable = (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png' || fileType === 'image/webp');
 
-      // MODIFICA RICHIESTA: Il resize tramite canvas si applica SOLTANTO a JPG e PNG.
-      // GIF e WEBP non vengono ridimensionati.
-      const isResizable = (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png');
-
-      if (isResizable) {
+      // Se è ridimensionabile E NON è una GIF (le GIF animate perse nel canvas)
+      if (isResizable && fileType !== 'image/gif') {
           const reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = function(event) {
@@ -1135,9 +1136,10 @@
                   const ctx = canvas.getContext('2d');
                   ctx.drawImage(img, 0, 0, width, height);
 
-                  let targetMime = fileType; 
+                  // REGOLA: Trasformazione in base alla sezione
+                  let targetMime = 'image/jpeg'; // Sbatuffolart, AI, Lulu, Sfigatini
                   if (sezione === 'sticker') {
-                      targetMime = 'image/webp'; // Sezione sticker convertita in webp se ridimensionata
+                      targetMime = 'image/webp'; // Sticker usa webp
                   }
 
                   const dataUrl = canvas.toDataURL(targetMime, 0.85);
@@ -1147,7 +1149,7 @@
               };
           };
       } else {
-          // GIF e WEBP: lettura diretta in Base64 senza passare dal Canvas (nessun resize)
+          // GIF o formati non supportati dal canvas
           const reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = async function () {
@@ -1159,6 +1161,7 @@
 
   async function inviaDatiApi(sezione, base64Data, mimeType) {
       try {
+          // SOLUZIONE FRONTEND: Utilizzo path relativo per risolvere i problemi di domini CORS asimmetrici
           const response = await fetch('/api/add_pandositaAPI', { 
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -1173,13 +1176,14 @@
               alert('Pandosità aggiunta con successo! La pagina si aggiornerà per mostrare le nuove immagini.');
               location.reload();
           } else {
+              // Intercetta l'errore HTML invece di schiantarsi
               let errMsg = "Errore sconosciuto";
               const text = await response.text();
               try {
                   const json = JSON.parse(text);
                   errMsg = json.error || errMsg;
               } catch (e) {
-                  errMsg = `Errore risposta server (${response.status}).`;
+                  errMsg = `Errore di connessione (L'API ha risposto con codice ${response.status}). Assicurati che l'API esista e non sia in errore.`;
               }
               alert('Errore: ' + errMsg);
               chiudiFormPandosita();
