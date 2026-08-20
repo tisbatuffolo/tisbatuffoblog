@@ -95,5 +95,9 @@ const dati_salotto = [
     {
         "titolo": "Panda HDisk",
         "immagine": "Panda HDisk.jpg"
+    },
+    {
+        "titolo": "Pandamodem",
+        "immagine": "Pandamodem.jpg"
     }
 ];
