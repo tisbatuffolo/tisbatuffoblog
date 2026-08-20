@@ -1,47 +1,47 @@
 const GIRI = [
   {
+    "titolo": "Forca Rossa",
+    "link": "https://www.outdooractive.com/it/route/escursione/val-di-fassa/forca-rossa/350310622/",
+    "img": "https://img2.oastatic.com/img2/636743303/800x600/variant.webp"
+  },
+  {
+    "titolo": "Lago di Cavedine",
+    "link": "https://www.outdooractive.com/it/route/nuoto/garda-trentino/lago-di-cavedine/349250661/",
+    "img": "https://img1.oastatic.com/img2/635948302/800x600/variant.webp"
+  },
+  {
+    "titolo": "Ciclabile Valsugana",
+    "link": "https://www.outdooractive.com/it/route/bicicletta/valsugana-lagorai-tesino/ciclabile-valsugana/349083269/",
+    "img": "https://img3.oastatic.com/img2/635816624/800x600/variant.webp"
+  },
+  {
+    "titolo": "Ciclabile val di Sole",
+    "link": "https://www.outdooractive.com/it/route/bicicletta/val-di-sole-pejo-e-rabbi/ciclabile-val-di-sole/348318313/",
+    "img": "https://img.oastatic.com/img2/635254805/800x600/variant.webp"
+  },
+  {
+    "titolo": "Openair art Drena",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/garda-trentino/openair-art-drena/347766896/",
+    "img": "https://img2.oastatic.com/img2/634841673/800x600/variant.webp"
+  },
+  {
+    "titolo": "Madonna di Drena",
+    "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/madonna-di-drena/347735769/",
+    "img": "https://img0.oastatic.com/img2/634841681/800x600/variant.webp"
+  },
+  {
+    "titolo": "Lago Montagnoli",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/madonna-di-campiglio-pinzolo-val-rendena/lago-montagnoli/346882170/",
+    "img": "https://img3.oastatic.com/img2/634223854/800x600/variant.webp"
+  },
+  {
+    "titolo": "Tarzaning Dimaro",
+    "link": "https://www.outdooractive.com/it/route/via-ferrata/val-di-sole-pejo-e-rabbi/tarzaning-dimaro/346849711/",
+    "img": "https://img0.oastatic.com/img2/634223771/800x600/variant.webp"
+  },
+  {
     "titolo": "Laguna di Venezia",
     "link": "https://www.outdooractive.com/it/route/giro-in-barca/venezia/laguna-di-venezia/346309146/",
     "img": "https://img3.oastatic.com/img2/633787569/800x600/variant.webp"
-  },
-  {
-    "titolo": "Piove di Sacco",
-    "link": "https://www.outdooractive.com/it/route/strada-panoramica/padova/piove-di-sacco/346308939/",
-    "img": "https://img3.oastatic.com/img2/633785559/800x600/variant.webp"
-  },
-  {
-    "titolo": "Chioggia",
-    "link": "https://www.outdooractive.com/it/route/percorso-urbano/venezia/chioggia/346308270/",
-    "img": "https://img1.oastatic.com/img2/633785492/800x600/variant.webp"
-  },
-  {
-    "titolo": "Bacucco",
-    "link": "https://www.outdooractive.com/it/route/nuoto/venezia/bacucco/346307730/",
-    "img": "https://img2.oastatic.com/img2/633785413/800x600/variant.webp"
-  },
-  {
-    "titolo": "Abano Concerto Max",
-    "link": "https://www.outdooractive.com/it/route/strada-panoramica/padova/abano-concerto-max/346304641/",
-    "img": "https://img.oastatic.com/img2/633784835/800x600/variant.webp"
-  },
-  {
-    "titolo": "Corno Bianco di Sarentino",
-    "link": "https://www.outdooractive.com/it/route/escursione/alto-adige/corno-bianco-di-sarentino/345689343/",
-    "img": "https://img3.oastatic.com/img2/633316134/800x600/variant.webp"
-  },
-  {
-    "titolo": "Kayak Senaiga",
-    "link": "https://www.outdooractive.com/it/route/kayak/belluno/kayak-senaiga/345130302/",
-    "img": "https://img2.oastatic.com/img2/632808338/800x600/variant.webp"
-  },
-  {
-    "titolo": "Francolini",
-    "link": "https://www.outdooractive.com/it/route/escursione/altopiano-di-folgaria-lavarone-luserna/francolini/344466189/",
-    "img": "https://img1.oastatic.com/img2/632318277/800x600/variant.webp"
-  },
-  {
-    "titolo": "Ponte Tibetano di Gresta",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-fiemme/ponte-tibetano-di-gresta/343986313/",
-    "img": "https://img2.oastatic.com/img2/631917503/800x600/variant.webp"
   }
 ]
