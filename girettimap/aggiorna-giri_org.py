@@ -29,10 +29,8 @@ print(f"Trovati {len(items)} elementi totali")
 
 giri = []
 downloaded_files = []
-# i primi 9 giri della GirettiMap 
-# for idx, item in enumerate(items[:9]): 
-# gli ultimi 9 della GirettiMap     
-for idx, item in enumerate(items[::-1][:9]):
+
+for idx, item in enumerate(items[:9]):
     try:
         # LINK
         a_tag = item.find("a")
