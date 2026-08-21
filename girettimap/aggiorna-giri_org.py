@@ -4,6 +4,7 @@ import json
 import os
 import html
 import re
+import cloudscraper
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 output_path = os.path.join(BASE_DIR, "giri.js")
@@ -20,8 +21,14 @@ headers = {
 }
 
 print("🔄 Scarico la pagina...")
-response = requests.get(URL, headers=headers)
-response.raise_for_status()
+try:
+    # Creiamo uno scraper che si finge un browser Chrome su Windows
+    scraper = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'windows', 'desktop': True})
+    response = scraper.get(URL, timeout=15)
+    response.raise_for_status()
+except Exception as err:
+    print(f"❌ Errore durante il caricamento di Outdooractive: {err}")
+    exit(1)
 
 soup = BeautifulSoup(response.text, "html.parser")
 items = soup.find_all("div", class_="oax-listImage-snippet")
