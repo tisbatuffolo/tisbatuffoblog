@@ -876,6 +876,7 @@
 
   let datiPerAnno = {}; 
   let chartTortaObj = null;
+  let tooltipTortaTimeout = null;
   const paletteColori = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'];
 
   const modal = document.getElementById("modal-dettaglio");
@@ -1028,6 +1029,10 @@
 
     const ctx = canvas.getContext('2d');
     
+    if (tooltipTortaTimeout) {
+      clearTimeout(tooltipTortaTimeout);
+      tooltipTortaTimeout = null;
+    }
     if (chartTortaObj) chartTortaObj.destroy();
     
     chartTortaObj = new Chart(ctx, {
@@ -1059,6 +1064,13 @@
             const index = elements[0].index;
             const label = chartTortaObj.data.labels[index];
             window.gestisciClickLegenda(label);
+
+            if (tooltipTortaTimeout) clearTimeout(tooltipTortaTimeout);
+            tooltipTortaTimeout = setTimeout(() => {
+              chartTortaObj.tooltip.setActiveElements([], { x: 0, y: 0 });
+              chartTortaObj.update();
+              tooltipTortaTimeout = null;
+            }, 2000);
           }
         }
       }
