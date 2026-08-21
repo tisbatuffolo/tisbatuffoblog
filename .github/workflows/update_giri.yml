@@ -11,6 +11,10 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    
+    # Questa variabile elimina il warning di Node.js 20 deprecato
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
@@ -29,9 +33,16 @@ jobs:
         run: |
           python3 girettimap/aggiorna-giri.py
 
-      - name: Commit file aggiornato
+      - name: Commit file e immagini
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A girettimap/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Aggiornamento automatico giri.js e anteprime" && git push)
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Aggiunge tutto il contenuto della cartella (giri.js e la sottocartella img_giri)
+          git add girettimap/
+          
+          # Se c'è qualcosa di nuovo fa il commit, altrimenti stampa il messaggio e prosegue senza andare in errore
+          git commit -m "Aggiornamento automatico giri.js e anteprime" || echo "Nessuna modifica da committare"
+          
+          # Invia le modifiche al repository
+          git push
