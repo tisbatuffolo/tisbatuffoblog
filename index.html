@@ -147,12 +147,21 @@
     .card {
       background: #fff;
       border-radius: 18px;
-      border: 1.5px solid var(--light-blue-border);
+      border: 3px solid var(--light-blue-border);
       overflow: hidden;
       text-decoration: none;
       color: inherit;
       transition: transform 0.3s ease;
     }
+    .card:has(.color-line.c1) { border-color: #ff5e5e; }
+    .card:has(.color-line.c2) { border-color: #5eb5ff; }
+    .card:has(.color-line.c3) { border-color: #f13bd2; }
+    .card:has(.color-line.c4) { border-color: #00cec9; }
+    .card:has(.color-line.c5) { border-color: #00244d; }
+    .card:has(.color-line.c6) { border-color: #ff802b; }
+    .card:has(.color-line.c7) { border-color: #ffcbfe; }
+    .card:has(.color-line.c8) { border-color: #fde37c; }
+    .card:has(.color-line.c9) { border-color: #19af4e; }
     .card:hover { transform: translateY(-5px); border-color: var(--main-blue); }
     .card-info { padding: 12px 5px 0 5px; text-align: center; }
     .card-title { font-weight: 700; font-size: clamp(0.65rem, 2.5vw, 0.9rem); text-transform: uppercase; margin-bottom: 5px; }
@@ -162,7 +171,7 @@
 
     .c1 { background: #ff5e5e; } .c2 { background: #5eb5ff; } .c3 { background: #f13bd2;; }
     .c4 { background: #00cec9; } .c5 { background: #00244d; } .c6 { background: #ff802b; }
-    .c7 { background: #ffde59; } .c8 { background: #55ef8b; } .c9 { background: #ffcbfe; }
+    .c7 { background: #ffcbfe; } .c8 { background: #fde37c; } .c9 { background: #19af4e; }
 
     /* --- TIMER SECTION --- */
     .timer-section {
@@ -351,15 +360,15 @@
         <div class="card-img"><img src="img/doccelunghe.jpg"></div>
       </a>
       <a href="pandamusic/pandamusic.html" class="card">
-        <div class="card-info"><div class="card-title">PandaMusic</div><div class="color-line c9"></div></div>
+        <div class="card-info"><div class="card-title">PandaMusic</div><div class="color-line c7"></div></div>
         <div class="card-img"><img src="img/pandamusic.jpg"></div>
       </a>
       <a href="fotoalbum/fotoalbum.html" class="card">
-        <div class="card-info"><div class="card-title">Fotoalbum</div><div class="color-line c7"></div></div>
+        <div class="card-info"><div class="card-title">Fotoalbum</div><div class="color-line c8"></div></div>
         <div class="card-img"><img src="img/fotoalbum.jpg"></div>
       </a>
       <a href="pandavideo/pandavideo.html" class="card">
-        <div class="card-info"><div class="card-title">Pandavideo</div><div class="color-line c8"></div></div>
+        <div class="card-info"><div class="card-title">Pandavideo</div><div class="color-line c9"></div></div>
         <div class="card-img"><img src="img/pandavideo.jpg"></div>
       </a>
     </section>
