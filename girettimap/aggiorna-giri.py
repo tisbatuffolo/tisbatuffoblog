@@ -1,121 +1,1273 @@
-import requests
-from bs4 import BeautifulSoup
-import json
-import os
-import html
-import re
-import cloudscraper
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GirettiMap - SbatuffoBlog</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-output_path = os.path.join(BASE_DIR, "giri.js")
-img_dir = os.path.join(BASE_DIR, "img_giri")
+  <style>
+    /* =======================================================
+       CSS GENERALE E VARIABILI
+       ======================================================= */
+    :root {
+      --main-blue: #0000ff;
+      --light-blue-border: #bde0fe;
+      --bg-soft: #fdfdfd;
+      --heart-red: #ff4d4d;
+      --color-theme: #5eb5ff;
+    }
 
-# Crea la cartella locale per le immagini se non esiste
-os.makedirs(img_dir, exist_ok=True)
+    body {
+      font-family: 'Fredoka', sans-serif;
+      background: var(--bg-soft);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #333;
+    }
 
-URL = "https://www.outdooractive.com/it/list/girettimap/240115709/"
+    main {
+      flex: 1;
+    }
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Accept-Language": "it-IT,it;q=0.9"
-}
+    /* --- HEADER --- */
+    header {
+      background: #fff;
+      padding: 25px 10px 5px;
+      text-align: center;
+      position: relative;
+    }
 
-print("🔄 Scarico la pagina...")
-try:
-    # Creiamo uno scraper che si finge un browser Chrome su Windows
-    scraper = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'windows', 'desktop': True})
-    response = scraper.get(URL, timeout=15)
-    response.raise_for_status()
-except Exception as err:
-    print(f"❌ Errore durante il caricamento di Outdooractive: {err}")
-    exit(1)
+    .header-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      position: relative;
+      min-height: 100px;
+    }
 
-soup = BeautifulSoup(response.text, "html.parser")
-items = soup.find_all("div", class_="oax-listImage-snippet")
-print(f"Trovati {len(items)} elementi totali")
+    .brand-title {
+      font-family: 'Grandstander', cursive;
+      font-weight: 900;
+      font-size: clamp(2.2rem, 8vw, 4.2rem);
+      color: var(--main-blue);
+      margin: 0;
+      line-height: 1;
+      text-decoration: none;
+    }
 
-giri = []
-downloaded_files = []
+    .brand-subtitle {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(0.9rem, 3vw, 1.2rem);
+      color: var(--color-theme); 
+      font-weight: 700;
+      margin-top: 5px;
+      letter-spacing: 1.5px;
+      text-transform: lowercase;
+    }
 
-# Prendiamo gli ultimi 9 della GirettiMap
-for idx, item in enumerate(items[::-1][:9]):
-    try:
-        # LINK
-        a_tag = item.find("a")
-        link = a_tag["href"] if a_tag else ""
+    /* --- DIVISORI CON CUORICINO --- */
+    .section-divider {
+      width: 100%;
+      max-width: 200px;
+      height: 3px;
+      flex: 0 0 3px;
+      background: linear-gradient(to right, var(--color-theme) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--color-theme) calc(50% + 30px) 100%);
+      margin: 40px auto;
+      border-radius: 50px;
+      position: relative;
+      clear: both;
+      display: block;
+    }
+    
+    .top-links + .section-divider {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .charts-vertical-stack + .section-divider {
+      margin-top: 80px;
+    }
+    
+    .section-divider::after {
+      content: "♥";
+      position: absolute;
+      top: -14px; left: 50%;
+      transform: translateX(-50%);
+      background: transparent;
+      padding: 0 15px;
+      color: var(--heart-red);
+      font-size: 1.5rem;
+    }
 
-        # TITOLO
-        titolo_tag = item.find("strong", class_="oax-region-title")
-        titolo = titolo_tag.get_text(strip=True) if titolo_tag else "Senza titolo"
+    /* --- FOOTER --- */
+    footer {
+      background: #fff;
+      padding: 20px 10px 40px;
+      margin-top: 0px;
+    }
 
-        # ESTRAI L'ID UNICO DAL LINK (Es: /350310622/ -> 350310622)
-        match_id = re.search(r'/(\d+)/?$', link)
-        giro_id = match_id.group(1) if match_id else f"index_{idx + 1}"
+    .footer-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: 20px;
+    }
 
-        # IMMAGINE REMOTE URL
-        img_remote = ""
-        img_tag = item.find("img")
-        if img_tag:
-            img_remote = img_tag.get("data-src") or img_tag.get("src") or ""
+    .footer-text {
+      font-family: 'Grandstander', cursive;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
 
-        if not img_remote or img_remote.startswith("data:image/gif"):
-            input_tag = item.select_one("output input.oax-load-path")
-            if input_tag:
-                value = html.unescape(input_tag.get("value", ""))
-                match_src = re.search(r'src:\s*"([^"]+)"', value)
-                if match_src:
-                    img_remote = match_src.group(1)
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
 
-        local_img_path = ""
-        if img_remote:
-            img_remote = img_remote.replace("120x120r", "800x600").replace("120x120", "800x600")
+    .footer-link:hover {
+      transform: scale(1.05);
+      color: var(--color-theme);
+    }
+
+    .footer-link img { width: 60px; height: auto; }
+
+    /* =======================================================
+       STILI SPECIFICI GIRETTI MAP
+       ======================================================= */
+    main h2 {
+      text-align: center;
+      margin: 35px 0 20px;
+      color: #000;
+      font-family: 'Grandstander', cursive;
+      font-size: clamp(1.8em, 6vw, 2.5em);
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    /* --- TOP LINKS --- */
+    .top-links {
+      display: flex;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 10px auto 30px auto;
+      padding: 0 15px;
+      gap: 15px;
+    }
+
+    .link-box {
+      flex: 1;
+      padding: 20px 10px;
+      border-radius: 15px;
+      text-align: center;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 160px; 
+      border: 2px solid transparent;
+    }
+    .link-box:hover { transform: translateY(-5px); }
+    
+    .link-box.map-box { background-color: #fff0f0; border-color: #ffdada; } 
+    .link-box.list-box { background-color: #f0fff4; border-color: #dcfce7;}
+
+    .link-box a {
+      text-decoration: none;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      white-space: nowrap; 
+    }
+    
+    .link-box a span {
+      font-family: 'Grandstander', cursive;
+      font-weight: 900;
+      font-size: clamp(0.9em, 3.5vw, 1.2em); 
+      color: #000;
+    }
+
+    .link-box img { width: 100%; max-width: 110px; height: auto; margin-bottom: 12px; }
+
+    /* --- GRID CARD --- */
+    .grid-riquadri {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto 40px auto;
+      padding: 0 15px;
+    }
+
+    .riquadro {
+      background: #fff;
+      border: 3px solid var(--color-theme);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .riquadro:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 24px rgba(94, 181, 255, 0.3);
+    }
+
+    .riquadro img { width: 100%; height: 200px; object-fit: cover; display: block; flex: 1 1 auto; }
+    
+    .riquadro-titolo { 
+      position: relative;
+      overflow: hidden;
+      padding: 15px; 
+      font-family: 'Grandstander', cursive;
+      font-weight: 600; 
+      text-align: center; 
+      color: #000; 
+      background: linear-gradient(135deg, #76d5ff 0%, var(--color-theme) 45%, #2da6f4 100%);
+      box-shadow: inset 0 -2px 0 rgba(255,255,255,0.35);
+      font-size: 1.2em;
+      letter-spacing: 1px;
+      word-wrap: break-word;
+    }
+
+    .riquadro-titolo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.35) 35%, transparent 60%);
+      transform: translateX(-120%);
+      animation: shimmer-title 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer-title {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(120%); }
+    }
+
+    .riquadro-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; }
+    .riquadro-link:hover .riquadro-titolo { color: #fff; text-decoration: underline; }
+
+    /* --- CONTAGIRI SECTION --- */
+    #contagiri {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 15px;
+      text-align: center;
+    }
+
+    #frase-giri {
+      font-family: 'Grandstander', cursive;
+      font-size: clamp(1.2em, 4vw, 1.5em);
+      line-height: 1.4;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--heart-red);
+    }
+
+    /* --- TABELLA --- */
+    .table-container-wrapper {
+      width: 100%;
+      margin: 0 auto;
+      overflow-x: auto; 
+    }
+
+    table#tabella-giri, table#tabella-confronto {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(26,50,120,0.15);
+      margin-bottom: 20px;
+      min-width: 300px;
+    }
+
+    .icon-row td {
+      background-color: #ffffff !important;
+      border: none !important;
+      padding: 20px 5px 10px 5px !important;
+      vertical-align: bottom;
+    }
+
+    .icon-row img {
+      width: 100%;
+      max-width: 120px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .header-row {
+      background: linear-gradient(90deg, #3db0ff, var(--color-theme), #8dd0ff, var(--color-theme), #3db0ff); 
+    }
+
+    .header-row th {
+      background: transparent;
+      color: #000;
+      padding: 15px 2px;
+      font-family: 'Grandstander', cursive;
+      font-size: clamp(0.9em, 3vw, 1.1em);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border: none;
+    }
+
+    #tabella-giri td, #tabella-confronto td {
+      padding: 12px 2px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(0.9em, 3vw, 1.1em);
+      font-weight: 400; 
+      color: #222;
+    }
+
+    #tabella-giri tbody tr:nth-child(even), #tabella-confronto tbody tr:nth-child(even) { background-color: #f4f8ff; }
+    #tabella-giri tbody tr:hover, #tabella-confronto tbody tr:hover { background-color: var(--light-blue-border); transition: background 0.2s ease; }
+
+    /* --- GRAFICI E TORTA --- */
+    .charts-vertical-stack { margin-bottom: 40px; }
+    
+    .chart-wrapper { 
+      width: 100%;
+      height: 300px; 
+      margin-top: 30px;
+      margin-bottom: 60px; 
+    }
+
+    #trend-legend-custom {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      overflow-x: auto;
+      padding: 5px 0;
+    }
+
+    .legend-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      font-size: 0.75em;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .legend-badge.hidden { opacity: 0.2; background-color: #ddd !important; color: #888; }
+
+    .torta-container {
+      background: #fff;
+      padding: 25px 15px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    
+    .torta-container h2 {
+      font-family: 'Grandstander', cursive;
+      color: #000;
+      font-size: clamp(1.8em, 6vw, 2.5em);
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .torta-subtitle {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.9em;
+      color: #555;
+      text-align: center;
+      margin: 0 0 20px 0;
+      line-height: 1.4;
+      max-width: 600px;
+    }
+
+    .torta-wrapper { width: 100%; max-width: 300px; height: 300px; cursor: pointer; } 
+
+    #grid-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      width: 100%;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .legend-item { 
+        font-size: 0.85em; 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        font-weight: 400; 
+    }
+    .legend-item strong { font-weight: 700; } 
+
+    .legend-lens {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
+      font-size: 1.05em;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      user-select: none;
+    }
+    .legend-lens:hover {
+      transform: scale(1.12);
+      opacity: 1;
+    }
+
+    .comparison-category-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 400;
+      font-size: 0.8em;
+      color: #111;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .color-box { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    .filter-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .anno-item {
+      background: #f0f4ff;
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 0.9em;
+      font-weight: normal; 
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      border: 1px solid var(--light-blue-border);
+    }
+
+    /* --- CONFRONTO --- */
+    .confronto-container {
+      background: #fff;
+      padding: 25px 15px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      width: 100%;
+      box-sizing: border-box;
+      display: none; 
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    
+    .confronto-container h3 {
+      font-family: 'Grandstander', cursive;
+      color: #000;
+      font-size: 1.5em; 
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .footer-banner {
+      background-color: #eff7ff;
+      border: 3px solid var(--light-blue-border);
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 1100px;
+      margin: 40px auto;
+      text-align: center;
+    }
+    
+    .footer-banner h2 {
+      font-family: 'Grandstander', cursive;
+      color: var(--main-blue);
+      margin: 0;
+      font-size: clamp(1.5em, 5vw, 2.2em);
+    }
+
+    /* --- MODALE DETTAGLIO GIRI --- */
+    .modal {
+      display: none; 
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5); 
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(3px); 
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh; 
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border: 4px solid var(--color-theme);
+      animation: modalFadeIn 0.3s;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--light-blue-border);
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+
+    .modal-titolo-box {
+      background: var(--color-theme);
+      padding: 8px 15px;
+      border-radius: 15px;
+      font-family: 'Grandstander', cursive;
+      font-weight: 900;
+      font-size: clamp(1em, 4vw, 1.2em);
+      color: #000;
+      margin: 0;
+      flex: 1;
+      text-align: center;
+    }
+
+    .close-btn {
+      background: var(--heart-red);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid var(--heart-red);
+      margin-left: 15px;
+      flex-shrink: 0;
+    }
+
+    .close-btn:hover, .close-btn:focus {
+      background: var(--heart-red);
+      color: #fff;
+      border-color: var(--heart-red);
+      text-decoration: none;
+    }
+
+    #modal-lista-container {
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    #modal-lista ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #modal-lista li {
+      background: #fdfdfd;
+      padding: 12px 15px;
+      border-radius: 12px;
+      border: 2px solid var(--light-blue-border);
+      border-left: 6px solid var(--color-theme);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95em;
+      color: #333;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 10px;
+      min-height: 48px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .li-testo {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      word-break: break-word;
+      text-align: left;
+    }
+
+    .li-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      object-fit: contain;
+      align-self: center;
+      display: block;
+      transform: scale(1.50);
+    }
+
+    /* --- MEDIA QUERIES --- */
+    @media (max-width: 1200px) {
+      .grid-riquadri, #contagiri, .chart-wrapper, .confronto-container { max-width: 980px; }
+    }
+
+    @media (max-width: 900px) {
+      .grid-riquadri { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .grid-riquadri, #contagiri, .top-links {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+      }
+      .grid-riquadri { grid-template-columns: repeat(1, 1fr); }
+
+      #modal-lista li {
+        align-items: center;
+        min-height: 52px;
+      }
+
+      .li-icon {
+        width: 40px;
+        height: 40px;
+      }
+      .icon-row img { max-width: 75px; }
+      #grid-legend { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .modal-content { padding: 15px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-container">
+    <div class="brand-wrapper">
+      <a href="../index.html" class="brand-title">SbatuffoBlog</a>
+      <div class="brand-subtitle">Giretti</div>
+    </div>
+  </div>
+</header>
+
+<div class="section-divider"></div>
+
+<main>
+  <section class="top-links">
+    <div class="link-box map-box">
+      <a href="https://www.outdooractive.com/it/list/girettimap/240115709" target="_blank">
+        <img src="img/pandamappa.png" alt="Mappa">
+        <span>Accedi alla GirettiMap</span>
+      </a>
+    </div>
+    <div class="link-box list-box">
+      <a href="https://docs.google.com/spreadsheets/d/15UmyRWaW0getdRevefWd1xHUEjXKS36IUtUXFqK_0ds/edit?usp=drivesdk" target="_blank">
+        <img src="img/pandalista.png" alt="Lista">
+        <span>Accedi alla GirettiList</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- Inizio Sezione Ultimi Giri protetta dalla variabile globale -->
+  <div id="sezione-ultimi-giri">
+    <h2>Ultimi Giri</h2>
+    <div class="grid-riquadri" id="contenitore-giri"></div>
+    <div class="section-divider"></div>
+  </div>
+  <!-- Fine Sezione Ultimi Giri -->
+
+  <section id="contagiri">
+    <h2>Conta Giri</h2>
+    <p id="frase-giri"></p>
+
+    <div class="table-container-wrapper">
+      <table id="tabella-giri">
+        <thead>
+          <tr class="icon-row">
+            <td style="width: 16%"></td>
+            <td><img src="img/giriinsieme.png" alt=""></td>
+            <td><img src="img/giretti.png" alt=""></td>
+            <td><img src="img/girilunghi.png" alt=""></td>
+            <td><img src="img/giriamici.png" alt=""></td>
+          </tr>
+          <tr class="header-row">
+            <th>Anno</th>
+            <th>Insieme</th>
+            <th>Giretti</th>
+            <th>Lunghi</th>
+            <th>Amici</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="charts-vertical-stack">
+      <div class="chart-wrapper">
+        <canvas id="chartTrend"></canvas>
+        <div id="trend-legend-custom"></div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="torta-container">
+      <h2>Torta dei Giretti 🥧</h2>
+      <p class="torta-subtitle">Seleziona gli anni per vedere la distribuzione dei giretti che abbiamo fatto.<br>Se selezioni un anno solo puoi vedierne il dettaglio.<br>Se selezioni due anni puoi vedere il confronto sotto!</p>
+      
+      <div class="filter-area">
+        <div id="lista-checkbox-anni" style="display: contents;"></div>
+      </div>
+      <div class="torta-wrapper">
+        <canvas id="chartTorta"></canvas>
+      </div>
+      <div id="grid-legend"></div>
+    </div>
+
+    <div class="section-divider" id="divisore-pre-confronto"></div>
+
+    <div class="confronto-container" id="sezione-confronto">
+      <h3>Confronta Giri ⚖️</h3>
+      <div id="confronto-risultati" style="width: 100%;"></div>
+    </div>
+
+    <div class="section-divider" id="divisore-post-confronto" style="display: none;"></div>
+
+  </section>
+
+  <div id="modal-dettaglio" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div id="modal-titolo" class="modal-titolo-box"></div>
+        <div class="close-btn" aria-label="Chiudi modale">&times;</div>
+      </div>
+      <div id="modal-lista-container">
+        <div id="modal-lista"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-banner">
+    <h2>Solo posti nuovi e tutti giri belli!</h2>
+  </div>
+  
+  <div class="section-divider"></div>
+
+</main>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-text">
+      <span>@SbatuffoBlog 2026 - </span> 
+      <a href="../index.html" class="footer-link">Home <img src="img/home.png" alt="Home"></a>
+    </div>
+  </div>
+</footer>
+
+<script src="giri.js"></script>
+
+<!-- SCRIPT 1: GESTIONE OUTDOORACTIVE -->
+<script>
+  // Usa "window." per aggirare qualsiasi conflitto di variabili col file giri.js
+  window.AttivaOutdooractive = true; 
+
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      const sezioneUltimiGiri = document.getElementById("sezione-ultimi-giri");
+      const containerGiri = document.getElementById("contenitore-giri");
+
+      if (window.AttivaOutdooractive === false) {
+        if (sezioneUltimiGiri) {
+          // Eliminazione fisica dal DOM
+          sezioneUltimiGiri.remove();
+        }
+      } else {
+        if (typeof GIRI !== 'undefined' && containerGiri) {
+          GIRI.slice(0, 9).forEach(giro => {
+            const card = document.createElement("div");
+            card.className = "riquadro";
             
-            ext = "webp"
-            if ".jpg" in img_remote.lower():
-                ext = "jpg"
-            elif ".png" in img_remote.lower():
-                ext = "png"
+            // In caso di immagine mancante o errore di caricamento, usa pandamappa.png come fallback sicuro
+            const fallbackImg = "img/pandamappa.png";
+            const imgSrc = giro.img && giro.img.trim() !== "" ? giro.img : fallbackImg;
+            
+            card.innerHTML = `
+              <a href="${giro.link}" target="_blank" class="riquadro-link">
+                <div class="riquadro-titolo">${giro.titolo}</div>
+                <img src="${imgSrc}" 
+                     alt="${giro.titolo}" 
+                     loading="lazy" 
+                     decoding="async" 
+                     onerror="this.onerror=null; this.src='${fallbackImg}';">
+              </a>`;
+            containerGiri.appendChild(card);
+          });
+        }
+      }
+    } catch(e) {
+      console.error("Si è verificato un errore nella sezione Ultimi Giri:", e);
+    }
+  });
+</script>
 
-            # Il file avrà il nome univoco basato sull'ID del giro
-            filename = f"giro_{giro_id}.{ext}"
-            filepath = os.path.join(img_dir, filename)
+<!-- SCRIPT 2: GESTIONE GIRETTILIST COMPLETAMENTE ISOLATA -->
+<script>
+// Questa è una IIFE (Immediately Invoked Function Expression). 
+// Isola tutto il codice al suo interno, impedendo che le variabili vadano in conflitto con il resto della pagina.
+(function() {
+  const BASE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS25gFAneadaRaQQHKaNq-dZLFD0dx1mQw5nxZj7fHc2XWZH6zxHn8A4rRgPJ_XH5eujTrhTr6x36vq/pub?output=csv&gid=";
+  const SHEETS = { 2018: 0, 2019: 1139420899, 2020: 2024853702, 2021: 1564840008, 2022: 1211406438, 2023: 47473263, 2024: 203674235, 2025: 1106825116, 2026: 232828694 };
 
-            # Download dell'immagine
-            try:
-                img_res = requests.get(img_remote, headers=headers, timeout=10)
-                if img_res.status_code == 200:
-                    with open(filepath, "wb") as f:
-                        f.write(img_res.content)
-                    local_img_path = f"img_giri/{filename}"
-                    downloaded_files.append(filename)
-                    print(f"✔ Scaricata anteprima locale: {filename}")
-                else:
-                    local_img_path = img_remote
-            except Exception as download_err:
-                print(f"⚠️ Impossibile scaricare l'immagine per {titolo}:", download_err)
-                local_img_path = img_remote
+  let datiPerAnno = {}; 
+  let chartTortaObj = null;
+  const paletteColori = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF63FF', '#C9CBCF', '#45f542', '#f54242', '#42f5f5', '#f5a442'];
 
-        giri.append({
-            "titolo": titolo,
-            "link": link,
-            "img": local_img_path
-        })
+  const modal = document.getElementById("modal-dettaglio");
+  const btnCloseModal = document.querySelector(".close-btn");
 
-    except Exception as e:
-        print("Errore:", e)
+  if(btnCloseModal) btnCloseModal.onclick = function() { modal.style.display = "none"; }
+  window.onclick = function(event) { if (event.target === modal) { modal.style.display = "none"; } }
 
-# Pulizia di vecchie immagini non più nei primi 9 (esclusa l'eccezione .gitkeep)
-for file_in_dir in os.listdir(img_dir):
-    if file_in_dir not in downloaded_files and file_in_dir != ".gitkeep":
-        try:
-            os.remove(os.path.join(img_dir, file_in_dir))
-            print(f"🗑 Rimossa vecchia immagine non più utilizzata: {file_in_dir}")
-        except Exception as e:
-            print("Errore durante la pulizia:", e)
+  function parseCSV(text) { return text.trim().split("\n").map(r => r.split(",").map(c => c.replace(/^"|"$/g, "").trim())); }
+  function parseDate(str) { const [y, m, d] = str.split("/").map(Number); return new Date(y, m - 1, d); }
 
-# SALVA COME JS
-with open(output_path, "w", encoding="utf-8") as f:
-    f.write("const GIRI = ")
-    json.dump(giri, f, ensure_ascii=False, indent=2)
+  function formattaData(str) {
+    if (!str) return "";
+    const parts = str.split("/");
+    if (parts.length === 3) {
+      if (parts[0].length === 4) { 
+        return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+      } else { 
+        return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+      }
+    }
+    return str;
+  }
 
-print("✅ giri.js e cartella img_giri aggiornati con successo!")
+  async function init() {
+    const anniOrdinati = Object.keys(SHEETS).sort((a, b) => a - b);
+    const containerAnni = document.getElementById("lista-checkbox-anni");
+    let ultimaData = null;
+
+    await Promise.all(anniOrdinati.map(async (anno) => {
+      try {
+        const res = await fetch(BASE_CSV + SHEETS[anno]);
+        const csv = await res.text();
+        const rows = parseCSV(csv).slice(1);
+        let tot = rows.length, giretti = 0, lunghi = 0, amici = 0, tipi = {}, giriDettagli = {};
+        
+        rows.forEach(r => {
+          const dataOriginale = (r[0] || "").trim();
+          const dove = (r[1] || "").trim();
+          const giorni = r[2];
+          const amiciCol = (r[3] || "").toUpperCase().trim(); 
+          const tipo = (r[6] || "Altro").trim() || "Altro";
+          
+          const hasAmici = amiciCol === "SI";
+
+          tipi[tipo] = (tipi[tipo] || 0) + 1;
+          
+          if (!giriDettagli[tipo]) giriDettagli[tipo] = [];
+          if (dove) giriDettagli[tipo].push({
+            dove: dove,
+            dataStr: formattaData(dataOriginale),
+            amici: hasAmici
+          });
+          
+          if (giorni === "1" || giorni === "1/2") giretti++; else if (parseFloat(giorni) > 1) lunghi++;
+          if (hasAmici) amici++;
+          if (dataOriginale) { const d = parseDate(dataOriginale); if (!ultimaData || d > ultimaData) ultimaData = d; }
+        });
+        datiPerAnno[anno] = { tot, giretti, lunghi, amici, tipi, giriDettagli };
+      } catch (e) { console.error("Impossibile caricare foglio:", e); }
+    }));
+
+    if(containerAnni) {
+      const masterItem = document.createElement("div");
+      masterItem.className = "anno-item";
+      masterItem.innerHTML = `<input type="checkbox" class="anno-cb anno-master-cb" checked id="cb-tutti"><label for="cb-tutti">TUTTI</label>`;
+      containerAnni.appendChild(masterItem);
+
+      anniOrdinati.slice().reverse().forEach(anno => {
+        if(datiPerAnno[anno]) {
+          const item = document.createElement("div");
+          item.className = "anno-item";
+          item.innerHTML = `<input type="checkbox" class="anno-cb anno-year-cb" value="${anno}" checked id="cb-${anno}"><label for="cb-${anno}">${anno}</label>`;
+          containerAnni.appendChild(item);
+        }
+      });
+    }
+
+    const tbody = document.querySelector("#tabella-giri tbody");
+    const summary = { anni: [], totali: [], giretti: [], lunghi: [], amici: [] };
+    
+    if(tbody) {
+      [...anniOrdinati].reverse().forEach(anno => {
+        const d = datiPerAnno[anno];
+        if(d) {
+          summary.anni.push(anno); summary.totali.push(d.tot); summary.giretti.push(d.giretti); summary.lunghi.push(d.lunghi); summary.amici.push(d.amici);
+          tbody.innerHTML += `<tr><td>${anno}</td><td>${d.tot}</td><td>${d.giretti}</td><td>${d.lunghi}</td><td>${d.amici}</td></tr>`;
+        }
+      });
+    }
+
+    renderTrend(summary);
+    aggiornaStatoMaster();
+    updateTorta();
+    
+    document.querySelectorAll('.anno-year-cb').forEach(cb => {
+      cb.addEventListener('change', () => {
+        aggiornaStatoMaster();
+        updateTorta();
+      });
+    });
+
+    const masterCb = document.querySelector('.anno-master-cb');
+    if (masterCb) {
+      masterCb.addEventListener('change', () => {
+        document.querySelectorAll('.anno-year-cb').forEach(cb => {
+          cb.checked = masterCb.checked;
+        });
+        aggiornaStatoMaster();
+        updateTorta();
+      });
+    }
+
+    if (ultimaData) {
+      const diff = Math.floor((new Date().setHours(0,0,0,0) - new Date(ultimaData).setHours(0,0,0,0)) / 86400000);
+      const el = document.getElementById("frase-giri");
+      if(el) {
+        if (diff === 0) { el.innerText = "Che bello oggi abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+        else if (diff === 1) { el.innerText = "Che bello ieri abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+        else if (diff <= 6) { el.innerText = "Che bello questa settimana abbiamo fatto un giro insieme!"; el.style.color = "#4caf50"; }
+        else { el.innerText = `Sono ben ${diff} giorni che non facciamo un giro insieme!`; el.style.color = "var(--heart-red)"; }
+      }
+    }
+  }
+
+  function aggiornaStatoMaster() {
+    const anniCheckboxes = Array.from(document.querySelectorAll('.anno-year-cb'));
+    const masterCb = document.querySelector('.anno-master-cb');
+    if (!masterCb || anniCheckboxes.length === 0) return;
+
+    const checkedCount = anniCheckboxes.filter(cb => cb.checked).length;
+    masterCb.checked = checkedCount === anniCheckboxes.length;
+    masterCb.indeterminate = checkedCount > 0 && checkedCount < anniCheckboxes.length;
+  }
+
+  function updateTorta() {
+    const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+    let aggregatoTipi = {};
+    
+    selectedAnni.forEach(anno => {
+      if(datiPerAnno[anno]) {
+        const tipi = datiPerAnno[anno].tipi;
+        for (let t in tipi) { aggregatoTipi[t] = (aggregatoTipi[t] || 0) + tipi[t]; }
+      }
+    });
+    
+    const labels = Object.keys(aggregatoTipi), valori = Object.values(aggregatoTipi);
+    const canvas = document.getElementById('chartTorta');
+    if(!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    
+    if (chartTortaObj) chartTortaObj.destroy();
+    
+    chartTortaObj = new Chart(ctx, {
+      type: 'pie',
+      data: { labels: labels, datasets: [{ data: valori, backgroundColor: paletteColori, borderWidth: 1 }] },
+      options: { 
+        responsive: true, 
+        maintainAspectRatio: false, 
+        plugins: { 
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.label || '';
+                if (label) { label += ': '; }
+                if (context.parsed !== null) { label += context.parsed; }
+                
+                const selAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+                if (selAnni.length === 1) {
+                  label += ' (Clicca per dettagli)';
+                }
+                return label;
+              }
+            }
+          }
+        },
+        onClick: (event, elements) => {
+          if (elements && elements.length > 0) {
+            const index = elements[0].index;
+            const label = chartTortaObj.data.labels[index];
+            window.gestisciClickLegenda(label);
+          }
+        }
+      }
+    });
+    
+    const legendGrid = document.getElementById('grid-legend');
+    if(legendGrid) {
+      legendGrid.innerHTML = '';
+      labels.forEach((l, i) => {
+        const safeLabel = l.replace(/'/g, "\\'");
+        const lensHtml = selectedAnni.length === 1
+          ? `<span class="legend-lens" title="Apri dettagli di ${l}" onclick="event.stopPropagation(); window.gestisciClickLegenda('${safeLabel}');" aria-label="Apri dettagli di ${l}">🔍</span>`
+          : '';
+
+        legendGrid.innerHTML += `<div class="legend-item" style="cursor: pointer;" onclick="window.gestisciClickLegenda('${safeLabel}')">
+          <div class="color-box" style="background:${paletteColori[i % paletteColori.length]}"></div>
+          <span>${l}: <strong>${valori[i]}</strong></span>${lensHtml}
+        </div>`;
+      });
+    }
+
+    aggiornaSezioneConfronto(selectedAnni);
+  }
+
+  // Esportiamo solo la funzione necessaria agli inline HTML onclick (per le lenti della torta)
+  window.gestisciClickLegenda = function(categoria) {
+    const selectedAnni = Array.from(document.querySelectorAll('.anno-year-cb:checked')).map(cb => cb.value);
+    if (selectedAnni.length === 1) {
+      apriModaleDettaglio(categoria, selectedAnni[0]);
+    }
+  };
+
+  function getColorForCategoria(categoria) {
+    if (!chartTortaObj || !chartTortaObj.data || !Array.isArray(chartTortaObj.data.labels)) {
+      return 'var(--color-theme)';
+    }
+    const index = chartTortaObj.data.labels.indexOf(categoria);
+    return index >= 0 ? paletteColori[index % paletteColori.length] : 'var(--color-theme)';
+  }
+
+  function apriModaleDettaglio(categoria, anno) {
+    const dettagli = datiPerAnno[anno] ? datiPerAnno[anno].giriDettagli[categoria] : [];
+    const modalTitolo = document.getElementById('modal-titolo');
+    const coloreCategoria = getColorForCategoria(categoria);
+    const modalLista = document.getElementById('modal-lista');
+    
+    if(modalTitolo) {
+      modalTitolo.innerText = `Dettaglio ${categoria} (${dettagli ? dettagli.length : 0}) - ${anno}`;
+      modalTitolo.style.backgroundColor = coloreCategoria;
+      modalTitolo.style.color = '#111';
+    }
+    
+    let html = '';
+    if (dettagli && dettagli.length > 0) {
+      html += `<ul>`;
+      dettagli.forEach(giro => {
+        let dateHtml = giro.dataStr ? `<span style="display: block; font-size: 0.85em; color: var(--main-blue); font-weight: bold; margin-bottom: 4px;">🗓 ${giro.dataStr}</span>` : '';
+        let amiciIcon = giro.amici ? `<img src="img/giriamici.png" class="li-icon" alt="Giro con amici" title="Giro con amici">` : '';
+        
+        html += `<li style="border-color: ${coloreCategoria}; border-left-color: ${coloreCategoria}; box-shadow: 0 0 0 1px ${coloreCategoria}22;">
+                   <div class="li-testo">${dateHtml}${giro.dove}</div>
+                   ${amiciIcon}
+                 </li>`;
+      });
+      html += `</ul>`;
+    } else {
+      html += `<p style="text-align: center; color: #777; font-family: 'Fredoka', sans-serif;">Nessun giro trovato.</p>`;
+    }
+    
+    if(modalLista) modalLista.innerHTML = html;
+    if(modal) modal.style.display = "flex";
+  }
+
+  function aggiornaSezioneConfronto(selectedAnni) {
+    const containerSezione = document.getElementById('sezione-confronto');
+    const containerRisultati = document.getElementById('confronto-risultati');
+    const divisore = document.getElementById('divisore-pre-confronto');
+    const divisorePost = document.getElementById('divisore-post-confronto');
+
+    if(!containerSezione) return;
+
+    if (selectedAnni.length === 2) {
+      containerSezione.style.display = 'flex';
+      if(divisore) divisore.style.display = 'none'; 
+      if(divisorePost) divisorePost.style.display = 'block'; 
+    } else {
+      containerSezione.style.display = 'none';
+      if(divisore) divisore.style.display = 'block'; 
+      if(divisorePost) divisorePost.style.display = 'none';
+      if(containerRisultati) containerRisultati.innerHTML = "";
+      return;
+    }
+    
+    let tutteLeCategorie = new Set();
+    selectedAnni.forEach(anno => {
+      if (datiPerAnno[anno]) {
+        Object.keys(datiPerAnno[anno].tipi).forEach(cat => tutteLeCategorie.add(cat));
+      }
+    });
+    const categorieOrdinate = Array.from(tutteLeCategorie).sort();
+    
+    let html = `<div class="table-container-wrapper" style="margin-top: 15px;">
+      <table id="tabella-confronto">
+        <thead>
+          <tr class="header-row">
+            <th style="text-align: left; padding-left: 20px; width: 40%;">Tipo Giretto</th>`;
+    
+    const anniOrdinatiDecrescente = [...selectedAnni].sort((a, b) => b - a);
+    const colWidth = Math.floor(60 / anniOrdinatiDecrescente.length); 
+    
+    anniOrdinatiDecrescente.forEach(anno => {
+      html += `<th style="width: ${colWidth}%;">${anno}</th>`;
+    });
+    
+    html += `</tr>
+        </thead>
+        <tbody>`;
+    
+    categorieOrdinate.forEach((cat) => {
+      const coloreCat = getColorForCategoria(cat);
+      html += `<tr>
+        <td style="text-align: left; padding-left: 20px; font-weight: 700;"><span class="comparison-category-badge" style="background-color: ${coloreCat};">${cat}</span></td>`;
+      
+      anniOrdinatiDecrescente.forEach(anno => {
+        const count = (datiPerAnno[anno] && datiPerAnno[anno].tipi[cat]) || 0;
+        html += `<td>${count}</td>`;
+      });
+      
+      html += `</tr>`;
+    });
+    
+    html += `</tbody>
+      </table>
+    </div>`;
+    
+    if(containerRisultati) containerRisultati.innerHTML = html;
+  }
+
+  function renderTrend(data) {
+    const canvas = document.getElementById('chartTrend');
+    if(!canvas) return;
+    const ctxTrend = canvas.getContext('2d');
+    
+    const datasets = [
+      { label: 'Insieme', data: data.totali.slice().reverse(), color: '#2332bb', width: 3 },
+      { label: 'Giretti', data: data.giretti.slice().reverse(), color: '#4caf50', width: 2 },
+      { label: 'Giri Lunghi', data: data.lunghi.slice().reverse(), color: '#ff9800', width: 2 },
+      { label: 'Amici', data: data.amici.slice().reverse(), color: '#e91e63', width: 2 }
+    ];
+
+    const chartTrend = new Chart(ctxTrend, {
+      type: 'line',
+      data: {
+        labels: data.anni.slice().reverse(),
+        datasets: datasets.map(d => ({
+          label: d.label,
+          data: d.data,
+          borderColor: d.color,
+          backgroundColor: d.color,
+          tension: 0.3,
+          borderWidth: d.width,
+          pointRadius: 3
+        }))
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: { bottom: 10 }
+        },
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    const legendContainer = document.getElementById('trend-legend-custom');
+    if(legendContainer) {
+      legendContainer.innerHTML = ''; 
+
+      datasets.forEach((d, index) => {
+        const badge = document.createElement('div');
+        badge.className = 'legend-badge';
+        badge.style.backgroundColor = d.color;
+        badge.innerText = d.label;
+
+        badge.onclick = () => {
+          const isVisible = chartTrend.isDatasetVisible(index);
+          if (isVisible) {
+            chartTrend.hide(index);
+            badge.classList.add('hidden');
+          } else {
+            chartTrend.show(index);
+            badge.classList.remove('hidden');
+          }
+        };
+        legendContainer.appendChild(badge);
+      });
+    }
+  }
+
+  // Lanciamo lo script
+  init();
+
+})();
+</script>
+
+</body>
+</html>

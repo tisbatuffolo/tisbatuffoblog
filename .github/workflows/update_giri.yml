@@ -26,7 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install beautifulsoup4 requests cloudscraper
+          pip install beautifulsoup4 curl-cffi
 
       - name: Run script aggiorna-giri.py
         run: |
