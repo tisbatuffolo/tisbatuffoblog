@@ -186,6 +186,8 @@
       gap: 6px;
       flex: 1; 
       white-space: nowrap;
+      position: relative;
+      z-index: 5;
     }
 
     .btn-action:hover {
@@ -194,8 +196,10 @@
     }
 
     .btn-action svg {
-      width: 18px; height: 18px;
+      width: 18px; 
+      height: 18px;
       stroke: currentColor;
+      pointer-events: none;
     }
 
     /* --- LIGHTBOX (Visore Foto) --- */
@@ -219,6 +223,7 @@
       pointer-events: auto;
     }
 
+    /* --- CORRETTO: Priorità assoluta e costante ai controlli superiori --- */
     .lightbox-header {
       position: absolute;
       top: 25px;
@@ -227,9 +232,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 1020;
+      z-index: 99999 !important; /* Priorità massima assoluta */
       gap: 20px;
-      transition: all 0.3s ease;
+      pointer-events: auto !important;
+    }
+
+    .lightbox.active .lightbox-header {
+      pointer-events: auto !important;
     }
 
     .lightbox-title {
@@ -247,12 +256,15 @@
       letter-spacing: 0.5px;
       user-select: none;
       transition: opacity 0.3s ease;
+      pointer-events: auto;
     }
 
     .header-controls {
       display: flex;
       gap: 12px;
       align-items: center;
+      pointer-events: auto !important;
+      z-index: 100000 !important;
     }
 
     .action-btn {
@@ -268,13 +280,16 @@
       transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
       flex-shrink: 0;
       border: 1.5px solid var(--light-blue-border);
+      pointer-events: auto !important;
+      z-index: 100001 !important;
+      position: relative;
     }
     
     .action-btn svg {
       width: 22px; height: 22px;
+      pointer-events: none; 
     }
 
-    /* Punto 1: Rendiamo la X esplicitamente rossa */
     .action-btn.close-btn { 
       font-size: 1.8rem; 
       color: var(--heart-red);
@@ -411,8 +426,7 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    /* Logica a "Comparsa" (Fade in/out dei controlli) */
-    .lightbox .header-controls,
+    /* Logica a "Comparsa" (Fade in/out dei controlli secondari: frecce e contatore) */
     .lightbox .nav-btn,
     .lightbox .slide-counter {
       opacity: 0;
@@ -420,7 +434,6 @@
       transition: opacity 0.3s ease;
     }
 
-    .lightbox.show-controls .header-controls,
     .lightbox.show-controls .nav-btn,
     .lightbox.show-controls .slide-counter {
       opacity: 1;
@@ -456,7 +469,7 @@
     .video-controls {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; /* Permette il click sul video sottostante */
+      pointer-events: none;
     }
 
     .video-header-controls {
@@ -492,7 +505,7 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* Barra di Avanzamento Video (Elegante) */
+    /* Barra di Avanzamento Video */
     .video-progress-wrapper {
       position: absolute;
       bottom: 30px;
@@ -572,7 +585,6 @@
       border: none;
       box-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
-
 
     /* --- FOOTER --- */
     footer { 
@@ -724,9 +736,7 @@
   <video id="album-video" playsinline></video>
   
   <div class="video-controls" id="video-controls">
-    <!-- Pulsanti in alto a destra -->
     <div class="video-header-controls">
-      <!-- Tasto Play/Pausa -->
       <div class="action-btn" onclick="toggleVideoPlay()" title="Play/Pausa">
         <svg id="video-play-icon" style="display: none;" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
@@ -736,18 +746,15 @@
           <rect x="14" y="4" width="4" height="16" fill="currentColor"></rect>
         </svg>
       </div>
-      <!-- Tasto Ruota -->
       <div class="action-btn" onclick="forceRotateVideo()" title="Forza Rotazione Schermo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
           <path d="M3 3v5h5"></path>
         </svg>
       </div>
-      <!-- Tasto Chiudi -->
       <div class="action-btn close-btn" onclick="closeVideo()" title="Chiudi Video">✕</div>
     </div>
 
-    <!-- Barra avanzamento in basso -->
     <div class="video-progress-wrapper" id="video-progress-wrapper">
       <input type="range" id="video-progress-bar" min="0" max="100" value="0">
     </div>
@@ -884,7 +891,6 @@
     if ('wakeLock' in navigator) {
       try {
         wakeLock = await navigator.wakeLock.request('screen');
-        console.log('Wake Lock attivato.');
       } catch (err) {
         console.error(`Wake Lock fallito: ${err.name}, ${err.message}`);
       }
@@ -937,7 +943,6 @@
     
     albumVideo.play().catch(e => console.log("Autoplay bloccato:", e));
     
-    // Forza la rotazione in landscape per il mobile
     if (screen.orientation && screen.orientation.lock) {
       screen.orientation.lock('landscape').catch(e => console.warn('Rotazione orizzontale non supportata:', e));
     }
@@ -959,7 +964,6 @@
     startVideoControlsTimeout();
   }
 
-  // Sincronizza l'interfaccia con lo stato del video
   albumVideo.addEventListener('play', () => {
     videoPlayIcon.style.display = 'none';
     videoPauseIcon.style.display = 'block';
@@ -994,7 +998,6 @@
     releaseWakeLock();
     clearTimeout(videoControlsTimeout);
     
-    // Punto 6: Reindirizza all'homepage
     window.location.href = 'fotoalbum.html';
   }
 
@@ -1002,7 +1005,6 @@
     closeVideo(); 
   });
 
-  // Logica per mostrare/nascondere i controlli video
   function startVideoControlsTimeout() {
     clearTimeout(videoControlsTimeout);
     videoControlsTimeout = setTimeout(() => {
@@ -1011,7 +1013,6 @@
   }
 
   videoLightbox.addEventListener('click', (e) => {
-    // Evita di nascondere i comandi se l'utente clicca su un bottone o sulla barra
     if (e.target.closest('.action-btn') || e.target.closest('.video-progress-wrapper')) return;
     
     if (videoControls.classList.contains('show')) {
@@ -1023,12 +1024,11 @@
     }
   });
 
-  // Logica della Progress Bar Video
   albumVideo.addEventListener('timeupdate', () => {
     if (albumVideo.duration) {
       const progress = (albumVideo.currentTime / albumVideo.duration) * 100;
       videoProgressBar.value = progress;
-      videoProgressBar.style.setProperty('--value', progress + '%'); // Per lo styling CSS
+      videoProgressBar.style.setProperty('--value', progress + '%');
     }
   });
 
@@ -1038,7 +1038,6 @@
     e.target.style.setProperty('--value', e.target.value + '%');
   });
 
-  // Gestiamo i tocchi sulla barra per evitare che i comandi scompaiano mentre la usiamo
   videoProgressBar.addEventListener('mousedown', () => clearTimeout(videoControlsTimeout));
   videoProgressBar.addEventListener('touchstart', () => clearTimeout(videoControlsTimeout), {passive: true});
   videoProgressBar.addEventListener('mouseup', () => startVideoControlsTimeout());
@@ -1056,7 +1055,12 @@
     document.getElementById('play-icon').style.display = 'none';
     document.getElementById('pause-icon').style.display = 'block';
     
-    if (!lightbox.classList.contains('is-fullscreen')) toggleFullscreen();
+    if (!lightbox.classList.contains('is-fullscreen')) {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(e => console.log(e));
+      }
+      enterFullscreenCSS();
+    }
 
     changeSlide(1);
     slideshowInterval = setInterval(() => changeSlide(1), 5000); 
@@ -1121,8 +1125,6 @@
     document.body.style.overflow = '';
     setTimeout(() => {
       sliderImagesContainer.innerHTML = '';
-      
-      // Punto 1: Reindirizza esplicitamente per aggirare i mancati click su mobile
       window.location.href = 'fotoalbum.html';
     }, 450);
   }
@@ -1166,7 +1168,6 @@
     slideCounter.innerText = `Foto ${currentSlideIndex} di ${currentAlbum.totalPhotos} 🐼`;
   }
 
-  // --- LOGICA AUTO-ROTAZIONE BASATA SULL'IMMAGINE ---
   function lockOrientationBasedOnImage(img) {
       if (!document.fullscreenElement || !screen.orientation || !screen.orientation.lock) return;
 
@@ -1184,9 +1185,8 @@
       else img.onload = () => applyLock(img);
   }
 
-  // --- LOGICA FULLSCREEN ---
   function toggleFullscreen() {
-    if (!lightbox.classList.contains('is-fullscreen')) {
+    if (!document.fullscreenElement) {
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().then(() => {
            const activeImg = document.querySelector('.slide.active');
@@ -1195,7 +1195,7 @@
       }
       enterFullscreenCSS();
     } else {
-      if (document.fullscreenElement) {
+      if (document.exitFullscreen) {
         document.exitFullscreen().catch(e => console.log(e));
       }
       exitFullscreenCSS();
@@ -1228,7 +1228,6 @@
     }
   });
 
-  // --- LOGICA SWIPE E COMANDI TOUCH (FOTO) ---
   let touchStartX = 0;
   let touchStartY = 0;
   let touchEndX = 0;
@@ -1274,7 +1273,6 @@
     }
   });
 
-  // --- COMANDI DA TASTIERA ---
   document.addEventListener('keydown', function(e) {
     if(lightbox.classList.contains('active')) {
       if(e.key === 'ArrowRight') changeSlide(1);
@@ -1284,7 +1282,7 @@
     
     if(videoLightbox.classList.contains('active')) {
       if(e.key === 'Escape') closeVideo();
-      if(e.key === ' ') toggleVideoPlay(); // Pausa/Play con la barra spaziatrice
+      if(e.key === ' ') toggleVideoPlay();
     }
   });
 </script>
