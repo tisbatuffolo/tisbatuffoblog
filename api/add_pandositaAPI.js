@@ -1,118 +1,154 @@
-module.exports = async function handler(req, res) {
-    // ✅ Configurazione CORS
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+export default async function handler(req, res) {
+  // Configurazione CORS speculare agli altri endpoint
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    // ✅ Gestione della richiesta preflight (OPTIONS)
-    if (req.method === "OPTIONS") {
-        return res.status(200).end();
-    }
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Metodo non consentito' });
-    }
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Metodo non consentito" });
+  }
 
-    const { sezione, imageB64, mimeType } = req.body;
-    if (!sezione || !imageB64) {
-        return res.status(400).json({ error: 'Dati mancanti' });
-    }
+  try {
+    const { titolo, imageB64, targetDir, jsFilePath, arrayName, data } = req.body;
 
-    // SOLUZIONE: Uniformato al file API funzionante. 
-    // Leggiamo solo il TOKEN dalle variabili d'ambiente, owner e repo sono hardcoded.
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN; 
-    const GITHUB_OWNER = "tisbatuffolo"; 
-    const GITHUB_REPO = "tisbatuffoblog";   
-    const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
+    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+    const REPO_OWNER = "tisbatuffolo";
+    const REPO_NAME = "tisbatuffoblog";
 
     if (!GITHUB_TOKEN) {
-        return res.status(500).json({ error: 'Configurazione GitHub (GITHUB_TOKEN) mancante in Vercel.' });
+      throw new Error("Configurazione GitHub (GITHUB_TOKEN) mancante in Vercel.");
     }
 
-    // Funzione per ricavare l'estensione corretta dal mimeType in modo dinamico
-    const getExtFromMime = (mime, defaultExt = 'jpg') => {
-        if (!mime) return defaultExt;
-        if (mime.includes('png')) return 'png';
-        if (mime.includes('webp')) return 'webp';
-        if (mime.includes('gif')) return 'gif';
-        if (mime.includes('jpeg') || mime.includes('jpg')) return 'jpg';
-        return defaultExt;
-    };
+    // Manteniamo i path corretti specifici per la sezione pandosita
+    const finalTargetDir = targetDir.startsWith("pandosita/") ? targetDir : `pandosita/${targetDir}`;
+    const finalJsFilePath = jsFilePath.startsWith("pandosita/") ? jsFilePath : `pandosita/${jsFilePath}`;
 
-    // Configurazione dettagliata per ogni sezione con estensione dinamica basata sul file caricato
-    const mapSezioni = {
-        'sticker':      { path: 'pandosita/img/sticker',      prefix: 'sticker',      ext: getExtFromMime(mimeType, 'webp') },
-        'gif':          { path: 'pandosita/img/gif',          prefix: 'pandagif',     ext: getExtFromMime(mimeType, 'gif') },
-        'sbatuffolart': { path: 'pandosita/img/sbatuffolart', prefix: 'sbatuffolart', ext: getExtFromMime(mimeType, 'jpg') },
-        'sbatuffolai':  { path: 'pandosita/img/sbatuffolAI',  prefix: 'sbatuffolai',  ext: getExtFromMime(mimeType, 'jpg') },
-        'lulu':         { path: 'pandosita/img/lulu',         prefix: 'lulu',         ext: getExtFromMime(mimeType, 'jpg') },
-        'sfigatini':    { path: 'pandosita/img/sfigatini',    prefix: 'sfigatini',    ext: 'jpg' }
-    };
+    // 1. Genera un nome file pulito basato sul titolo
+    const cleanFileName = titolo.replace(/[^a-zA-Z0-9 \-_]/g, '').trim() + '.jpg';
+    const imageFullPath = `${finalTargetDir}/${cleanFileName}`;
 
-    const config = mapSezioni[sezione];
-    if (!config) return res.status(400).json({ error: 'Sezione non valida' });
+    // ==========================================
+    // STEP 1: CARICA L'IMMAGINE SU GITHUB
+    // ==========================================
+    const uploadImgRes = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${imageFullPath}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          "Content-Type": "application/json",
+          Accept: "application/vnd.github+json",
+        },
+        body: JSON.stringify({
+          message: `Aggiunta immagine Pandosita: ${titolo}`,
+          content: imageB64 
+        })
+      }
+    );
 
+    if (!uploadImgRes.ok) {
+        const errorText = await uploadImgRes.text();
+        throw new Error(`Errore caricamento immagine: ${errorText}`);
+    }
+
+    // ==========================================
+    // STEP 2: SCARICA IL FILE JS ESISTENTE
+    // ==========================================
+    const getJsFile = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${finalJsFilePath}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github+json",
+        }
+      }
+    );
+
+    let sha = null;
+    let decodedContent = "";
+
+    if (getJsFile.ok) {
+        const jsFileData = await getJsFile.json();
+        sha = jsFileData.sha;
+        decodedContent = Buffer.from(jsFileData.content, 'base64').toString('utf8');
+    } else if (getJsFile.status === 404) {
+        decodedContent = `const ${arrayName} = [];\n`;
+    } else {
+        const errorText = await getJsFile.text();
+        throw new Error(`Impossibile recuperare il file JS: ${finalJsFilePath}. Dettaglio: ${errorText}`);
+    }
+
+    // ==========================================
+    // STEP 3: MODIFICA IL FILE JS
+    // ==========================================
+    const arrayRegex = new RegExp(`(const\\s+${arrayName}\\s*=\\s*)(\\[[\\s\\S]*?\\])(\\s*;)`);
+    const match = decodedContent.match(arrayRegex);
+
+    if (!match) {
+        throw new Error(`Impossibile trovare l'array ${arrayName} nel file JS.`);
+    }
+
+    let currentArray = [];
     try {
-        // 1. Legge la cartella su GitHub per calcolare il numero progressivo massimo
-        const repoPathUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${config.path}?ref=${GITHUB_BRANCH}`;
-        const responseList = await fetch(repoPathUrl, {
-            headers: { 
-                'Authorization': `Bearer ${GITHUB_TOKEN}`, 
-                'Accept': 'application/vnd.github.v3+json' 
-            }
-        });
-
-        let maxIndex = 0;
-        
-        if (responseList.ok) {
-            const files = await responseList.json();
-            const regex = new RegExp(`^${config.prefix} \\((\\d+)\\)\\.`);
-            
-            for (const file of files) {
-                const match = file.name.match(regex);
-                if (match) {
-                    const num = parseInt(match[1], 10);
-                    if (num > maxIndex) maxIndex = num;
-                }
-            }
-        } else if (responseList.status !== 404) {
-            throw new Error('Impossibile scansionare i file esistenti.');
-        }
-
-        if (maxIndex >= 1000) {
-            return res.status(400).json({ error: 'Raggiunto il limite massimo di 1000 elementi per questa sezione.' });
-        }
-
-        // 2. Prepara il nuovo file con estensione corretta
-        const nextIndex = maxIndex + 1;
-        const newFileName = `${config.prefix} (${nextIndex}).${config.ext}`;
-        const newFilePath = `${config.path}/${newFileName}`;
-
-        // 3. Salva l'immagine tramite commit su GitHub
-        const uploadUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${newFilePath}`;
-        const uploadRes = await fetch(uploadUrl, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: `Upload automatico: aggiunta pandosita ${newFileName}`,
-                content: imageB64,
-                branch: GITHUB_BRANCH
-            })
-        });
-
-        if (!uploadRes.ok) {
-            const errJson = await uploadRes.json();
-            throw new Error(errJson.message || 'Errore durante l\'upload su GitHub');
-        }
-
-        res.status(200).json({ success: true, fileName: newFileName });
-        
-    } catch (error) {
-        console.error("Errore API upload:", error);
-        res.status(500).json({ error: error.message });
+        currentArray = new Function(`return ${match[2]}`)();
+    } catch (e) {
+        throw new Error("Errore nel parsing dell'array interno al file .js");
     }
-};
+
+    // Costruiamo il nuovo elemento da aggiungere all'array
+    const newItem = {
+        "titolo": titolo,
+        "immagine": cleanFileName
+    };
+    
+    // Se è prevista una data (opzionale), la aggiungiamo all'oggetto
+    if (data) {
+        newItem.data = data;
+    }
+
+    currentArray.push(newItem);
+
+    const newArrayString = JSON.stringify(currentArray, null, 4);
+    decodedContent = decodedContent.replace(arrayRegex, `$1${newArrayString}$3`);
+
+    // ==========================================
+    // STEP 4: SALVA IL FILE JS SU GITHUB
+    // ==========================================
+    const bodyData = {
+      message: `Aggiornato array in ${finalJsFilePath} per ${titolo}`,
+      content: Buffer.from(decodedContent).toString("base64")
+    };
+    
+    if (sha) {
+        bodyData.sha = sha;
+    }
+
+    const updateJsRes = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${finalJsFilePath}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          "Content-Type": "application/json",
+          Accept: "application/vnd.github+json",
+        },
+        body: JSON.stringify(bodyData)
+      }
+    );
+
+    if (!updateJsRes.ok) {
+      const errorMsg = await updateJsRes.text();
+      throw new Error(`Errore durante l'aggiornamento del file JS: ${errorMsg}`);
+    }
+
+    return res.status(200).json({ message: "Immagine e Dati salvati con successo!" });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+}
