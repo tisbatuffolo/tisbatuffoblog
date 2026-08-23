@@ -135,6 +135,7 @@
       margin-bottom: 18px;
       background: #fdfdfd;
       border: 1px solid #f0f0f0;
+      cursor: pointer;
     }
 
     .album-cover-wrapper img {
@@ -188,6 +189,7 @@
       white-space: nowrap;
       position: relative;
       z-index: 5;
+      touch-action: manipulation;
     }
 
     .btn-action:hover {
@@ -205,7 +207,7 @@
     /* --- LIGHTBOX (Visore Foto) --- */
     .lightbox {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(253, 253, 253, 0.97);
       backdrop-filter: blur(20px);
       z-index: 1000;
@@ -223,22 +225,20 @@
       pointer-events: auto;
     }
 
-    /* --- CORRETTO: Priorità assoluta e costante ai controlli superiori --- */
     .lightbox-header {
       position: absolute;
       top: 25px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 90%;
       max-width: 850px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 99999 !important; /* Priorità massima assoluta */
+      z-index: 2000;
       gap: 20px;
-      pointer-events: auto !important;
-    }
-
-    .lightbox.active .lightbox-header {
-      pointer-events: auto !important;
+      transition: all 0.3s ease;
+      pointer-events: auto;
     }
 
     .lightbox-title {
@@ -246,25 +246,17 @@
       font-weight: 600;
       font-size: clamp(0.9rem, 2.8vw, 1.2rem);
       color: var(--main-blue);
-      background: transparent;
-      padding: 0;
-      border-radius: 0;
-      box-shadow: none;
-      border: none;
       text-align: left;
-      opacity: 0.5;
+      opacity: 0.8;
       letter-spacing: 0.5px;
       user-select: none;
-      transition: opacity 0.3s ease;
-      pointer-events: auto;
     }
 
     .header-controls {
       display: flex;
       gap: 12px;
       align-items: center;
-      pointer-events: auto !important;
-      z-index: 100000 !important;
+      z-index: 2010;
     }
 
     .action-btn {
@@ -276,24 +268,28 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
       flex-shrink: 0;
       border: 1.5px solid var(--light-blue-border);
-      pointer-events: auto !important;
-      z-index: 100001 !important;
-      position: relative;
+      outline: none;
+      padding: 0;
+      margin: 0;
+      pointer-events: auto;
+      touch-action: manipulation;
     }
     
     .action-btn svg {
       width: 22px; height: 22px;
-      pointer-events: none; 
+      pointer-events: none;
     }
 
     .action-btn.close-btn { 
       font-size: 1.8rem; 
       color: var(--heart-red);
       border-color: var(--heart-red);
+      font-family: sans-serif;
+      line-height: 1;
     }
 
     .action-btn:hover { 
@@ -311,6 +307,7 @@
       justify-content: center;
       margin-top: 40px;
       transition: all 0.4s ease;
+      z-index: 1005;
     }
 
     #slider-images {
@@ -330,7 +327,7 @@
       filter: drop-shadow(0 0 2px rgba(0,0,0,0.12)) drop-shadow(0 15px 35px rgba(0,0,0,0.15));
       opacity: 0;
       transform: scale(0.96);
-      transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.8s ease;
+      transition: opacity 0.6s ease-in-out, transform 0.6s ease;
       pointer-events: none;
     }
 
@@ -344,7 +341,7 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
       color: var(--main-blue);
       border: 2px solid var(--light-blue-border);
       width: 55px; height: 55px;
@@ -356,8 +353,10 @@
       justify-content: center;
       box-shadow: 0 6px 15px rgba(0,0,0,0.08);
       transition: all 0.3s ease;
-      z-index: 1010;
+      z-index: 2000;
       user-select: none;
+      outline: none;
+      touch-action: manipulation;
     }
 
     .nav-btn:hover { 
@@ -373,6 +372,8 @@
     .slide-counter {
       position: absolute;
       bottom: 35px;
+      left: 50%;
+      transform: translateX(-50%);
       font-family: 'Fredoka', sans-serif;
       font-weight: 700;
       color: #555;
@@ -382,19 +383,19 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.06);
       border: 1.5px solid var(--light-blue-border);
       transition: all 0.3s ease;
-      z-index: 1010;
+      z-index: 2000;
     }
 
-    /* --- MODALITÀ SCHERMO INTERO (FULLSCREEN) FOTO --- */
+    /* --- MODALITÀ SCHERMO INTERO (FULLSCREEN FALLBACK) --- */
     .lightbox.is-fullscreen {
-      background-color: #000;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      background-color: #000 !important;
       backdrop-filter: none;
-    }
-    
-    .lightbox.is-fullscreen .lightbox-header {
-      top: 15px;
-      width: 95%;
-      max-width: 100%;
+      z-index: 99999 !important;
     }
     
     .lightbox.is-fullscreen .slider-container {
@@ -404,29 +405,20 @@
       margin-top: 0;
     }
     
-    .lightbox.is-fullscreen .slide {
-      filter: none; 
-    }
-    
     .lightbox.is-fullscreen .lightbox-title {
       opacity: 0;
-      pointer-events: none;
     }
     
     .lightbox.is-fullscreen .action-btn,
     .lightbox.is-fullscreen .nav-btn,
     .lightbox.is-fullscreen .slide-counter {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .lightbox.is-fullscreen .action-btn:hover,
-    .lightbox.is-fullscreen .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
-    /* Logica a "Comparsa" (Fade in/out dei controlli secondari: frecce e contatore) */
+    /* Controlli a Scomparsa */
+    .lightbox .lightbox-header,
     .lightbox .nav-btn,
     .lightbox .slide-counter {
       opacity: 0;
@@ -434,18 +426,19 @@
       transition: opacity 0.3s ease;
     }
 
+    .lightbox.show-controls .lightbox-header,
     .lightbox.show-controls .nav-btn,
     .lightbox.show-controls .slide-counter {
       opacity: 1;
       pointer-events: auto;
     }
 
-    /* --- VIDEO LIGHTBOX E NUOVI CONTROLLI --- */
+    /* --- VIDEO LIGHTBOX --- */
     .video-lightbox {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0; left: 0; width: 100vw; height: 100vh;
       background: #000;
-      z-index: 2000;
+      z-index: 3000;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -478,7 +471,7 @@
       right: 25px;
       display: flex;
       gap: 15px;
-      z-index: 2020;
+      z-index: 3020;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
@@ -490,22 +483,11 @@
     }
 
     .video-header-controls .action-btn {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-      pointer-events: auto; 
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
-    .video-header-controls .action-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    
-    .video-header-controls .action-btn.close-btn {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Barra di Avanzamento Video */
     .video-progress-wrapper {
       position: absolute;
       bottom: 30px;
@@ -515,12 +497,12 @@
       max-width: 800px;
       display: flex;
       align-items: center;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(5px);
       border-radius: 20px;
       padding: 10px 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      z-index: 2020;
+      z-index: 3020;
       opacity: 0;
       pointer-events: none;
       transition: all 0.3s ease;
@@ -539,29 +521,13 @@
       margin: 0;
     }
 
-    .video-progress-wrapper input[type=range]:focus {
-      outline: none;
-    }
+    .video-progress-wrapper input[type=range]:focus { outline: none; }
 
     .video-progress-wrapper input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
       height: 6px;
       cursor: pointer;
       background: linear-gradient(to right, var(--primary) var(--value, 0%), rgba(255,255,255,0.3) var(--value, 0%));
-      border-radius: 10px;
-    }
-
-    .video-progress-wrapper input[type=range]::-moz-range-track {
-      width: 100%;
-      height: 6px;
-      cursor: pointer;
-      background: rgba(255,255,255,0.3);
-      border-radius: 10px;
-    }
-
-    .video-progress-wrapper input[type=range]::-moz-range-progress {
-      background: var(--primary);
-      height: 6px;
       border-radius: 10px;
     }
 
@@ -576,57 +542,10 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
-    .video-progress-wrapper input[type=range]::-moz-range-thumb {
-      height: 16px;
-      width: 16px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    }
-
-    /* --- FOOTER --- */
-    footer { 
-      background: #fff; 
-      padding: 20px 10px 40px; 
-      border-top: 1px solid #eee;
-    }
-    .footer-container { 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      max-width: 1100px; 
-      margin: 0 auto; 
-    }
-    .footer-text { 
-      font-family: 'Grandstander', cursive; 
-      font-weight: 600; 
-      font-size: 1.2rem; 
-      color: #444; 
-    }
-    .footer-home-link { 
-      text-decoration: none; 
-      color: inherit; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 8px; 
-      vertical-align: middle;
-      transition: transform 0.2s ease;
-    }
-    .footer-home-link:hover { transform: scale(1.05); color: var(--main-blue); }
-    .footer-home-link img { width: 60px; height: auto; }
-
     /* --- MOBILE RESPONSIVE --- */
     @media (max-width: 600px) {
-      .btn-action {
-        font-size: 0.85rem;
-        padding: 8px 10px;
-      }
-      .slider-container {
-        height: 52vh;
-        width: 100%;
-      }
+      .btn-action { font-size: 0.85rem; padding: 8px 10px; }
+      .slider-container { height: 52vh; width: 100%; }
       .nav-btn {
         width: 46px; height: 46px;
         font-size: 1.1rem;
@@ -635,31 +554,11 @@
         bottom: 25px;
         transform: none;
       }
-      .nav-btn:hover { transform: scale(1.05); }
       .prev-btn { left: calc(50% - 80px); }
       .next-btn { right: calc(50% - 80px); }
-      .slide-counter {
-        bottom: 90px;
-        font-size: 0.85rem;
-        padding: 6px 16px;
-      }
-      .lightbox-header {
-        top: 15px;
-      }
-      .action-btn {
-        width: 42px; height: 42px;
-      }
-      .lightbox.is-fullscreen .nav-btn {
-        bottom: 40px;
-      }
-      .lightbox.is-fullscreen .slide-counter {
-        bottom: 100px;
-      }
-      .video-header-controls {
-        top: 15px;
-        right: 15px;
-        gap: 10px;
-      }
+      .slide-counter { bottom: 90px; font-size: 0.85rem; padding: 6px 16px; }
+      .lightbox-header { top: 15px; }
+      .action-btn { width: 42px; height: 42px; }
     }
   </style>
 </head>
@@ -702,7 +601,7 @@
   <div class="lightbox-header">
     <div class="lightbox-title" id="lb-title">Titolo Album</div>
     <div class="header-controls">
-      <div class="action-btn" onclick="togglePlay()" title="Riproduzione Automatica (Play/Pausa)">
+      <button type="button" class="action-btn" id="btn-toggle-play" onclick="togglePlay(event)" title="Riproduzione Automatica (Play/Pausa)">
         <svg id="play-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
         </svg>
@@ -710,14 +609,15 @@
           <rect x="6" y="4" width="4" height="16" fill="currentColor"></rect>
           <rect x="14" y="4" width="4" height="16" fill="currentColor"></rect>
         </svg>
-      </div>
+      </button>
       
-      <div class="action-btn" onclick="toggleFullscreen()" title="Schermo Intero">
+      <button type="button" class="action-btn" onclick="toggleFullscreen(event)" title="Schermo Intero">
         <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
         </svg>
-      </div>
-      <div class="action-btn close-btn" onclick="closeLightbox()" title="Chiudi">✕</div>
+      </button>
+      
+      <button type="button" class="action-btn close-btn" onclick="closeLightbox(event)" title="Chiudi">✕</button>
     </div>
   </div>
   
@@ -725,8 +625,8 @@
     <div id="slider-images"></div>
   </div>
   
-  <button class="nav-btn prev-btn" onclick="changeSlide(-1)" aria-label="Foto precedente">&#10094;</button>
-  <button class="nav-btn next-btn" onclick="changeSlide(1)" aria-label="Foto successiva">&#10095;</button>
+  <button type="button" class="nav-btn prev-btn" onclick="changeSlide(-1, event)" aria-label="Foto precedente">&#10094;</button>
+  <button type="button" class="nav-btn next-btn" onclick="changeSlide(1, event)" aria-label="Foto successiva">&#10095;</button>
   
   <div class="slide-counter" id="slide-counter">Foto 1 di X 🐼</div>
 </div>
@@ -737,7 +637,7 @@
   
   <div class="video-controls" id="video-controls">
     <div class="video-header-controls">
-      <div class="action-btn" onclick="toggleVideoPlay()" title="Play/Pausa">
+      <button type="button" class="action-btn" onclick="toggleVideoPlay(event)" title="Play/Pausa">
         <svg id="video-play-icon" style="display: none;" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
         </svg>
@@ -745,14 +645,14 @@
           <rect x="6" y="4" width="4" height="16" fill="currentColor"></rect>
           <rect x="14" y="4" width="4" height="16" fill="currentColor"></rect>
         </svg>
-      </div>
-      <div class="action-btn" onclick="forceRotateVideo()" title="Forza Rotazione Schermo">
+      </button>
+      <button type="button" class="action-btn" onclick="forceRotateVideo(event)" title="Forza Rotazione Schermo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
           <path d="M3 3v5h5"></path>
         </svg>
-      </div>
-      <div class="action-btn close-btn" onclick="closeVideo()" title="Chiudi Video">✕</div>
+      </button>
+      <button type="button" class="action-btn close-btn" onclick="closeVideo(event)" title="Chiudi Video">✕</button>
     </div>
 
     <div class="video-progress-wrapper" id="video-progress-wrapper">
@@ -762,7 +662,6 @@
 </div>
 
 <script>
-  // --- CONFIGURAZIONE DATA BASE ALBUM ---
   const albums = [
     {
       id: "album_2018",
@@ -814,7 +713,6 @@
     }
   ];
 
-  // --- GENERATORE CARD ---
   const gridContainer = document.getElementById('albums-container');
 
   function shrinkTitleToFit(el, minSize = 9) {
@@ -833,19 +731,19 @@
     const coverSrc = `${album.folderPath}1${album.extension}`;
 
     card.innerHTML = `
-      <div class="album-cover-wrapper">
+      <div class="album-cover-wrapper" onclick="openAlbum('${album.id}')">
         <img src="${coverSrc}" alt="${album.title}" loading="lazy">
       </div>
       <div class="album-title">${album.title}</div>
       <div class="card-actions">
-        <button class="btn-action" onclick="openAlbum('${album.id}')" title="Apri Album Foto">
+        <button type="button" class="btn-action" onclick="openAlbum('${album.id}', event)" title="Apri Album Foto">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
           Album
         </button>
-        <button class="btn-action" onclick="playVideo('${album.id}')" title="Guarda Video Slideshow">
+        <button type="button" class="btn-action" onclick="playVideo('${album.id}', event)" title="Guarda Video Slideshow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.4-2.2 1.5-2.5l13.5-4c1.1-.3 2.2.4 2.5 1.5l.6 1.4Z"></path>
             <path d="m6.2 5.3 3.1 3.9"></path>
@@ -867,59 +765,163 @@
     });
   });
 
-  // --- CONTROLLO VISORE LIGHTBOX FOTO ---
   let currentAlbum = null;
   let currentSlideIndex = 1;
   let controlsTimeout = null; 
   let isPlaying = false;
   let slideshowInterval = null;
 
-  // --- CONTROLLO VIDEO LIGHTBOX ---
-  const videoLightbox = document.getElementById('video-lightbox');
-  const albumVideo = document.getElementById('album-video');
-  const videoControls = document.getElementById('video-controls');
-  const videoPlayIcon = document.getElementById('video-play-icon');
-  const videoPauseIcon = document.getElementById('video-pause-icon');
-  const videoProgressBar = document.getElementById('video-progress-bar');
-  let currentVideoAlbumId = null;
-  let videoControlsTimeout = null;
-
-  // --- WAKE LOCK ---
-  let wakeLock = null;
-
-  async function requestWakeLock() {
-    if ('wakeLock' in navigator) {
-      try {
-        wakeLock = await navigator.wakeLock.request('screen');
-      } catch (err) {
-        console.error(`Wake Lock fallito: ${err.name}, ${err.message}`);
-      }
-    }
-  }
-
-  function releaseWakeLock() {
-    if (wakeLock !== null) {
-      wakeLock.release().then(() => { wakeLock = null; });
-    }
-  }
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      if (isPlaying || videoLightbox.classList.contains('active')) requestWakeLock();
-    }
-  });
-  
   const lightbox = document.getElementById('lightbox');
   const sliderImagesContainer = document.getElementById('slider-images');
   const lbTitle = document.getElementById('lb-title');
   const slideCounter = document.getElementById('slide-counter');
 
+  function openAlbum(albumId, e) {
+    if(e) e.stopPropagation();
+    currentAlbum = albums.find(a => a.id === albumId);
+    if (!currentAlbum) return;
+
+    currentSlideIndex = 1;
+    stopSlideshow();
+    
+    lbTitle.innerText = currentAlbum.title;
+    sliderImagesContainer.innerHTML = '';
+    
+    for(let i = 1; i <= currentAlbum.totalPhotos; i++) {
+      const img = document.createElement('img');
+      img.src = `${currentAlbum.folderPath}${i}${currentAlbum.extension}`;
+      img.className = 'slide';
+      img.alt = `Foto ${i} dell'album ${currentAlbum.title}`;
+      if(i === 1) img.classList.add('active');
+      sliderImagesContainer.appendChild(img);
+    }
+    
+    updateCounter();
+    lightbox.classList.add('active');
+    lightbox.classList.add('show-controls');
+    document.body.style.overflow = 'hidden';
+
+    startControlsTimeout();
+  }
+
+  function closeLightbox(e) {
+    if(e) e.stopPropagation();
+    stopSlideshow(); 
+    lightbox.classList.remove('active');
+    lightbox.classList.remove('is-fullscreen');
+    lightbox.classList.remove('show-controls');
+    
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      sliderImagesContainer.innerHTML = '';
+    }, 300);
+  }
+
+  function changeSlide(direction, e) {
+    if(e) e.stopPropagation();
+    const slides = document.querySelectorAll('.slide');
+    if(slides.length === 0) return;
+
+    slides[currentSlideIndex - 1].classList.remove('active');
+    
+    currentSlideIndex += direction;
+    if (currentSlideIndex > currentAlbum.totalPhotos) currentSlideIndex = 1;
+    else if (currentSlideIndex < 1) currentSlideIndex = currentAlbum.totalPhotos;
+    
+    slides[currentSlideIndex - 1].classList.add('active');
+    updateCounter();
+    
+    if (lightbox.classList.contains('show-controls')) {
+      startControlsTimeout();
+    }
+  }
+
+  function updateCounter() {
+    slideCounter.innerText = `Foto ${currentSlideIndex} di ${currentAlbum.totalPhotos} 🐼`;
+  }
+
+  function togglePlay(e) {
+    if(e) e.stopPropagation();
+    if (isPlaying) {
+      stopSlideshow();
+    } else {
+      if (!lightbox.classList.contains('is-fullscreen')) {
+        toggleFullscreen(null);
+      }
+      startSlideshow();
+    }
+  }
+
+  function startSlideshow() {
+    isPlaying = true;
+    document.getElementById('play-icon').style.display = 'none';
+    document.getElementById('pause-icon').style.display = 'block';
+    
+    changeSlide(1);
+    
+    slideshowInterval = setInterval(() => {
+      if (currentSlideIndex === currentAlbum.totalPhotos) {
+        stopSlideshow();
+        
+        if (lightbox.classList.contains('is-fullscreen')) {
+          toggleFullscreen(null);
+        }
+        
+        changeSlide(1);
+        
+        lightbox.classList.add('show-controls');
+        clearControlsTimeout();
+      } else {
+        changeSlide(1);
+      }
+    }, 3500);
+  }
+
+  function stopSlideshow() {
+    isPlaying = false;
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    if (playIcon) playIcon.style.display = 'block';
+    if (pauseIcon) pauseIcon.style.display = 'none';
+
+    if (slideshowInterval) {
+      clearInterval(slideshowInterval);
+      slideshowInterval = null;
+    }
+  }
+
+  function toggleFullscreen(e) {
+    if(e) e.stopPropagation();
+    
+    if (!lightbox.classList.contains('is-fullscreen')) {
+      lightbox.classList.add('is-fullscreen');
+      let docEl = document.documentElement;
+      
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => {});
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      }
+    } else {
+      lightbox.classList.remove('is-fullscreen');
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      }
+    }
+  }
+
   function startControlsTimeout() {
     clearControlsTimeout();
-    if (window.innerWidth <= 600 && lightbox.classList.contains('show-controls')) {
+    if (lightbox.classList.contains('show-controls')) {
       controlsTimeout = setTimeout(() => {
         lightbox.classList.remove('show-controls');
-      }, 3000);
+      }, 3500);
     }
   }
 
@@ -930,34 +932,32 @@
     }
   }
 
-  // --- LOGICA VIDEO SLIDESHOW (MP4) ---
-  function playVideo(albumId) {
+  /* --- CONTROLLO VIDEO SLIDESHOW --- */
+  const videoLightbox = document.getElementById('video-lightbox');
+  const albumVideo = document.getElementById('album-video');
+  const videoControls = document.getElementById('video-controls');
+  const videoPlayIcon = document.getElementById('video-play-icon');
+  const videoPauseIcon = document.getElementById('video-pause-icon');
+  const videoProgressBar = document.getElementById('video-progress-bar');
+  let videoControlsTimeout = null;
+
+  function playVideo(albumId, e) {
+    if(e) e.stopPropagation();
     const album = albums.find(a => a.id === albumId);
     if(!album || !album.videoPath) return;
     
-    currentVideoAlbumId = albumId;
     albumVideo.src = album.videoPath;
     videoLightbox.classList.add('active');
-    
     videoControls.classList.add('show'); 
     
-    albumVideo.play().catch(e => console.log("Autoplay bloccato:", e));
-    
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock('landscape').catch(e => console.warn('Rotazione orizzontale non supportata:', e));
-    }
-
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().catch(e => console.log(e));
-    }
-    
-    requestWakeLock();
+    albumVideo.play().catch(() => {});
     startVideoControlsTimeout();
   }
 
-  function toggleVideoPlay() {
+  function toggleVideoPlay(e) {
+    if(e) e.stopPropagation();
     if (albumVideo.paused) {
-      albumVideo.play();
+      albumVideo.play().catch(() => {});
     } else {
       albumVideo.pause();
     }
@@ -974,47 +974,41 @@
     videoPauseIcon.style.display = 'none';
   });
 
-  function forceRotateVideo() {
+  function forceRotateVideo(e) {
+    if(e) e.stopPropagation();
+    
+    if (albumVideo.webkitEnterFullscreen) {
+      albumVideo.webkitEnterFullscreen();
+      return;
+    }
+
     if (screen.orientation && screen.orientation.lock) {
-      const currentType = screen.orientation.type;
-      if (currentType.includes('portrait')) {
-        screen.orientation.lock('landscape').catch(e => console.warn(e));
-      } else {
-        screen.orientation.lock('portrait').catch(e => console.warn(e));
-      }
+      const type = screen.orientation.type.includes('portrait') ? 'landscape' : 'portrait';
+      screen.orientation.lock(type).catch(() => {});
     }
     startVideoControlsTimeout();
   }
 
-  function closeVideo() {
-    albumVideo.pause();
-    albumVideo.src = "";
+  function closeVideo(e) {
+    if(e) e.stopPropagation();
+    try { albumVideo.pause(); } catch(err) {}
+    albumVideo.removeAttribute('src'); 
+    albumVideo.load();
     videoLightbox.classList.remove('active');
-    
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(e => console.log(e));
-    }
-    
-    releaseWakeLock();
     clearTimeout(videoControlsTimeout);
-    
-    window.location.href = 'fotoalbum.html';
   }
 
-  albumVideo.addEventListener('ended', () => {
-    closeVideo(); 
-  });
+  albumVideo.addEventListener('ended', closeVideo);
 
   function startVideoControlsTimeout() {
     clearTimeout(videoControlsTimeout);
     videoControlsTimeout = setTimeout(() => {
       videoControls.classList.remove('show');
-    }, 3000);
+    }, 3500);
   }
 
   videoLightbox.addEventListener('click', (e) => {
     if (e.target.closest('.action-btn') || e.target.closest('.video-progress-wrapper')) return;
-    
     if (videoControls.classList.contains('show')) {
       videoControls.classList.remove('show');
       clearTimeout(videoControlsTimeout);
@@ -1038,221 +1032,34 @@
     e.target.style.setProperty('--value', e.target.value + '%');
   });
 
-  videoProgressBar.addEventListener('mousedown', () => clearTimeout(videoControlsTimeout));
-  videoProgressBar.addEventListener('touchstart', () => clearTimeout(videoControlsTimeout), {passive: true});
-  videoProgressBar.addEventListener('mouseup', () => startVideoControlsTimeout());
-  videoProgressBar.addEventListener('touchend', () => startVideoControlsTimeout(), {passive: true});
-
-
-  // --- LOGICA SLIDESHOW IMMAGINI ---
-  function togglePlay() {
-    if (isPlaying) stopSlideshow();
-    else startSlideshow();
-  }
-
-  function startSlideshow() {
-    isPlaying = true;
-    document.getElementById('play-icon').style.display = 'none';
-    document.getElementById('pause-icon').style.display = 'block';
-    
-    if (!lightbox.classList.contains('is-fullscreen')) {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(e => console.log(e));
-      }
-      enterFullscreenCSS();
-    }
-
-    changeSlide(1);
-    slideshowInterval = setInterval(() => changeSlide(1), 5000); 
-    requestWakeLock();
-  }
-
-  function stopSlideshow() {
-    isPlaying = false;
-    document.getElementById('play-icon').style.display = 'block';
-    document.getElementById('pause-icon').style.display = 'none';
-    
-    if (slideshowInterval) {
-        clearInterval(slideshowInterval);
-        slideshowInterval = null;
-    }
-    releaseWakeLock();
-  }
-
-  function openAlbum(albumId) {
-    currentAlbum = albums.find(a => a.id === albumId);
-    currentSlideIndex = 1;
-    
-    stopSlideshow();
-    lbTitle.innerText = currentAlbum.title;
-    sliderImagesContainer.innerHTML = '';
-    
-    for(let i = 1; i <= currentAlbum.totalPhotos; i++) {
-      const img = document.createElement('img');
-      img.src = `${currentAlbum.folderPath}${i}${currentAlbum.extension}`;
-      img.className = 'slide';
-      img.alt = `Foto ${i} dell'album ${currentAlbum.title}`;
-      if(i === 1) img.classList.add('active');
-      sliderImagesContainer.appendChild(img);
-    }
-    
-    updateCounter();
-    lightbox.classList.add('active');
-    lightbox.classList.add('show-controls');
-    document.body.style.overflow = 'hidden';
-    
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().then(() => {
-         const activeImg = document.querySelector('.slide.active');
-         if(activeImg) lockOrientationBasedOnImage(activeImg);
-      }).catch(e => console.log(e));
-    }
-    
-    enterFullscreenCSS();
-    startControlsTimeout();
-  }
-
-  function closeLightbox() {
-    stopSlideshow(); 
-    
-    lightbox.classList.remove('active');
-    exitFullscreenCSS();
-    
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(e => console.log(e));
-    }
-
-    document.body.style.overflow = '';
-    setTimeout(() => {
-      sliderImagesContainer.innerHTML = '';
-      window.location.href = 'fotoalbum.html';
-    }, 450);
-  }
-
-  function changeSlide(direction) {
-    const slides = document.querySelectorAll('.slide');
-    if(slides.length === 0) return;
-
-    let isWrapping = false; 
-
-    if (direction === 1 && currentSlideIndex === currentAlbum.totalPhotos) {
-        isWrapping = true;
-        if (isPlaying) stopSlideshow();
-        if (lightbox.classList.contains('is-fullscreen')) {
-            exitFullscreenCSS();
-            if (document.fullscreenElement) document.exitFullscreen().catch(e => console.log(e));
-        }
-    }
-
-    slides[currentSlideIndex - 1].classList.remove('active');
-    
-    currentSlideIndex += direction;
-    if (currentSlideIndex > currentAlbum.totalPhotos) currentSlideIndex = 1;
-    else if (currentSlideIndex < 1) currentSlideIndex = currentAlbum.totalPhotos;
-    
-    const newActiveSlide = slides[currentSlideIndex - 1];
-    newActiveSlide.classList.add('active');
-    updateCounter();
-    
-    if (isWrapping) {
-        lightbox.classList.add('show-controls');
-        clearControlsTimeout();
-    } else if (lightbox.classList.contains('show-controls')) {
-        startControlsTimeout();
-    }
-    
-    lockOrientationBasedOnImage(newActiveSlide);
-  }
-
-  function updateCounter() {
-    slideCounter.innerText = `Foto ${currentSlideIndex} di ${currentAlbum.totalPhotos} 🐼`;
-  }
-
-  function lockOrientationBasedOnImage(img) {
-      if (!document.fullscreenElement || !screen.orientation || !screen.orientation.lock) return;
-
-      const applyLock = (image) => {
-          try {
-              if (image.naturalWidth > image.naturalHeight) {
-                  screen.orientation.lock('landscape').catch(e => console.warn(e));
-              } else {
-                  screen.orientation.lock('portrait').catch(e => console.warn(e));
-              }
-          } catch(e) { }
-      };
-
-      if (img.complete) applyLock(img);
-      else img.onload = () => applyLock(img);
-  }
-
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().then(() => {
-           const activeImg = document.querySelector('.slide.active');
-           if(activeImg) lockOrientationBasedOnImage(activeImg);
-        }).catch(e => console.log(e));
-      }
-      enterFullscreenCSS();
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(e => console.log(e));
-      }
-      exitFullscreenCSS();
-    }
-  }
-
-  function enterFullscreenCSS() {
-    lightbox.classList.add('is-fullscreen');
-    if (lightbox.classList.contains('show-controls')) startControlsTimeout();
-  }
-
-  function exitFullscreenCSS() {
-    lightbox.classList.remove('is-fullscreen');
-    clearControlsTimeout(); 
-    if (screen.orientation && screen.orientation.unlock) {
-      screen.orientation.unlock();
-    }
-  }
-
-  window.matchMedia("(orientation: landscape)").addEventListener("change", e => {
-    if (lightbox.classList.contains('active')) {
-      if (e.matches) enterFullscreenCSS();
-      else exitFullscreenCSS();
-    }
-  });
-
-  document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement && lightbox.classList.contains('is-fullscreen')) {
-      exitFullscreenCSS();
-    }
-  });
-
+  /* --- SWIPE TOUCH SU MOBILE --- */
   let touchStartX = 0;
   let touchStartY = 0;
   let touchEndX = 0;
   let isSwiping = false;
-  const SWIPE_THRESHOLD = 40;
 
   lightbox.addEventListener('touchstart', e => {
+    if (e.target.closest('.action-btn') || e.target.closest('.nav-btn')) return;
     touchStartX = e.changedTouches[0].screenX;
     touchStartY = e.changedTouches[0].screenY;
     isSwiping = false;
   }, {passive: true});
 
   lightbox.addEventListener('touchmove', e => {
+    if (e.target.closest('.action-btn') || e.target.closest('.nav-btn')) return;
     let moveX = e.changedTouches[0].screenX;
     let moveY = e.changedTouches[0].screenY;
     if (Math.abs(moveX - touchStartX) > 10 || Math.abs(moveY - touchStartY) > 10) isSwiping = true;
   }, {passive: true});
 
   lightbox.addEventListener('touchend', e => {
+    if (e.target.closest('.action-btn') || e.target.closest('.nav-btn')) return;
     touchEndX = e.changedTouches[0].screenX;
     if (isSwiping) {
       let diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > SWIPE_THRESHOLD) {
-        if (diff > 0) changeSlide(1); 
-        else changeSlide(-1); 
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) changeSlide(1, null); 
+        else changeSlide(-1, null); 
       }
       setTimeout(() => { isSwiping = false; }, 100); 
     }
@@ -1262,27 +1069,24 @@
     if (isSwiping) return;
     if (e.target.closest('.nav-btn') || e.target.closest('.action-btn')) return;
 
-    if (e.target.classList.contains('slide') || e.target === lightbox || e.target.id === 'slider-images' || e.target.classList.contains('slider-container')) {
-      if (lightbox.classList.contains('is-fullscreen') || window.innerWidth <= 600 || e.target.classList.contains('slide')) {
-          lightbox.classList.toggle('show-controls');
-          if (lightbox.classList.contains('show-controls')) startControlsTimeout();
-          else clearControlsTimeout();
-      } else {
-          if(e.target !== document.querySelector('.slide.active')) closeLightbox();
-      }
+    lightbox.classList.toggle('show-controls');
+    if (lightbox.classList.contains('show-controls')) {
+      startControlsTimeout();
+    } else {
+      clearControlsTimeout();
     }
   });
 
   document.addEventListener('keydown', function(e) {
     if(lightbox.classList.contains('active')) {
-      if(e.key === 'ArrowRight') changeSlide(1);
-      if(e.key === 'ArrowLeft') changeSlide(-1);
-      if(e.key === 'Escape') closeLightbox();
+      if(e.key === 'ArrowRight') changeSlide(1, null);
+      if(e.key === 'ArrowLeft') changeSlide(-1, null);
+      if(e.key === 'Escape') closeLightbox(null);
     }
     
     if(videoLightbox.classList.contains('active')) {
-      if(e.key === 'Escape') closeVideo();
-      if(e.key === ' ') toggleVideoPlay();
+      if(e.key === 'Escape') closeVideo(null);
+      if(e.key === ' ') toggleVideoPlay(null);
     }
   });
 </script>
