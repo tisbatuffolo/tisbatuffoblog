@@ -187,6 +187,11 @@
       "nome": "Valtellina",
       "tipo": "girolungo",
       "ricorrenza": "singola"
+    },
+    {
+      "nome": "Davide",
+      "tipo": "compleanno",
+      "ricorrenza": "annuale"
     }
   ],
   "2026-10-09": [
