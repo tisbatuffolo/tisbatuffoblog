@@ -237,5 +237,12 @@
       "tipo": "girolungo",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-12-08": [
+    {
+      "nome": "Tortel",
+      "tipo": "evento",
+      "ricorrenza": "annuale"
+    }
   ]
 }
