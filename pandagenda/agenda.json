@@ -167,5 +167,26 @@
       "tipo": "evento",
       "ricorrenza": "annuale"
     }
+  ],
+  "2026-09-18": [
+    {
+      "nome": "Valtellina",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-09-19": [
+    {
+      "nome": "Bernina",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-09-20": [
+    {
+      "nome": "Valtellina",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
   ]
 }
