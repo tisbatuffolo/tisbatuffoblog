@@ -167,5 +167,87 @@
       "tipo": "evento",
       "ricorrenza": "annuale"
     }
+  ],
+  "2026-09-18": [
+    {
+      "nome": "Valtellina",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-09-19": [
+    {
+      "nome": "Valtellina",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-09-20": [
+    {
+      "nome": "Valtellina",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    },
+    {
+      "nome": "Davide",
+      "tipo": "compleanno",
+      "ricorrenza": "annuale"
+    }
+  ],
+  "2026-10-09": [
+    {
+      "nome": "Tiramisù",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-10-10": [
+    {
+      "nome": "Tiramisù",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-10-11": [
+    {
+      "nome": "Tiramisù",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-12-03": [
+    {
+      "nome": "Lipsia",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-12-04": [
+    {
+      "nome": "Lipsia",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-12-05": [
+    {
+      "nome": "Lipsia",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-12-06": [
+    {
+      "nome": "Lipsia",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2026-12-08": [
+    {
+      "nome": "Tortel",
+      "tipo": "evento",
+      "ricorrenza": "annuale"
+    }
   ]
 }
