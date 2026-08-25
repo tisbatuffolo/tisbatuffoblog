@@ -13,7 +13,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { titolo, imageB64, targetDir, jsFilePath, arrayName, data } = req.body;
+    // Otteniamo solo i dati che pandosità.html effettivamente invia
+    const { sezione, imageB64, mimeType } = req.body;
 
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
     const REPO_OWNER = "tisbatuffolo";
@@ -23,17 +24,72 @@ export default async function handler(req, res) {
       throw new Error("Configurazione GitHub (GITHUB_TOKEN) mancante in Vercel.");
     }
 
-    // Manteniamo i path corretti specifici per la sezione pandosita
-    const finalTargetDir = targetDir.startsWith("pandosita/") ? targetDir : `pandosita/${targetDir}`;
-    const finalJsFilePath = jsFilePath.startsWith("pandosita/") ? jsFilePath : `pandosita/${jsFilePath}`;
+    if (!sezione || !imageB64) {
+      throw new Error("Dati mancanti: sezione o immagine non forniti dal client.");
+    }
 
-    // 1. Genera un nome file pulito basato sul titolo
-    const cleanFileName = titolo.replace(/[^a-zA-Z0-9 \-_]/g, '').trim() + '.jpg';
-    const imageFullPath = `${finalTargetDir}/${cleanFileName}`;
+    // Mappatura delle directory, prefissi e formati in base alla sezione
+    const configMap = {
+      'sticker': { dir: 'img/sticker', prefix: 'sticker', ext: 'webp' },
+      'gif': { dir: 'img/gif', prefix: 'pandagif', ext: 'gif' },
+      'sbatuffolart': { dir: 'img/sbatuffolart', prefix: 'sbatuffolart', ext: 'jpg' },
+      'sbatuffolai': { dir: 'img/sbatuffolAI', prefix: 'sbatuffolai', ext: 'jpg' },
+      'lulu': { dir: 'img/lulu', prefix: 'lulu', ext: 'jpg' },
+      'sfigatini': { dir: 'img/sfigatini', prefix: 'sfigatini', ext: 'jpg' }
+    };
+
+    const config = configMap[sezione];
+    if (!config) {
+      throw new Error(`Sezione non riconosciuta: ${sezione}`);
+    }
 
     // ==========================================
-    // STEP 1: CARICA L'IMMAGINE SU GITHUB
+    // STEP 1: TROVA L'ULTIMO INDICE (NUMERO SEQUENZIALE) NELLA CARTELLA
     // ==========================================
+    const dirRes = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${config.dir}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github+json",
+        }
+      }
+    );
+
+    let nextIndex = 1;
+
+    if (dirRes.ok) {
+      const files = await dirRes.json();
+      let maxIndex = 0;
+      
+      // Cerca file nel formato "prefisso (numero).estensione" es. "sticker (42).webp"
+      const regex = new RegExp(`^${config.prefix}\\s*\\((\\d+)\\)\\.[a-z0-9]+$`, 'i');
+      
+      for (const file of files) {
+        if (file.type === 'file') {
+          const match = file.name.match(regex);
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num > maxIndex) {
+              maxIndex = num;
+            }
+          }
+        }
+      }
+      // Il prossimo numero disponibile
+      nextIndex = maxIndex + 1;
+    } else if (dirRes.status !== 404) {
+      // Se la cartella restituisce 404 significa che è vuota o nuova, partirà da 1.
+      const errorText = await dirRes.text();
+      throw new Error(`Errore nel recupero della cartella ${config.dir}: ${errorText}`);
+    }
+
+    // ==========================================
+    // STEP 2: COSTRUISCI IL NOME E CARICA L'IMMAGINE
+    // ==========================================
+    const cleanFileName = `${config.prefix} (${nextIndex}).${config.ext}`;
+    const imageFullPath = `${config.dir}/${cleanFileName}`;
+
     const uploadImgRes = await fetch(
       `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${imageFullPath}`,
       {
@@ -44,7 +100,7 @@ export default async function handler(req, res) {
           Accept: "application/vnd.github+json",
         },
         body: JSON.stringify({
-          message: `Aggiunta immagine Pandosita: ${titolo}`,
+          message: `Aggiunta nuova pandosità: ${cleanFileName} in ${sezione}`,
           content: imageB64 
         })
       }
@@ -52,100 +108,11 @@ export default async function handler(req, res) {
 
     if (!uploadImgRes.ok) {
         const errorText = await uploadImgRes.text();
-        throw new Error(`Errore caricamento immagine: ${errorText}`);
+        throw new Error(`Errore caricamento immagine su GitHub: ${errorText}`);
     }
 
-    // ==========================================
-    // STEP 2: SCARICA IL FILE JS ESISTENTE
-    // ==========================================
-    const getJsFile = await fetch(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${finalJsFilePath}`,
-      {
-        headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
-          Accept: "application/vnd.github+json",
-        }
-      }
-    );
-
-    let sha = null;
-    let decodedContent = "";
-
-    if (getJsFile.ok) {
-        const jsFileData = await getJsFile.json();
-        sha = jsFileData.sha;
-        decodedContent = Buffer.from(jsFileData.content, 'base64').toString('utf8');
-    } else if (getJsFile.status === 404) {
-        decodedContent = `const ${arrayName} = [];\n`;
-    } else {
-        const errorText = await getJsFile.text();
-        throw new Error(`Impossibile recuperare il file JS: ${finalJsFilePath}. Dettaglio: ${errorText}`);
-    }
-
-    // ==========================================
-    // STEP 3: MODIFICA IL FILE JS
-    // ==========================================
-    const arrayRegex = new RegExp(`(const\\s+${arrayName}\\s*=\\s*)(\\[[\\s\\S]*?\\])(\\s*;)`);
-    const match = decodedContent.match(arrayRegex);
-
-    if (!match) {
-        throw new Error(`Impossibile trovare l'array ${arrayName} nel file JS.`);
-    }
-
-    let currentArray = [];
-    try {
-        currentArray = new Function(`return ${match[2]}`)();
-    } catch (e) {
-        throw new Error("Errore nel parsing dell'array interno al file .js");
-    }
-
-    // Costruiamo il nuovo elemento da aggiungere all'array
-    const newItem = {
-        "titolo": titolo,
-        "immagine": cleanFileName
-    };
-    
-    // Se è prevista una data (opzionale), la aggiungiamo all'oggetto
-    if (data) {
-        newItem.data = data;
-    }
-
-    currentArray.push(newItem);
-
-    const newArrayString = JSON.stringify(currentArray, null, 4);
-    decodedContent = decodedContent.replace(arrayRegex, `$1${newArrayString}$3`);
-
-    // ==========================================
-    // STEP 4: SALVA IL FILE JS SU GITHUB
-    // ==========================================
-    const bodyData = {
-      message: `Aggiornato array in ${finalJsFilePath} per ${titolo}`,
-      content: Buffer.from(decodedContent).toString("base64")
-    };
-    
-    if (sha) {
-        bodyData.sha = sha;
-    }
-
-    const updateJsRes = await fetch(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${finalJsFilePath}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
-          "Content-Type": "application/json",
-          Accept: "application/vnd.github+json",
-        },
-        body: JSON.stringify(bodyData)
-      }
-    );
-
-    if (!updateJsRes.ok) {
-      const errorMsg = await updateJsRes.text();
-      throw new Error(`Errore durante l'aggiornamento del file JS: ${errorMsg}`);
-    }
-
-    return res.status(200).json({ message: "Immagine e Dati salvati con successo!" });
+    // Qui a differenza di pandamusic NON serve aggiornare alcun array JS
+    return res.status(200).json({ message: "Immagine salvata con successo!", fileName: cleanFileName });
 
   } catch (error) {
     console.error(error);
