@@ -1162,15 +1162,15 @@
   async function inviaDatiApi(sezione, base64Data, mimeType) {
       try {
           // SOLUZIONE FRONTEND: Utilizzo path relativo per risolvere i problemi di domini CORS asimmetrici
-          const response = await fetch('/api/add_pandositaAPI', { 
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                  sezione: sezione,
-                  imageB64: base64Data,
-                  mimeType: mimeType
-              })
-          });
+  const response = await fetch('https://tisbatuffoblog.vercel.app/api/add_pandositaAPI', { 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        sezione: sezione, 
+        imageB64: base64Data, 
+        mimeType: mimeType 
+    })
+});
           
           if (response.ok) {
               alert('Pandosità aggiunta con successo! La pagina si aggiornerà per mostrare le nuove immagini.');
