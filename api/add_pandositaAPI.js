@@ -1,4 +1,3 @@
-// PREVENZIONE BACKEND: Aumenta il limite del body per le immagini Base64
 export const config = {
   api: {
     bodyParser: {
@@ -22,7 +21,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Otteniamo solo i dati che pandosità.html effettivamente invia
     const { sezione, imageB64, mimeType } = req.body;
 
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -53,7 +51,7 @@ export default async function handler(req, res) {
     }
 
     // ==========================================
-    // STEP 1: TROVA L'ULTIMO INDICE (NUMERO SEQUENZIALE) NELLA CARTELLA
+    // STEP 1: TROVA L'ULTIMO INDICE NELLA CARTELLA
     // ==========================================
     const dirRes = await fetch(
       `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${configTarget.dir}`,
@@ -71,7 +69,6 @@ export default async function handler(req, res) {
       const files = await dirRes.json();
       let maxIndex = 0;
       
-      // Cerca file nel formato "prefisso (numero).estensione" es. "sticker (42).webp"
       const regex = new RegExp(`^${configTarget.prefix}\\s*\\((\\d+)\\)\\.[a-z0-9]+$`, 'i');
       
       for (const file of files) {
@@ -80,15 +77,13 @@ export default async function handler(req, res) {
           if (match) {
             const num = parseInt(match[1], 10);
             if (num > maxIndex) {
-              maxIndex = maxIndex < num ? num : maxIndex;
+              maxIndex = num;
             }
           }
         }
       }
-      // Il prossimo numero disponibile
       nextIndex = maxIndex + 1;
     } else if (dirRes.status !== 404) {
-      // Se la cartella restituisce 404 significa che è vuota o nuova, partirà da 1.
       const errorText = await dirRes.text();
       throw new Error(`Errore nel recupero della cartella ${configTarget.dir}: ${errorText}`);
     }
@@ -120,7 +115,6 @@ export default async function handler(req, res) {
         throw new Error(`Errore caricamento immagine su GitHub: ${errorText}`);
     }
 
-    // Qui a differenza di pandamusic NON serve aggiornare alcun array JS
     return res.status(200).json({ message: "Immagine salvata con successo!", fileName: cleanFileName });
 
   } catch (error) {
@@ -128,7 +122,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
-
-// Esportazioni in stile CommonJS identiche a quelle funzionanti di add_pandaccessorioAPI
-module.exports = handler;
-module.exports.config = config;
