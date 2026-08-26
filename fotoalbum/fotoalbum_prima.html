@@ -542,22 +542,6 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
-    /* --- ROTAZIONE FORZATA VIDEO (fallback CSS, funziona su tutti gli smartphone) --- */
-    .video-lightbox.force-rotate {
-      width: 100vh;
-      height: 100vw;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(90deg);
-      transform-origin: center center;
-    }
-
-    .action-btn.active {
-      background: var(--heart-red);
-      color: #fff;
-      border-color: var(--heart-red);
-    }
-
     /* FOOTER */
     footer { background: #fff; padding: 20px 10px 40px; border-top: 1px solid #eee; }
     .footer-container { display: flex; justify-content: center; align-items: center; position: relative; max-width: 1100px; margin: 0 auto; }
@@ -678,7 +662,7 @@
           <rect x="14" y="4" width="4" height="16" fill="currentColor"></rect>
         </svg>
       </button>
-      <button type="button" class="action-btn" id="btn-force-rotate" onclick="forceRotateVideo(event)" title="Forza Rotazione Schermo">
+      <button type="button" class="action-btn" onclick="forceRotateVideo(event)" title="Forza Rotazione Schermo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
           <path d="M3 3v5h5"></path>
@@ -980,10 +964,6 @@
     
     albumVideo.src = album.videoPath;
     videoLightbox.classList.add('active');
-    videoLightbox.classList.remove('force-rotate');
-    isVideoForceRotated = false;
-    const rotateBtn = document.getElementById('btn-force-rotate');
-    if (rotateBtn) rotateBtn.classList.remove('active');
     videoControls.classList.add('show'); 
     
     albumVideo.play().catch(() => {});
@@ -1010,35 +990,33 @@
     videoPauseIcon.style.display = 'none';
   });
 
-let isVideoForceRotated = false;
+async function forceRotateVideo(e) {
+  if(e) e.stopPropagation();
+  
+  if (albumVideo.webkitEnterFullscreen) {
+    albumVideo.webkitEnterFullscreen();
+    return;
+  }
 
-function forceRotateVideo(e) {
-  if (e) e.stopPropagation();
-
-  // Rotazione tramite CSS: funziona su qualsiasi smartphone (iOS incluso),
-  // a differenza della Screen Orientation API che su molti browser mobile
-  // (in particolare Safari/iOS) non è supportata e fallisce silenziosamente.
-  isVideoForceRotated = !isVideoForceRotated;
-  videoLightbox.classList.toggle('force-rotate', isVideoForceRotated);
-
-  const btn = document.getElementById('btn-force-rotate');
-  if (btn) btn.classList.toggle('active', isVideoForceRotated);
-
-  // Bonus: se il browser lo supporta, prova anche lo schermo intero nativo
-  // per nascondere la barra degli indirizzi. Puramente estetico: la rotazione
-  // funziona comunque anche se questa parte fallisce o non è supportata.
-  if (isVideoForceRotated && !document.fullscreenElement) {
-    try {
+  try {
+    // Richiede lo schermo intero prima di cambiare l'orientamento
+    if (!document.fullscreenElement) {
       if (videoLightbox.requestFullscreen) {
-        videoLightbox.requestFullscreen().catch(() => {});
+        await videoLightbox.requestFullscreen();
       } else if (videoLightbox.webkitRequestFullscreen) {
         videoLightbox.webkitRequestFullscreen();
       }
-    } catch (err) {
-      // Ignorato: non blocca la rotazione via CSS
     }
-  }
 
+    // Esegue il cambio di orientamento solo se supportato dal browser
+    if (screen.orientation && screen.orientation.lock) {
+      const type = screen.orientation.type.includes('portrait') ? 'landscape' : 'portrait';
+      await screen.orientation.lock(type);
+    }
+  } catch (err) {
+    console.warn("Rotazione schermo non consentita o non supportata dal browser:", err);
+  }
+  
   startVideoControlsTimeout();
 }
 
@@ -1048,14 +1026,6 @@ function forceRotateVideo(e) {
     albumVideo.removeAttribute('src'); 
     albumVideo.load();
     videoLightbox.classList.remove('active');
-    videoLightbox.classList.remove('force-rotate');
-    isVideoForceRotated = false;
-    const rotateBtn = document.getElementById('btn-force-rotate');
-    if (rotateBtn) rotateBtn.classList.remove('active');
-    if (document.fullscreenElement) {
-      if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-    }
     clearTimeout(videoControlsTimeout);
   }
 
