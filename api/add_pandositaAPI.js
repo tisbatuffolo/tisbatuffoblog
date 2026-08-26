@@ -1,5 +1,5 @@
 // PREVENZIONE BACKEND: Aumenta il limite del body per le immagini Base64
-const config = {
+export const config = {
   api: {
     bodyParser: {
       sizeLimit: '10mb',
@@ -7,7 +7,7 @@ const config = {
   },
 };
 
-async function handler(req, res) {
+export default async function handler(req, res) {
   // Configurazione CORS speculare agli altri endpoint
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
