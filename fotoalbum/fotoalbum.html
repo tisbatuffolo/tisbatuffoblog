@@ -990,20 +990,35 @@
     videoPauseIcon.style.display = 'none';
   });
 
-  function forceRotateVideo(e) {
-    if(e) e.stopPropagation();
-    
-    if (albumVideo.webkitEnterFullscreen) {
-      albumVideo.webkitEnterFullscreen();
-      return;
+async function forceRotateVideo(e) {
+  if(e) e.stopPropagation();
+  
+  if (albumVideo.webkitEnterFullscreen) {
+    albumVideo.webkitEnterFullscreen();
+    return;
+  }
+
+  try {
+    // Richiede lo schermo intero prima di cambiare l'orientamento
+    if (!document.fullscreenElement) {
+      if (videoLightbox.requestFullscreen) {
+        await videoLightbox.requestFullscreen();
+      } else if (videoLightbox.webkitRequestFullscreen) {
+        videoLightbox.webkitRequestFullscreen();
+      }
     }
 
+    // Esegue il cambio di orientamento solo se supportato dal browser
     if (screen.orientation && screen.orientation.lock) {
       const type = screen.orientation.type.includes('portrait') ? 'landscape' : 'portrait';
-      screen.orientation.lock(type).catch(() => {});
+      await screen.orientation.lock(type);
     }
-    startVideoControlsTimeout();
+  } catch (err) {
+    console.warn("Rotazione schermo non consentita o non supportata dal browser:", err);
   }
+  
+  startVideoControlsTimeout();
+}
 
   function closeVideo(e) {
     if(e) e.stopPropagation();
