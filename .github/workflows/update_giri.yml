@@ -1,0 +1,57 @@
+name: Aggiorna Giri Automaticamente
+
+on:
+  schedule:
+    # Esegue l'azione 2 volte al giorno (alle 08:00 e alle 20:00 UTC)
+    - cron: '0 0,12 * * *'
+  # Permette di lanciare l'azione anche manualmente dalla scheda "Actions" di GitHub
+  workflow_dispatch:
+
+jobs:
+  aggiorna-giri:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Scarica il codice del repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configura l'ambiente Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          # Se il tuo script usa librerie esterne (es. requests, beautifulsoup4), 
+          # puoi decommentare la riga sotto e usare un requirements.txt nella cartella girettimap
+          # cache: 'pip'
+
+      # 3. Installa le dipendenze (opzionale, decommenta se necessario)
+      # - name: Install dependencies
+      #   working-directory: girettimap
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt
+
+      # 4. Esegue lo script Python dentro la cartella girettimap
+      - name: Run script aggiorna-giri.py
+        working-directory: girettimap
+        run: |
+          python3 aggiorna-giri.py
+
+      # 5. Effettua il commit e il push dei file modificati (giri.js e img_giri/)
+      - name: Commit e push dei file aggiornati
+        working-directory: girettimap
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          git add giri.js img_giri/
+          
+          # Controlla se ci sono modifiche effettive da committare
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Modifiche rilevate, procedo al commit..."
+            git commit -m "Aggiornamento automatico giri.js e anteprime [skip ci]"
+            git push
+          else
+            echo "Nessuna modifica da committare. Tutto aggiornato!"
+          fi
