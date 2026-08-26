@@ -1,11 +1,3 @@
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-};
-
 export default async function handler(req, res) {
   // Configurazione CORS speculare agli altri endpoint
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -37,12 +29,12 @@ export default async function handler(req, res) {
 
     // Mappatura delle directory, prefissi e formati in base alla sezione
     const configMap = {
-      'sticker': { dir: 'pandosita/img/sticker', prefix: 'sticker', ext: 'webp' },[cite: 7]
-      'gif': { dir: 'pandosita/img/gif', prefix: 'pandagif', ext: 'gif' },[cite: 7]
-      'sbatuffolart': { dir: 'pandosita/img/sbatuffolart', prefix: 'sbatuffolart', ext: 'jpg' },[cite: 7]
-      'sbatuffolai': { dir: 'pandosita/img/sbatuffolAI', prefix: 'sbatuffolai', ext: 'jpg' },[cite: 7]
-      'lulu': { dir: 'pandosita/img/lulu', prefix: 'lulu', ext: 'jpg' },[cite: 7]
-      'sfigatini': { dir: 'pandosita/img/sfigatini', prefix: 'sfigatini', ext: 'jpg' }[cite: 7]
+      'sticker': { dir: 'pandosita/img/sticker', prefix: 'sticker', ext: 'webp' },
+      'gif': { dir: 'pandosita/img/gif', prefix: 'pandagif', ext: 'gif' },
+      'sbatuffolart': { dir: 'pandosita/img/sbatuffolart', prefix: 'sbatuffolart', ext: 'jpg' },
+      'sbatuffolai': { dir: 'pandosita/img/sbatuffolAI', prefix: 'sbatuffolai', ext: 'jpg' },
+      'lulu': { dir: 'pandosita/img/lulu', prefix: 'lulu', ext: 'jpg' },
+      'sfigatini': { dir: 'pandosita/img/sfigatini', prefix: 'sfigatini', ext: 'jpg' }
     };
 
     const configTarget = configMap[sezione];
