@@ -25,7 +25,8 @@ const dati_cameretta = [
     },
     {
         "titolo": "Panda Sasso",
-        "immagine": "Panda Sasso.jpg"
+        "immagine": "Panda Sasso.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Zen",
