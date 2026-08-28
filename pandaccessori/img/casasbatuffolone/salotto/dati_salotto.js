@@ -113,6 +113,7 @@ const dati_salotto = [
     },
     {
         "titolo": "Pandamodem",
-        "immagine": "Pandamodem.jpg"
+        "immagine": "Pandamodem.jpg",
+        "pandaforma": true
     }
 ];
