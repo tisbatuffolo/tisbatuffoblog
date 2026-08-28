@@ -108,7 +108,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda HDisk",
-        "immagine": "Panda HDisk.jpg"
+        "immagine": "Panda HDisk.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandamodem",
