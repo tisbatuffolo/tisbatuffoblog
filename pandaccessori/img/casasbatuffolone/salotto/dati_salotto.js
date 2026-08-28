@@ -65,7 +65,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Family",
-        "immagine": "Panda Family.jpg"
+        "immagine": "Panda Family.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Lego",
