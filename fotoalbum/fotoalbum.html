@@ -394,7 +394,8 @@
       width: 100vw !important;
       height: 100vh !important;
       background-color: #000 !important;
-      backdrop-filter: none;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
       z-index: 99999 !important;
     }
     
@@ -434,7 +435,6 @@
     }
 
     /* --- ROTAZIONE FORZATA (Fallback CSS se fallisce il lock nativo su Smartphone) --- */
-    /* La media query assicura che il fix via CSS scatti solo se il telefono è retto in verticale */
     @media screen and (orientation: portrait) {
       .lightbox.force-rotate,
       .video-lightbox.force-rotate {
@@ -632,6 +632,7 @@
   </div>
 </footer>
 
+<!-- LIGHTBOX FOTO -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-header">
     <div class="lightbox-title" id="lb-title">Titolo Album</div>
@@ -666,6 +667,7 @@
   <div class="slide-counter" id="slide-counter">Foto 1 di X 🐼</div>
 </div>
 
+<!-- LIGHTBOX VIDEO SLIDESHOW -->
 <div class="video-lightbox" id="video-lightbox">
   <video id="album-video" playsinline></video>
   
@@ -888,19 +890,22 @@
   async function enterFullscreenAndRotate() {
     if (!lightbox.classList.contains('is-fullscreen')) {
       lightbox.classList.add('is-fullscreen');
-      let docEl = document.documentElement;
-
+      
+      let target = lightbox;
       try {
-        if (docEl.requestFullscreen) {
-          await docEl.requestFullscreen();
-        } else if (docEl.webkitRequestFullscreen) {
-          docEl.webkitRequestFullscreen();
+        if (target.requestFullscreen) {
+          await target.requestFullscreen();
+        } else if (target.webkitRequestFullscreen) {
+          target.webkitRequestFullscreen();
         }
       } catch (err) {}
+      
+      // MICRO-PAUSA: Lascia il tempo al browser di completare l'animazione grafica
+      // del fullscreen prima di forzare la rotazione ed evitare lo schermo nero su Android.
+      await new Promise(resolve => setTimeout(resolve, 200));
 
-      // Verifica che il dispositivo sia realmente touch (evita falsi positivi su Desktop)
       const isMobile = window.matchMedia("(pointer: coarse)").matches;
-
+      
       if (isMobile) {
         let nativeLockOk = false;
         try {
@@ -908,10 +913,8 @@
             await screen.orientation.lock('landscape');
             nativeLockOk = true;
           }
-        } catch (err) {
-          // Blocco reso intenzionalmente silenzioso per mantenere la console pulita
-        }
-
+        } catch (err) {}
+        
         if (!nativeLockOk) {
           lightbox.classList.add('force-rotate');
         } else {
@@ -927,34 +930,31 @@
     if (!lightbox.classList.contains('is-fullscreen')) {
       await enterFullscreenAndRotate();
     } else {
-      // Se play è attivo, uscire dal fullscreen continuerà comunque a far scorrere lo slideshow regolarmente
       exitFullscreenAndRotate();
     }
   }
 
   async function exitFullscreenAndRotate() {
-  try {
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-      if (document.exitFullscreen) {
-        await document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
+    try {
+      if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+        screen.orientation.unlock();
       }
-    }
-  } catch (err) {}
+    } catch (err) {}
 
-  lightbox.classList.remove('is-fullscreen');
-  lightbox.classList.remove('force-rotate');
+    lightbox.classList.remove('is-fullscreen');
+    lightbox.classList.remove('force-rotate');
 
-  // Sblocco silenzioso
-  try {
-    if (screen.orientation && typeof screen.orientation.unlock === 'function') {
-      screen.orientation.unlock();
-    }
-  } catch (err) {}
-}
+    try {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    } catch (err) {}
+  }
 
-  // Permette di gestire elegantemente l'uscita da fullscreen tramite tasto nativo ESC (Desktop)
   document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && lightbox.classList.contains('is-fullscreen')) {
       exitFullscreenAndRotate();
