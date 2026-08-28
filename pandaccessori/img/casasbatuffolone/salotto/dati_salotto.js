@@ -75,7 +75,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Lume",
-        "immagine": "Panda Lume.jpg"
+        "immagine": "Panda Lume.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Orologio",
