@@ -216,12 +216,14 @@
       align-items: center;
       justify-content: center;
       opacity: 0;
+      visibility: hidden; /* RISOLTO: Blocca qualsiasi interazione o tocco fantasma quando chiuso */
       pointer-events: none;
-      transition: opacity 0.4s ease, background-color 0.4s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease, background-color 0.4s ease;
     }
 
     .lightbox.active {
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
     }
 
@@ -457,12 +459,14 @@
       align-items: center;
       justify-content: center;
       opacity: 0;
+      visibility: hidden; /* AGGIUNTO: Impedisce interazioni fantasma anche per il video lightbox */
       pointer-events: none;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
     .video-lightbox.active {
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
     }
 
@@ -900,8 +904,6 @@
         }
       } catch (err) {}
       
-      // MICRO-PAUSA: Lascia il tempo al browser di completare l'animazione grafica
-      // del fullscreen prima di forzare la rotazione ed evitare lo schermo nero su Android.
       await new Promise(resolve => setTimeout(resolve, 200));
 
       const isMobile = window.matchMedia("(pointer: coarse)").matches;
