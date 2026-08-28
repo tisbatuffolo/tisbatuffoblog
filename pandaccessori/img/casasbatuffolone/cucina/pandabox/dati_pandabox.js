@@ -15,7 +15,8 @@ const dati_pandabox = [
     },
     {
         "titolo": "Panda Collane",
-        "immagine": "Panda Collane.jpg"
+        "immagine": "Panda Collane.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Sticker",
