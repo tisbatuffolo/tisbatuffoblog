@@ -27,8 +27,9 @@ const dati_cucina = [
         "pandaforma": true
     },
     {
-        "titolo": "Mollette Cartoons",
-        "immagine": "Mollette Cartoons.jpg"
+        "titolo": "Panda Mollette",
+        "immagine": "Panda Mollette.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Orsetti Cuore",
