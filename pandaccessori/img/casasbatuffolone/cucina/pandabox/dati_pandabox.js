@@ -30,7 +30,8 @@ const dati_pandabox = [
     },
     {
         "titolo": "Pandoni Adesivi",
-        "immagine": "Pandoni Adesivi.jpg"
+        "immagine": "Pandoni Adesivi.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Stickers",
