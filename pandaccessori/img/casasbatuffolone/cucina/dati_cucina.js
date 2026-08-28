@@ -47,7 +47,8 @@ const dati_cucina = [
     },
     {
         "titolo": "Panda Cactus",
-        "immagine": "Panda Cactus.jpg"
+        "immagine": "Panda Cactus.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Lavagna",
