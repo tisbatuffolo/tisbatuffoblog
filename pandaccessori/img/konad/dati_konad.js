@@ -12,6 +12,7 @@ const dati_konad = [
     },
     {
         "titolo": "PandMan",
-        "immagine": "PandMan.jpg"
+        "immagine": "PandMan.jpg",
+        "pandaforma": true
     }
 ];
