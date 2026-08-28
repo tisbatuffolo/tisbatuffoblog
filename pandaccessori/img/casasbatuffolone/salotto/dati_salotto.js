@@ -18,7 +18,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Ex Panda Cover",
-        "immagine": "Ex Panda Cover.jpg"
+        "immagine": "Ex Panda Cover.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Goso Ciondolo",
