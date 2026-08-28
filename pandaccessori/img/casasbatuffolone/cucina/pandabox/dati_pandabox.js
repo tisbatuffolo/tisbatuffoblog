@@ -25,7 +25,8 @@ const dati_pandabox = [
     },
     {
         "titolo": "Pandacucciolatori Bis",
-        "immagine": "Pandacucciolatori Bis.jpg"
+        "immagine": "Pandacucciolatori Bis.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandoni Adesivi",
