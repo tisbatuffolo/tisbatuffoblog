@@ -433,13 +433,13 @@
       pointer-events: auto;
     }
 
-    /* --- ROTAZIONE FORZATA LIGHTBOX FOTO (fallback CSS, speculare ai video) --- */
+    /* --- ROTAZIONE CORRETTA 90 GRADI LIGHTBOX FOTO --- */
     .lightbox.force-rotate {
       width: 100vh !important;
       height: 100vw !important;
       top: 50% !important;
       left: 50% !important;
-      transform: translate(-50%, -50%) rotate(90deg) !important;
+      transform: translate(-50%, -50%) rotate(-90deg) !important;
       transform-origin: center center !important;
     }
 
@@ -900,10 +900,16 @@
       stopSlideshow();
     } else {
       if (!lightbox.classList.contains('is-fullscreen')) {
-        toggleFullscreen(null);
+        lightbox.classList.add('is-fullscreen');
+        let docEl = document.documentElement;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => {});
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
+        }
       }
       
-      // Su mobile, al click del play, ruota la lightbox e blocca in landscape per ottimizzare le slide
+      // Su mobile, al click del play, ruota la lightbox e blocca in landscape
       if (window.innerWidth <= 768) {
         lightbox.classList.add('force-rotate');
         try {
@@ -936,7 +942,11 @@
         } catch (err) {}
 
         if (lightbox.classList.contains('is-fullscreen')) {
-          toggleFullscreen(null);
+          lightbox.classList.remove('is-fullscreen');
+          if (document.fullscreenElement || document.webkitFullscreenElement) {
+            if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+          }
         }
         
         changeSlide(1);
@@ -962,10 +972,11 @@
     }
   }
 
-  function toggleFullscreen(e) {
+  async function toggleFullscreen(e) {
     if(e) e.stopPropagation();
     
     if (!lightbox.classList.contains('is-fullscreen')) {
+      // Attiva schermo intero
       lightbox.classList.add('is-fullscreen');
       let docEl = document.documentElement;
       
@@ -974,7 +985,18 @@
       } else if (docEl.webkitRequestFullscreen) {
         docEl.webkitRequestFullscreen();
       }
+
+      // Se siamo su mobile, attiva anche la rotazione ottimizzata
+      if (window.innerWidth <= 768) {
+        lightbox.classList.add('force-rotate');
+        try {
+          if (screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock('landscape');
+          }
+        } catch (err) {}
+      }
     } else {
+      // Chiude schermo intero e disattiva rotazione (torna alla versione classica e dritta)
       lightbox.classList.remove('is-fullscreen');
       lightbox.classList.remove('force-rotate');
       try {
