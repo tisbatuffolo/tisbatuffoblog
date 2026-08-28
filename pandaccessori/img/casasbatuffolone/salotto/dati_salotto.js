@@ -90,7 +90,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Poomba",
-        "immagine": "Poomba.jpg"
+        "immagine": "Poomba.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Portafazzoletti Orsetto",
