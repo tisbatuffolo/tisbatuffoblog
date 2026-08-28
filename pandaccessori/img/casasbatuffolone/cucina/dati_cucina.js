@@ -23,7 +23,8 @@ const dati_cucina = [
     },
     {
         "titolo": "Kit PandaSushi",
-        "immagine": "Kit PandaSushi.jpg"
+        "immagine": "Kit PandaSushi.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Mollette Cartoons",
