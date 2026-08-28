@@ -115,5 +115,10 @@ const dati_salotto = [
         "titolo": "Pandamodem",
         "immagine": "Pandamodem.jpg",
         "pandaforma": true
+    },
+    {
+        "titolo": "Dancing Panda",
+        "immagine": "Dancing Panda.jpg",
+        "pandaforma": true
     }
 ];
