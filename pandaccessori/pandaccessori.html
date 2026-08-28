@@ -102,9 +102,11 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .grid-mini { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
 .card-mini { position: relative; cursor: pointer; border: 4px solid #eee; border-radius: 15px; overflow: hidden; background: #fff; text-align: center; padding: 10px; transition: transform 0.2s, box-shadow 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .card-mini:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-.card-mini img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
-.card-title { font-weight: 700; font-size: 0.85rem; margin-top: 8px; }
-.card-panda-badge { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); font-size: 13px; pointer-events: none; z-index: 2; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5)); }
+.card-image { position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 12px; }
+.card-mini img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block; }
+.card-title { font-weight: 700; font-size: 0.85rem; margin-top: 0; }
+/* Per spostare il pandabadge adire su bottom -N px */
+.card-panda-badge { position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); font-size: 13px; line-height: 1; pointer-events: none; z-index: 2; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5)); }
 
 .special-boxes-wrapper { display: flex; justify-content: center; gap: clamp(15px, 4vw, 40px); margin-top: 40px; padding: 0 10px; flex-wrap: nowrap; }
 .special-box { background: #ffffff; border-radius: 50%; padding: 15px; cursor: pointer; text-align: center; width: clamp(140px, 45vw, 300px); aspect-ratio: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; }
@@ -118,8 +120,9 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
     .section-container { padding: 0 5px; } 
     .grid-mini { grid-template-columns: repeat(4, 1fr); gap: 4px; }
     .card-mini { border-width: 1px; padding: 3px; border-radius: 6px; }
+    .card-image { margin-bottom: 8px; }
     .card-mini img { border-radius: 4px; }
-    .card-title { font-size: 0.55rem; margin-top: 3px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-title { font-size: 0.55rem; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 /* --- PLANIMETRIA --- */
@@ -166,8 +169,8 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .m-edit-area input, .m-edit-area select { width: 100%; margin-bottom: 10px; padding: 8px; border: 2px solid var(--cartoon-border); border-radius: 10px; font-family: 'Fredoka', sans-serif; text-align: center; font-size: 0.95rem; }
 
 /* Bottoni di modifica/eliminazione */
-.edit-actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-.edit-actions button { flex: 1; min-width: 150px; background: var(--primary); color: #fff; font-family: 'Grandstander'; font-weight: 900; font-size: 1.1rem; border: 3px solid var(--cartoon-border); border-radius: 12px; padding: 8px 10px; cursor: pointer; box-shadow: 2px 2px 0px var(--cartoon-border); transition: transform 0.1s, box-shadow 0.1s; }
+.edit-actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: nowrap; }
+.edit-actions button { flex: 1; background: var(--primary); color: #fff; font-family: 'Grandstander'; font-weight: 900; font-size: 1.1rem; border: 3px solid var(--cartoon-border); border-radius: 12px; padding: 8px 10px; cursor: pointer; box-shadow: 2px 2px 0px var(--cartoon-border); transition: transform 0.1s, box-shadow 0.1s; }
 .edit-actions button:hover { transform: translateY(-2px); box-shadow: 4px 4px 0px var(--cartoon-border); }
 .edit-actions .btn-delete { background: #222; border-color: #000; box-shadow: 2px 2px 0px #000; }
 .edit-actions .btn-delete:hover { background: #000; box-shadow: 4px 4px 0px #000; }
@@ -396,8 +399,8 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
             <div class="add-form-group">
                 <label for="add-pandaforma">Pandaforma</label>
                 <select id="add-pandaforma">
-                    <option value="no">Non è a forma panda</option>
-                    <option value="si">È a forma panda</option>
+                    <option value="no">No, non è a forma panda</option>
+                    <option value="si">Sì, è a forma panda</option>
                 </select>
             </div>
             <button class="btn-submit" id="btn-invia-panda">Aggiungi! 🚀</button>
@@ -408,12 +411,9 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
     </div>
 </div>
 
-<!-- MODALE LIGHTBOX -->
 <div class="modal-overlay" id="lightbox" onclick="if(event.target == this) closeModal()">
     <div class="modal-content" id="m-box">
-        <!-- Bottone Modifica STANDARD per Pandaccessori -->
         <button class="edit-btn" onclick="toggleEditMode()" title="Modifica">✏️</button>
-        <!-- Bottone Modifica SPECIALE per Immagini EXTRA (Matita gialla su cerchio grigio, bordo nero) -->
         <button class="edit-btn-extra" id="btn-edit-extra" onclick="toggleExtraEditMode()" title="Modifica Extra">✏️</button>
         
         <button class="close-x" onclick="closeModal()">&times;</button>
@@ -428,7 +428,6 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
             <p id="l-comment" style="font-style:italic; color:#555;"></p>
         </div>
 
-        <!-- SLIDE AGGIUNGI OGGETTO EXTRA (Mostrata solo alla fine del carosello) -->
         <div id="m-add-extra-view" style="display: none; padding: 20px 10px; text-align: center;">
             <h2 class="m-title" style="color: var(--text);">aggiungi oggetto extra</h2>
             <div class="m-edit-area" style="display: block; margin-top: 15px; background: #f1f2f6; border: 3px dashed #ccc; padding: 15px; border-radius: 20px;">
@@ -447,7 +446,6 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
             </div>
         </div>
 
-        <!-- AREA EDITING STANDARD PANDACCESSORI -->
         <div class="m-edit-area" id="m-edit-area">
             <input type="text" id="edit-nome" placeholder="Nuovo Nome Oggetto" required>
             
@@ -480,12 +478,11 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
             </div>
 
             <div class="edit-actions">
-                <button id="btn-delete" class="btn-delete" onclick="deleteItem()">🗑️ Elimina Oggetto</button>
-                <button id="btn-save-edit" onclick="submitEdit()">Salva Modifica ✔️</button>
+                <button id="btn-delete" class="btn-delete" onclick="deleteItem()">🗑️ Elimina</button>
+                <button id="btn-save-edit" onclick="submitEdit()">Salva ✔️</button>
             </div>
         </div>
 
-        <!-- AREA EDITING ESTESA PER IMMAGINI EXTRA -->
         <div class="m-edit-area" id="m-extra-edit-area">
             <label style="display:block; text-align:left; font-weight:800; font-size:0.8rem; margin-bottom:2px; color:#333;">NOME OGGETTO EXTRA:</label>
             <input type="text" id="extra-edit-nome" placeholder="Nome Oggetto Extra" required>
@@ -494,8 +491,8 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
             <input type="text" id="extra-edit-posizione" readonly disabled style="background:#e0e0e0; font-weight:bold; cursor:not-allowed;">
 
             <div class="edit-actions" style="margin-bottom: 15px;">
-                <button id="btn-extra-delete" class="btn-delete" onclick="deleteExtraItem()">🗑️ Elimina Oggetto</button>
-                <button id="btn-extra-save" onclick="submitExtraEdit()">Salva Modifica ✔️</button>
+                <button id="btn-extra-delete" class="btn-delete" onclick="deleteExtraItem()">🗑️ Elimina</button>
+                <button id="btn-extra-save" onclick="submitExtraEdit()">Salva ✔️</button>
             </div>
         </div>
     </div>
@@ -612,9 +609,14 @@ function initApp() {
     let kCount = 0;
     for(let k in DB) {
         total += DB[k].length;
-        kCount += DB[k].filter(it => (it.pandaforma === true || it.pandaforma === 'si' || it.pandaforma === 'vero')).length;
+        let ambientPandaCount = DB[k].filter(it => (it.pandaforma === true || it.pandaforma === 'si' || it.pandaforma === 'vero')).length;
+        kCount += ambientPandaCount;
+        
         if(document.getElementById(`c-${k}`)) document.getElementById(`c-${k}`).innerText = DB[k].length;
-        if(document.getElementById(`sub-${k}`)) document.getElementById(`sub-${k}`).innerText = `In ${k.charAt(0).toUpperCase() + k.slice(1)} ci sono ${DB[k].length} Pandaccessori!`;
+        if(document.getElementById(`sub-${k}`)) {
+            let nomeAmbiente = k === 'casa' ? 'Casa Sbatuffolone' : k.charAt(0).toUpperCase() + k.slice(1);
+            document.getElementById(`sub-${k}`).innerText = `In ${nomeAmbiente} ci sono ${DB[k].length} pandaccessori di cui ${ambientPandaCount} a forma panda!`;
+        }
         renderGrid(k, DB[k]);
     }
     document.getElementById('total-banner').innerHTML = `In totale abbiamo <span>${total}</span> Pandaccessori!`;
@@ -639,7 +641,7 @@ function renderGrid(k, items) {
         const isPandaForm = (it.pandaforma === true || it.pandaforma === 'si' || it.pandaforma === 'vero');
         const pandaBadge = isPandaForm ? '<div class="card-panda-badge">🐼</div>' : '';
         
-        d.innerHTML = `${pandaBadge}<img src="${it.imgSrc}"><div class="card-title">${it.titolo || it.foro}</div>`;
+        d.innerHTML = `<div class="card-image">${pandaBadge}<img src="${it.imgSrc}"></div><div class="card-title">${it.titolo || it.foro}</div>`;
         g.appendChild(d);
     });
 }
@@ -1018,7 +1020,7 @@ async function submitEdit() {
             
         } else { const errText = await res.text(); throw new Error(errText); }
     } catch (e) { alert("Errore durante la modifica: " + e.message); } 
-    finally { btnS.innerText = "Salva Modifica ✔️"; btnS.disabled = false; btnD.disabled = false; }
+    finally { btnS.innerText = "Salva ✔️"; btnS.disabled = false; btnD.disabled = false; }
 }
 
 async function deleteItem() {
@@ -1062,7 +1064,7 @@ async function deleteItem() {
     } catch (e) { 
         alert("Errore durante l'eliminazione: " + e.message); 
     } finally { 
-        btnD.innerText = "🗑️ Elimina Oggetto"; btnD.disabled = false; btnS.disabled = false; 
+        btnD.innerText = "🗑️ Elimina"; btnD.disabled = false; btnS.disabled = false; 
     }
 }
 
@@ -1134,7 +1136,7 @@ async function submitExtraEdit() {
     } catch (e) {
         alert("Errore durante la modifica dell'oggetto extra: " + e.message);
     } finally {
-        btnS.innerText = "Salva Modifica ✔️"; btnS.disabled = false; btnD.disabled = false;
+        btnS.innerText = "Salva ✔️"; btnS.disabled = false; btnD.disabled = false;
     }
 }
 
@@ -1174,7 +1176,7 @@ async function deleteExtraItem() {
     } catch (e) {
         alert("Errore durante l'eliminazione dell'extra: " + e.message);
     } finally {
-        btnD.innerText = "🗑️ Elimina Oggetto"; btnD.disabled = false; btnS.disabled = false;
+        btnD.innerText = "🗑️ Elimina"; btnD.disabled = false; btnS.disabled = false;
     }
 }
 
