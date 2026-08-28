@@ -103,7 +103,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Ventolino",
-        "immagine": "Ventolino.jpg"
+        "immagine": "Ventolino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda HDisk",
