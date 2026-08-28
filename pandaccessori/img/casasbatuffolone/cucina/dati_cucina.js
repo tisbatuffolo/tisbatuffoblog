@@ -52,7 +52,8 @@ const dati_cucina = [
     },
     {
         "titolo": "Panda Lavagna",
-        "immagine": "Panda Lavagna.jpg"
+        "immagine": "Panda Lavagna.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Musik",
