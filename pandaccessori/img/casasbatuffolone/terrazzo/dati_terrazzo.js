@@ -11,6 +11,7 @@ const dati_terrazzo = [
     },
     {
         "titolo": "PandaMeter",
-        "immagine": "PandaMeter.jpg"
+        "immagine": "PandaMeter.jpg",
+        "pandaforma": true
     }
 ];
