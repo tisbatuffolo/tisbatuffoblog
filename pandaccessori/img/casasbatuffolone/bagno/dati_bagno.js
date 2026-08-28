@@ -24,6 +24,7 @@ const dati_bagno = [
     },
     {
         "titolo": "Scaldino",
-        "immagine": "Scaldino.jpg"
+        "immagine": "Scaldino.jpg",
+        "pandaforma": true
     }
 ];
