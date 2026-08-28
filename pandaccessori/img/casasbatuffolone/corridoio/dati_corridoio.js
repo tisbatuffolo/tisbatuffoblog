@@ -18,10 +18,5 @@ const dati_corridoio = [
         "titolo": "Pandino Sbattiporta",
         "immagine": "Pandino Sbattiporta.jpg",
         "pandaforma": true
-    },
-    {
-        "titolo": "Dancing Panda",
-        "immagine": "Dancing Panda.jpg",
-        "pandaforma": true
     }
 ];
