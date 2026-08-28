@@ -433,14 +433,18 @@
       pointer-events: auto;
     }
 
-    /* --- ROTAZIONE CORRETTA 90 GRADI LIGHTBOX FOTO --- */
-    .lightbox.force-rotate {
-      width: 100vh !important;
-      height: 100vw !important;
-      top: 50% !important;
-      left: 50% !important;
-      transform: translate(-50%, -50%) rotate(-90deg) !important;
-      transform-origin: center center !important;
+    /* --- ROTAZIONE FORZATA (Fallback CSS se fallisce il lock nativo su Smartphone) --- */
+    /* La media query assicura che il fix via CSS scatti solo se il telefono è retto in verticale */
+    @media screen and (orientation: portrait) {
+      .lightbox.force-rotate,
+      .video-lightbox.force-rotate {
+        width: 100vh !important;
+        height: 100vw !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) rotate(90deg) !important;
+        transform-origin: center center !important;
+      }
     }
 
     /* --- VIDEO LIGHTBOX --- */
@@ -552,16 +556,6 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
-    /* --- ROTAZIONE FORZATA VIDEO (fallback CSS, funziona su tutti gli smartphone) --- */
-    .video-lightbox.force-rotate {
-      width: 100vh;
-      height: 100vw;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(90deg);
-      transform-origin: center center;
-    }
-
     .action-btn.active {
       background: var(--heart-red);
       color: #fff;
@@ -611,7 +605,7 @@
   <div class="header-container">
     <div class="side-heart">♥</div>
     <div class="brand-wrapper">
-      <a href="index.html" class="brand-title">SbatuffoBlog</a>
+      <a href="../index.html" class="brand-title">SbatuffoBlog</a>
       <div class="brand-subtitle">FotoAlbum</div>
     </div>
     <div class="side-heart">♥</div>
@@ -631,14 +625,13 @@
   <div class="footer-container">
     <div class="footer-text">
       @SbatuffoBlog 2026 - 
-      <a href="index.html" class="footer-home-link">
+      <a href="../index.html" class="footer-home-link">
         Home <img src="img/home.png" alt="Home">
       </a>
     </div>
   </div>
 </footer>
 
-<!-- LIGHTBOX FOTO -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-header">
     <div class="lightbox-title" id="lb-title">Titolo Album</div>
@@ -673,7 +666,6 @@
   <div class="slide-counter" id="slide-counter">Foto 1 di X 🐼</div>
 </div>
 
-<!-- LIGHTBOX VIDEO SLIDESHOW -->
 <div class="video-lightbox" id="video-lightbox">
   <video id="album-video" playsinline></video>
   
@@ -884,6 +876,7 @@
 
   async function togglePlay(e) {
     if(e) e.stopPropagation();
+    
     if (isPlaying) {
       stopSlideshow();
     } else {
@@ -896,25 +889,33 @@
     if (!lightbox.classList.contains('is-fullscreen')) {
       lightbox.classList.add('is-fullscreen');
       let docEl = document.documentElement;
-      
+
       try {
         if (docEl.requestFullscreen) {
           await docEl.requestFullscreen();
         } else if (docEl.webkitRequestFullscreen) {
           docEl.webkitRequestFullscreen();
         }
-      } catch (err) {
-        console.warn("Fullscreen non consentito o già attivo", err);
-      }
-      
-      if (window.innerWidth <= 768) {
-        lightbox.classList.add('force-rotate');
+      } catch (err) {}
+
+      // Verifica che il dispositivo sia realmente touch (evita falsi positivi su Desktop)
+      const isMobile = window.matchMedia("(pointer: coarse)").matches;
+
+      if (isMobile) {
+        let nativeLockOk = false;
         try {
-          if (screen.orientation && screen.orientation.lock) {
+          if (screen.orientation && typeof screen.orientation.lock === 'function') {
             await screen.orientation.lock('landscape');
+            nativeLockOk = true;
           }
         } catch (err) {
-          console.warn("Orientamento bloccato dal browser o non supportato", err);
+          // Blocco reso intenzionalmente silenzioso per mantenere la console pulita
+        }
+
+        if (!nativeLockOk) {
+          lightbox.classList.add('force-rotate');
+        } else {
+          lightbox.classList.remove('force-rotate');
         }
       }
     }
@@ -926,28 +927,44 @@
     if (!lightbox.classList.contains('is-fullscreen')) {
       await enterFullscreenAndRotate();
     } else {
+      // Se play è attivo, uscire dal fullscreen continuerà comunque a far scorrere lo slideshow regolarmente
       exitFullscreenAndRotate();
     }
   }
 
-  function exitFullscreenAndRotate() {
-    lightbox.classList.remove('is-fullscreen');
-    lightbox.classList.remove('force-rotate');
-    
-    try {
-      if (screen.orientation && screen.orientation.unlock) {
-        screen.orientation.unlock();
-      }
-    } catch (err) {}
-
+  async function exitFullscreenAndRotate() {
+  try {
     if (document.fullscreenElement || document.webkitFullscreenElement) {
       if (document.exitFullscreen) {
-        document.exitFullscreen().catch(()=>{});
+        await document.exitFullscreen();
       } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
       }
     }
-  }
+  } catch (err) {}
+
+  lightbox.classList.remove('is-fullscreen');
+  lightbox.classList.remove('force-rotate');
+
+  // Sblocco silenzioso
+  try {
+    if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+      screen.orientation.unlock();
+    }
+  } catch (err) {}
+}
+
+  // Permette di gestire elegantemente l'uscita da fullscreen tramite tasto nativo ESC (Desktop)
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && lightbox.classList.contains('is-fullscreen')) {
+      exitFullscreenAndRotate();
+    }
+  });
+  document.addEventListener('webkitfullscreenchange', () => {
+    if (!document.webkitFullscreenElement && lightbox.classList.contains('is-fullscreen')) {
+      exitFullscreenAndRotate();
+    }
+  });
 
   function startSlideshow() {
     isPlaying = true;
