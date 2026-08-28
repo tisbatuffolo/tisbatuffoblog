@@ -2,6 +2,7 @@
 const dati_progetto = [
     {
         "titolo": "PandaTazza",
-        "immagine": "PandaTazza.jpg"
+        "immagine": "PandaTazza.jpg",
+        "pandaforma": true
     }
 ];
