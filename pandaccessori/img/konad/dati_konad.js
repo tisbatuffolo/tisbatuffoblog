@@ -7,7 +7,8 @@ const dati_konad = [
     },
     {
         "titolo": "Panda Cucciolatori",
-        "immagine": "Panda Cucciolatori.jpg"
+        "immagine": "Panda Cucciolatori.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "PandMan",
