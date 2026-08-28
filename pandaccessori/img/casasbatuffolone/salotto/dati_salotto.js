@@ -23,7 +23,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Goso Ciondolo",
-        "immagine": "Goso Ciondolo.jpg"
+        "immagine": "Goso Ciondolo.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Il Mondo",
