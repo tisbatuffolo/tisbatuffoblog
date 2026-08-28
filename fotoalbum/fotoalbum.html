@@ -611,7 +611,7 @@
   <div class="header-container">
     <div class="side-heart">♥</div>
     <div class="brand-wrapper">
-      <a href="../index.html" class="brand-title">SbatuffoBlog</a>
+      <a href="index.html" class="brand-title">SbatuffoBlog</a>
       <div class="brand-subtitle">FotoAlbum</div>
     </div>
     <div class="side-heart">♥</div>
@@ -631,7 +631,7 @@
   <div class="footer-container">
     <div class="footer-text">
       @SbatuffoBlog 2026 - 
-      <a href="../index.html" class="footer-home-link">
+      <a href="index.html" class="footer-home-link">
         Home <img src="img/home.png" alt="Home">
       </a>
     </div>
@@ -849,22 +849,10 @@
   function closeLightbox(e) {
     if(e) e.stopPropagation();
     stopSlideshow(); 
+    exitFullscreenAndRotate();
     lightbox.classList.remove('active');
-    lightbox.classList.remove('is-fullscreen');
-    lightbox.classList.remove('force-rotate');
     lightbox.classList.remove('show-controls');
     
-    try {
-      if (screen.orientation && screen.orientation.unlock) {
-        screen.orientation.unlock();
-      }
-    } catch (err) {}
-
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-      if (document.exitFullscreen) document.exitFullscreen().catch(()=>{});
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-    }
-
     document.body.style.overflow = '';
     setTimeout(() => {
       sliderImagesContainer.innerHTML = '';
@@ -899,27 +887,65 @@
     if (isPlaying) {
       stopSlideshow();
     } else {
-      if (!lightbox.classList.contains('is-fullscreen')) {
-        lightbox.classList.add('is-fullscreen');
-        let docEl = document.documentElement;
+      await enterFullscreenAndRotate();
+      startSlideshow();
+    }
+  }
+
+  async function enterFullscreenAndRotate() {
+    if (!lightbox.classList.contains('is-fullscreen')) {
+      lightbox.classList.add('is-fullscreen');
+      let docEl = document.documentElement;
+      
+      try {
         if (docEl.requestFullscreen) {
-          docEl.requestFullscreen().catch(() => {});
+          await docEl.requestFullscreen();
         } else if (docEl.webkitRequestFullscreen) {
           docEl.webkitRequestFullscreen();
         }
+      } catch (err) {
+        console.warn("Fullscreen non consentito o già attivo", err);
       }
       
-      // Su mobile, al click del play, ruota la lightbox e blocca in landscape
       if (window.innerWidth <= 768) {
         lightbox.classList.add('force-rotate');
         try {
           if (screen.orientation && screen.orientation.lock) {
             await screen.orientation.lock('landscape');
           }
-        } catch (err) {}
+        } catch (err) {
+          console.warn("Orientamento bloccato dal browser o non supportato", err);
+        }
       }
+    }
+  }
 
-      startSlideshow();
+  async function toggleFullscreen(e) {
+    if(e) e.stopPropagation();
+    
+    if (!lightbox.classList.contains('is-fullscreen')) {
+      await enterFullscreenAndRotate();
+    } else {
+      exitFullscreenAndRotate();
+    }
+  }
+
+  function exitFullscreenAndRotate() {
+    lightbox.classList.remove('is-fullscreen');
+    lightbox.classList.remove('force-rotate');
+    
+    try {
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
+    } catch (err) {}
+
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(()=>{});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
     }
   }
 
@@ -933,24 +959,8 @@
     slideshowInterval = setInterval(async () => {
       if (currentSlideIndex === currentAlbum.totalPhotos) {
         stopSlideshow();
-        
-        lightbox.classList.remove('force-rotate');
-        try {
-          if (screen.orientation && screen.orientation.unlock) {
-            screen.orientation.unlock();
-          }
-        } catch (err) {}
-
-        if (lightbox.classList.contains('is-fullscreen')) {
-          lightbox.classList.remove('is-fullscreen');
-          if (document.fullscreenElement || document.webkitFullscreenElement) {
-            if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-          }
-        }
-        
+        exitFullscreenAndRotate();
         changeSlide(1);
-        
         lightbox.classList.add('show-controls');
         clearControlsTimeout();
       } else {
@@ -969,46 +979,6 @@
     if (slideshowInterval) {
       clearInterval(slideshowInterval);
       slideshowInterval = null;
-    }
-  }
-
-  async function toggleFullscreen(e) {
-    if(e) e.stopPropagation();
-    
-    if (!lightbox.classList.contains('is-fullscreen')) {
-      // Attiva schermo intero
-      lightbox.classList.add('is-fullscreen');
-      let docEl = document.documentElement;
-      
-      if (docEl.requestFullscreen) {
-        docEl.requestFullscreen().catch(() => {});
-      } else if (docEl.webkitRequestFullscreen) {
-        docEl.webkitRequestFullscreen();
-      }
-
-      // Se siamo su mobile, attiva anche la rotazione ottimizzata
-      if (window.innerWidth <= 768) {
-        lightbox.classList.add('force-rotate');
-        try {
-          if (screen.orientation && screen.orientation.lock) {
-            await screen.orientation.lock('landscape');
-          }
-        } catch (err) {}
-      }
-    } else {
-      // Chiude schermo intero e disattiva rotazione (torna alla versione classica e dritta)
-      lightbox.classList.remove('is-fullscreen');
-      lightbox.classList.remove('force-rotate');
-      try {
-        if (screen.orientation && screen.orientation.unlock) {
-          screen.orientation.unlock();
-        }
-      } catch (err) {}
-
-      if (document.fullscreenElement || document.webkitFullscreenElement) {
-        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      }
     }
   }
 
@@ -1140,8 +1110,11 @@
       if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
     } catch (err) {}
     if (document.fullscreenElement) {
-      if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
     }
     clearTimeout(videoControlsTimeout);
   }
