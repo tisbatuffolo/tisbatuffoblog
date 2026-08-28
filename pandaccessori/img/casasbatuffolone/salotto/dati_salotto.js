@@ -50,7 +50,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Bicchieri",
-        "immagine": "Panda Bicchieri.jpg"
+        "immagine": "Panda Bicchieri.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Cavetti",
