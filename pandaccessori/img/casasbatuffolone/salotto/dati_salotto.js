@@ -55,7 +55,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Cavetti",
-        "immagine": "Panda Cavetti.jpg"
+        "immagine": "Panda Cavetti.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Copri-Puf",
