@@ -2,22 +2,22 @@ const GIRI = [
   {
     "titolo": "Forca Rossa",
     "link": "https://www.outdooractive.com/it/route/escursione/val-di-fassa/forca-rossa/350310622/",
-    "img": "https://img2.oastatic.com/img2/636743303/800x600/variant.webp"
+    "img": "https://img2.oastatic.com/img2/636743303/800x600/variant.webp?revbust=1a01a98661b"
   },
   {
     "titolo": "Lago di Cavedine",
     "link": "https://www.outdooractive.com/it/route/nuoto/garda-trentino/lago-di-cavedine/349250661/",
-    "img": "https://img1.oastatic.com/img2/635948302/800x600/variant.webp"
+    "img": "https://img1.oastatic.com/img2/635948302/800x600/variant.webp?revbust=19fe9dde0a9"
   },
   {
     "titolo": "Ciclabile Valsugana",
     "link": "https://www.outdooractive.com/it/route/bicicletta/valsugana-lagorai-tesino/ciclabile-valsugana/349083269/",
-    "img": "https://img3.oastatic.com/img2/635816624/800x600/variant.webp"
+    "img": "https://img3.oastatic.com/img2/635816624/800x600/variant.webp?revbust=19fe1a229b6"
   },
   {
     "titolo": "Ciclabile val di Sole",
     "link": "https://www.outdooractive.com/it/route/bicicletta/val-di-sole-pejo-e-rabbi/ciclabile-val-di-sole/348318313/",
-    "img": "https://img.oastatic.com/img2/635254805/800x600/variant.webp"
+    "img": "https://img.oastatic.com/img2/635254805/800x600/variant.webp?revbust=19fbd444f72"
   },
   {
     "titolo": "Openair art Drena",
@@ -40,8 +40,8 @@ const GIRI = [
     "img": "https://img0.oastatic.com/img2/634223771/800x600/variant.webp"
   },
   {
-    "titolo": "Laguna di Venezia",
-    "link": "https://www.outdooractive.com/it/route/giro-in-barca/venezia/laguna-di-venezia/346309146/",
-    "img": "https://img3.oastatic.com/img2/633787569/800x600/variant.webp"
+    "titolo": "Troi della Mariotta e Fuciade",
+    "link": "https://www.outdooractive.com/it/route/escursione/italy/troi-della-mariotta-e-fuciade/232614794/",
+    "img": "https://img.oastatic.com/img2/70956955/800x600/variant.jpg"
   }
 ]
