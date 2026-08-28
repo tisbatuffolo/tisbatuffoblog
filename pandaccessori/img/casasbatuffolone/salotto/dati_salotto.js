@@ -45,7 +45,8 @@ const dati_salotto = [
     },
     {
         "titolo": "AppoggiaVentolino",
-        "immagine": "AppoggiaVentolino.jpg"
+        "immagine": "AppoggiaVentolino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Bicchieri",
