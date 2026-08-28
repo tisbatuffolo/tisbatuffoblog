@@ -6,7 +6,8 @@ const dati_terrazzo = [
     },
     {
         "titolo": "Panda Sfigatino",
-        "immagine": "Panda Sfigatino.jpg"
+        "immagine": "Panda Sfigatino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "PandaMeter",
