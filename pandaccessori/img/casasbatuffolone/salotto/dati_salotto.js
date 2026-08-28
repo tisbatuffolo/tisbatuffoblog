@@ -40,7 +40,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Adesivi Salotto",
-        "immagine": "Panda Adesivi Salotto.jpg"
+        "immagine": "Panda Adesivi Salotto.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "AppoggiaVentolino",
