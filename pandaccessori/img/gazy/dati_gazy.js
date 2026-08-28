@@ -21,7 +21,8 @@ const dati_gazy = [
     },
     {
         "titolo": "Pandino Box",
-        "immagine": "Pandino Box.jpg"
+        "immagine": "Pandino Box.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Gazy PandaCucciolatori",
