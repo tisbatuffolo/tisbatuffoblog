@@ -2,7 +2,8 @@
 const dati_konad = [
     {
         "titolo": "Ciondolo PandaCuore",
-        "immagine": "Ciondolo PandaCuore.jpg"
+        "immagine": "Ciondolo PandaCuore.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Cucciolatori",
