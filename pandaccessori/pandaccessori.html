@@ -42,8 +42,9 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .section-divider { max-width: 200px; height: 3px; background: linear-gradient(to right, var(--primary) 0 calc(50% - 30px), transparent calc(50% - 30px) calc(50% + 30px), var(--primary) calc(50% + 30px) 100%); margin: 40px auto; border-radius: 50px; position: relative; clear: both; }
 .section-divider::after { content: "♥"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: transparent; padding: 0 15px; color: var(--heart-red); font-size: 1.5rem; }
 
-.total-title { font-family: 'Luckiest Guy', cursive; font-size: 1.6rem; color: #000; margin: 45px 0 25px; letter-spacing: 1px; text-align: center; }
+.total-title { font-family: 'Luckiest Guy', cursive; font-size: 1.6rem; color: #000; margin: 45px 0 10px; letter-spacing: 1px; text-align: center; }
 .total-title span { color: var(--primary); font-size: 2rem; }
+.total-sub { font-size: clamp(1rem, 2vw, 1.2rem); color: #555; text-align: center; margin-bottom: 35px; font-weight: 600; }
 
 /* --- MAPPA RIFINITA & RESPONSIVE --- */
 .map-outer { padding: 4vw 0; background: transparent; }
@@ -99,10 +100,11 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .section-sub { font-size: clamp(1rem, 2vw, 1.2rem); color: #555; text-align: center; margin-bottom: 35px; font-weight: 600; }
 
 .grid-mini { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
-.card-mini { cursor: pointer; border: 4px solid #eee; border-radius: 15px; overflow: hidden; background: #fff; text-align: center; padding: 10px; transition: transform 0.2s, box-shadow 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.card-mini { position: relative; cursor: pointer; border: 4px solid #eee; border-radius: 15px; overflow: hidden; background: #fff; text-align: center; padding: 10px; transition: transform 0.2s, box-shadow 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .card-mini:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 .card-mini img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
 .card-title { font-weight: 700; font-size: 0.85rem; margin-top: 8px; }
+.card-panda-badge { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); font-size: 13px; pointer-events: none; z-index: 2; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5)); }
 
 .special-boxes-wrapper { display: flex; justify-content: center; gap: clamp(15px, 4vw, 40px); margin-top: 40px; padding: 0 10px; flex-wrap: nowrap; }
 .special-box { background: #ffffff; border-radius: 50%; padding: 15px; cursor: pointer; text-align: center; width: clamp(140px, 45vw, 300px); aspect-ratio: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; }
@@ -228,6 +230,7 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
 
 <div class="section-divider"></div>
 <h1 class="total-title" id="total-banner">Calcolo Pandaccessori...</h1>
+<div class="total-sub" id="total-sub-banner"></div>
 
 <section class="map-outer">
     <div class="map-canvas">
@@ -380,7 +383,9 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                 <select id="add-stanza">
                     <option value="">-- Scegli Stanza --</option>
                     <option value="salotto">Salotto</option>
+                    <option value="salotto-mondo">Salotto-Mondo</option>
                     <option value="cucina">Cucina</option>
+                    <option value="cucina-pandabox">Cucina-Pandabox</option>
                     <option value="corridoio">Corridoio</option>
                     <option value="terrazzo">Terrazzo</option>
                     <option value="lettone">Lettone</option>
@@ -388,18 +393,11 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                     <option value="cantina">Cantina</option>
                 </select>
             </div>
-            <div class="add-form-group" id="div-mondo" style="display: none;">
-                <label for="add-mondo">È nel Mondo?</label>
-                <select id="add-mondo">
-                    <option value="no">No, in Salotto normale</option>
-                    <option value="si">Sì, è nel Mondo!</option>
-                </select>
-            </div>
-            <div class="add-form-group" id="div-pandabox" style="display: none;">
-                <label for="add-pandabox">È nella PandaBox?</label>
-                <select id="add-pandabox">
-                    <option value="no">No, in Cucina normale</option>
-                    <option value="si">Sì, è nella PandaBox!</option>
+            <div class="add-form-group">
+                <label for="add-pandaforma">Pandaforma</label>
+                <select id="add-pandaforma">
+                    <option value="no">Non è a forma panda</option>
+                    <option value="si">È a forma panda</option>
                 </select>
             </div>
             <button class="btn-submit" id="btn-invia-panda">Aggiungi! 🚀</button>
@@ -461,9 +459,11 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                 <option value="cameretta">Cameretta</option>
             </select>
             
-            <select id="edit-stanza" onchange="updateEditSelects()" style="display: none;">
+            <select id="edit-stanza" style="display: none;">
                 <option value="salotto">Salotto</option>
+                <option value="salotto-mondo">Salotto-Mondo</option>
                 <option value="cucina">Cucina</option>
+                <option value="cucina-pandabox">Cucina-Pandabox</option>
                 <option value="corridoio">Corridoio</option>
                 <option value="terrazzo">Terrazzo</option>
                 <option value="lettone">Lettone</option>
@@ -471,15 +471,13 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                 <option value="cantina">Cantina</option>
             </select>
             
-            <select id="edit-mondo" style="display: none;">
-                <option value="no">No, in Salotto normale</option>
-                <option value="si">Sì, è nel Mondo!</option>
-            </select>
-            
-            <select id="edit-pandabox" style="display: none;">
-                <option value="no">No, in Cucina normale</option>
-                <option value="si">Sì, è nella PandaBox!</option>
-            </select>
+            <div style="margin-bottom: 10px; text-align: left;">
+                <label for="edit-pandaforma" style="display:block; font-weight:800; font-size:0.8rem; margin-bottom:2px; color:#333;">PANDAFORMA:</label>
+                <select id="edit-pandaforma">
+                    <option value="no">Non è a forma panda</option>
+                    <option value="si">È a forma panda</option>
+                </select>
+            </div>
 
             <div class="edit-actions">
                 <button id="btn-delete" class="btn-delete" onclick="deleteItem()">🗑️ Elimina Oggetto</button>
@@ -489,8 +487,6 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
 
         <!-- AREA EDITING ESTESA PER IMMAGINI EXTRA -->
         <div class="m-edit-area" id="m-extra-edit-area">
-           <!-- <div style="font-weight: 800; font-size: 1.1rem; margin-bottom: 12px; color: #1a1a1a;">Modifica Oggetto Extra 🖼️</div> -->
-            
             <label style="display:block; text-align:left; font-weight:800; font-size:0.8rem; margin-bottom:2px; color:#333;">NOME OGGETTO EXTRA:</label>
             <input type="text" id="extra-edit-nome" placeholder="Nome Oggetto Extra" required>
             
@@ -539,7 +535,8 @@ function formatData(arr, path, room = null, cat = "", displayTitle = null, rawAr
         arrayName: "dati_" + rawArrayName,
         room, 
         category: cat, 
-        displayTitle 
+        displayTitle,
+        pandaforma: i.pandaforma !== undefined ? i.pandaforma : false
     }));
 }
 
@@ -561,7 +558,7 @@ function loadDynamicScripts() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('total-banner').innerHTML = "Caricamento database in corso... 🐼";
+    document.getElementById('total-banner').innerHTML = "Calcolo Pandaccessori... 🐼";
     loadDynamicScripts().then(() => {
         const getExtraPanda = () => typeof dati_extra_pandabox !== 'undefined' ? dati_extra_pandabox : [];
         const getExtraMondo = () => typeof dati_extra_mondo !== 'undefined' ? dati_extra_mondo : [];
@@ -612,13 +609,17 @@ function clearUI() {
 
 function initApp() {
     let total = 0;
+    let kCount = 0;
     for(let k in DB) {
         total += DB[k].length;
+        kCount += DB[k].filter(it => (it.pandaforma === true || it.pandaforma === 'si' || it.pandaforma === 'vero')).length;
         if(document.getElementById(`c-${k}`)) document.getElementById(`c-${k}`).innerText = DB[k].length;
         if(document.getElementById(`sub-${k}`)) document.getElementById(`sub-${k}`).innerText = `In ${k.charAt(0).toUpperCase() + k.slice(1)} ci sono ${DB[k].length} Pandaccessori!`;
         renderGrid(k, DB[k]);
     }
     document.getElementById('total-banner').innerHTML = `In totale abbiamo <span>${total}</span> Pandaccessori!`;
+    document.getElementById('total-sub-banner').innerText = `di cui ${kCount} hanno forma panda`;
+
     Object.keys(roomColors).forEach(r => {
         const count = DB.casa.filter(i => i.room === r).length;
         const el = document.querySelector(`#p-${r} span`);
@@ -634,7 +635,11 @@ function renderGrid(k, items) {
         const d = document.createElement('div'); d.className = 'card-mini';
         if (it.room) { d.setAttribute('data-room', it.room); d.style.backgroundColor = roomColors[it.room]; }
         d.onclick = () => { isSpecialMode = false; openModal(items, idx); };
-        d.innerHTML = `<img src="${it.imgSrc}"><div class="card-title">${it.titolo || it.foro}</div>`;
+        
+        const isPandaForm = (it.pandaforma === true || it.pandaforma === 'si' || it.pandaforma === 'vero');
+        const pandaBadge = isPandaForm ? '<div class="card-panda-badge">🐼</div>' : '';
+        
+        d.innerHTML = `${pandaBadge}<img src="${it.imgSrc}"><div class="card-title">${it.titolo || it.foro}</div>`;
         g.appendChild(d);
     });
 }
@@ -692,7 +697,6 @@ function updateModal() {
     const editExtraBtn = document.getElementById('btn-edit-extra');
     const modalBox = document.getElementById('m-box');
 
-    // Gestione visibilità delle due view principali
     document.getElementById('m-info-view').style.display = isAddSlide ? 'none' : 'block';
     document.querySelector('.m-img-box').style.display = isAddSlide ? 'none' : '';
     document.getElementById('m-add-extra-view').style.display = isAddSlide ? 'block' : 'none';
@@ -707,8 +711,7 @@ function updateModal() {
     }
 
     if (isAddSlide) {
-        // Setup Grafica SLIDE AGGIUNTA
-        modalBox.style.backgroundColor = '#d4d4d4'; // Grigio scuro per extra
+        modalBox.style.backgroundColor = '#d4d4d4';
         if (editBtn) editBtn.style.display = 'none';
         if (editExtraBtn) editExtraBtn.style.display = 'none';
 
@@ -716,21 +719,28 @@ function updateModal() {
         document.getElementById('slide-add-nome').value = '';
         document.getElementById('slide-add-img').value = '';
     } else {
-        // Setup Grafica VISUALIZZAZIONE NORMALE
         const it = activeSet[activeIdx];
-        if(!it) return; // Salvaguardia se l'array è vuoto ma per qualche motivo non siamo sulla slide
+        if(!it) return;
 
         document.getElementById('l-img').src = it.imgSrc;
         document.getElementById('l-title').innerText = it.titolo || it.foro;
         
         const sub = document.getElementById('l-room');
-        if(it.displayTitle) { sub.innerText = it.displayTitle; sub.style.color = roomColors[it.room] || 'var(--primary)'; } 
-        else if(it.room) { sub.innerText = it.room; sub.style.color = roomColors[it.room] || 'var(--primary)'; } 
-        else { sub.innerText = it.category; sub.style.color = 'var(--primary)'; }
-        document.getElementById('l-comment').innerText = it.commento || "";
-
-        // GESTIONE BOTTONI EDITING E SFONDO
         const isExtra = it.arrayName === 'dati_extra_mondo' || it.arrayName === 'dati_extra_pandabox';
+        const isPandaForm = (it.pandaforma === true || it.pandaforma === 'si' || it.pandaforma === 'vero');
+
+        let roomText = "";
+        if(it.displayTitle) { roomText = it.displayTitle; } 
+        else if(it.room) { roomText = it.room; } 
+        else { roomText = it.category; }
+
+        if (isPandaForm && !isExtra) {
+            roomText += " 🐼";
+        }
+
+        sub.innerText = roomText;
+        sub.style.color = it.displayTitle || it.room ? (roomColors[it.room] || 'var(--primary)') : 'var(--primary)';
+        document.getElementById('l-comment').innerText = it.commento || "";
 
         if (isExtra) {
             if (editBtn) editBtn.style.display = 'none';
@@ -752,11 +762,7 @@ function scrollToRoom(roomName) {
 document.getElementById('add-ambiente').addEventListener('change', function(e) {
     const val = e.target.value; const divStanza = document.getElementById('div-stanza');
     if (val === 'casasbatuffolone') divStanza.style.display = 'block';
-    else { divStanza.style.display = 'none'; document.getElementById('div-mondo').style.display = 'none'; document.getElementById('div-pandabox').style.display = 'none'; document.getElementById('add-stanza').value = ""; }
-});
-document.getElementById('add-stanza').addEventListener('change', function(e) {
-    document.getElementById('div-mondo').style.display = (e.target.value === 'salotto') ? 'block' : 'none';
-    document.getElementById('div-pandabox').style.display = (e.target.value === 'cucina') ? 'block' : 'none';
+    else { divStanza.style.display = 'none'; document.getElementById('add-stanza').value = ""; }
 });
 
 async function resizeImage(file) {
@@ -769,17 +775,38 @@ async function resizeImage(file) {
 
 document.getElementById('btn-invia-panda').addEventListener('click', async function() {
     const n = document.getElementById('add-nome').value.trim(); const f = document.getElementById('add-img'); const a = document.getElementById('add-ambiente').value; const s = document.getElementById('add-stanza').value;
+    const isPanda = document.getElementById('add-pandaforma').value === 'si';
     if (!n || f.files.length === 0 || !a) return alert("Inserisci nome, immagine e ambiente!");
     const btn = this; btn.innerText = "⏳ Caricamento..."; btn.disabled = true;
     try {
-        const b64 = await resizeImage(f.files[0]); let t="", j="", arr="";
-        const isM = document.getElementById('add-mondo').value; const isP = document.getElementById('add-pandabox').value;
+        const b64 = await resizeImage(f.files[0]); let t="", j="", arr="", dispTitle=null, roomVal=null;
+        
         if (a === 'casasbatuffolone') {
-            if (s === 'salotto' && isM === 'si') { t = "img/casasbatuffolone/salotto/mondo"; j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js"; arr = "dati_mondo"; } 
-            else if (s === 'cucina' && isP === 'si') { t = "img/casasbatuffolone/cucina/pandabox"; j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js"; arr = "dati_pandabox"; } 
-            else { t = `img/casasbatuffolone/${s}`; j = `img/casasbatuffolone/${s}/dati_${s}.js`; arr = `dati_${s}`; }
-        } else { t = `img/${a}`; j = `img/${a}/dati_${a}.js`; arr = `dati_${a}`; }
-        const res = await fetch("https://tisbatuffoblog.vercel.app/api/add_pandaccessorioAPI", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ titolo: n, imageB64: b64, targetDir: t, jsFilePath: j, arrayName: arr }) });
+            if (s === 'salotto-mondo') {
+                t = "img/casasbatuffolone/salotto/mondo";
+                j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js";
+                arr = "dati_mondo";
+                dispTitle = "Salotto - Mondo";
+                roomVal = "salotto";
+            } else if (s === 'cucina-pandabox') {
+                t = "img/casasbatuffolone/cucina/pandabox";
+                j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js";
+                arr = "dati_pandabox";
+                dispTitle = "Cucina - PandaBox";
+                roomVal = "cucina";
+            } else {
+                t = `img/casasbatuffolone/${s}`;
+                j = `img/casasbatuffolone/${s}/dati_${s}.js`;
+                arr = `dati_${s}`;
+                roomVal = s;
+            }
+        } else {
+            t = `img/${a}`;
+            j = `img/${a}/dati_${a}.js`;
+            arr = `dati_${a}`;
+        }
+
+        const res = await fetch("https://tisbatuffoblog.vercel.app/api/add_pandaccessorioAPI", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ titolo: n, imageB64: b64, targetDir: t, jsFilePath: j, arrayName: arr, pandaforma: isPanda }) });
         
         if (res.ok) { 
             alert("Salvato! 🐼"); 
@@ -790,8 +817,10 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
                 targetDir: t,
                 jsFilePath: j,
                 arrayName: arr,
-                room: (a === 'casasbatuffolone' && s) ? s : null,
-                category: a === 'casasbatuffolone' ? 'Casa Sbatuffolone' : a.charAt(0).toUpperCase() + a.slice(1)
+                room: roomVal,
+                category: a === 'casasbatuffolone' ? 'Casa Sbatuffolone' : a.charAt(0).toUpperCase() + a.slice(1),
+                displayTitle: dispTitle,
+                pandaforma: isPanda
             };
             
             let dbKey = a === 'casasbatuffolone' ? 'casa' : a;
@@ -799,12 +828,10 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
             DB[dbKey].push(newItem);
 
             if (a === 'casasbatuffolone') {
-                if (s === 'salotto' && isM === 'si') {
-                    newItem.displayTitle = 'Salotto - Mondo';
+                if (s === 'salotto-mondo') {
                     if(!specialDB.mondo) specialDB.mondo = [];
                     specialDB.mondo.push(newItem);
-                } else if (s === 'cucina' && isP === 'si') {
-                    newItem.displayTitle = 'Cucina - PandaBox';
+                } else if (s === 'cucina-pandabox') {
                     if(!specialDB.pandabox) specialDB.pandabox = [];
                     specialDB.pandabox.push(newItem);
                 }
@@ -829,6 +856,7 @@ document.getElementById('btn-invia-panda').addEventListener('click', async funct
             initApp();
             document.getElementById('add-nome').value = '';
             f.value = '';
+            document.getElementById('add-pandaforma').value = 'no';
             
         } else throw new Error("Errore API");
     } catch (e) { alert("Errore: " + e.message); } finally { btn.innerText = "Aggiungi! 🚀"; btn.disabled = false; }
@@ -849,44 +877,37 @@ function toggleEditMode() {
         const it = activeSet[activeIdx];
         document.getElementById('edit-nome').value = it.titolo || it.foro;
         
+        const isPandaForm = (it.pandaforma === true || it.pandaforma === 'si' || it.pandaforma === 'vero');
+        document.getElementById('edit-pandaforma').value = isPandaForm ? 'si' : 'no';
+
         const tDir = it.targetDir;
         const ambSel = document.getElementById('edit-ambiente');
+        const stanzaSel = document.getElementById('edit-stanza');
+
         if (tDir.includes('casasbatuffolone')) {
             ambSel.value = 'casasbatuffolone';
-            updateEditSelects();
-            const stanzaRegex = /casasbatuffolone\/([^\/]+)/;
-            const match = tDir.match(stanzaRegex);
-            if (match) {
-                document.getElementById('edit-stanza').value = match[1];
-                updateEditSelects();
-                if (match[1] === 'salotto') {
-                    document.getElementById('edit-mondo').value = tDir.includes('mondo') ? 'si' : 'no';
-                } else if (match[1] === 'cucina') {
-                    document.getElementById('edit-pandabox').value = tDir.includes('pandabox') ? 'si' : 'no';
-                }
+            stanzaSel.style.display = 'block';
+            if (tDir.includes('mondo')) {
+                stanzaSel.value = 'salotto-mondo';
+            } else if (tDir.includes('pandabox')) {
+                stanzaSel.value = 'cucina-pandabox';
+            } else {
+                const match = tDir.match(/casasbatuffolone\/([^\/]+)/);
+                if (match) stanzaSel.value = match[1];
             }
         } else {
             const rootEnv = tDir.replace('img/', '');
             ambSel.value = rootEnv;
-            updateEditSelects();
+            stanzaSel.style.display = 'none';
         }
     }
 }
 
-function updateEditSelects() {
-    const a = document.getElementById('edit-ambiente').value;
-    const s = document.getElementById('edit-stanza');
-    const sm = document.getElementById('edit-mondo');
-    const sp = document.getElementById('edit-pandabox');
-    
-    if (a === 'casasbatuffolone') { s.style.display = 'block'; } 
-    else { s.style.display = 'none'; sm.style.display = 'none'; sp.style.display = 'none'; s.value = ""; }
-    
-    if (s.style.display === 'block') {
-        sm.style.display = (s.value === 'salotto') ? 'block' : 'none';
-        sp.style.display = (s.value === 'cucina') ? 'block' : 'none';
-    }
-}
+document.getElementById('edit-ambiente').addEventListener('change', function(e) {
+    const val = e.target.value; const stanzaSel = document.getElementById('edit-stanza');
+    if (val === 'casasbatuffolone') stanzaSel.style.display = 'block';
+    else { stanzaSel.style.display = 'none'; stanzaSel.value = ""; }
+});
 
 async function submitEdit() {
     const newName = document.getElementById('edit-nome').value.trim();
@@ -894,15 +915,34 @@ async function submitEdit() {
     
     const a = document.getElementById('edit-ambiente').value;
     const s = document.getElementById('edit-stanza').value;
-    const isM = document.getElementById('edit-mondo').value; 
-    const isP = document.getElementById('edit-pandabox').value;
-    let t="", j="", arr="";
+    const pandaforma = document.getElementById('edit-pandaforma').value === 'si';
+    
+    let t="", j="", arr="", dispTitle=null, roomVal=null;
     
     if (a === 'casasbatuffolone') {
-        if (s === 'salotto' && isM === 'si') { t = "img/casasbatuffolone/salotto/mondo"; j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js"; arr = "dati_mondo"; } 
-        else if (s === 'cucina' && isP === 'si') { t = "img/casasbatuffolone/cucina/pandabox"; j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js"; arr = "dati_pandabox"; } 
-        else { t = `img/casasbatuffolone/${s}`; j = `img/casasbatuffolone/${s}/dati_${s}.js`; arr = `dati_${s}`; }
-    } else { t = `img/${a}`; j = `img/${a}/dati_${a}.js`; arr = `dati_${a}`; }
+        if (s === 'salotto-mondo') {
+            t = "img/casasbatuffolone/salotto/mondo";
+            j = "img/casasbatuffolone/salotto/mondo/dati_mondo.js";
+            arr = "dati_mondo";
+            dispTitle = "Salotto - Mondo";
+            roomVal = "salotto";
+        } else if (s === 'cucina-pandabox') {
+            t = "img/casasbatuffolone/cucina/pandabox";
+            j = "img/casasbatuffolone/cucina/pandabox/dati_pandabox.js";
+            arr = "dati_pandabox";
+            dispTitle = "Cucina - PandaBox";
+            roomVal = "cucina";
+        } else {
+            t = `img/casasbatuffolone/${s}`;
+            j = `img/casasbatuffolone/${s}/dati_${s}.js`;
+            arr = `dati_${s}`;
+            roomVal = s;
+        }
+    } else {
+        t = `img/${a}`;
+        j = `img/${a}/dati_${a}.js`;
+        arr = `dati_${a}`;
+    }
 
     const it = activeSet[activeIdx];
     const btnS = document.getElementById('btn-save-edit');
@@ -915,7 +955,7 @@ async function submitEdit() {
             action: "update",
             oldTitolo: it.titolo || it.foro, oldImmagine: it.immagine,
             oldTargetDir: it.targetDir, oldJsFilePath: it.jsFilePath, oldArrayName: it.arrayName,
-            newTitolo: newName, newTargetDir: t, newJsFilePath: j, newArrayName: arr
+            newTitolo: newName, newTargetDir: t, newJsFilePath: j, newArrayName: arr, pandaforma: pandaforma
         };
 
         const res = await fetch("https://tisbatuffoblog.vercel.app/api/update_pandaccessorioAPI", { 
@@ -937,20 +977,19 @@ async function submitEdit() {
             it.jsFilePath = j;
             it.arrayName = arr;
             it.category = a === 'casasbatuffolone' ? 'Casa Sbatuffolone' : a.charAt(0).toUpperCase() + a.slice(1);
-            it.room = (a === 'casasbatuffolone' && s) ? s : null;
-            it.displayTitle = null;
+            it.room = roomVal;
+            it.displayTitle = dispTitle;
+            it.pandaforma = pandaforma;
 
             if (roomChanged) {
                 if (!DB[dbKeyNew]) DB[dbKeyNew] = [];
                 DB[dbKeyNew].push(it);
 
                 if (a === 'casasbatuffolone') {
-                    if (s === 'salotto' && isM === 'si') {
-                        it.displayTitle = 'Salotto - Mondo';
+                    if (s === 'salotto-mondo') {
                         if (!specialDB.mondo) specialDB.mondo = [];
                         specialDB.mondo.push(it);
-                    } else if (s === 'cucina' && isP === 'si') {
-                        it.displayTitle = 'Cucina - PandaBox';
+                    } else if (s === 'cucina-pandabox') {
                         if (!specialDB.pandabox) specialDB.pandabox = [];
                         specialDB.pandabox.push(it);
                     }
@@ -1047,7 +1086,6 @@ function toggleExtraEditMode() {
         const it = activeSet[activeIdx];
         document.getElementById('extra-edit-nome').value = it.titolo || it.foro || '';
 
-        // Imposta la posizione in sola lettura (PandaBox oppure Mondo)
         const posText = (it.arrayName === 'dati_extra_pandabox' || it.displayTitle === 'PandaBox' || it.displayTitle === 'Cucina - PandaBox') ? 'PandaBox' : 'Mondo';
         document.getElementById('extra-edit-posizione').value = posText;
     }
@@ -1143,7 +1181,7 @@ async function deleteExtraItem() {
 async function submitSlideExtraAdd() {
     const nome = document.getElementById('slide-add-nome').value.trim();
     const fileInput = document.getElementById('slide-add-img');
-    const pos = document.getElementById('slide-add-posizione').value; // 'PandaBox' oppure 'Mondo'
+    const pos = document.getElementById('slide-add-posizione').value;
 
     if (!nome || fileInput.files.length === 0) {
         return alert("Inserisci sia il nome che l'immagine per il nuovo oggetto extra!");
@@ -1193,14 +1231,13 @@ async function submitSlideExtraAdd() {
                 displayTitle: pos
             };
 
-            const key = pos.toLowerCase(); // 'pandabox' o 'mondo'
+            const key = pos.toLowerCase();
             if (!specialDB[key]) specialDB[key] = [];
             specialDB[key].push(newItem);
 
             clearUI();
             initApp();
             
-            // Resta sulla slide appena aggiunta ricaricando il modale con i dati aggiornati
             activeSet = specialDB[key];
             activeIdx = activeSet.length - 1; 
             updateModal();

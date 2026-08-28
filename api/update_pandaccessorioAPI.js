@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     const { 
         action = "update",
         oldTitolo, oldImmagine, oldTargetDir, oldJsFilePath, oldArrayName, 
-        newTitolo, newTargetDir, newJsFilePath, newArrayName 
+        newTitolo, newTargetDir, newJsFilePath, newArrayName, pandaforma 
     } = req.body;
 
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -118,6 +118,7 @@ export default async function handler(req, res) {
                 if (idx !== -1) {
                     arr[idx].titolo = newTitolo;
                     arr[idx].immagine = newFileNameClean;
+                    arr[idx].pandaforma = pandaforma !== undefined ? pandaforma : false;
                 }
                 return arr;
             });
@@ -130,7 +131,11 @@ export default async function handler(req, res) {
             
             // 2. Aggiungi al nuovo array
             await processJsFile(cNewJs, newArrayName, (arr) => {
-                arr.push({ titolo: newTitolo, immagine: newFileNameClean });
+                arr.push({ 
+                    titolo: newTitolo, 
+                    immagine: newFileNameClean, 
+                    pandaforma: pandaforma !== undefined ? pandaforma : false 
+                });
                 return arr;
             });
         }

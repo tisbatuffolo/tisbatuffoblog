@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { titolo, imageB64, targetDir, jsFilePath, arrayName } = req.body;
+    const { titolo, imageB64, targetDir, jsFilePath, arrayName, pandaforma } = req.body;
 
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
     const REPO_OWNER = "tisbatuffolo";
@@ -99,7 +99,8 @@ export default async function handler(req, res) {
 
     currentArray.push({
         "titolo": titolo,
-        "immagine": cleanFileName
+        "immagine": cleanFileName,
+        "pandaforma": pandaforma !== undefined ? pandaforma : false
     });
 
     const newArrayString = JSON.stringify(currentArray, null, 4);
