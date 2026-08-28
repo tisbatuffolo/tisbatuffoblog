@@ -67,7 +67,8 @@ const dati_cucina = [
     },
     {
         "titolo": "Panda Portanome",
-        "immagine": "Panda Portanome.jpg"
+        "immagine": "Panda Portanome.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Posate",
