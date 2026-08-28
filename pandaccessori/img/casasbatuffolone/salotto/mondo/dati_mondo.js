@@ -35,7 +35,8 @@ const dati_mondo = [
     },
     {
         "titolo": "PandaNinja",
-        "immagine": "PandaNinja.jpg"
+        "immagine": "PandaNinja.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Sei tuuu - Calamita",
