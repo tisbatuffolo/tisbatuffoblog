@@ -80,7 +80,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Orologio",
-        "immagine": "Panda Orologio.jpg"
+        "immagine": "Panda Orologio.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Termometro",
