@@ -216,7 +216,7 @@
       align-items: center;
       justify-content: center;
       opacity: 0;
-      visibility: hidden; /* RISOLTO: Blocca qualsiasi interazione o tocco fantasma quando chiuso e migliora precisione tocco su icone */
+      visibility: hidden;
       pointer-events: none;
       transition: opacity 0.4s ease, visibility 0.4s ease, background-color 0.4s ease;
     }
@@ -436,7 +436,7 @@
       pointer-events: auto;
     }
 
-    /* --- ROTAZIONE FORZATA (Fallback CSS se fallisce il lock nativo su Smartphone) --- */
+    /* --- ROTAZIONE FORZATA --- */
     @media screen and (orientation: portrait) {
       .lightbox.force-rotate,
       .video-lightbox.force-rotate {
@@ -459,7 +459,7 @@
       align-items: center;
       justify-content: center;
       opacity: 0;
-      visibility: hidden; /* AGGIUNTO: Impedisce interazioni fantasma anche per il video lightbox */
+      visibility: hidden;
       pointer-events: none;
       transition: opacity 0.4s ease, visibility 0.4s ease;
     }
@@ -636,7 +636,6 @@
   </div>
 </footer>
 
-<!-- LIGHTBOX FOTO -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-header">
     <div class="lightbox-title" id="lb-title">Titolo Album</div>
@@ -671,9 +670,9 @@
   <div class="slide-counter" id="slide-counter">Foto 1 di X 🐼</div>
 </div>
 
-<!-- LIGHTBOX VIDEO SLIDESHOW -->
 <div class="video-lightbox" id="video-lightbox">
   <video id="album-video" playsinline></video>
+  <audio id="album-audio" preload="auto"></audio>
   
   <div class="video-controls" id="video-controls">
     <div class="video-header-controls">
@@ -686,12 +685,27 @@
           <rect x="14" y="4" width="4" height="16" fill="currentColor"></rect>
         </svg>
       </button>
+
+      <button type="button" class="action-btn" id="btn-toggle-audio" onclick="toggleAudio(event)" title="Attiva/Disattiva Audio">
+        <svg id="audio-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <svg id="audio-off-icon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+      </button>
+
       <button type="button" class="action-btn" id="btn-force-rotate" onclick="forceRotateVideo(event)" title="Forza Rotazione Schermo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
           <path d="M3 3v5h5"></path>
         </svg>
       </button>
+      
       <button type="button" class="action-btn close-btn" onclick="closeVideo(event)" title="Chiudi Video">✕</button>
     </div>
 
@@ -709,7 +723,8 @@
       folderPath: "img/2018 - l'inizio/", 
       extension: ".png",
       totalPhotos: 13,
-      videoPath: "slideshow/Slideshow_Fotoalbum2018.mp4"
+      videoPath: "slideshow/Slideshow_Fotoalbum2018.mp4",
+      soundtrackPath: "soundtrack/Soundtrack_Fotoalbum2018.mp3"
     },
     {
       id: "album_2019",
@@ -717,7 +732,8 @@
       folderPath: "img/2019 - il nostro primo anno insieme/",
       extension: ".png",
       totalPhotos: 14,
-      videoPath: "slideshow/Slideshow_Fotoalbum2019.mp4"
+      videoPath: "slideshow/Slideshow_Fotoalbum2019.mp4",
+      soundtrackPath: "soundtrack/Soundtrack_Fotoalbum2019.mp3"
     },
     {
       id: "album_2020",
@@ -725,7 +741,8 @@
       folderPath: "img/2020 - il nostro secondo anno insieme/",
       extension: ".png",
       totalPhotos: 36,
-      videoPath: "slideshow/Slideshow_Fotoalbum2020.mp4"
+      videoPath: "slideshow/Slideshow_Fotoalbum2020.mp4",
+      soundtrackPath: "soundtrack/Soundtrack_Fotoalbum2020.mp3"
     },
     {
       id: "album_2021",
@@ -733,7 +750,8 @@
       folderPath: "img/2021 - il nostro terzo anno insieme/",
       extension: ".png",
       totalPhotos: 43,
-      videoPath: "slideshow/Slideshow_Fotoalbum2021.mp4"
+      videoPath: "slideshow/Slideshow_Fotoalbum2021.mp4",
+      soundtrackPath: "soundtrack/Soundtrack_Fotoalbum2021.mp3"
     },
     {
       id: "album_2022",
@@ -741,7 +759,8 @@
       folderPath: "img/2022 - il nostro quarto anno insieme/",
       extension: ".png",
       totalPhotos: 49,
-      videoPath: "slideshow/Slideshow_Fotoalbum2022.mp4"
+      videoPath: "slideshow/Slideshow_Fotoalbum2022.mp4",
+      soundtrackPath: "soundtrack/Soundtrack_Fotoalbum2022.mp3"
     },
     {
       id: "album_2023",
@@ -749,7 +768,8 @@
       folderPath: "img/2023 - il nostro quinto anno insieme/",
       extension: ".png",
       totalPhotos: 45,
-      videoPath: "slideshow/Slideshow_Fotoalbum2023.mp4"
+      videoPath: "slideshow/Slideshow_Fotoalbum2023.mp4",
+      soundtrackPath: "soundtrack/Soundtrack_Fotoalbum2023.mp3"
     }
   ];
 
@@ -1017,14 +1037,25 @@
     }
   }
 
-  /* --- CONTROLLO VIDEO SLIDESHOW --- */
+  /* --- CONTROLLO VIDEO & AUDIO SOUNDTRACK SLIDESHOW --- */
   const videoLightbox = document.getElementById('video-lightbox');
   const albumVideo = document.getElementById('album-video');
+  const albumAudio = document.getElementById('album-audio');
   const videoControls = document.getElementById('video-controls');
   const videoPlayIcon = document.getElementById('video-play-icon');
   const videoPauseIcon = document.getElementById('video-pause-icon');
   const videoProgressBar = document.getElementById('video-progress-bar');
+  const audioOnIcon = document.getElementById('audio-on-icon');
+  const audioOffIcon = document.getElementById('audio-off-icon');
+  const btnToggleAudio = document.getElementById('btn-toggle-audio');
+  
+  let isAudioMuted = false;
   let videoControlsTimeout = null;
+
+  albumAudio.onerror = () => {
+    console.warn("Soundtrack non trovata o errore di caricamento, proseguo solo con il video.");
+    albumAudio.src = "";
+  };
 
   function playVideo(albumId, e) {
     if(e) e.stopPropagation();
@@ -1032,6 +1063,21 @@
     if(!album || !album.videoPath) return;
     
     albumVideo.src = album.videoPath;
+    albumVideo.muted = true; // Video silenziato per dare priorità e controllo pulito al file audio MP3 separato
+    
+    isAudioMuted = false;
+    albumAudio.muted = false;
+    if (audioOnIcon) audioOnIcon.style.display = 'block';
+    if (audioOffIcon) audioOffIcon.style.display = 'none';
+    if (btnToggleAudio) btnToggleAudio.classList.remove('active');
+
+    if (album.soundtrackPath) {
+      albumAudio.src = album.soundtrackPath;
+      albumAudio.load();
+    } else {
+      albumAudio.src = "";
+    }
+
     videoLightbox.classList.add('active');
     videoLightbox.classList.remove('force-rotate');
     isVideoForceRotated = false;
@@ -1039,7 +1085,16 @@
     if (rotateBtn) rotateBtn.classList.remove('active');
     videoControls.classList.add('show'); 
     
-    albumVideo.play().catch(() => {});
+    // Partenza simultanea video + audio sincronizzati a bassissima latenza
+    Promise.all([
+      albumVideo.play().catch(() => {}),
+      albumAudio.src ? albumAudio.play().catch(() => {}) : Promise.resolve()
+    ]).then(() => {
+      if (albumAudio.src) {
+        albumAudio.currentTime = albumVideo.currentTime;
+      }
+    });
+
     startVideoControlsTimeout();
   }
 
@@ -1047,8 +1102,32 @@
     if(e) e.stopPropagation();
     if (albumVideo.paused) {
       albumVideo.play().catch(() => {});
+      if (albumAudio.src) {
+        albumAudio.currentTime = albumVideo.currentTime;
+        albumAudio.play().catch(() => {});
+      }
     } else {
       albumVideo.pause();
+      if (albumAudio.src) {
+        albumAudio.pause();
+      }
+    }
+    startVideoControlsTimeout();
+  }
+
+  function toggleAudio(e) {
+    if(e) e.stopPropagation();
+    isAudioMuted = !isAudioMuted;
+    albumAudio.muted = isAudioMuted;
+    
+    if (isAudioMuted) {
+      audioOnIcon.style.display = 'none';
+      audioOffIcon.style.display = 'block';
+      btnToggleAudio.classList.add('active');
+    } else {
+      audioOnIcon.style.display = 'block';
+      audioOffIcon.style.display = 'none';
+      btnToggleAudio.classList.remove('active');
     }
     startVideoControlsTimeout();
   }
@@ -1056,11 +1135,18 @@
   albumVideo.addEventListener('play', () => {
     videoPlayIcon.style.display = 'none';
     videoPauseIcon.style.display = 'block';
+    if (albumAudio.src && albumAudio.paused) {
+      albumAudio.currentTime = albumVideo.currentTime;
+      albumAudio.play().catch(() => {});
+    }
   });
   
   albumVideo.addEventListener('pause', () => {
     videoPlayIcon.style.display = 'block';
     videoPauseIcon.style.display = 'none';
+    if (albumAudio.src && !albumAudio.paused) {
+      albumAudio.pause();
+    }
   });
 
   let isVideoForceRotated = false;
@@ -1118,8 +1204,11 @@
   function closeVideo(e) {
     if(e) e.stopPropagation();
     try { albumVideo.pause(); } catch(err) {}
+    try { albumAudio.pause(); } catch(err) {}
     albumVideo.removeAttribute('src'); 
     albumVideo.load();
+    albumAudio.removeAttribute('src');
+    albumAudio.load();
     videoLightbox.classList.remove('active');
     videoLightbox.classList.remove('force-rotate');
     isVideoForceRotated = false;
@@ -1163,12 +1252,23 @@
       const progress = (albumVideo.currentTime / albumVideo.duration) * 100;
       videoProgressBar.value = progress;
       videoProgressBar.style.setProperty('--value', progress + '%');
+
+      // Controllo di sincronizzazione attiva per evitare qualsiasi drift temporale tra video e audio
+      if (albumAudio.src && !albumAudio.paused && !albumVideo.paused) {
+        const diff = Math.abs(albumAudio.currentTime - albumVideo.currentTime);
+        if (diff > 0.2) {
+          albumAudio.currentTime = albumVideo.currentTime;
+        }
+      }
     }
   });
 
   videoProgressBar.addEventListener('input', (e) => {
     const seekTime = (e.target.value / 100) * albumVideo.duration;
     albumVideo.currentTime = seekTime;
+    if (albumAudio.src) {
+      albumAudio.currentTime = seekTime;
+    }
     e.target.style.setProperty('--value', e.target.value + '%');
   });
 
