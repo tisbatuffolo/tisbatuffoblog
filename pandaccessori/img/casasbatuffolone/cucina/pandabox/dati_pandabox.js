@@ -6,7 +6,8 @@ const dati_pandabox = [
     },
     {
         "titolo": "Baby Appandini",
-        "immagine": "Baby Appandini.jpg"
+        "immagine": "Baby Appandini.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Fasciacavi Orsetti",
