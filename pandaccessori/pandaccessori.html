@@ -152,6 +152,8 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 
 .m-title { font-family: 'Luckiest Guy'; font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 15px 0 5px; line-height: 1.1; }
 .m-subtitle { font-weight: 800; font-size: clamp(1rem, 2.5vw, 1.3rem); text-transform: uppercase; margin-bottom: 10px; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; }
+/* --- agire qui per distanziare il pandabadge dalla scritta --- */
+.m-subtitle .modal-panda-icon { margin-left: 6px; }
 
 .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--cartoon-yellow); border: 5px solid var(--cartoon-border); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-family: 'Luckiest Guy'; font-size: 20px; z-index: 100; display:flex; align-items:center; justify-content:center;}
 .btn-p { left: -15px; } .btn-n { right: -15px; }
@@ -382,7 +384,7 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                 </select>
             </div>
             <div class="add-form-group" id="div-stanza" style="display: none;">
-                <label for="add-stanza">In che stanza?</label>
+                <label for="add-stanza">In che ambiente?</label>
                 <select id="add-stanza">
                     <option value="">-- Scegli Stanza --</option>
                     <option value="salotto">Salotto</option>
@@ -473,7 +475,7 @@ footer { padding: 40px 10px; text-align: center; font-family: 'Grandstander'; fo
                 <label for="edit-pandaforma" style="display:block; font-weight:800; font-size:0.8rem; margin-bottom:2px; color:#333;">PANDAFORMA:</label>
                 <select id="edit-pandaforma">
                     <option value="no">Non è a forma panda</option>
-                    <option value="si">È a forma panda</option>
+                    <option value="si">Si, èa forma panda</option>
                 </select>
             </div>
 
@@ -736,11 +738,13 @@ function updateModal() {
         else if(it.room) { roomText = it.room; } 
         else { roomText = it.category; }
 
-        if (isPandaForm && !isExtra) {
-            roomText += " 🐼";
-        }
-
         sub.innerText = roomText;
+        if (isPandaForm && !isExtra) {
+            const pandaIcon = document.createElement('span');
+            pandaIcon.className = 'modal-panda-icon';
+            pandaIcon.innerText = '🐼';
+            sub.appendChild(pandaIcon);
+        }
         sub.style.color = it.displayTitle || it.room ? (roomColors[it.room] || 'var(--primary)') : 'var(--primary)';
         document.getElementById('l-comment').innerText = it.commento || "";
 
