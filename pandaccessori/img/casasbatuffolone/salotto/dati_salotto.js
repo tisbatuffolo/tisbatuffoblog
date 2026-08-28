@@ -60,7 +60,8 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Copri-Puf",
-        "immagine": "Panda Copri-Puf.jpg"
+        "immagine": "Panda Copri-Puf.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Family",
