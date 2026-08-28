@@ -433,6 +433,16 @@
       pointer-events: auto;
     }
 
+    /* --- ROTAZIONE FORZATA LIGHTBOX FOTO (fallback CSS, speculare ai video) --- */
+    .lightbox.force-rotate {
+      width: 100vh !important;
+      height: 100vw !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) rotate(90deg) !important;
+      transform-origin: center center !important;
+    }
+
     /* --- VIDEO LIGHTBOX --- */
     .video-lightbox {
       position: fixed;
@@ -841,8 +851,15 @@
     stopSlideshow(); 
     lightbox.classList.remove('active');
     lightbox.classList.remove('is-fullscreen');
+    lightbox.classList.remove('force-rotate');
     lightbox.classList.remove('show-controls');
     
+    try {
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
+    } catch (err) {}
+
     if (document.fullscreenElement || document.webkitFullscreenElement) {
       if (document.exitFullscreen) document.exitFullscreen().catch(()=>{});
       else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
@@ -877,7 +894,7 @@
     slideCounter.innerText = `Foto ${currentSlideIndex} di ${currentAlbum.totalPhotos} 🐼`;
   }
 
-  function togglePlay(e) {
+  async function togglePlay(e) {
     if(e) e.stopPropagation();
     if (isPlaying) {
       stopSlideshow();
@@ -885,6 +902,17 @@
       if (!lightbox.classList.contains('is-fullscreen')) {
         toggleFullscreen(null);
       }
+      
+      // Su mobile, al click del play, ruota la lightbox e blocca in landscape per ottimizzare le slide
+      if (window.innerWidth <= 768) {
+        lightbox.classList.add('force-rotate');
+        try {
+          if (screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock('landscape');
+          }
+        } catch (err) {}
+      }
+
       startSlideshow();
     }
   }
@@ -896,10 +924,17 @@
     
     changeSlide(1);
     
-    slideshowInterval = setInterval(() => {
+    slideshowInterval = setInterval(async () => {
       if (currentSlideIndex === currentAlbum.totalPhotos) {
         stopSlideshow();
         
+        lightbox.classList.remove('force-rotate');
+        try {
+          if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock();
+          }
+        } catch (err) {}
+
         if (lightbox.classList.contains('is-fullscreen')) {
           toggleFullscreen(null);
         }
@@ -941,6 +976,13 @@
       }
     } else {
       lightbox.classList.remove('is-fullscreen');
+      lightbox.classList.remove('force-rotate');
+      try {
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+        }
+      } catch (err) {}
+
       if (document.fullscreenElement || document.webkitFullscreenElement) {
         if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
@@ -1010,68 +1052,57 @@
     videoPauseIcon.style.display = 'none';
   });
 
-let isVideoForceRotated = false;
+  let isVideoForceRotated = false;
 
-async function forceRotateVideo(e) {
-  if (e) e.stopPropagation();
-  const btn = document.getElementById('btn-force-rotate');
+  async function forceRotateVideo(e) {
+    if (e) e.stopPropagation();
+    const btn = document.getElementById('btn-force-rotate');
 
-  isVideoForceRotated = !isVideoForceRotated;
-  let nativeOk = false;
+    isVideoForceRotated = !isVideoForceRotated;
+    let nativeOk = false;
 
-  // 1) ROTAZIONE VERA: schermo intero + blocco orientamento nativo del browser.
-  //    Su Android (Chrome/Firefox/Edge) questa API ruota davvero lo schermo,
-  //    esattamente come attivare la rotazione fisica del telefono.
-  //    Su iPhone NON è supportata: è una scelta di Apple, non un limite
-  //    di questo codice, e nessun sito web può aggirarla.
-  try {
-    if (isVideoForceRotated) {
-      if (!document.fullscreenElement) {
-        if (videoLightbox.requestFullscreen) {
-          await videoLightbox.requestFullscreen();
-        } else if (videoLightbox.webkitRequestFullscreen) {
-          videoLightbox.webkitRequestFullscreen();
-        } else {
-          throw new Error('Fullscreen non supportato');
+    try {
+      if (isVideoForceRotated) {
+        if (!document.fullscreenElement) {
+          if (videoLightbox.requestFullscreen) {
+            await videoLightbox.requestFullscreen();
+          } else if (videoLightbox.webkitRequestFullscreen) {
+            videoLightbox.webkitRequestFullscreen();
+          } else {
+            throw new Error('Fullscreen non supportato');
+          }
         }
-      }
-      if (screen.orientation && screen.orientation.lock) {
-        await screen.orientation.lock('landscape');
-        nativeOk = true;
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock('landscape');
+          nativeOk = true;
+        } else {
+          throw new Error('Screen Orientation Lock non supportato');
+        }
       } else {
-        throw new Error('Screen Orientation Lock non supportato');
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+        }
+        if (document.fullscreenElement) {
+          if (document.exitFullscreen) await document.exitFullscreen().catch(() => {});
+          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
+        nativeOk = true;
       }
-    } else {
-      if (screen.orientation && screen.orientation.unlock) {
-        screen.orientation.unlock();
-      }
-      if (document.fullscreenElement) {
-        if (document.exitFullscreen) await document.exitFullscreen().catch(() => {});
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      }
-      nativeOk = true;
+    } catch (err) {
+      nativeOk = false;
     }
-  } catch (err) {
-    nativeOk = false;
-  }
 
-  if (!nativeOk) {
-    if (isVideoForceRotated && albumVideo.webkitEnterFullscreen) {
-      // 2) iPHONE: nessuna API web forza la vera rotazione dello schermo.
-      //    La soluzione nativa migliore è il player video a schermo intero
-      //    di iOS, che ruota da solo, correttamente, quando l'utente gira
-      //    fisicamente il telefono.
-      try { albumVideo.webkitEnterFullscreen(); } catch (err) {}
-    } else {
-      // 3) ULTIMO FALLBACK: rotazione visuale via CSS, per i pochi browser
-      //    che non supportano né il punto 1 né il punto 2.
-      videoLightbox.classList.toggle('force-rotate', isVideoForceRotated);
+    if (!nativeOk) {
+      if (isVideoForceRotated && albumVideo.webkitEnterFullscreen) {
+        try { albumVideo.webkitEnterFullscreen(); } catch (err) {}
+      } else {
+        videoLightbox.classList.toggle('force-rotate', isVideoForceRotated);
+      }
     }
-  }
 
-  if (btn) btn.classList.toggle('active', isVideoForceRotated);
-  startVideoControlsTimeout();
-}
+    if (btn) btn.classList.toggle('active', isVideoForceRotated);
+    startVideoControlsTimeout();
+  }
 
   function closeVideo(e) {
     if(e) e.stopPropagation();
