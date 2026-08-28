@@ -6,7 +6,8 @@ const dati_gazy = [
     },
     {
         "titolo": "Panda Fermacavo",
-        "immagine": "Panda Fermacavo.jpg"
+        "immagine": "Panda Fermacavo.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Portaocchiali",
