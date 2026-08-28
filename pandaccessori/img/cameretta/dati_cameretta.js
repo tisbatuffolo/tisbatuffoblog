@@ -10,7 +10,8 @@ const dati_cameretta = [
     },
     {
         "titolo": "Panda Adesivi",
-        "immagine": "Panda Adesivi.jpg"
+        "immagine": "Panda Adesivi.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Peluche",
