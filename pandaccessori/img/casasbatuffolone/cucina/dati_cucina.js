@@ -2,7 +2,8 @@
 const dati_cucina = [
     {
         "titolo": "Appandino Cuoricino",
-        "immagine": "Appandino Cuoricino.jpg"
+        "immagine": "Appandino Cuoricino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Appandino Presine",
