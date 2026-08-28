@@ -7,9 +7,15 @@ on:
   # Permette di lanciare l'azione anche manualmente dalla scheda "Actions" di GitHub
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   aggiorna-giri:
     runs-on: ubuntu-latest
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # 1. Scarica il codice del repository
@@ -22,7 +28,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      # 3. Installa le dipendenze e i browser di Playwright
+      # 3. Installa le dipendenze e i browser di Playwright necessari allo script
       - name: Install dependencies
         working-directory: girettimap
         run: |
@@ -36,19 +42,14 @@ jobs:
         run: |
           python3 aggiorna-giri.py
 
-      # 5. Effettua il commit e il push dei file modificati
+      # 5. Effettua il commit e il push dei file modificati (giri.js e img_giri/)
       - name: Commit e push dei file aggiornati
         working-directory: girettimap
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           
           git add giri.js img_giri/
           
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Modifiche rilevate, procedo al commit..."
-            git commit -m "Aggiornamento automatico giri.js e anteprime [skip ci]"
-            git push
-          else
-            echo "Nessuna modifica da committare. Tutto aggiornato!"
-          fi
+          git commit -m "Aggiornamento automatico giri.js e anteprime [skip ci]" || echo "Nessuna modifica da committare"
+          git push
