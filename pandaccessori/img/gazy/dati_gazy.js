@@ -11,7 +11,8 @@ const dati_gazy = [
     },
     {
         "titolo": "Panda Portaocchiali",
-        "immagine": "Panda Portaocchiali.jpg"
+        "immagine": "Panda Portaocchiali.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandaocchiali",
