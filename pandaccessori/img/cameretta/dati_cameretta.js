@@ -20,7 +20,8 @@ const dati_cameretta = [
     },
     {
         "titolo": "Panda Portaocchiali",
-        "immagine": "Panda Portaocchiali.jpg"
+        "immagine": "Panda Portaocchiali.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Sasso",
