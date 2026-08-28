@@ -35,7 +35,8 @@ const dati_cameretta = [
     },
     {
         "titolo": "Pandanello",
-        "immagine": "Pandanello.jpg"
+        "immagine": "Pandanello.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Scorlino",
