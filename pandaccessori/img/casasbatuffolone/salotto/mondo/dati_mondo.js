@@ -40,7 +40,8 @@ const dati_mondo = [
     },
     {
         "titolo": "Sei tuuu - Calamita",
-        "immagine": "Sei tuuu - Calamita.jpg"
+        "immagine": "Sei tuuu - Calamita.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Siiiii - Calamita",
