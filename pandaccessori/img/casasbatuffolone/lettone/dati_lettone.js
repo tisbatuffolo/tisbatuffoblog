@@ -10,7 +10,8 @@ const dati_lettone = [
     },
     {
         "titolo": "Panda Cuori",
-        "immagine": "Panda Cuori.jpg"
+        "immagine": "Panda Cuori.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "PandAnello",
