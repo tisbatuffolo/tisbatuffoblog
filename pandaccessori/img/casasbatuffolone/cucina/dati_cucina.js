@@ -2,7 +2,8 @@
 const dati_cucina = [
     {
         "titolo": "Appandino Cuoricino",
-        "immagine": "Appandino Cuoricino.jpg"
+        "immagine": "Appandino Cuoricino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Appandino Presine",
@@ -22,11 +23,13 @@ const dati_cucina = [
     },
     {
         "titolo": "Kit PandaSushi",
-        "immagine": "Kit PandaSushi.jpg"
+        "immagine": "Kit PandaSushi.jpg",
+        "pandaforma": true
     },
     {
-        "titolo": "Mollette Cartoons",
-        "immagine": "Mollette Cartoons.jpg"
+        "titolo": "Panda Mollette",
+        "immagine": "Panda Mollette.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Orsetti Cuore",
@@ -34,39 +37,48 @@ const dati_cucina = [
     },
     {
         "titolo": "Panda Adesivi",
-        "immagine": "Panda Adesivi.jpg"
+        "immagine": "Panda Adesivi.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Box",
-        "immagine": "Panda Box.jpg"
+        "immagine": "Panda Box.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Cactus",
-        "immagine": "Panda Cactus.jpg"
+        "immagine": "Panda Cactus.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Lavagna",
-        "immagine": "Panda Lavagna.jpg"
+        "immagine": "Panda Lavagna.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Musik",
-        "immagine": "Panda Musik.jpg"
+        "immagine": "Panda Musik.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Portabicchieri",
-        "immagine": "Panda Portabicchieri.jpg"
+        "immagine": "Panda Portabicchieri.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Portanome",
-        "immagine": "Panda Portanome.jpg"
+        "immagine": "Panda Portanome.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Posate",
-        "immagine": "Panda Posate.jpg"
+        "immagine": "Panda Posate.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Timer",
-        "immagine": "Panda Timer.jpg"
+        "immagine": "Panda Timer.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pando e Dino",
@@ -78,10 +90,12 @@ const dati_cucina = [
     },
     {
         "titolo": "Stuzzicadenti Panda",
-        "immagine": "Stuzzicadenti Panda.jpg"
+        "immagine": "Stuzzicadenti Panda.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Spesa",
-        "immagine": "Panda Spesa.jpg"
+        "immagine": "Panda Spesa.jpg",
+        "pandaforma": true
     }
 ];

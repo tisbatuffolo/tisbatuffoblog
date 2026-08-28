@@ -6,7 +6,8 @@ const dati_pandabox = [
     },
     {
         "titolo": "Baby Appandini",
-        "immagine": "Baby Appandini.jpg"
+        "immagine": "Baby Appandini.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Fasciacavi Orsetti",
@@ -14,19 +15,23 @@ const dati_pandabox = [
     },
     {
         "titolo": "Panda Collane",
-        "immagine": "Panda Collane.jpg"
+        "immagine": "Panda Collane.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Sticker",
-        "immagine": "Panda Sticker.jpg"
+        "immagine": "Panda Sticker.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandacucciolatori Bis",
-        "immagine": "Pandacucciolatori Bis.jpg"
+        "immagine": "Pandacucciolatori Bis.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandoni Adesivi",
-        "immagine": "Pandoni Adesivi.jpg"
+        "immagine": "Pandoni Adesivi.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Stickers",

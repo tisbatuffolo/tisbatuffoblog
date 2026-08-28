@@ -6,18 +6,22 @@ const dati_corridoio = [
     },
     {
         "titolo": "Panda Borse",
-        "immagine": "Panda Borse.jpg"
+        "immagine": "Panda Borse.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Lucine",
-        "immagine": "Panda Lucine.jpg"
+        "immagine": "Panda Lucine.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandino Sbattiporta",
-        "immagine": "Pandino Sbattiporta.jpg"
+        "immagine": "Pandino Sbattiporta.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Dancing Panda",
-        "immagine": "Dancing Panda.jpg"
+        "immagine": "Dancing Panda.jpg",
+        "pandaforma": true
     }
 ];

@@ -6,22 +6,27 @@ const dati_gazy = [
     },
     {
         "titolo": "Panda Fermacavo",
-        "immagine": "Panda Fermacavo.jpg"
+        "immagine": "Panda Fermacavo.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Portaocchiali",
-        "immagine": "Panda Portaocchiali.jpg"
+        "immagine": "Panda Portaocchiali.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandaocchiali",
-        "immagine": "Pandaocchiali.jpg"
+        "immagine": "Pandaocchiali.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandino Box",
-        "immagine": "Pandino Box.jpg"
+        "immagine": "Pandino Box.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Gazy PandaCucciolatori",
-        "immagine": "Gazy PandaCucciolatori.jpg"
+        "immagine": "Gazy PandaCucciolatori.jpg",
+        "pandaforma": true
     }
 ];

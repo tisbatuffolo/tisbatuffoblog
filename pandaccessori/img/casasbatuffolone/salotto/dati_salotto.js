@@ -18,11 +18,13 @@ const dati_salotto = [
     },
     {
         "titolo": "Ex Panda Cover",
-        "immagine": "Ex Panda Cover.jpg"
+        "immagine": "Ex Panda Cover.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Goso Ciondolo",
-        "immagine": "Goso Ciondolo.jpg"
+        "immagine": "Goso Ciondolo.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Il Mondo",
@@ -38,47 +40,58 @@ const dati_salotto = [
     },
     {
         "titolo": "Panda Adesivi Salotto",
-        "immagine": "Panda Adesivi Salotto.jpg"
+        "immagine": "Panda Adesivi Salotto.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "AppoggiaVentolino",
-        "immagine": "AppoggiaVentolino.jpg"
+        "immagine": "AppoggiaVentolino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Bicchieri",
-        "immagine": "Panda Bicchieri.jpg"
+        "immagine": "Panda Bicchieri.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Cavetti",
-        "immagine": "Panda Cavetti.jpg"
+        "immagine": "Panda Cavetti.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Copri-Puf",
-        "immagine": "Panda Copri-Puf.jpg"
+        "immagine": "Panda Copri-Puf.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Family",
-        "immagine": "Panda Family.jpg"
+        "immagine": "Panda Family.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Lego",
-        "immagine": "Panda Lego.jpg"
+        "immagine": "Panda Lego.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Lume",
-        "immagine": "Panda Lume.jpg"
+        "immagine": "Panda Lume.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Orologio",
-        "immagine": "Panda Orologio.jpg"
+        "immagine": "Panda Orologio.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Termometro",
-        "immagine": "Panda Termometro.jpg"
+        "immagine": "Panda Termometro.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Poomba",
-        "immagine": "Poomba.jpg"
+        "immagine": "Poomba.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Portafazzoletti Orsetto",
@@ -90,14 +103,17 @@ const dati_salotto = [
     },
     {
         "titolo": "Ventolino",
-        "immagine": "Ventolino.jpg"
+        "immagine": "Ventolino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda HDisk",
-        "immagine": "Panda HDisk.jpg"
+        "immagine": "Panda HDisk.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandamodem",
-        "immagine": "Pandamodem.jpg"
+        "immagine": "Pandamodem.jpg",
+        "pandaforma": true
     }
 ];

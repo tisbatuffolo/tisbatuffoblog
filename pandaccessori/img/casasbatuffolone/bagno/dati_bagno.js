@@ -14,14 +14,17 @@ const dati_bagno = [
     },
     {
         "titolo": "EX Saponificatore Panda",
-        "immagine": "EX Saponificatore Panda.jpg"
+        "immagine": "EX Saponificatore Panda.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Saponificatore Panda",
-        "immagine": "Saponificatore Panda.jpg"
+        "immagine": "Saponificatore Panda.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Scaldino",
-        "immagine": "Scaldino.jpg"
+        "immagine": "Scaldino.jpg",
+        "pandaforma": true
     }
 ];

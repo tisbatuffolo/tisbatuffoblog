@@ -10,31 +10,38 @@ const dati_cameretta = [
     },
     {
         "titolo": "Panda Adesivi",
-        "immagine": "Panda Adesivi.jpg"
+        "immagine": "Panda Adesivi.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Peluche",
-        "immagine": "Panda Peluche.jpg"
+        "immagine": "Panda Peluche.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Portaocchiali",
-        "immagine": "Panda Portaocchiali.jpg"
+        "immagine": "Panda Portaocchiali.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Sasso",
-        "immagine": "Panda Sasso.jpg"
+        "immagine": "Panda Sasso.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Zen",
-        "immagine": "Panda Zen.jpg"
+        "immagine": "Panda Zen.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pandanello",
-        "immagine": "Pandanello.jpg"
+        "immagine": "Pandanello.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Scorlino",
-        "immagine": "Scorlino.jpg"
+        "immagine": "Scorlino.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Ti Voglio Bene",
