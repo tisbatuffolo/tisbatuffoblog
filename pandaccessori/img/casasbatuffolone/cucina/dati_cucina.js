@@ -77,7 +77,8 @@ const dati_cucina = [
     },
     {
         "titolo": "Panda Timer",
-        "immagine": "Panda Timer.jpg"
+        "immagine": "Panda Timer.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Pando e Dino",
