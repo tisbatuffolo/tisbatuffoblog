@@ -532,18 +532,15 @@
         audioElement.play();
       } else {
         audioElement.pause();
-        audioElement.currentTime = 0;
       }
     });
     
-    // Ferma la canzone quando si cambia pagina (click su card)
+    // Ferma la canzone e resetta quando si cambia pagina (click su card)
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
       card.addEventListener('click', function() {
-        if (!audioElement.paused) {
-          audioElement.pause();
-          audioElement.currentTime = 0;
-        }
+        audioElement.pause();
+        audioElement.currentTime = 0;
       });
     });
   </script>
