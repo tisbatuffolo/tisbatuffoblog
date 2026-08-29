@@ -49,7 +49,8 @@ const dati_mondo = [
     },
     {
         "titolo": "Ti Sbatuffolo - Calamita",
-        "immagine": "Ti Sbatuffolo - Calamita.jpg"
+        "immagine": "Ti Sbatuffolo - Calamita.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Zio Ema - Calamita",
