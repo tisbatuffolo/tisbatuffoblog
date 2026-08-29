@@ -106,12 +106,17 @@
       margin: 20px auto 0;
       max-width: 120px;
       width: 50%;
+      cursor: pointer;
     }
     .logo-wrapper img {
       width: 100%;
       height: auto;
       display: block;
       margin: 0 auto;
+      transition: transform 0.2s ease;
+    }
+    .logo-wrapper:hover img {
+      transform: scale(1.05);
     }
 
     /* --- SLIDER --- */
@@ -413,6 +418,8 @@
     </div>
   </footer>
 
+  <audio id="sbatuffo-song" src="sound/SbatuffoblogSong.mp3"></audio>
+
   <script>
     /* --- SOTTOTITOLO RANDOM --- */
     const frasi = [
@@ -498,7 +505,7 @@
       } else if (days === 0) {
         msgBox.innerHTML = "Oggi è il nostro anniversario mese!";
       } else {
-        msgBox.innerHTML = "";
+        msgBox.innerHTML = "Io & Te";
       }
     }
     updateTimer();
@@ -515,6 +522,30 @@
     }
     setInterval(triggerFlip, 8000);
     setTimeout(triggerFlip, 1500);
+
+    /* --- AUDIO LOGO --- */
+    const audioElement = document.getElementById('sbatuffo-song');
+    const logoWrapper = document.querySelector('.logo-wrapper');
+    
+    logoWrapper.addEventListener('click', function() {
+      if (audioElement.paused) {
+        audioElement.play();
+      } else {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+    });
+    
+    // Ferma la canzone quando si cambia pagina (click su card)
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.addEventListener('click', function() {
+        if (!audioElement.paused) {
+          audioElement.pause();
+          audioElement.currentTime = 0;
+        }
+      });
+    });
   </script>
 </body>
 </html>

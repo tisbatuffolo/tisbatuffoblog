@@ -328,7 +328,7 @@ header {
 }
 
 .cd-shape { 
-    background: #e0e0e0; 
+    background: radial-gradient(circle at 30% 30%, #c8c8c8, #808080); 
     border-radius: 50%; 
     width: 95vw; 
     max-width: 550px;
@@ -401,12 +401,13 @@ header {
 .form-group { margin-bottom: 12px; }
 .form-group input { 
     width: 100%; 
-    padding: 12px; 
+    padding: 6px 12px; 
     border: 2px solid var(--stroke); 
     border-radius: 8px; 
     font-family: 'Fredoka', sans-serif; 
     box-sizing: border-box; 
     font-size: 0.95rem; 
+    line-height: 1;
 }
 
 .modal-btns { 
@@ -739,7 +740,7 @@ footer {
                 <div class="photo-editor-grid" id="photo-editor-grid">
                     </div>
                 <input type="file" id="concert-photos-input" multiple accept="image/*" style="font-size: 0.85rem; padding: 8px;">
-                <small style="display:block; color:#666; font-size:0.75rem; margin-top: 4px;">Le immagini verranno ridimensionate automaticamente per il web.</small>
+                <small style="display:block; color:#666; font-size:0.75rem; margin-top: 4px;">Le immagini verranno ridimensionate automaticamente.</small>
             </div>
             
             <div class="modal-btns" style="margin-top: 25px;">
