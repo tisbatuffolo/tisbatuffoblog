@@ -1057,13 +1057,13 @@
     albumAudio.src = "";
   };
 
-  function playVideo(albumId, e) {
+  async function playVideo(albumId, e) {
     if(e) e.stopPropagation();
     const album = albums.find(a => a.id === albumId);
     if(!album || !album.videoPath) return;
     
     albumVideo.src = album.videoPath;
-    albumVideo.muted = true; // Video silenziato per dare priorità e controllo pulito al file audio MP3 separato
+    albumVideo.muted = true; 
     
     isAudioMuted = false;
     albumAudio.muted = false;
@@ -1084,8 +1084,35 @@
     const rotateBtn = document.getElementById('btn-force-rotate');
     if (rotateBtn) rotateBtn.classList.remove('active');
     videoControls.classList.add('show'); 
+
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+
+    try {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (videoLightbox.requestFullscreen) {
+          await videoLightbox.requestFullscreen();
+        } else if (videoLightbox.webkitRequestFullscreen) {
+          videoLightbox.webkitRequestFullscreen();
+        }
+      }
+    } catch (err) {}
+
+    if (isMobile) {
+      let nativeLockOk = false;
+      try {
+        if (screen.orientation && typeof screen.orientation.lock === 'function') {
+          await screen.orientation.lock('landscape');
+          nativeLockOk = true;
+        }
+      } catch (err) {}
+      
+      if (!nativeLockOk) {
+        videoLightbox.classList.add('force-rotate');
+        isVideoForceRotated = true;
+        if (rotateBtn) rotateBtn.classList.add('active');
+      }
+    }
     
-    // Partenza simultanea video + audio sincronizzati a bassissima latenza
     Promise.all([
       albumVideo.play().catch(() => {}),
       albumAudio.src ? albumAudio.play().catch(() => {}) : Promise.resolve()
@@ -1253,7 +1280,6 @@
       videoProgressBar.value = progress;
       videoProgressBar.style.setProperty('--value', progress + '%');
 
-      // Controllo di sincronizzazione attiva per evitare qualsiasi drift temporale tra video e audio
       if (albumAudio.src && !albumAudio.paused && !albumVideo.paused) {
         const diff = Math.abs(albumAudio.currentTime - albumVideo.currentTime);
         if (diff > 0.2) {
