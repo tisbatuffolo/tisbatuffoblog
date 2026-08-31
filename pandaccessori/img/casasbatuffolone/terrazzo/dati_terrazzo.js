@@ -2,7 +2,8 @@
 const dati_terrazzo = [
     {
         "titolo": "Luce Zampa",
-        "immagine": "Luce Zampa.jpg"
+        "immagine": "Luce Zampa.jpg",
+        "pandaforma": true
     },
     {
         "titolo": "Panda Sfigatino",
