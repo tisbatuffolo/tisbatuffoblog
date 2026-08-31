@@ -17,5 +17,10 @@ const dati_lettone = [
         "titolo": "PandAnello",
         "immagine": "PandAnello.jpg",
         "pandaforma": true
+    },
+    {
+        "titolo": "Panda Musik",
+        "immagine": "Panda Musik.jpg",
+        "pandaforma": true
     }
 ];
