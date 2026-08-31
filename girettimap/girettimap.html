@@ -824,7 +824,6 @@
 
 <!-- SCRIPT 1: GESTIONE OUTDOORACTIVE -->
 <script>
-  // Usa "window." per aggirare qualsiasi conflitto di variabili col file giri.js
   window.AttivaOutdooractive = true; 
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -834,58 +833,31 @@
 
       if (window.AttivaOutdooractive === false) {
         if (sezioneUltimiGiri) {
-          // Eliminazione fisica dal DOM
           sezioneUltimiGiri.remove();
         }
       } else {
         if (typeof GIRI !== 'undefined' && containerGiri) {
-          GIRI.slice(0, 9).forEach(giro => {
+          GIRI.slice(0, 9).forEach((giro, index) => {
             const card = document.createElement("div");
             card.className = "riquadro";
             
-            // 1. Estraiamo sia l'ID del Link sia l'ID dell'Immagine (per supportare entrambe le nomenclature nella cartella locale)
+            // Estraiamo l'ID del giro dal link
             const linkMatch = giro.link ? giro.link.match(/\/(\d+)\/?(?:#.*)?$/) : null;
             const linkId = linkMatch ? linkMatch[1] : null;
 
-            const imgMatch = giro.img ? giro.img.match(/\/(\d+)\//) : null;
-            const imgId = imgMatch ? imgMatch[1] : null;
-
-            // 2. Prepariamo la lista di fallback nell'ordine corretto
-            const sources = [];
-            if (linkId) sources.push(`img_giri/giro_${linkId}.webp`); // Prima scelta: ID del link
-            if (imgId) sources.push(`img_giri/giro_${imgId}.webp`);   // Seconda scelta: ID immagine
-            if (giro.img && giro.img.trim() !== "") sources.push(giro.img); // Terza scelta: URL Esterno da giri.js
-            
+            // Generiamo il nome del file locale corretto: giro1_..., giro2_..., ecc.
+            const nGiro = index + 1;
+            const localImg = linkId ? `img_giri/giro${nGiro}_${linkId}.webp` : giro.img;
             const fallbackImg = "img/pandamappa.png";
-            sources.push(fallbackImg); // Fallback finale
-            
-            // 3. Rimuoviamo eventuali duplicati
-            const uniqueSources = [...new Set(sources)];
-            
-            // L'immagine iniziale è il primo url valido
-            const initialSrc = uniqueSources[0];
-            // Le alternative vengono passate come attributo data per essere gestite dall'evento onerror
-            const fallbacksStr = uniqueSources.slice(1).join(',');
 
-            // Inline onerror script garantisce transizioni robuste senza far crashare nulla
             card.innerHTML = `
               <a href="${giro.link}" target="_blank" class="riquadro-link">
                 <div class="riquadro-titolo">${giro.titolo}</div>
-                <img src="${initialSrc}" 
-                     data-fallbacks="${fallbacksStr}"
+                <img src="${localImg}" 
                      alt="${giro.titolo}" 
                      loading="lazy" 
                      decoding="async" 
-                     onerror="
-                       const fallbacks = this.getAttribute('data-fallbacks').split(',');
-                       if(fallbacks.length > 0 && fallbacks[0] !== '') {
-                         this.src = fallbacks.shift();
-                         this.setAttribute('data-fallbacks', fallbacks.join(','));
-                       } else {
-                         this.onerror=null; 
-                         this.src='${fallbackImg}';
-                       }
-                     ">
+                     onerror="this.onerror=null; this.src='${fallbackImg}';">
               </a>`;
             containerGiri.appendChild(card);
           });
