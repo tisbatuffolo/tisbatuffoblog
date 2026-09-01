@@ -138,13 +138,11 @@
   .phone-screen { width: 100%; height: 465px; background: #e0f7fa; border-radius: 38px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 3px solid #1a1a1a; margin-top: 10px; }
   .phone-screen::before { content: ""; position: absolute; top: 10px; right: 15px; width: 60px; height: 120px; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%); transform: rotate(-10deg); border-radius: 15px; z-index: 10; pointer-events: none; }
   
-  /* Modificate solo queste regole per la scrollbar stile ombra */
   .stickers-display { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; overflow-y: auto; gap: 30px; background-image: radial-gradient(rgba(255,255,255,0.4) 2px, transparent 2px); background-size: 30px 30px; scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.15) transparent; }
   .stickers-display::-webkit-scrollbar { width: 3px; }
   .stickers-display::-webkit-scrollbar-track { background: transparent; }
   .stickers-display::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
   .stickers-display::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
-  /* Fine modifiche scrollbar */
 
   .sticker-item-phone { width: 155px; flex-shrink: 0; filter: drop-shadow(0 5px 12px rgba(0,0,0,0.12)); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .sticker-item-phone:hover { transform: scale(1.1) rotate(-3deg); }
@@ -517,7 +515,6 @@
 
 <div class="section-divider" style="margin: 40px auto 10px;"></div>
 
-<!-- NUOVA SEZIONE SBATUFFOLAI -->
 <section class="sbatuffolai-section">
   <h2 class="section-title">Ti sbatuffolAI</h2>
   <p class="section-subtitle">Ieri ti sbatuffolai, oggi ti sbatuffolo, domani ti sbatuffolerò</p>
@@ -601,7 +598,6 @@
 
 <div class="section-divider" style="margin: 40px auto;"></div>
 
-<!-- NUOVA SEZIONE AGGIUNGI PANDOSITÀ -->
 <section class="aggiungi-pandosita-section" style="padding: 40px 0; text-align: center; background: #fff;">
     <h2 class="section-title">Aggiungi Pandosità</h2>
     <p class="section-subtitle">Contribuisci a rendere questo posto ancora più sbatuffoloso!</p>
@@ -610,7 +606,6 @@
     </div>
 </section>
 
-<!-- MODALE FORM -->
 <div id="modalPandosita" class="modal-overlay">
   <div class="modal-content">
     <span class="modal-close" onclick="chiudiFormPandosita()">&times;</span>
@@ -1090,11 +1085,9 @@
       const sezione = document.getElementById('sezionePandosita').value;
       const file = fileInput.files[0];
       
-      // Controllo di fallback JavaScript oltre a quello HTML
       if (!sezione) return alert("Scegli una sezione di atterraggio!");
       if (!file) return alert("Seleziona un'immagine!");
 
-      // REGOLA: Il formato GIF è esclusivo solo per la sezione Panda Gif
       if (file.type === 'image/gif' && sezione !== 'gif') {
           return alert("Il formato GIF è consentito esclusivamente nella sezione Panda Gif!");
       }
@@ -1105,7 +1098,6 @@
       const fileType = file.type;
       const isResizable = (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png' || fileType === 'image/webp');
 
-      // Se è ridimensionabile E NON è una GIF (le GIF animate perse nel canvas)
       if (isResizable && fileType !== 'image/gif') {
           const reader = new FileReader();
           reader.readAsDataURL(file);
@@ -1136,10 +1128,9 @@
                   const ctx = canvas.getContext('2d');
                   ctx.drawImage(img, 0, 0, width, height);
 
-                  // REGOLA: Trasformazione in base alla sezione
-                  let targetMime = 'image/jpeg'; // Sbatuffolart, AI, Lulu, Sfigatini
+                  let targetMime = 'image/jpeg';
                   if (sezione === 'sticker') {
-                      targetMime = 'image/webp'; // Sticker usa webp
+                      targetMime = 'image/webp';
                   }
 
                   const dataUrl = canvas.toDataURL(targetMime, 0.85);
@@ -1149,7 +1140,6 @@
               };
           };
       } else {
-          // GIF o formati non supportati dal canvas
           const reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = async function () {
@@ -1161,29 +1151,27 @@
 
   async function inviaDatiApi(sezione, base64Data, mimeType) {
       try {
-          // SOLUZIONE FRONTEND: Utilizzo path relativo per risolvere i problemi di domini CORS asimmetrici
-  const response = await fetch('https://tisbatuffoblog.vercel.app/api/add_pandositaAPI', { 
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
-        sezione: sezione, 
-        imageB64: base64Data, 
-        mimeType: mimeType 
-    })
-});
+          const response = await fetch('https://tisbatuffoblog.vercel.app/api/add_pandositaAPI', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                sezione: sezione, 
+                imageB64: base64Data, 
+                mimeType: mimeType 
+            })
+          });
           
           if (response.ok) {
               alert('Pandosità aggiunta con successo! La pagina si aggiornerà per mostrare le nuove immagini.');
               location.reload();
           } else {
-              // Intercetta l'errore HTML invece di schiantarsi
               let errMsg = "Errore sconosciuto";
               const text = await response.text();
               try {
                   const json = JSON.parse(text);
                   errMsg = json.error || errMsg;
               } catch (e) {
-                  errMsg = `Errore di connessione (L'API ha risposto con codice ${response.status}). Assicurati che l'API esista e non sia in errore.`;
+                  errMsg = `Errore di connessione (L'API ha risposto con codice ${response.status}).`;
               }
               alert('Errore: ' + errMsg);
               chiudiFormPandosita();
@@ -1193,6 +1181,93 @@
           chiudiFormPandosita();
       }
   }
+
+  /* ── Condivisione Mobile Elementi (WhatsApp) ─────────────────────────── */
+  let touchShareStartX = 0;
+  let touchShareStartY = 0;
+  let isShareSwiping = false;
+
+  document.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    touchShareStartX = e.touches[0].clientX;
+    touchShareStartY = e.touches[0].clientY;
+    isShareSwiping = false;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (isShareSwiping) return;
+    const dx = Math.abs(e.touches[0].clientX - touchShareStartX);
+    const dy = Math.abs(e.touches[0].clientY - touchShareStartY);
+    if (dx > 8 || dy > 8) {
+      isShareSwiping = true;
+    }
+  }, { passive: true });
+
+  document.addEventListener('click', async (e) => {
+    // Abilita solo per dispositivi mobile/schermi piccoli
+    if (window.innerWidth > 850 && !('ontouchstart' in window)) return;
+    
+    // Ignora se l'utente stava scrollando la galleria
+    if (isShareSwiping) {
+      isShareSwiping = false;
+      return;
+    }
+
+    const target = e.target;
+    let mediaTarget = null;
+
+    if (target.tagName === 'IMG' || target.tagName === 'VIDEO') {
+        mediaTarget = target;
+    } else {
+        // Cerca l'immagine all'interno del contenitore, utile in caso di pointer-events: none (es. Sfigatini)
+        const container = target.closest('.sticker-item-phone, .film-frame-gif, .art-frame, .ai-image-wrapper, .cushion, .film-frame');
+        if (container) mediaTarget = container.querySelector('img, video');
+    }
+
+    if (!mediaTarget) return;
+
+    // Assicura che provenga dalle gallerie designate
+    const isShareable = mediaTarget.closest('.sticker-item-phone, .film-frame-gif, .art-frame, .ai-image-wrapper, .cushion, .film-frame');
+    if (!isShareable) return;
+
+    let src = mediaTarget.src || mediaTarget.currentSrc;
+    if (mediaTarget.tagName === 'VIDEO') {
+      const source = mediaTarget.querySelector('source');
+      if (source) src = source.src;
+    }
+    
+    if (!src) return;
+
+    try {
+      // Feedback visivo immediato al tap
+      const originalFilter = mediaTarget.style.filter || '';
+      mediaTarget.style.filter = originalFilter ? originalFilter + ' brightness(0.6)' : 'brightness(0.6)';
+      
+      const response = await fetch(src);
+      const blob = await response.blob();
+      
+      // Mantiene il file originale (.gif, .mp4) per inviare l'animazione reale
+      const filename = src.split('/').pop().split('?')[0] || 'sbatuffolita';
+      const file = new File([blob], filename, { type: blob.type });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: 'Guarda questa Pandosità!',
+          files: [file]
+        });
+      } else if (navigator.share) {
+        // Fallback sul solo URL se il browser non supporta il formato nativo
+        await navigator.share({
+          title: 'Guarda questa Pandosità!',
+          url: src
+        });
+      }
+      mediaTarget.style.filter = originalFilter;
+    } catch (err) {
+      console.log("Condivisione annullata o errore:", err);
+      mediaTarget.style.filter = '';
+    }
+  });
 
   // Avvio Funzioni
   loadPhoneStickers();
