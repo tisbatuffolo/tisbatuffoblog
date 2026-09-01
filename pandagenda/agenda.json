@@ -249,5 +249,12 @@
       "tipo": "evento",
       "ricorrenza": "annuale"
     }
+  ],
+  "2026-09-05": [
+    {
+      "nome": "Birreria Rethia",
+      "tipo": "evento",
+      "ricorrenza": "singola"
+    }
   ]
 }

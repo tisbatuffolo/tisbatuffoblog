@@ -56,11 +56,6 @@ const dati_cucina = [
         "pandaforma": true
     },
     {
-        "titolo": "Panda Musik",
-        "immagine": "Panda Musik.jpg",
-        "pandaforma": true
-    },
-    {
         "titolo": "Panda Portabicchieri",
         "immagine": "Panda Portabicchieri.jpg",
         "pandaforma": true
