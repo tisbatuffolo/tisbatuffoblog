@@ -17,7 +17,7 @@ const GIRI = [
   {
     "titolo": "Ciclabile val di Sole",
     "link": "https://www.outdooractive.com/it/route/bicicletta/val-di-sole-pejo-e-rabbi/ciclabile-val-di-sole/348318313/",
-    "img": "https://img.oastatic.com/img2/635254805/800x600/variant.webp?revbust=19fbd444f72"
+    "img": "https://img.oastatic.com/img2/635254805/800x600/variant.webp"
   },
   {
     "titolo": "Openair art Drena",
