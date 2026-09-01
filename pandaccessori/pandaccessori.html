@@ -105,7 +105,6 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 .card-image { position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 12px; }
 .card-mini img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block; }
 .card-title { font-weight: 700; font-size: 0.85rem; margin-top: 0; }
-/* Per spostare il pandabadge adire su bottom -N px */
 .card-panda-badge { position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); font-size: 13px; line-height: 1; pointer-events: none; z-index: 2; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5)); }
 
 .special-boxes-wrapper { display: flex; justify-content: center; gap: clamp(15px, 4vw, 40px); margin-top: 40px; padding: 0 10px; flex-wrap: nowrap; }
@@ -145,14 +144,13 @@ header { background: #fff; padding: 25px 10px 10px; text-align: center; position
 /* --- MODALE --- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 15px; }
 .modal-overlay.active { display: flex; }
-.modal-content { background: #fff; border: 7px solid var(--cartoon-border); border-radius: 35px; padding: 15px; width: 100%; max-width: 700px; position: relative; text-align: center; box-shadow: 10px 10px 0px var(--primary); transition: background-color 0.2s; }
+.modal-content { background: #fff; border: 7px solid var(--cartoon-border); border-radius: 35px; padding: 15px; width: 100%; max-width: 700px; position: relative; text-align: center; box-shadow: 10px 10px 0px var(--primary); transition: background-color 0.2s; touch-action: pan-y; }
 
 .m-img-box { width: fit-content; max-width: 100%; margin: 0 auto; border: 6px solid var(--cartoon-border); border-radius: 25px; overflow: hidden; background: transparent; }
 .m-img-box img { display: block; max-width: 100%; max-height: 50vh; width: auto; height: auto; object-fit: contain; }
 
 .m-title { font-family: 'Luckiest Guy'; font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 15px 0 5px; line-height: 1.1; }
 .m-subtitle { font-weight: 800; font-size: clamp(1rem, 2.5vw, 1.3rem); text-transform: uppercase; margin-bottom: 10px; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; }
-/* --- agire qui per distanziare il pandabadge dalla scritta --- */
 .m-subtitle .modal-panda-icon { margin-left: 6px; }
 
 .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--cartoon-yellow); border: 5px solid var(--cartoon-border); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-family: 'Luckiest Guy'; font-size: 20px; z-index: 100; display:flex; align-items:center; justify-content:center;}
@@ -591,6 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         };
         initApp();
+        setupModalSwipe();
     });
 });
 
@@ -758,6 +757,48 @@ function updateModal() {
             modalBox.style.backgroundColor = '#fff'; 
         }
     }
+}
+
+/* ============================================== */
+/* --- GESTIONE SWIPE DA MOBILE SUI MODALI --- */
+/* ============================================== */
+function setupModalSwipe() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    const modalBox = document.getElementById('m-box');
+    if (!modalBox) return;
+
+    modalBox.addEventListener('touchstart', (e) => {
+        if (['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON', 'A'].includes(e.target.tagName)) return;
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    modalBox.addEventListener('touchend', (e) => {
+        if (['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON', 'A'].includes(e.target.tagName)) return;
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        const threshold = 40;
+
+        // Se lo scorrimento è prevalentemente orizzontale e supera la soglia
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
+            const edit1 = document.getElementById('m-edit-area').style.display === 'block';
+            const edit2 = document.getElementById('m-extra-edit-area').style.display === 'block';
+            if (edit1 || edit2) return;
+
+            if (deltaX < 0) {
+                nav(1); // Swipe verso sinistra -> foto successiva
+            } else {
+                nav(-1); // Swipe verso destra -> foto precedente
+            }
+        }
+    }, { passive: true });
 }
 
 function scrollToRoom(roomName) {
