@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SbatuffoBlog - PandaTetris</title>
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #19af4e; 
+  --sbatuffo-blue: #0056ff;
+  --accent: #ff4757;
+  --bg-soft: #fdfdfd;
+  --text: #1a1a1a;
+  --stroke: #1a1a1a;
+}
+
+body { 
+    font-family: 'Fredoka', sans-serif; 
+    margin: 0; 
+    background: var(--bg-soft); 
+    color: var(--text); 
+    overflow: hidden; 
+    text-align: center;
+    touch-action: none;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+}
+
+header {
+  background: #fff;
+  padding: 6px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #eee;
+  position: relative;
+  z-index: 10;
+}
+
+.brand-title {
+  font-family: 'Grandstander', cursive;
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.header-info {
+  display: flex;
+  gap: 12px;
+  font-family: 'Grandstander', cursive;
+  font-weight: 900;
+  font-size: 0.85rem;
+  background: #f4f4f4;
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 2px solid var(--stroke);
+}
+
+.header-info span {
+  color: var(--accent);
+}
+
+.top-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.top-btn {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 900;
+  border: 2px solid var(--stroke);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--stroke);
+  transition: transform 0.1s ease;
+}
+
+.top-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 var(--stroke);
+}
+
+#close-btn {
+  background: var(--accent);
+  color: white;
+}
+
+.game-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* --- PANDA CON LAVAGNETTA (Ottimizzato e massimizzato) --- */
+.panda-wrapper { 
+    position: relative; 
+    max-width: 270px; 
+    margin: 55px auto 10px; 
+    z-index: 5; 
+    width: 95%; 
+}
+.panda-head { 
+    position: absolute; 
+    top: -65px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 110px; 
+    height: 85px; 
+    background: #fff; 
+    border: 3px solid var(--stroke); 
+    border-radius: 40px 40px 35px 35px; 
+    z-index: 10; 
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.05); 
+}
+.panda-ear { 
+    position: absolute; 
+    width: 30px; 
+    height: 30px; 
+    background: #1c1c1c; 
+    border: 3px solid var(--stroke); 
+    border-radius: 50%; 
+    top: -6px; 
+    z-index: -1; 
+}
+.panda-ear.left { left: -6px; } 
+.panda-ear.right { right: -6px; }
+.panda-eye { 
+    position: absolute; 
+    width: 25px; 
+    height: 30px; 
+    background: #1c1c1c; 
+    border-radius: 50%; 
+    top: 25px; 
+}
+.panda-eye.left { left: 16px; transform: rotate(-20deg); } 
+.panda-eye.right { right: 16px; transform: rotate(20deg); }
+.panda-eye-sparkle { 
+    position: absolute; 
+    width: 7px; 
+    height: 7px; 
+    background: #fff; 
+    border-radius: 50%; 
+    top: 5px; 
+    right: 5px; 
+}
+.panda-nose { 
+    position: absolute; 
+    width: 13px; 
+    height: 8px; 
+    background: #1c1c1c; 
+    border-radius: 50%; 
+    top: 58px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+}
+.panda-mouth { 
+    position: absolute; 
+    width: 16px; 
+    height: 6px; 
+    border-bottom: 3px solid #1c1c1c; 
+    border-radius: 0 0 30px 30px; 
+    top: 64px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+}
+.panda-blush { 
+    position: absolute; 
+    width: 15px; 
+    height: 9px; 
+    background: #ffb3ba; 
+    border-radius: 50%; 
+    top: 50px; 
+    opacity: 0.6; 
+    filter: blur(2px); 
+}
+.panda-blush.left { left: 6px; } 
+.panda-blush.right { right: 6px; }
+
+/* Mani superiori con dettagli */
+.panda-paw-top {
+    position: absolute;
+    width: 36px;
+    height: 30px;
+    background: #1c1c1c;
+    border: 3px solid var(--stroke);
+    border-radius: 50%;
+    top: -11px;
+    z-index: 15;
+    box-shadow: 0 2px 0 var(--stroke), inset 0 2px 0 rgba(255,255,255,0.2);
+}
+.panda-paw-top.left { left: 22px; transform: rotate(-10deg); }
+.panda-paw-top.right { right: 22px; transform: rotate(10deg); }
+
+.panda-paw-pad-top {
+    position: absolute;
+    width: 14px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.panda-paw-pad-top::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    background: #333;
+    border-radius: 50%;
+    box-shadow: -6px 2px 0 -1px #333, 6px 2px 0 -1px #333;
+}
+
+/* Piedi inferiori con dettagli */
+.panda-paw-bottom {
+    position: absolute;
+    width: 44px;
+    height: 36px;
+    background: #1c1c1c;
+    border: 3px solid var(--stroke);
+    border-radius: 40% 40% 50% 50%;
+    bottom: -18px;
+    z-index: 15;
+    box-shadow: 0 3px 0 var(--stroke), inset 0 2px 0 rgba(255,255,255,0.2);
+}
+.panda-paw-bottom.left { left: 16px; transform: rotate(-5deg); }
+.panda-paw-bottom.right { right: 16px; transform: rotate(5deg); }
+
+.panda-paw-pad {
+    position: absolute;
+    width: 18px;
+    height: 13px;
+    background: #333;
+    border-radius: 50%;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.panda-paw-pad::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 7px;
+    background: #333;
+    border-radius: 50%;
+    box-shadow: -9px 2px 0 -1px #333, 9px 2px 0 -1px #333;
+}
+
+/* Contorno lavagna esteso per schermo mobile */
+.lavagnetta-container { 
+    position: relative; 
+    background: #2c1810; 
+    border: 3px solid var(--stroke); 
+    border-radius: 12px; 
+    padding: 4px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12), 3px 3px 0px var(--primary); 
+    z-index: 5; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+/* Area di gioco massimizzata */
+.lavagnetta-screen {
+    position: relative;
+    width: 230px;
+    height: 420px;
+    background: #000000;
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    display: block;
+}
+
+#game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    border: 4px solid var(--stroke);
+    box-shadow: 0 8px 0 var(--stroke);
+    display: none;
+    z-index: 100;
+    text-align: center;
+}
+
+#game-over h2 {
+    font-family: 'Grandstander', cursive;
+    color: var(--accent);
+    margin-top: 0;
+}
+
+.btn {
+    background: var(--primary);
+    color: white;
+    border: 2px solid var(--stroke);
+    padding: 8px 16px;
+    font-size: 15px;
+    font-family: 'Grandstander', cursive;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--stroke);
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--stroke);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand-title">PandaTetris 🐼</span>
+  <div class="header-info">
+    <div>Punti: <span id="score">0</span></div>
+    <div>Liv: <span id="level">1</span></div>
+  </div>
+  <div class="top-buttons">
+    <button class="top-btn" id="pause-btn" onclick="togglePause()">⏸️</button>
+    <a href="../pandagames.html" class="top-btn" id="close-btn" title="Esci">✕</a>
+  </div>
+</header>
+
+<div class="game-container">
+    <div class="panda-wrapper">
+        <div class="panda-head">
+            <div class="panda-ear left"></div>
+            <div class="panda-ear right"></div>
+            <div class="panda-eye left"><div class="panda-eye-sparkle"></div></div>
+            <div class="panda-eye right"><div class="panda-eye-sparkle"></div></div>
+            <div class="panda-blush left"></div>
+            <div class="panda-blush right"></div>
+            <div class="panda-nose"></div>
+            <div class="panda-mouth"></div>
+        </div>
+        
+        <div class="panda-paw-top left"><div class="panda-paw-pad-top"></div></div>
+        <div class="panda-paw-top right"><div class="panda-paw-pad-top"></div></div>
+
+        <div class="lavagnetta-container">
+            <div class="lavagnetta-screen">
+                <canvas id="tetris" width="230" height="420"></canvas>
+            </div>
+        </div>
+
+        <div class="panda-paw-bottom left"><div class="panda-paw-pad"></div></div>
+        <div class="panda-paw-bottom right"><div class="panda-paw-pad"></div></div>
+    </div>
+
+    <div id="game-over">
+        <h2>Ops! Game Over!</h2>
+        <p>Punteggio finale: <span id="final-score">0</span></p>
+        <button class="btn" onclick="resetGame()">Rigioca 🐼</button>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById('tetris');
+const context = canvas.getContext('2d');
+context.scale(23, 21);
+
+const scoreElement = document.getElementById('score');
+const levelElement = document.getElementById('level');
+const finalScoreElement = document.getElementById('final-score');
+const gameOverScreen = document.getElementById('game-over');
+const pauseBtn = document.getElementById('pause-btn');
+
+const arena = createMatrix(10, 20);
+
+const player = {
+    pos: {x: 0, y: 0},
+    matrix: null,
+    score: 0,
+    level: 1,
+    lines: 0
+};
+
+const colors = [
+    null,
+    '#ff4757', // I
+    '#2ed573', // J
+    '#1e90ff', // L
+    '#ffa502', // O
+    '#9b59b6', // S
+    '#00d2d3', // T
+    '#ff6b81'  // Z
+];
+
+function createMatrix(w, h) {
+    const matrix = [];
+    while (h--) {
+        matrix.push(new Array(w).fill(0));
+    }
+    return matrix;
+}
+
+function createPiece(type) {
+    if (type === 'T') {
+        return [
+            [0, 0, 0],
+            [6, 6, 6],
+            [0, 6, 0],
+        ];
+    } else if (type === 'O') {
+        return [
+            [4, 4],
+            [4, 4],
+        ];
+    } else if (type === 'L') {
+        return [
+            [0, 3, 0],
+            [0, 3, 0],
+            [0, 3, 3],
+        ];
+    } else if (type === 'J') {
+        return [
+            [0, 2, 0],
+            [0, 2, 0],
+            [2, 2, 0],
+        ];
+    } else if (type === 'I') {
+        return [
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+        ];
+    } else if (type === 'S') {
+        return [
+            [0, 5, 5],
+            [5, 5, 0],
+            [0, 0, 0],
+        ];
+    } else if (type === 'Z') {
+        return [
+            [7, 7, 0],
+            [0, 7, 7],
+            [0, 0, 0],
+        ];
+    }
+}
+
+function drawMatrix(matrix, offset) {
+    matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                context.fillStyle = colors[value];
+                context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                context.strokeStyle = '#111';
+                context.lineWidth = 0.05;
+                context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+            }
+        });
+    });
+}
+
+function draw() {
+    context.fillStyle = '#000000';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    arena.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                context.fillStyle = colors[value];
+                context.fillRect(x, y, 1, 1);
+                context.strokeStyle = '#111';
+                context.lineWidth = 0.05;
+                context.strokeRect(x, y, 1, 1);
+            }
+        });
+    });
+
+    drawMatrix(player.matrix, player.pos);
+}
+
+function merge(arena, player) {
+    player.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                arena[y + player.pos.y][x + player.pos.x] = value;
+            }
+        });
+    });
+}
+
+function rotate(matrix, dir) {
+    for (let y = 0; y < matrix.length; ++y) {
+        for (let x = 0; x < y; ++x) {
+            [
+                matrix[x][y],
+                matrix[y][x],
+            ] = [
+                matrix[y][x],
+                matrix[x][y],
+            ];
+        }
+    }
+    if (dir > 0) {
+        matrix.forEach(row => row.reverse());
+    } else {
+        matrix.reverse();
+    }
+}
+
+function playerRotate() {
+    const posX = player.pos.x;
+    let offset = 1;
+    rotate(player.matrix, 1);
+    while (collide(arena, player)) {
+        player.pos.x += offset;
+        offset = -(offset + (offset > 0 ? 1 : -1));
+        if (offset > player.matrix[0].length) {
+            rotate(player.matrix, -1);
+            player.pos.x = posX;
+            return;
+        }
+    }
+}
+
+function collide(arena, player) {
+    const m = player.matrix;
+    const o = player.pos;
+    for (let y = 0; y < m.length; ++y) {
+        for (let x = 0; x < m[y].length; ++x) {
+            if (m[y][x] !== 0 &&
+               (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function arenaSweep() {
+    let rowCount = 1;
+    outer: for (let y = arena.length - 1; y > 0; --y) {
+        for (let x = 0; x < arena[y].length; ++x) {
+            if (arena[y][x] === 0) {
+                continue outer;
+            }
+        }
+        const row = arena.splice(y, 1)[0].fill(0);
+        arena.unshift(row);
+        ++y;
+
+        player.score += rowCount * 100 * player.level;
+        player.lines++;
+        rowCount *= 2;
+
+        if (player.lines % 5 === 0) {
+            player.level++;
+            updateInterval();
+        }
+    }
+    scoreElement.innerText = player.score;
+    levelElement.innerText = player.level;
+}
+
+function playerDrop() {
+    player.pos.y++;
+    if (collide(arena, player)) {
+        player.pos.y--;
+        merge(arena, player);
+        playerReset();
+        arenaSweep();
+        if (collide(arena, player)) {
+            gameOver();
+        }
+    }
+    dropCounter = 0;
+}
+
+function move(dir) {
+    player.pos.x += dir;
+    if (collide(arena, player)) {
+        player.pos.x -= dir;
+    }
+}
+
+function playerReset() {
+    const pieces = 'TJLOSZI';
+    player.matrix = createPiece(pieces[Math.floor(Math.random() * pieces.length)]);
+    player.pos.y = 0;
+    player.pos.x = Math.floor((arena[0].length / 2) - (player.matrix[0].length / 2));
+    if (collide(arena, player)) {
+        gameOver();
+    }
+}
+
+let dropCounter = 0;
+let dropInterval = 1000;
+let lastTime = 0;
+let isPaused = false;
+let isGameOver = false;
+let animationId = null;
+
+function updateInterval() {
+    dropInterval = Math.max(150, 1000 - (player.level - 1) * 150);
+}
+
+function update(time = 0) {
+    if (isPaused || isGameOver) return;
+    const deltaTime = time - lastTime;
+    lastTime = time;
+    dropCounter += deltaTime;
+    if (dropCounter > dropInterval) {
+        playerDrop();
+    }
+    draw();
+    animationId = requestAnimationFrame(update);
+}
+
+function togglePause() {
+    isPaused = !isPaused;
+    pauseBtn.innerText = isPaused ? '▶️' : '⏸️';
+    if (!isPaused) {
+        lastTime = performance.now();
+        animationId = requestAnimationFrame(update);
+    }
+}
+
+function gameOver() {
+    isGameOver = true;
+    finalScoreElement.innerText = player.score;
+    gameOverScreen.style.display = 'block';
+}
+
+function resetGame() {
+    arena.forEach(row => row.fill(0));
+    player.score = 0;
+    player.lines = 0;
+    player.level = 1;
+    updateInterval();
+    scoreElement.innerText = player.score;
+    levelElement.innerText = player.level;
+    gameOverScreen.style.display = 'none';
+    isGameOver = false;
+    isPaused = false;
+    pauseBtn.innerText = '⏸️';
+    playerReset();
+    lastTime = performance.now();
+    cancelAnimationFrame(animationId);
+    update();
+}
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartTime = 0;
+let longPressTimer = null;
+let isLongPressing = false;
+let holdDropInterval = null;
+
+canvas.addEventListener('touchstart', (e) => {
+    if (isPaused || isGameOver) return;
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchStartTime = performance.now();
+    isLongPressing = false;
+
+    longPressTimer = setTimeout(() => {
+        isLongPressing = true;
+        holdDropInterval = setInterval(() => {
+            playerDrop();
+        }, 80);
+    }, 350);
+}, {passive: true});
+
+canvas.addEventListener('touchmove', (e) => {
+    if (isPaused || isGameOver) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchStartX;
+    const dy = touch.clientY - touchStartY;
+
+    if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
+        clearTimeout(longPressTimer);
+        if (holdDropInterval) {
+            clearInterval(holdDropInterval);
+            holdDropInterval = null;
+        }
+    }
+}, {passive: true});
+
+canvas.addEventListener('touchend', (e) => {
+    if (isPaused || isGameOver) return;
+    clearTimeout(longPressTimer);
+    if (holdDropInterval) {
+        clearInterval(holdDropInterval);
+        holdDropInterval = null;
+    }
+
+    if (isLongPressing) return;
+
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartX;
+    const dy = touch.clientY - touchStartY;
+    const dt = performance.now() - touchStartTime;
+
+    if (dt < 300 && Math.abs(dx) < 20 && Math.abs(dy) < 20) {
+        playerRotate();
+    } else if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 30) {
+            move(1); 
+        } else if (dx < -30) {
+            move(-1); 
+        }
+    }
+}, {passive: true});
+
+window.addEventListener('keydown', event => {
+    if (isPaused || isGameOver) return;
+    if (event.key === 'ArrowLeft') {
+        move(-1);
+    } else if (event.key === 'ArrowRight') {
+        move(1);
+    } else if (event.key === 'ArrowDown') {
+        playerDrop();
+    } else if (event.key === 'ArrowUp' || event.code === 'KeyX') {
+        playerRotate();
+    }
+});
+
+playerReset();
+updateInterval();
+update();
+</script>
+</body>
+</html>

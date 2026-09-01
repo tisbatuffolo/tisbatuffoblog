@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PandaRun</title>
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@900&display=swap" rel="stylesheet">
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #87CEEB;
+        overflow: hidden;
+        font-family: 'Grandstander', cursive;
+        touch-action: none;
+    }
+    #gameCanvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    #ui-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+    #score-container {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 24px;
+        color: #333;
+        font-weight: 900;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px 20px;
+        border-radius: 20px;
+        border: 2px solid #333;
+        pointer-events: auto;
+        box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+        text-align: left;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    @keyframes levelFlash {
+        0% { background: #ffeaa7; transform: scale(1.08); }
+        50% { background: #ff7675; transform: scale(1.15); color: white; }
+        100% { background: rgba(255, 255, 255, 0.9); transform: scale(1); color: #333; }
+    }
+    .level-flash {
+        animation: levelFlash 0.6s ease;
+    }
+    #close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        background: #ff4757;
+        color: white;
+        font-size: 26px;
+        font-weight: 900;
+        border: 2px solid #333;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 4px 0 #333;
+        pointer-events: auto;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+    }
+    #close-btn:active {
+        transform: translateY(4px);
+        box-shadow: 0 0 0 #333;
+    }
+    #game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        border: 4px solid #1a1a1a;
+        box-shadow: 0 10px 0 #1a1a1a;
+        display: none;
+        pointer-events: auto;
+    }
+    #game-over h1 { margin: 0 0 20px; color: #ff4757; }
+    .btn {
+        background: #19af4e;
+        color: white;
+        border: 2px solid #1a1a1a;
+        padding: 12px 25px;
+        font-size: 18px;
+        font-family: 'Grandstander', cursive;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 0 #1a1a1a;
+        text-decoration: none;
+        display: inline-block;
+        margin: 5px;
+    }
+    .btn:active {
+        transform: translateY(4px);
+        box-shadow: 0 0 0 #1a1a1a;
+    }
+    #orientation-warning {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: #19af4e;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        text-align: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    @media screen and (orientation: landscape) {
+        #orientation-warning { display: none; }
+    }
+</style>
+</head>
+<body>
+
+<div id="orientation-warning">
+    <h2>Ruota il dispositivo!</h2>
+    <p>PandaRun si gioca al meglio in orizzontale (Landscape).</p>
+    <div style="font-size: 40px; margin: 10px;">🔄📱</div>
+    <button class="btn" onclick="dismissWarning()" style="background:#ff4757; margin-top:15px;">Gioca Subito! 🐼</button>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+
+<div id="ui-layer">
+    <div id="score-container">
+        Punti: <span id="score">0</span><br>
+        <span style="font-size: 18px; color: #555;">Livello: <span id="level">1</span></span>
+    </div>
+    <a href="../pandagames.html" id="close-btn" title="Esci">✕</a>
+    
+    <div id="game-over">
+        <h1>Ops! Preso!</h1>
+        <p>Punteggio finale: <span id="final-score">0</span></p>
+        <button class="btn" onclick="resetGame()">Rigioca 🐼</button>
+        <br><br>
+        <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:16px;">Torna ai Giochi</a>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    const levelEl = document.getElementById('level');
+    const scoreContainer = document.getElementById('score-container');
+    const gameOverScreen = document.getElementById('game-over');
+    const finalScoreEl = document.getElementById('final-score');
+
+    let w, h, groundY;
+    let score = 0;
+    let gameSpeed = 5;
+    let isGameOver = false;
+    let frames = 0;
+    let nextObstacleDistance = 350;
+    let distanceTraveled = 0;
+    let currentLevel = 1;
+    let lastLevel = 1;
+    let airplaneLevel3Triggered = false;
+
+    let airplane = {
+        active: false,
+        x: 0,
+        y: 0,
+        speed: 3.5,
+        direction: 1,
+        text: "ti sbatuffolo"
+    };
+
+    function dismissWarning() {
+        document.getElementById('orientation-warning').style.display = 'none';
+    }
+
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        groundY = h - 60;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const panda = {
+        x: 60,
+        y: 0,
+        width: 65,
+        height: 60,
+        vy: 0,
+        gravity: 0.7,
+        jumpPower: -15.5,
+        isGrounded: false,
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+
+            let tilt = this.isGrounded ? Math.sin(frames * 0.3) * 0.08 : -0.15;
+            ctx.rotate(tilt);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#1a1a1a';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.ellipse(this.width/2, this.height/2 + 2, this.width/2.2, this.height/2.6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#1a1a1a';
+            let legOffset = this.isGrounded ? Math.sin(frames * 0.4) * 8 : 6;
+            
+            ctx.beginPath();
+            ctx.arc(16 + legOffset, this.height - 4, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(this.width - 16 - legOffset, this.height - 4, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(this.width - 18, 16, 17, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#1a1a1a';
+            ctx.beginPath();
+            ctx.arc(this.width - 28, 4, 6.5, 0, Math.PI * 2);
+            ctx.arc(this.width - 10, 5, 6.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.ellipse(this.width - 23, 15, 4.5, 3.5, -0.2, 0, Math.PI * 2);
+            ctx.ellipse(this.width - 14, 15, 4.5, 3.5, 0.2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(this.width - 23, 15, 1.2, 0, Math.PI * 2);
+            ctx.arc(this.width - 14, 15, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#1a1a1a';
+            ctx.beginPath();
+            ctx.arc(this.width - 18, 19, 2.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        },
+        update() {
+            this.vy += this.gravity;
+            this.y += this.vy;
+            if (this.y + this.height >= groundY) {
+                this.y = groundY - this.height;
+                this.vy = 0;
+                this.isGrounded = true;
+            }
+        },
+        jump() {
+            if (this.isGrounded) {
+                this.vy = this.jumpPower;
+                this.isGrounded = false;
+            }
+        }
+    };
+
+    let obstacles = [];
+
+    function getLevel() {
+        if (score < 80) return 1;
+        if (score < 180) return 2;
+        if (score < 300) return 3;
+        if (score < 450) return 4;
+        return 5;
+    }
+
+    function getAvailableObstacles() {
+        const lvl = getLevel();
+        let pool = ['bamboo', 'cake'];
+        if (lvl >= 2) pool.push('pasta');
+        if (lvl >= 3) {
+            pool.push('bee_single_bottom', 'bee_single_top', 'bee_single_very_top', 'bee_double_bottom_top', 'bee_double_top_very_high');
+        }
+        if (lvl >= 4) {
+            pool.push('icecream', 'cat');
+        }
+        return pool;
+    }
+
+    class Obstacle {
+        constructor(typeId, customX) {
+            this.id = typeId;
+            this.x = customX;
+
+            if (this.id === 'bamboo' || this.id === 'cake' || this.id === 'pasta' || this.id === 'icecream' || this.id === 'cat') {
+                this.size = 50;
+                this.y = groundY - this.size;
+                this.type = 'ground';
+                this.hitbox = { offset: 8, size: this.size - 16 };
+            } else if (this.id === 'bee_single_bottom') {
+                this.size = 40;
+                this.y = groundY - 75;
+                this.type = 'air';
+                this.hitbox = { offset: 6, size: this.size - 12 };
+            } else if (this.id === 'bee_single_top') {
+                this.size = 40;
+                this.y = groundY - 125;
+                this.type = 'air';
+                this.hitbox = { offset: 6, size: this.size - 12 };
+            } else if (this.id === 'bee_single_very_top') {
+                this.size = 40;
+                this.y = groundY - 170;
+                this.type = 'air';
+                this.hitbox = { offset: 6, size: this.size - 12 };
+            } else if (this.id === 'bee_double_bottom_top') {
+                this.size = 35;
+                this.y1 = groundY - 75;
+                this.y2 = groundY - 135;
+                this.type = 'air_double';
+            } else if (this.id === 'bee_double_top_very_high') {
+                this.size = 35;
+                this.y1 = groundY - 125;
+                this.y2 = groundY - 180;
+                this.type = 'air_double';
+            }
+        }
+        draw() {
+            if (this.id === 'bamboo') {
+                ctx.fillStyle = '#2e8b57';
+                ctx.strokeStyle = '#1b4d3e';
+                ctx.lineWidth = 2;
+                let stalkWidth = 10;
+                let stalkHeight = this.size;
+                for(let i=0; i<2; i++) {
+                    let bx = this.x + i * 14 + 6;
+                    ctx.fillRect(bx, this.y, stalkWidth, stalkHeight);
+                    ctx.strokeRect(bx, this.y, stalkWidth, stalkHeight);
+                    ctx.beginPath();
+                    ctx.moveTo(bx, this.y + stalkHeight * 0.33);
+                    ctx.lineTo(bx + stalkWidth, this.y + stalkHeight * 0.33);
+                    ctx.moveTo(bx, this.y + stalkHeight * 0.66);
+                    ctx.lineTo(bx + stalkWidth, this.y + stalkHeight * 0.66);
+                    ctx.stroke();
+                }
+                ctx.fillStyle = '#228b22';
+                ctx.beginPath();
+                ctx.moveTo(this.x + 2, this.y + 15);
+                ctx.lineTo(this.x - 8, this.y + 10);
+                ctx.lineTo(this.x + 2, this.y + 25);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(this.x + 28, this.y + 25);
+                ctx.lineTo(this.x + 38, this.y + 20);
+                ctx.lineTo(this.x + 28, this.y + 35);
+                ctx.fill();
+            } else if (this.id.startsWith('bee_single')) {
+                ctx.font = this.size + "px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText('🐝', this.x + this.size/2, this.y + this.size/2);
+            } else if (this.id.startsWith('bee_double')) {
+                ctx.font = this.size + "px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText('🐝', this.x + this.size/2, this.y1 + this.size/2);
+                ctx.fillText('🐝', this.x + this.size/2, this.y2 + this.size/2);
+            } else {
+                let emojiMap = { cake: '🍰', pasta: '🍝', icecream: '🍦', cat: '🐈' };
+                ctx.font = this.size + "px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(emojiMap[this.id], this.x + this.size/2, this.y + this.size/2 + 5);
+            }
+        }
+        update() {
+            this.x -= gameSpeed;
+        }
+    }
+
+    function spawnObstaclePattern() {
+        const lvl = getLevel();
+        const pool = getAvailableObstacles();
+        const chosenId = pool[Math.floor(Math.random() * pool.length)];
+
+        const isGround = ['bamboo', 'cake', 'pasta', 'icecream', 'cat'].includes(chosenId);
+        
+        // Ostacoli doppi orizzontalmente dal terzo livello in poi, ma con distanza sicura (240px) 
+        // e limitati solo a ostacoli a terra per non bloccare la parabola di salto.
+        let doubleChance = lvl >= 3 ? 0.35 + ((lvl - 3) * 0.15) : 0; 
+        if (isGround && lvl >= 3 && Math.random() < doubleChance) {
+            obstacles.push(new Obstacle(chosenId, w));
+            const groundPool = ['bamboo', 'cake', 'pasta', 'icecream', 'cat'];
+            const secondId = groundPool[Math.floor(Math.random() * groundPool.length)];
+            obstacles.push(new Obstacle(secondId, w + 240));
+        } else {
+            obstacles.push(new Obstacle(chosenId, w));
+        }
+    }
+
+    const clouds = [
+        { x: 50, y: 50, speed: 0.25, size: '60px' },
+        { x: 300, y: 90, speed: 0.18, size: '75px' },
+        { x: 600, y: 40, speed: 0.3, size: '65px' },
+        { x: 900, y: 100, speed: 0.22, size: '80px' },
+        { x: 1200, y: 60, speed: 0.2, size: '70px' }
+    ];
+
+    function drawBackground() {
+        let skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+        skyGrad.addColorStop(0, '#59c1ff');
+        skyGrad.addColorStop(0.7, '#a1e3ff');
+        skyGrad.addColorStop(1, '#e0f7ff');
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.font = "65px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("☀️", w / 2, 75);
+
+        ctx.globalAlpha = 1.0;
+        clouds.forEach(c => {
+            ctx.font = c.size + " Arial";
+            ctx.fillText("☁️", c.x, c.y);
+            c.x -= c.speed;
+            if (c.x < -120) c.x = w + 100;
+        });
+
+        if (airplane.active) {
+            airplane.x += airplane.speed * airplane.direction;
+            ctx.save();
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            
+            let bannerWidth = 190;
+            let bannerHeight = 36;
+            let bx = airplane.x - (airplane.direction === 1 ? 130 : -130);
+            let by = airplane.y;
+            
+            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(airplane.x, airplane.y);
+            ctx.lineTo(bx, by);
+            ctx.stroke();
+            
+            ctx.fillStyle = "#ffffff";
+            ctx.strokeStyle = "#1a1a1a";
+            ctx.lineWidth = 2;
+            ctx.fillRect(bx - bannerWidth/2, by - bannerHeight/2, bannerWidth, bannerHeight);
+            ctx.strokeRect(bx - bannerWidth/2, by - bannerHeight/2, bannerWidth, bannerHeight);
+            
+            ctx.fillStyle = "#ff4757";
+            ctx.font = "bold 15px 'Grandstander', cursive, Arial";
+            ctx.fillText(airplane.text, bx, by);
+            
+            ctx.font = "32px Arial";
+            ctx.save();
+            ctx.translate(airplane.x, airplane.y);
+            if (airplane.direction === -1) {
+                ctx.scale(-1, 1);
+            }
+            ctx.fillText("✈️", 0, 0);
+            ctx.restore();
+            
+            ctx.restore();
+
+            if ((airplane.direction === 1 && airplane.x > w + 600) || (airplane.direction === -1 && airplane.x < -600)) {
+                airplane.active = false;
+            }
+        }
+
+        ctx.fillStyle = '#6b8292';
+        ctx.beginPath();
+        ctx.moveTo(0, groundY);
+        let mountainSpacing = Math.max(w / 3, 300);
+        for (let i = 0; i <= w + mountainSpacing; i += mountainSpacing) {
+            ctx.lineTo(i - mountainSpacing * 0.5, groundY - 180);
+            ctx.lineTo(i, groundY);
+        }
+        ctx.lineTo(w, groundY);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#526675';
+        ctx.beginPath();
+        ctx.moveTo(0, groundY);
+        let mSpacing2 = Math.max(w / 4, 220);
+        for (let i = 0; i <= w + mSpacing2; i += mSpacing2) {
+            ctx.lineTo(i - mSpacing2 * 0.5, groundY - 110);
+            ctx.lineTo(i, groundY);
+        }
+        ctx.lineTo(w, groundY);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = "#8B4513";
+        ctx.fillRect(0, groundY, w, h - groundY);
+        ctx.fillStyle = "#2ecc71";
+        ctx.fillRect(0, groundY, w, 18);
+        
+        ctx.fillStyle = "#27ae60";
+        for(let gx = 0; gx < w; gx += 20) {
+            ctx.fillRect(gx, groundY, 10, 6);
+        }
+    }
+
+    function checkCollision(obs) {
+        const pLeft = panda.x + 8;
+        const pRight = panda.x + panda.width - 8;
+        const pTop = panda.y + 8;
+        const pBottom = panda.y + panda.height - 8;
+
+        if (obs.type === 'air_double') {
+            const oLeft1 = obs.x + 4;
+            const oRight1 = obs.x + obs.size - 4;
+            const oTop1 = obs.y1 + 4;
+            const oBottom1 = obs.y1 + obs.size - 4;
+
+            const oLeft2 = obs.x + 4;
+            const oRight2 = obs.x + obs.size - 4;
+            const oTop2 = obs.y2 + 4;
+            const oBottom2 = obs.y2 + obs.size - 4;
+
+            if ((pLeft < oRight1 && pRight > oLeft1 && pTop < oBottom1 && pBottom > oTop1) ||
+                (pLeft < oRight2 && pRight > oLeft2 && pTop < oBottom2 && pBottom > oTop2)) {
+                return true;
+            }
+            return false;
+        } else {
+            const oLeft = obs.x + obs.hitbox.offset;
+            const oRight = obs.x + obs.size - obs.hitbox.offset;
+            const oTop = obs.y + obs.hitbox.offset;
+            const oBottom = obs.y + obs.hitbox.offset;
+
+            if (pLeft < oRight && pRight > oLeft && pTop < oBottom && pBottom > oTop) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    function gameLoop() {
+        if (isGameOver) return;
+        
+        ctx.clearRect(0, 0, w, h);
+        drawBackground();
+
+        panda.update();
+        panda.draw();
+
+        distanceTraveled += gameSpeed;
+        if (distanceTraveled >= nextObstacleDistance) {
+            spawnObstaclePattern();
+            
+            const lvl = getLevel();
+            let baseMinDist = Math.max(380 - (lvl * 20), 280);
+            let baseMaxDist = Math.max(600 - (lvl * 30), 450);
+
+            if (Math.random() < 0.3) {
+                nextObstacleDistance = baseMaxDist + 300 + Math.random() * 250;
+            } else {
+                nextObstacleDistance = baseMinDist + Math.random() * (baseMaxDist - baseMinDist);
+            }
+            
+            distanceTraveled = 0;
+        }
+
+        for (let i = 0; i < obstacles.length; i++) {
+            let obs = obstacles[i];
+            obs.update();
+            obs.draw();
+
+            if (checkCollision(obs)) {
+                gameOver();
+            }
+        }
+
+        obstacles = obstacles.filter(obs => obs.x + obs.size > 0);
+
+        frames++;
+        if (frames % 10 === 0) {
+            score++;
+            scoreEl.innerText = score;
+            
+            currentLevel = getLevel();
+            levelEl.innerText = currentLevel;
+
+            if (currentLevel > lastLevel) {
+                lastLevel = currentLevel;
+                scoreContainer.classList.add('level-flash');
+                setTimeout(() => scoreContainer.classList.remove('level-flash'), 600);
+
+                let triggerAirplane = false;
+                if (currentLevel === 3 && !airplaneLevel3Triggered) {
+                    triggerAirplane = true;
+                    airplaneLevel3Triggered = true;
+                } else if (currentLevel > 3 && Math.random() < 0.65) {
+                    triggerAirplane = true;
+                }
+
+                if (triggerAirplane && !airplane.active) {
+                    airplane.direction = Math.random() < 0.5 ? 1 : -1;
+                    airplane.y = (h * 0.42) + Math.random() * (h * 0.1);
+                    airplane.x = airplane.direction === 1 ? -450 : w + 450;
+                    airplane.active = true;
+                }
+            }
+
+            gameSpeed = 5 + (currentLevel - 1) * 0.9 + Math.floor(score / 50) * 0.2;
+        }
+
+        animationId = requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver() {
+        isGameOver = true;
+        finalScoreEl.innerText = score;
+        gameOverScreen.style.display = 'block';
+    }
+
+    function resetGame() {
+        isGameOver = false;
+        score = 0;
+        currentLevel = 1;
+        lastLevel = 1;
+        gameSpeed = 5;
+        frames = 0;
+        distanceTraveled = 0;
+        nextObstacleDistance = 350;
+        obstacles = [];
+        airplane.active = false;
+        airplaneLevel3Triggered = false;
+        panda.y = groundY - panda.height;
+        scoreEl.innerText = score;
+        levelEl.innerText = currentLevel;
+        gameOverScreen.style.display = 'none';
+        gameLoop();
+    }
+
+    function handleInput(e) {
+        if (e.type === 'touchstart' || e.type === 'mousedown' || (e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp'))) {
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+            if (!isGameOver) {
+                panda.jump();
+                if(e.cancelable) e.preventDefault();
+            }
+        }
+    }
+
+    window.addEventListener('touchstart', handleInput, {passive: false});
+    window.addEventListener('mousedown', handleInput);
+    window.addEventListener('keydown', handleInput);
+
+    panda.y = groundY - panda.height;
+    gameLoop();
+
+</script>
+</body>
+</html>
