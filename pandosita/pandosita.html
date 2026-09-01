@@ -1252,13 +1252,11 @@
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
-          title: 'Guarda questa Pandosità!',
           files: [file]
         });
       } else if (navigator.share) {
         // Fallback sul solo URL se il browser non supporta il formato nativo
         await navigator.share({
-          title: 'Guarda questa Pandosità!',
           url: src
         });
       }
