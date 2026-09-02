@@ -8,7 +8,7 @@
 <style>
 :root {
   --primary: #19af4e; 
-  --sbatuffo-blue: #0056ff;
+  --sbatuffo-blue: #0000ff;
   --accent: #ff4757;
   --bg-soft: #ffffff;
   --text: #1a1a1a;
@@ -59,7 +59,7 @@ body, html {
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 34px;
+    font-size: 32px;
     color: var(--sbatuffo-blue);
     font-weight: 900;
     font-family: 'Grandstander', cursive;
@@ -110,30 +110,30 @@ body, html {
 
 #score-container {
     position: relative;
-    margin-top: 10px;
-    font-size: 14px;
+    margin-top: 14px;
+    font-size: 13px;
     color: #333;
     font-weight: 900;
     font-family: 'Grandstander', cursive;
     background: #f4f4f4;
-    padding: 4px 14px;
+    padding: 6px 12px;
     border-radius: 12px;
     border: 2px solid var(--stroke);
     pointer-events: auto;
-    box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
     text-align: center;
     z-index: 20;
     display: inline-block;
     transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-#score-container span {
-    color: var(--accent);
+    line-height: 1.3;
+    width: 82%;
+    max-width: 310px;
+    box-sizing: border-box;
 }
 
 @keyframes levelFlash {
-    0% { background: #ffeaa7; transform: scale(1.08); }
-    50% { background: #ff7675; transform: scale(1.15); color: white; }
+    0% { background: #ffeaa7; transform: scale(1.05); }
+    50% { background: #ff7675; transform: scale(1.1); color: white; }
     100% { background: #f4f4f4; transform: scale(1); color: #333; }
 }
 
@@ -147,20 +147,38 @@ body, html {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f7f9fa 100%);
+    padding: 25px 20px;
+    border-radius: 22px;
     border: 4px solid #1a1a1a;
     box-shadow: 0 10px 0 #1a1a1a;
     display: none;
     pointer-events: auto;
     z-index: 60;
-    max-width: 300px;
-    width: 80%;
+    max-width: 320px;
+    width: 85%;
 }
 
-.modal h2 { margin: 0 0 15px; color: #3742fa; font-size: 22px; font-family: 'Grandstander', cursive; }
-.modal p { font-size: 14px; color: #333; line-height: 1.4; margin-bottom: 20px; font-weight: 600; font-family: 'Fredoka', sans-serif; }
+.modal h2 { margin: 0 0 10px; color: #3742fa; font-size: 22px; font-family: 'Grandstander', cursive; text-shadow: 1px 1px 0 #dff9fb; }
+.modal p { font-size: 14px; color: #555; line-height: 1.4; margin-bottom: 18px; font-weight: 600; font-family: 'Fredoka', sans-serif; }
+.modal input {
+    width: 85%;
+    padding: 12px;
+    font-size: 16px;
+    font-family: 'Grandstander', cursive;
+    border: 3px solid #333;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    text-align: center;
+    outline: none;
+    background: #fff;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+    transition: all 0.2s ease;
+}
+.modal input:focus {
+    border-color: #3742fa;
+    box-shadow: 0 0 8px rgba(55, 66, 250, 0.4), inset 0 2px 4px rgba(0,0,0,0.06);
+}
 
 #game-over {
     position: absolute;
@@ -176,12 +194,22 @@ body, html {
     display: none;
     pointer-events: auto;
     z-index: 60;
-    max-width: 300px;
-    width: 80%;
+    max-width: 320px;
+    width: 85%;
 }
 
 #game-over h1 { margin: 0 0 15px; color: #ff4757; font-size: 26px; font-family: 'Grandstander', cursive; }
-#game-over p { font-size: 15px; font-family: 'Fredoka', sans-serif; font-weight: 600; color: #333; margin-bottom: 20px; }
+
+#best-score-notice {
+    color: #e67e22;
+    font-size: 16px;
+    font-weight: 900;
+    display: none;
+    margin: 2px 0 16px 0;
+    text-shadow: 1px 1px 0 #ffeaa7;
+    text-align: center;
+    font-family: 'Grandstander', cursive;
+}
 
 .btn {
     background: #19af4e;
@@ -208,18 +236,20 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     position: relative;
-    padding-top: 75px;
+    padding-top: 105px;
     box-sizing: border-box;
     flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
 }
 
-/* --- PANDA CON LAVAGNETTA (Zampe più grandi, impronte chiare, bordo lavagna meno scuro) --- */
+/* --- PANDA CON LAVAGNETTA --- */
 .panda-wrapper { 
     position: relative; 
     max-width: 380px; 
-    margin: 30px auto 0 auto; 
+    margin: 15px auto 0 auto; 
     z-index: 5; 
     width: 96%; 
 }
@@ -267,6 +297,27 @@ body, html {
     top: 4px; 
     right: 4px; 
 }
+
+.panda-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 13px;
+    pointer-events: none;
+    opacity: 0;
+}
+
+@keyframes heartPulse {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.heart-eyes-active .panda-heart {
+    animation: heartPulse 0.4s ease 3;
+}
+
 .panda-nose { 
     position: absolute; 
     width: 12px; 
@@ -300,7 +351,6 @@ body, html {
 .panda-blush.left { left: 5px; } 
 .panda-blush.right { right: 5px; }
 
-/* Mani superiori più grandi e con impronte più chiare ed evidenti */
 .panda-paw-top {
     position: absolute;
     width: 42px;
@@ -338,7 +388,6 @@ body, html {
     box-shadow: -6px 2px 0 -1px #747d8c, 6px 2px 0 -1px #747d8c;
 }
 
-/* Piedi inferiori più grandi e con impronte più chiare ed evidenti */
 .panda-paw-bottom {
     position: absolute;
     width: 52px;
@@ -376,7 +425,6 @@ body, html {
     box-shadow: -9px 2px 0 -1px #747d8c, 9px 2px 0 -1px #747d8c;
 }
 
-/* Contorno lavagna con colore meno marron scuro */
 .lavagnetta-container { 
     position: relative; 
     background: #8B5A2B; 
@@ -390,11 +438,10 @@ body, html {
     align-items: center; 
 }
 
-/* Area di gioco */
 .lavagnetta-screen {
     position: relative;
-    width: 340px;
-    height: 476px;
+    width: 320px;
+    height: 360px;
     background: #000000;
     border: 2px solid #1a1a1a;
     border-radius: 4px;
@@ -428,6 +475,14 @@ canvas {
         <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
     </div>
 
+    <div id="nickname-modal" class="modal">
+        <h2>Benvenuto a PandaTetris! 🐼</h2>
+        <p>Inserisci il tuo nickname per iniziare l'avventura:</p>
+        <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
+        <br>
+        <button class="btn" id="save-nickname-btn" style="font-size: 15px; width: 160px; padding: 10px;">Inizia 🚀</button>
+    </div>
+
     <div id="info-modal" class="modal">
         <h2>Come Giocare 🐼</h2>
         <p id="info-text">Caricamento...</p>
@@ -436,7 +491,10 @@ canvas {
 
     <div id="leaderboard-modal" class="modal">
         <h2>Classifica 🏆</h2>
-        <p>Le classifiche online saranno disponibili presto con una nuova API dedicata!</p>
+        <p style="font-size: 12px; color: #777; margin-top: -5px; margin-bottom: 12px;">Miglior punteggio per giocatore</p>
+        <div id="leaderboard-list" style="font-size: 14px; color: #333; max-height: 150px; overflow-y: auto; margin-bottom: 15px; text-align: left; padding: 0 10px;">
+            Caricamento classifica...
+        </div>
         <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
     </div>
 </div>
@@ -446,8 +504,8 @@ canvas {
         <div class="panda-head">
             <div class="panda-ear left"></div>
             <div class="panda-ear right"></div>
-            <div class="panda-eye left"><div class="panda-eye-sparkle"></div></div>
-            <div class="panda-eye right"><div class="panda-eye-sparkle"></div></div>
+            <div class="panda-eye left"><div class="panda-eye-sparkle"></div><span class="panda-heart">❤️</span></div>
+            <div class="panda-eye right"><div class="panda-eye-sparkle"></div><span class="panda-heart">❤️</span></div>
             <div class="panda-blush left"></div>
             <div class="panda-blush right"></div>
             <div class="panda-nose"></div>
@@ -459,7 +517,7 @@ canvas {
 
         <div class="lavagnetta-container">
             <div class="lavagnetta-screen">
-                <canvas id="tetris" width="340" height="476"></canvas>
+                <canvas id="tetris" width="320" height="360"></canvas>
             </div>
         </div>
 
@@ -468,12 +526,15 @@ canvas {
     </div>
 
     <div id="score-container">
-        Punti: <span id="score">0</span> &nbsp;|&nbsp; Livello: <span id="level">1</span>
+        <div style="color: #0000ff; font-size: 12px;">Ciao, <span id="player-name">Panda</span>!</div>
+        Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
+        <span style="font-size: 10px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
     </div>
 
     <div id="game-over">
         <h1>Ops! Perso!</h1>
-        <p>Punteggio finale: <span id="final-score">0</span></p>
+        <p style="margin-bottom: 6px;">Punteggio finale: <span id="final-score">0</span></p>
+        <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
         <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
         <br><br>
         <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:14px; width:180px; padding:8px; box-sizing:border-box;">Torna ai<br>Panda Games</a>
@@ -483,17 +544,72 @@ canvas {
 <script>
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
-context.scale(340 / 12, 476 / 17);
+context.scale(320 / 12, 360 / 17);
 
 const scoreElement = document.getElementById('score');
 const levelElement = document.getElementById('level');
+const bestScoreEl = document.getElementById('best-score');
+const lastScoreEl = document.getElementById('last-score');
+const playerNameEl = document.getElementById('player-name');
 const scoreContainer = document.getElementById('score-container');
 const finalScoreElement = document.getElementById('final-score');
+const bestScoreNotice = document.getElementById('best-score-notice');
 const gameOverScreen = document.getElementById('game-over');
 const pauseBtn = document.getElementById('pause-btn');
 const infoModal = document.getElementById('info-modal');
 const leaderboardModal = document.getElementById('leaderboard-modal');
+const nicknameModal = document.getElementById('nickname-modal');
+const nicknameInput = document.getElementById('nickname-input');
+const saveNicknameBtn = document.getElementById('save-nickname-btn');
+const leaderboardList = document.getElementById('leaderboard-list');
 const infoTextEl = document.getElementById('info-text');
+
+let bestScore = parseInt(localStorage.getItem('pandatetris_best_score')) || 0;
+let lastScore = parseInt(localStorage.getItem('pandatetris_last_score')) || 0;
+let nickname = localStorage.getItem('pandatetris_nickname') || '';
+
+bestScoreEl.innerText = bestScore;
+lastScoreEl.innerText = lastScore;
+
+if (nickname) {
+    playerNameEl.innerText = nickname;
+    nicknameModal.style.display = 'none';
+} else {
+    nicknameModal.style.display = 'block';
+}
+
+saveNicknameBtn.addEventListener('click', () => {
+    let val = nicknameInput.value.trim();
+    if (val) {
+        nickname = val;
+        localStorage.setItem('pandatetris_nickname', nickname);
+        playerNameEl.innerText = nickname;
+        nicknameModal.style.display = 'none';
+        fetchBestScore();
+        lastTime = performance.now();
+        update();
+    } else {
+        alert('Inserisci un nickname valido!');
+    }
+});
+
+function fetchBestScore() {
+    if (!nickname) return;
+    fetch(`/api/games_leaderboard-UPVapi?game=pandatetris&username=${encodeURIComponent(nickname)}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.bestScore > bestScore) {
+                bestScore = data.bestScore;
+                bestScoreEl.innerText = bestScore;
+                localStorage.setItem('pandatetris_best_score', bestScore);
+            }
+        })
+        .catch(err => console.error(err));
+}
+
+if (nickname) {
+    fetchBestScore();
+}
 
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 if (isMobile) {
@@ -503,8 +619,11 @@ if (isMobile) {
 }
 
 function openModal(modal) {
-    if (!isPaused && !isGameOver) {
+    if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
         togglePause();
+    }
+    if (modal === leaderboardModal) {
+        loadLeaderboard();
     }
     modal.style.display = 'block';
 }
@@ -515,6 +634,38 @@ function closeModal(modalId) {
 
 document.getElementById('info-btn').addEventListener('click', () => openModal(infoModal));
 document.getElementById('leaderboard-btn').addEventListener('click', () => openModal(leaderboardModal));
+
+function loadLeaderboard() {
+    leaderboardList.innerHTML = "Caricamento...";
+    
+    fetch(`/api/games_leaderboard-UPVapi?game=pandatetris&t=` + Date.now())
+        .then(async res => {
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                return res.json();
+            } else {
+                throw new Error(`Errore Server Vercel (Risposta non JSON)`);
+            }
+        })
+        .then(data => {
+            if (data.success && data.scores && data.scores.length > 0) {
+                let html = "<ol style='margin:0; padding-left:20px;'>";
+                data.scores.forEach(item => {
+                    html += `<li style='margin-bottom: 4px;'><b>${item.username}</b>: <span style='color:#e67e22;'>${item.score} pts</span></li>`;
+                });
+                html += "</ol>";
+                leaderboardList.innerHTML = html;
+            } else if (data.success === false) {
+                leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore API: ${data.error}</span>`;
+            } else {
+                leaderboardList.innerHTML = "Nessun punteggio in classifica.";
+            }
+        })
+        .catch(err => {
+            leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore: ${err.message}</span>`;
+            console.error("Dettaglio errore classifica:", err);
+        });
+}
 
 const arena = createMatrix(12, 17);
 
@@ -703,6 +854,12 @@ function arenaSweep() {
             updateInterval();
             scoreContainer.classList.add('level-flash');
             setTimeout(() => scoreContainer.classList.remove('level-flash'), 600);
+
+            const pandaHead = document.querySelector('.panda-head');
+            pandaHead.classList.add('heart-eyes-active');
+            setTimeout(() => {
+                pandaHead.classList.remove('heart-eyes-active');
+            }, 1200);
         }
     }
     scoreElement.innerText = player.score;
@@ -752,7 +909,7 @@ function updateInterval() {
 }
 
 function update(time = 0) {
-    if (isPaused || isGameOver) return;
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     const deltaTime = time - lastTime;
     lastTime = time;
     dropCounter += deltaTime;
@@ -764,7 +921,7 @@ function update(time = 0) {
 }
 
 function togglePause() {
-    if (isGameOver) return;
+    if (isGameOver || nicknameModal.style.display === 'block') return;
     isPaused = !isPaused;
     pauseBtn.innerText = isPaused ? '▶' : '⏸';
     if (!isPaused) {
@@ -778,6 +935,43 @@ pauseBtn.addEventListener('click', togglePause);
 function gameOver() {
     isGameOver = true;
     finalScoreElement.innerText = player.score;
+
+    let isNewRecord = player.score > bestScore;
+    if (isNewRecord && player.score > 0) {
+        bestScoreNotice.style.display = 'block';
+    } else {
+        bestScoreNotice.style.display = 'none';
+    }
+
+    lastScore = player.score;
+    lastScoreEl.innerText = lastScore;
+    localStorage.setItem('pandatetris_last_score', lastScore);
+
+    if (player.score > bestScore) {
+        bestScore = player.score;
+        bestScoreEl.innerText = bestScore;
+        localStorage.setItem('pandatetris_best_score', bestScore);
+    }
+
+    if (nickname) {
+        fetch('/api/games_leaderboard-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ game: 'pandatetris', username: nickname, score: player.score })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (data.bestScore > bestScore) {
+                    bestScore = data.bestScore;
+                    bestScoreEl.innerText = bestScore;
+                    localStorage.setItem('pandatetris_best_score', bestScore);
+                }
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
     gameOverScreen.style.display = 'block';
 }
 
@@ -789,6 +983,7 @@ function resetGame() {
     updateInterval();
     scoreElement.innerText = player.score;
     levelElement.innerText = player.level;
+    bestScoreNotice.style.display = 'none';
     gameOverScreen.style.display = 'none';
     isGameOver = false;
     isPaused = false;
@@ -807,7 +1002,7 @@ let isLongPressing = false;
 let holdDropInterval = null;
 
 canvas.addEventListener('touchstart', (e) => {
-    if (isPaused || isGameOver) return;
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     const touch = e.touches[0];
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
@@ -823,7 +1018,7 @@ canvas.addEventListener('touchstart', (e) => {
 }, {passive: true});
 
 canvas.addEventListener('touchmove', (e) => {
-    if (isPaused || isGameOver) return;
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     const touch = e.touches[0];
     const dx = touch.clientX - touchStartX;
     const dy = touch.clientY - touchStartY;
@@ -838,7 +1033,7 @@ canvas.addEventListener('touchmove', (e) => {
 }, {passive: true});
 
 canvas.addEventListener('touchend', (e) => {
-    if (isPaused || isGameOver) return;
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     clearTimeout(longPressTimer);
     if (holdDropInterval) {
         clearInterval(holdDropInterval);
@@ -868,7 +1063,7 @@ canvas.addEventListener('touchend', (e) => {
 }, {passive: true});
 
 window.addEventListener('keydown', event => {
-    if (isPaused || isGameOver) return;
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     if (event.key === 'ArrowLeft') {
         move(-1);
     } else if (event.key === 'ArrowRight') {
@@ -882,7 +1077,9 @@ window.addEventListener('keydown', event => {
 
 playerReset();
 updateInterval();
-update();
+if (nickname) {
+    update();
+}
 </script>
 </body>
 </html>

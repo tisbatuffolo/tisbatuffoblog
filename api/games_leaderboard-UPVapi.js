@@ -9,8 +9,10 @@ export default async function handler(req, res) {
   const { method } = req;
   const game = req.query.game || req.body?.game;
 
-  if (!game) {
-    return res.status(400).json({ success: false, error: 'Specificare il nome del gioco (es. ?game=pandarun)' });
+  const allowedGames = ['pandarun', 'pandatetris', 'pandapoops'];
+
+  if (!game || !allowedGames.includes(game)) {
+    return res.status(400).json({ success: false, error: 'Specificare un gioco valido (es. ?game=pandapoops)' });
   }
 
   // Inizializzazione sicura per prevenire crash globali che generano errori HTML
