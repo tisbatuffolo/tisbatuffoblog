@@ -29,39 +29,43 @@
         height: 100%;
         pointer-events: none;
     }
-    #score-container {
+    #left-controls {
         position: absolute;
-        top: 20px;
+        top: 15px;
         left: 20px;
-        font-size: 24px;
-        color: #333;
-        font-weight: 900;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 10px 20px;
-        border-radius: 20px;
-        border: 2px solid #333;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        z-index: 10;
         pointer-events: auto;
-        box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-        text-align: left;
-        transition: transform 0.2s ease, background-color 0.2s ease;
     }
-    @keyframes levelFlash {
-        0% { background: #ffeaa7; transform: scale(1.08); }
-        50% { background: #ff7675; transform: scale(1.15); color: white; }
-        100% { background: rgba(255, 255, 255, 0.9); transform: scale(1); color: #333; }
-    }
-    .level-flash {
-        animation: levelFlash 0.6s ease;
-    }
-    #close-btn {
+    #game-title {
         position: absolute;
-        top: 20px;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 30px;
+        color: #0000ff;
+        font-weight: 900;
+        text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 #333;
+        pointer-events: none;
+        z-index: 10;
+        white-space: nowrap;
+    }
+    #right-controls {
+        position: absolute;
+        top: 15px;
         right: 20px;
-        width: 45px;
-        height: 45px;
-        background: #ff4757;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        z-index: 10;
+        pointer-events: auto;
+    }
+    .top-btn {
+        width: 30px;
+        height: 30px;
         color: white;
-        font-size: 26px;
         font-weight: 900;
         border: 2px solid #333;
         border-radius: 50%;
@@ -69,15 +73,68 @@
         align-items: center;
         justify-content: center;
         text-decoration: none;
-        box-shadow: 0 4px 0 #333;
-        pointer-events: auto;
+        box-shadow: 0 3px 0 #333;
         cursor: pointer;
         transition: transform 0.1s ease;
+        font-family: 'Grandstander', cursive;
+        background: #19af4e;
     }
-    #close-btn:active {
-        transform: translateY(4px);
+    .top-btn:active {
+        transform: translateY(3px);
         box-shadow: 0 0 0 #333;
     }
+    #info-btn { background: #3742fa; font-size: 14px; font-style: italic; }
+    #leaderboard-btn { background: #fbc531; font-size: 13px; }
+    #pause-btn { background: #ffa502; font-size: 13px; }
+    #close-btn { background: #ff4757; font-size: 14px; }
+
+    #score-container {
+        position: absolute;
+        top: 175px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        color: #333;
+        font-weight: 900;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 6px 16px;
+        border-radius: 14px;
+        border: 2px solid #333;
+        pointer-events: auto;
+        box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+        text-align: center;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        z-index: 10;
+    }
+    @keyframes levelFlash {
+        0% { background: #ffeaa7; transform: translateX(-50%) scale(1.08); }
+        50% { background: #ff7675; transform: translateX(-50%) scale(1.15); color: white; }
+        100% { background: rgba(255, 255, 255, 0.9); transform: translateX(-50%) scale(1); color: #333; }
+    }
+    .level-flash {
+        animation: levelFlash 0.6s ease;
+    }
+
+    .modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        border: 4px solid #1a1a1a;
+        box-shadow: 0 10px 0 #1a1a1a;
+        display: none;
+        pointer-events: auto;
+        z-index: 30;
+        max-width: 300px;
+        width: 80%;
+    }
+    .modal h2 { margin: 0 0 15px; color: #3742fa; font-size: 22px; }
+    .modal p { font-size: 15px; color: #333; line-height: 1.4; margin-bottom: 20px; font-weight: 600; }
+
     #game-over {
         position: absolute;
         top: 50%;
@@ -85,75 +142,75 @@
         transform: translate(-50%, -50%);
         text-align: center;
         background: white;
-        padding: 30px;
+        padding: 25px;
         border-radius: 20px;
         border: 4px solid #1a1a1a;
         box-shadow: 0 10px 0 #1a1a1a;
         display: none;
         pointer-events: auto;
+        z-index: 20;
     }
-    #game-over h1 { margin: 0 0 20px; color: #ff4757; }
+    #game-over h1 { margin: 0 0 15px; color: #ff4757; font-size: 26px; }
     .btn {
         background: #19af4e;
         color: white;
         border: 2px solid #1a1a1a;
-        padding: 12px 25px;
-        font-size: 18px;
+        padding: 10px 20px;
+        font-size: 16px;
         font-family: 'Grandstander', cursive;
         border-radius: 30px;
         cursor: pointer;
-        box-shadow: 0 4px 0 #1a1a1a;
+        box-shadow: 0 3px 0 #1a1a1a;
         text-decoration: none;
         display: inline-block;
-        margin: 5px;
+        margin: 4px;
     }
     .btn:active {
-        transform: translateY(4px);
+        transform: translateY(3px);
         box-shadow: 0 0 0 #1a1a1a;
-    }
-    #orientation-warning {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: #19af4e;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        text-align: center;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-    @media screen and (orientation: landscape) {
-        #orientation-warning { display: none; }
     }
 </style>
 </head>
 <body>
 
-<div id="orientation-warning">
-    <h2>Ruota il dispositivo!</h2>
-    <p>PandaRun si gioca al meglio in orizzontale (Landscape).</p>
-    <div style="font-size: 40px; margin: 10px;">🔄📱</div>
-    <button class="btn" onclick="dismissWarning()" style="background:#ff4757; margin-top:15px;">Gioca Subito! 🐼</button>
-</div>
-
 <canvas id="gameCanvas"></canvas>
 
 <div id="ui-layer">
+    <div id="left-controls">
+        <button id="info-btn" class="top-btn" title="Info">i</button>
+        <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
+    </div>
+    
+    <div id="game-title">PandaRun</div>
+    
+    <div id="right-controls">
+        <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
+        <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
+    </div>
+
     <div id="score-container">
         Punti: <span id="score">0</span><br>
-        <span style="font-size: 18px; color: #555;">Livello: <span id="level">1</span></span>
+        <span style="font-size: 15px; color: #555;">Livello: <span id="level">1</span></span>
     </div>
-    <a href="../pandagames.html" id="close-btn" title="Esci">✕</a>
+
+    <div id="info-modal" class="modal">
+        <h2>Come Giocare 🐼</h2>
+        <p id="info-text">Caricamento...</p>
+        <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
+    </div>
+
+    <div id="leaderboard-modal" class="modal">
+        <h2>Classifica 🏆</h2>
+        <p>Le classifiche online saranno disponibili presto con una nuova API dedicata!</p>
+        <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
+    </div>
     
     <div id="game-over">
-        <h1>Ops! Preso!</h1>
+        <h1>Ops! Perso!</h1>
         <p>Punteggio finale: <span id="final-score">0</span></p>
-        <button class="btn" onclick="resetGame()">Rigioca 🐼</button>
+        <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
         <br><br>
-        <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:16px;">Torna ai Giochi</a>
+        <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:14px; width:180px; padding:8px; box-sizing:border-box;">Torna ai<br>Panda Games</a>
     </div>
 </div>
 
@@ -165,17 +222,59 @@
     const scoreContainer = document.getElementById('score-container');
     const gameOverScreen = document.getElementById('game-over');
     const finalScoreEl = document.getElementById('final-score');
+    const infoModal = document.getElementById('info-modal');
+    const leaderboardModal = document.getElementById('leaderboard-modal');
+    const infoTextEl = document.getElementById('info-text');
+    const pauseBtn = document.getElementById('pause-btn');
 
-    let w, h, groundY;
+    let w, h, baseGroundY;
     let score = 0;
     let gameSpeed = 5;
     let isGameOver = false;
+    let isPaused = false;
+    let animationId = null;
     let frames = 0;
     let nextObstacleDistance = 350;
     let distanceTraveled = 0;
+    let worldDistance = 0;
     let currentLevel = 1;
     let lastLevel = 1;
     let airplaneLevel3Triggered = false;
+
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isMobile) {
+        infoTextEl.innerText = "Fai tap o swipe sullo schermo per far saltare il panda ed evitare gli ostacoli!";
+    } else {
+        infoTextEl.innerText = "Usa il tasto Spazio, la freccia su o clicca con il mouse per far saltare il panda ed evitare gli ostacoli!";
+    }
+
+    function openModal(modal) {
+        if (!isPaused && !isGameOver) {
+            togglePause();
+        }
+        modal.style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    document.getElementById('info-btn').addEventListener('click', () => openModal(infoModal));
+    document.getElementById('leaderboard-btn').addEventListener('click', () => openModal(leaderboardModal));
+
+    function togglePause() {
+        if (isGameOver) return;
+        isPaused = !isPaused;
+        if (isPaused) {
+            pauseBtn.innerText = '▶';
+            if (animationId) cancelAnimationFrame(animationId);
+        } else {
+            pauseBtn.innerText = '⏸';
+            gameLoop();
+        }
+    }
+
+    pauseBtn.addEventListener('click', togglePause);
 
     let airplane = {
         active: false,
@@ -186,17 +285,30 @@
         text: "ti sbatuffolo"
     };
 
-    function dismissWarning() {
-        document.getElementById('orientation-warning').style.display = 'none';
-    }
-
     function resize() {
         w = canvas.width = window.innerWidth;
         h = canvas.height = window.innerHeight;
-        groundY = h - 60;
+        baseGroundY = h - 60;
     }
     window.addEventListener('resize', resize);
     resize();
+
+    function getGroundY(screenX) {
+        if (currentLevel < 5) return baseGroundY;
+        let worldX = screenX + worldDistance;
+        let cycle = worldX % 1200;
+        if (cycle < 300) {
+            return baseGroundY; // Piatto
+        } else if (cycle < 600) {
+            let t = (cycle - 300) / 300;
+            return baseGroundY - Math.sin(t * Math.PI / 2) * 55; // Salita
+        } else if (cycle < 900) {
+            let t = (cycle - 600) / 300;
+            return baseGroundY - 55 + Math.sin(t * Math.PI / 2) * 55; // Discesa
+        } else {
+            return baseGroundY; // Piatto
+        }
+    }
 
     const panda = {
         x: 60,
@@ -211,63 +323,83 @@
             ctx.save();
             ctx.translate(this.x, this.y);
 
-            let tilt = this.isGrounded ? Math.sin(frames * 0.3) * 0.08 : -0.15;
-            ctx.rotate(tilt);
+            if (isGameOver) {
+                ctx.fillStyle = '#b2bec3';
+                ctx.strokeStyle = '#2d3436';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(this.width/2, 15, 20, Math.PI, 0, false);
+                ctx.lineTo(this.width/2 + 20, this.height);
+                ctx.lineTo(this.width/2 - 20, this.height);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
 
-            ctx.fillStyle = '#ffffff';
-            ctx.strokeStyle = '#1a1a1a';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.ellipse(this.width/2, this.height/2 + 2, this.width/2.2, this.height/2.6, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
+                ctx.fillStyle = '#2d3436';
+                ctx.font = "bold 14px 'Grandstander', cursive, Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("RIP", this.width/2, this.height/2 + 5);
+            } else {
+                let tilt = this.isGrounded ? Math.sin(frames * 0.3) * 0.08 : -0.15;
+                ctx.rotate(tilt);
 
-            ctx.fillStyle = '#1a1a1a';
-            let legOffset = this.isGrounded ? Math.sin(frames * 0.4) * 8 : 6;
-            
-            ctx.beginPath();
-            ctx.arc(16 + legOffset, this.height - 4, 7, 0, Math.PI * 2);
-            ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#1a1a1a';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.ellipse(this.width/2, this.height/2 + 2, this.width/2.2, this.height/2.6, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
 
-            ctx.beginPath();
-            ctx.arc(this.width - 16 - legOffset, this.height - 4, 7, 0, Math.PI * 2);
-            ctx.fill();
+                ctx.fillStyle = '#1a1a1a';
+                let legOffset = this.isGrounded ? Math.sin(frames * 0.4) * 8 : 6;
+                
+                ctx.beginPath();
+                ctx.arc(16 + legOffset, this.height - 4, 7, 0, Math.PI * 2);
+                ctx.fill();
 
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(this.width - 18, 16, 17, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(this.width - 16 - legOffset, this.height - 4, 7, 0, Math.PI * 2);
+                ctx.fill();
 
-            ctx.fillStyle = '#1a1a1a';
-            ctx.beginPath();
-            ctx.arc(this.width - 28, 4, 6.5, 0, Math.PI * 2);
-            ctx.arc(this.width - 10, 5, 6.5, 0, Math.PI * 2);
-            ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.width - 18, 16, 17, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
 
-            ctx.beginPath();
-            ctx.ellipse(this.width - 23, 15, 4.5, 3.5, -0.2, 0, Math.PI * 2);
-            ctx.ellipse(this.width - 14, 15, 4.5, 3.5, 0.2, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(this.width - 23, 15, 1.2, 0, Math.PI * 2);
-            ctx.arc(this.width - 14, 15, 1.2, 0, Math.PI * 2);
-            ctx.fill();
+                ctx.fillStyle = '#1a1a1a';
+                ctx.beginPath();
+                ctx.arc(this.width - 28, 4, 6.5, 0, Math.PI * 2);
+                ctx.arc(this.width - 10, 5, 6.5, 0, Math.PI * 2);
+                ctx.fill();
 
-            ctx.fillStyle = '#1a1a1a';
-            ctx.beginPath();
-            ctx.arc(this.width - 18, 19, 2.2, 0, Math.PI * 2);
-            ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(this.width - 23, 15, 4.5, 3.5, -0.2, 0, Math.PI * 2);
+                ctx.ellipse(this.width - 14, 15, 4.5, 3.5, 0.2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.width - 23, 15, 1.2, 0, Math.PI * 2);
+                ctx.arc(this.width - 14, 15, 1.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#1a1a1a';
+                ctx.beginPath();
+                ctx.arc(this.width - 18, 19, 2.2, 0, Math.PI * 2);
+                ctx.fill();
+            }
 
             ctx.restore();
         },
         update() {
+            let currentGroundY = getGroundY(this.x + this.width/2);
             this.vy += this.gravity;
             this.y += this.vy;
-            if (this.y + this.height >= groundY) {
-                this.y = groundY - this.height;
+            if (this.y + this.height >= currentGroundY) {
+                this.y = currentGroundY - this.height;
                 this.vy = 0;
                 this.isGrounded = true;
             }
@@ -292,7 +424,7 @@
 
     function getAvailableObstacles() {
         const lvl = getLevel();
-        let pool = ['bamboo', 'cake'];
+        let pool = ['beer', 'cake'];
         if (lvl >= 2) pool.push('pasta');
         if (lvl >= 3) {
             pool.push('bee_single_bottom', 'bee_single_top', 'bee_single_very_top', 'bee_double_bottom_top', 'bee_double_top_very_high');
@@ -308,68 +440,47 @@
             this.id = typeId;
             this.x = customX;
 
-            if (this.id === 'bamboo' || this.id === 'cake' || this.id === 'pasta' || this.id === 'icecream' || this.id === 'cat') {
+            if (this.id === 'beer' || this.id === 'cake' || this.id === 'pasta' || this.id === 'icecream' || this.id === 'cat') {
                 this.size = 50;
-                this.y = groundY - this.size;
                 this.type = 'ground';
+                this.y = getGroundY(this.x + this.size/2) - this.size;
                 this.hitbox = { offset: 8, size: this.size - 16 };
             } else if (this.id === 'bee_single_bottom') {
                 this.size = 40;
-                this.y = groundY - 75;
+                this.airOffset = 75;
                 this.type = 'air';
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
                 this.hitbox = { offset: 6, size: this.size - 12 };
             } else if (this.id === 'bee_single_top') {
                 this.size = 40;
-                this.y = groundY - 125;
+                this.airOffset = 125;
                 this.type = 'air';
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
                 this.hitbox = { offset: 6, size: this.size - 12 };
             } else if (this.id === 'bee_single_very_top') {
                 this.size = 40;
-                this.y = groundY - 170;
+                this.airOffset = 170;
                 this.type = 'air';
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
                 this.hitbox = { offset: 6, size: this.size - 12 };
             } else if (this.id === 'bee_double_bottom_top') {
                 this.size = 35;
-                this.y1 = groundY - 75;
-                this.y2 = groundY - 135;
+                this.airOffset1 = 75;
+                this.airOffset2 = 135;
                 this.type = 'air_double';
+                this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1;
+                this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2;
             } else if (this.id === 'bee_double_top_very_high') {
                 this.size = 35;
-                this.y1 = groundY - 125;
-                this.y2 = groundY - 180;
+                this.airOffset1 = 125;
+                this.airOffset2 = 180;
                 this.type = 'air_double';
+                this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1;
+                this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2;
             }
         }
         draw() {
-            if (this.id === 'bamboo') {
-                ctx.fillStyle = '#2e8b57';
-                ctx.strokeStyle = '#1b4d3e';
-                ctx.lineWidth = 2;
-                let stalkWidth = 10;
-                let stalkHeight = this.size;
-                for(let i=0; i<2; i++) {
-                    let bx = this.x + i * 14 + 6;
-                    ctx.fillRect(bx, this.y, stalkWidth, stalkHeight);
-                    ctx.strokeRect(bx, this.y, stalkWidth, stalkHeight);
-                    ctx.beginPath();
-                    ctx.moveTo(bx, this.y + stalkHeight * 0.33);
-                    ctx.lineTo(bx + stalkWidth, this.y + stalkHeight * 0.33);
-                    ctx.moveTo(bx, this.y + stalkHeight * 0.66);
-                    ctx.lineTo(bx + stalkWidth, this.y + stalkHeight * 0.66);
-                    ctx.stroke();
-                }
-                ctx.fillStyle = '#228b22';
-                ctx.beginPath();
-                ctx.moveTo(this.x + 2, this.y + 15);
-                ctx.lineTo(this.x - 8, this.y + 10);
-                ctx.lineTo(this.x + 2, this.y + 25);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.moveTo(this.x + 28, this.y + 25);
-                ctx.lineTo(this.x + 38, this.y + 20);
-                ctx.lineTo(this.x + 28, this.y + 35);
-                ctx.fill();
-            } else if (this.id.startsWith('bee_single')) {
+            if (this.id.startsWith('bee_single')) {
                 ctx.font = this.size + "px Arial";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
@@ -381,7 +492,7 @@
                 ctx.fillText('🐝', this.x + this.size/2, this.y1 + this.size/2);
                 ctx.fillText('🐝', this.x + this.size/2, this.y2 + this.size/2);
             } else {
-                let emojiMap = { cake: '🍰', pasta: '🍝', icecream: '🍦', cat: '🐈' };
+                let emojiMap = { beer: '🍺', cake: '🍰', pasta: '🍝', icecream: '🍦', cat: '🐈' };
                 ctx.font = this.size + "px Arial";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
@@ -390,6 +501,14 @@
         }
         update() {
             this.x -= gameSpeed;
+            if (this.type === 'ground') {
+                this.y = getGroundY(this.x + this.size/2) - this.size;
+            } else if (this.type === 'air') {
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
+            } else if (this.type === 'air_double') {
+                this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1;
+                this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2;
+            }
         }
     }
 
@@ -398,14 +517,12 @@
         const pool = getAvailableObstacles();
         const chosenId = pool[Math.floor(Math.random() * pool.length)];
 
-        const isGround = ['bamboo', 'cake', 'pasta', 'icecream', 'cat'].includes(chosenId);
+        const isGround = ['beer', 'cake', 'pasta', 'icecream', 'cat'].includes(chosenId);
         
-        // Ostacoli doppi orizzontalmente dal terzo livello in poi, ma con distanza sicura (240px) 
-        // e limitati solo a ostacoli a terra per non bloccare la parabola di salto.
         let doubleChance = lvl >= 3 ? 0.35 + ((lvl - 3) * 0.15) : 0; 
         if (isGround && lvl >= 3 && Math.random() < doubleChance) {
             obstacles.push(new Obstacle(chosenId, w));
-            const groundPool = ['bamboo', 'cake', 'pasta', 'icecream', 'cat'];
+            const groundPool = ['beer', 'cake', 'pasta', 'icecream', 'cat'];
             const secondId = groundPool[Math.floor(Math.random() * groundPool.length)];
             obstacles.push(new Obstacle(secondId, w + 240));
         } else {
@@ -414,11 +531,11 @@
     }
 
     const clouds = [
-        { x: 50, y: 50, speed: 0.25, size: '60px' },
-        { x: 300, y: 90, speed: 0.18, size: '75px' },
-        { x: 600, y: 40, speed: 0.3, size: '65px' },
-        { x: 900, y: 100, speed: 0.22, size: '80px' },
-        { x: 1200, y: 60, speed: 0.2, size: '70px' }
+        { x: 50, y: 120, speed: 0.25, size: '60px' },
+        { x: 300, y: 160, speed: 0.18, size: '75px' },
+        { x: 600, y: 110, speed: 0.3, size: '65px' },
+        { x: 900, y: 170, speed: 0.22, size: '80px' },
+        { x: 1200, y: 130, speed: 0.2, size: '70px' }
     ];
 
     function drawBackground() {
@@ -432,7 +549,7 @@
         ctx.font = "65px Arial";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText("☀️", w / 2, 75);
+        ctx.fillText("☀️", w / 2, 140);
 
         ctx.globalAlpha = 1.0;
         clouds.forEach(c => {
@@ -488,36 +605,58 @@
 
         ctx.fillStyle = '#6b8292';
         ctx.beginPath();
-        ctx.moveTo(0, groundY);
+        ctx.moveTo(0, baseGroundY);
         let mountainSpacing = Math.max(w / 3, 300);
         for (let i = 0; i <= w + mountainSpacing; i += mountainSpacing) {
-            ctx.lineTo(i - mountainSpacing * 0.5, groundY - 180);
-            ctx.lineTo(i, groundY);
+            ctx.lineTo(i - mountainSpacing * 0.5, baseGroundY - 180);
+            ctx.lineTo(i, baseGroundY);
         }
-        ctx.lineTo(w, groundY);
+        ctx.lineTo(w, baseGroundY);
         ctx.closePath();
         ctx.fill();
 
         ctx.fillStyle = '#526675';
         ctx.beginPath();
-        ctx.moveTo(0, groundY);
+        ctx.moveTo(0, baseGroundY);
         let mSpacing2 = Math.max(w / 4, 220);
         for (let i = 0; i <= w + mSpacing2; i += mSpacing2) {
-            ctx.lineTo(i - mSpacing2 * 0.5, groundY - 110);
-            ctx.lineTo(i, groundY);
+            ctx.lineTo(i - mSpacing2 * 0.5, baseGroundY - 110);
+            ctx.lineTo(i, baseGroundY);
         }
-        ctx.lineTo(w, groundY);
+        ctx.lineTo(w, baseGroundY);
         ctx.closePath();
         ctx.fill();
 
+        // Terra dinamica
         ctx.fillStyle = "#8B4513";
-        ctx.fillRect(0, groundY, w, h - groundY);
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        for (let x = 0; x <= w; x += 10) {
+            ctx.lineTo(x, getGroundY(x));
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fill();
+
+        // Prato dinamico
         ctx.fillStyle = "#2ecc71";
-        ctx.fillRect(0, groundY, w, 18);
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 10) {
+            let gy = getGroundY(x);
+            if (x === 0) ctx.moveTo(x, gy);
+            else ctx.lineTo(x, gy);
+        }
+        for (let x = w; x >= 0; x -= 10) {
+            let gy = getGroundY(x);
+            ctx.lineTo(x, gy + 18);
+        }
+        ctx.closePath();
+        ctx.fill();
         
         ctx.fillStyle = "#27ae60";
         for(let gx = 0; gx < w; gx += 20) {
-            ctx.fillRect(gx, groundY, 10, 6);
+            let gy = getGroundY(gx);
+            ctx.fillRect(gx, gy, 10, 6);
         }
     }
 
@@ -557,9 +696,12 @@
     }
 
     function gameLoop() {
-        if (isGameOver) return;
+        if (isGameOver || isPaused) return;
         
         ctx.clearRect(0, 0, w, h);
+        
+        worldDistance += gameSpeed;
+
         drawBackground();
 
         panda.update();
@@ -633,21 +775,29 @@
         isGameOver = true;
         finalScoreEl.innerText = score;
         gameOverScreen.style.display = 'block';
+        
+        ctx.clearRect(0, 0, w, h);
+        drawBackground();
+        panda.draw();
+        obstacles.forEach(obs => obs.draw());
     }
 
     function resetGame() {
         isGameOver = false;
+        isPaused = false;
+        pauseBtn.innerText = '⏸';
         score = 0;
         currentLevel = 1;
         lastLevel = 1;
         gameSpeed = 5;
         frames = 0;
         distanceTraveled = 0;
+        worldDistance = 0;
         nextObstacleDistance = 350;
         obstacles = [];
         airplane.active = false;
         airplaneLevel3Triggered = false;
-        panda.y = groundY - panda.height;
+        panda.y = baseGroundY - panda.height;
         scoreEl.innerText = score;
         levelEl.innerText = currentLevel;
         gameOverScreen.style.display = 'none';
@@ -656,8 +806,8 @@
 
     function handleInput(e) {
         if (e.type === 'touchstart' || e.type === 'mousedown' || (e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp'))) {
-            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
-            if (!isGameOver) {
+            if (e.target.closest('#right-controls') || e.target.closest('#left-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+            if (!isGameOver && !isPaused) {
                 panda.jump();
                 if(e.cancelable) e.preventDefault();
             }
@@ -668,7 +818,7 @@
     window.addEventListener('mousedown', handleInput);
     window.addEventListener('keydown', handleInput);
 
-    panda.y = groundY - panda.height;
+    panda.y = baseGroundY - panda.height;
     gameLoop();
 
 </script>
