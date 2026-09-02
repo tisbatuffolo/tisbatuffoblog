@@ -93,23 +93,33 @@
         top: 175px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 18px;
+        font-size: 15px;
         color: #333;
         font-weight: 900;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 6px 16px;
-        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 6px 14px;
+        border-radius: 12px;
         border: 2px solid #333;
         pointer-events: auto;
         box-shadow: 0 3px 0 rgba(0,0,0,0.15);
         text-align: center;
+        white-space: nowrap;
         transition: transform 0.2s ease, background-color 0.2s ease;
         z-index: 10;
+        line-height: 1.3;
     }
+    @media (max-width: 480px) {
+        #score-container {
+            top: 165px;
+            font-size: 13px;
+            padding: 5px 10px;
+        }
+    }
+
     @keyframes levelFlash {
         0% { background: #ffeaa7; transform: translateX(-50%) scale(1.08); }
         50% { background: #ff7675; transform: translateX(-50%) scale(1.15); color: white; }
-        100% { background: rgba(255, 255, 255, 0.9); transform: translateX(-50%) scale(1); color: #333; }
+        100% { background: rgba(255, 255, 255, 0.95); transform: translateX(-50%) scale(1); color: #333; }
     }
     .level-flash {
         animation: levelFlash 0.6s ease;
@@ -121,19 +131,37 @@
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
-        background: white;
-        padding: 25px;
-        border-radius: 20px;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fa 100%);
+        padding: 25px 20px;
+        border-radius: 22px;
         border: 4px solid #1a1a1a;
         box-shadow: 0 10px 0 #1a1a1a;
         display: none;
         pointer-events: auto;
         z-index: 30;
-        max-width: 300px;
-        width: 80%;
+        max-width: 320px;
+        width: 85%;
     }
-    .modal h2 { margin: 0 0 15px; color: #3742fa; font-size: 22px; }
-    .modal p { font-size: 15px; color: #333; line-height: 1.4; margin-bottom: 20px; font-weight: 600; }
+    .modal h2 { margin: 0 0 10px; color: #3742fa; font-size: 22px; text-shadow: 1px 1px 0 #dff9fb; }
+    .modal p { font-size: 14px; color: #555; line-height: 1.4; margin-bottom: 18px; font-weight: 600; }
+    .modal input {
+        width: 85%;
+        padding: 12px;
+        font-size: 16px;
+        font-family: 'Grandstander', cursive;
+        border: 3px solid #333;
+        border-radius: 14px;
+        margin-bottom: 18px;
+        text-align: center;
+        outline: none;
+        background: #fff;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+        transition: all 0.2s ease;
+    }
+    .modal input:focus {
+        border-color: #3742fa;
+        box-shadow: 0 0 8px rgba(55, 66, 250, 0.4), inset 0 2px 4px rgba(0,0,0,0.06);
+    }
 
     #game-over {
         position: absolute;
@@ -151,6 +179,20 @@
         z-index: 20;
     }
     #game-over h1 { margin: 0 0 15px; color: #ff4757; font-size: 26px; }
+    
+    #best-score-notice {
+        color: #e67e22;
+        font-size: 16px;
+        font-weight: 900;
+        display: none;
+        margin: 2px 0 16px 0;
+        text-shadow: 1px 1px 0 #ffeaa7;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
     .btn {
         background: #19af4e;
         color: white;
@@ -189,8 +231,17 @@
     </div>
 
     <div id="score-container">
-        Punti: <span id="score">0</span><br>
-        <span style="font-size: 15px; color: #555;">Livello: <span id="level">1</span></span>
+        <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name">Panda</span>!</div>
+        Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
+        <span style="font-size: 12px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
+    </div>
+
+    <div id="nickname-modal" class="modal">
+        <h2>Benvenuto a PandaRun! 🐼</h2>
+        <p>Inserisci il tuo nickname per iniziare l'avventura:</p>
+        <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
+        <br>
+        <button class="btn" id="save-nickname-btn" style="font-size: 15px; width: 160px; padding: 10px;">Inizia 🚀</button>
     </div>
 
     <div id="info-modal" class="modal">
@@ -201,13 +252,17 @@
 
     <div id="leaderboard-modal" class="modal">
         <h2>Classifica 🏆</h2>
-        <p>Le classifiche online saranno disponibili presto con una nuova API dedicata!</p>
+        <p style="font-size: 12px; color: #777; margin-top: -5px; margin-bottom: 12px;">Miglior punteggio per giocatore</p>
+        <div id="leaderboard-list" style="font-size: 14px; color: #333; max-height: 150px; overflow-y: auto; margin-bottom: 15px; text-align: left; padding: 0 10px;">
+            Caricamento classifica...
+        </div>
         <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
     </div>
     
     <div id="game-over">
         <h1>Ops! Perso!</h1>
-        <p>Punteggio finale: <span id="final-score">0</span></p>
+        <p style="margin-bottom: 6px;">Punteggio finale: <span id="final-score">0</span></p>
+        <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
         <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
         <br><br>
         <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:14px; width:180px; padding:8px; box-sizing:border-box;">Torna ai<br>Panda Games</a>
@@ -219,16 +274,70 @@
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
     const levelEl = document.getElementById('level');
+    const bestScoreEl = document.getElementById('best-score');
+    const lastScoreEl = document.getElementById('last-score');
+    const playerNameEl = document.getElementById('player-name');
     const scoreContainer = document.getElementById('score-container');
     const gameOverScreen = document.getElementById('game-over');
     const finalScoreEl = document.getElementById('final-score');
+    const bestScoreNotice = document.getElementById('best-score-notice');
     const infoModal = document.getElementById('info-modal');
     const leaderboardModal = document.getElementById('leaderboard-modal');
+    const nicknameModal = document.getElementById('nickname-modal');
+    const nicknameInput = document.getElementById('nickname-input');
+    const saveNicknameBtn = document.getElementById('save-nickname-btn');
+    const leaderboardList = document.getElementById('leaderboard-list');
     const infoTextEl = document.getElementById('info-text');
     const pauseBtn = document.getElementById('pause-btn');
 
     let w, h, baseGroundY;
     let score = 0;
+    let bestScore = parseInt(localStorage.getItem('pandarun_best_score')) || 0;
+    let lastScore = parseInt(localStorage.getItem('pandarun_last_score')) || 0;
+    let nickname = localStorage.getItem('pandarun_nickname') || '';
+
+    bestScoreEl.innerText = bestScore;
+    lastScoreEl.innerText = lastScore;
+
+    if (nickname) {
+        playerNameEl.innerText = nickname;
+        nicknameModal.style.display = 'none';
+    } else {
+        nicknameModal.style.display = 'block';
+    }
+
+    saveNicknameBtn.addEventListener('click', () => {
+        let val = nicknameInput.value.trim();
+        if (val) {
+            nickname = val;
+            localStorage.setItem('pandarun_nickname', nickname);
+            playerNameEl.innerText = nickname;
+            nicknameModal.style.display = 'none';
+            fetchBestScore();
+            gameLoop();
+        } else {
+            alert('Inserisci un nickname valido!');
+        }
+    });
+
+    function fetchBestScore() {
+        if (!nickname) return;
+        fetch(`/api/games_leaderboard-UPVapi?game=pandarun&username=${encodeURIComponent(nickname)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.bestScore > bestScore) {
+                    bestScore = data.bestScore;
+                    bestScoreEl.innerText = bestScore;
+                    localStorage.setItem('pandarun_best_score', bestScore);
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+    if (nickname) {
+        fetchBestScore();
+    }
+
     let gameSpeed = 5;
     let isGameOver = false;
     let isPaused = false;
@@ -249,8 +358,11 @@
     }
 
     function openModal(modal) {
-        if (!isPaused && !isGameOver) {
+        if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
             togglePause();
+        }
+        if (modal === leaderboardModal) {
+            loadLeaderboard();
         }
         modal.style.display = 'block';
     }
@@ -262,8 +374,43 @@
     document.getElementById('info-btn').addEventListener('click', () => openModal(infoModal));
     document.getElementById('leaderboard-btn').addEventListener('click', () => openModal(leaderboardModal));
 
+    function loadLeaderboard() {
+        leaderboardList.innerHTML = "Caricamento...";
+        
+        // Il parametro t=Date.now() costringe Vercel a restituire dati freschi ignorando la cache
+        fetch('/api/games_leaderboard-UPVapi?game=pandarun&t=' + Date.now())
+            .then(async res => {
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    return res.json();
+                } else {
+                    throw new Error(`Errore Server Vercel (Risposta non JSON)`);
+                }
+            })
+            .then(data => {
+                if (data.success && data.scores && data.scores.length > 0) {
+                    let html = "<ol style='margin:0; padding-left:20px;'>";
+                    data.scores.forEach(item => {
+                        html += `<li style='margin-bottom: 4px;'><b>${item.username}</b>: <span style='color:#e67e22;'>${item.score} pts</span></li>`;
+                    });
+                    html += "</ol>";
+                    leaderboardList.innerHTML = html;
+                } else if (data.success === false) {
+                    // Stampa un eventuale errore interno di Redis direttamente nel popup
+                    leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore API: ${data.error}</span>`;
+                } else {
+                    leaderboardList.innerHTML = "Nessun punteggio in classifica.";
+                }
+            })
+            .catch(err => {
+                // Sostituisce il messaggio generico mostrando il motivo reale del blocco
+                leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore: ${err.message}</span>`;
+                console.error("Dettaglio errore classifica:", err);
+            });
+    }
+
     function togglePause() {
-        if (isGameOver) return;
+        if (isGameOver || nicknameModal.style.display === 'block') return;
         isPaused = !isPaused;
         if (isPaused) {
             pauseBtn.innerText = '▶';
@@ -298,15 +445,15 @@
         let worldX = screenX + worldDistance;
         let cycle = worldX % 1200;
         if (cycle < 300) {
-            return baseGroundY; // Piatto
+            return baseGroundY;
         } else if (cycle < 600) {
             let t = (cycle - 300) / 300;
-            return baseGroundY - Math.sin(t * Math.PI / 2) * 55; // Salita
+            return baseGroundY - Math.sin(t * Math.PI / 2) * 55;
         } else if (cycle < 900) {
             let t = (cycle - 600) / 300;
-            return baseGroundY - 55 + Math.sin(t * Math.PI / 2) * 55; // Discesa
+            return baseGroundY - 55 + Math.sin(t * Math.PI / 2) * 55;
         } else {
-            return baseGroundY; // Piatto
+            return baseGroundY;
         }
     }
 
@@ -627,7 +774,6 @@
         ctx.closePath();
         ctx.fill();
 
-        // Terra dinamica
         ctx.fillStyle = "#8B4513";
         ctx.beginPath();
         ctx.moveTo(0, h);
@@ -638,7 +784,6 @@
         ctx.closePath();
         ctx.fill();
 
-        // Prato dinamico
         ctx.fillStyle = "#2ecc71";
         ctx.beginPath();
         for (let x = 0; x <= w; x += 10) {
@@ -696,7 +841,7 @@
     }
 
     function gameLoop() {
-        if (isGameOver || isPaused) return;
+        if (isGameOver || isPaused || nicknameModal.style.display === 'block') return;
         
         ctx.clearRect(0, 0, w, h);
         
@@ -774,6 +919,43 @@
     function gameOver() {
         isGameOver = true;
         finalScoreEl.innerText = score;
+
+        let isNewRecord = score > bestScore;
+        if (isNewRecord && score > 0) {
+            bestScoreNotice.style.display = 'flex';
+        } else {
+            bestScoreNotice.style.display = 'none';
+        }
+
+        lastScore = score;
+        lastScoreEl.innerText = lastScore;
+        localStorage.setItem('pandarun_last_score', lastScore);
+
+        if (score > bestScore) {
+            bestScore = score;
+            bestScoreEl.innerText = bestScore;
+            localStorage.setItem('pandarun_best_score', bestScore);
+        }
+
+        if (nickname) {
+            fetch('/api/games_leaderboard-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ game: 'pandarun', username: nickname, score: score })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.bestScore > bestScore) {
+                        bestScore = data.bestScore;
+                        bestScoreEl.innerText = bestScore;
+                        localStorage.setItem('pandarun_best_score', bestScore);
+                    }
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
         gameOverScreen.style.display = 'block';
         
         ctx.clearRect(0, 0, w, h);
@@ -797,6 +979,7 @@
         obstacles = [];
         airplane.active = false;
         airplaneLevel3Triggered = false;
+        bestScoreNotice.style.display = 'none';
         panda.y = baseGroundY - panda.height;
         scoreEl.innerText = score;
         levelEl.innerText = currentLevel;
@@ -805,8 +988,9 @@
     }
 
     function handleInput(e) {
+        if (nicknameModal.style.display === 'block') return;
         if (e.type === 'touchstart' || e.type === 'mousedown' || (e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp'))) {
-            if (e.target.closest('#right-controls') || e.target.closest('#left-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+            if (e.target.closest('#right-controls') || e.target.closest('#left-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
             if (!isGameOver && !isPaused) {
                 panda.jump();
                 if(e.cancelable) e.preventDefault();
@@ -819,7 +1003,9 @@
     window.addEventListener('keydown', handleInput);
 
     panda.y = baseGroundY - panda.height;
-    gameLoop();
+    if (nickname) {
+        gameLoop();
+    }
 
 </script>
 </body>
