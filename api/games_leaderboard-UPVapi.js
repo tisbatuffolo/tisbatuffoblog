@@ -1,10 +1,7 @@
 import { Redis } from '@upstash/redis';
-// NOTA: Se usi Node.js puro su Vercel senza un bundler (es. Next.js), 
-// usa invece: const { Redis } = require('@upstash/redis');
 
 let redis; // L'istanza viene dichiarata globalmente, ma inizializzata nell'handler
 
-// NOTA: Se usi Node.js puro, cambia 'export default' con 'module.exports ='
 export default async function handler(req, res) {
   const { method } = req;
   const game = req.query.game || req.body?.game;
@@ -91,7 +88,6 @@ export default async function handler(req, res) {
   
   else {
     res.setHeader('Allow', ['GET', 'POST']);
-    // Restituisce un JSON valido anche in caso di metodo non autorizzato
     return res.status(405).json({ success: false, error: `Method ${method} Not Allowed` }); 
   }
 }
