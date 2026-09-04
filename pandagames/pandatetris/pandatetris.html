@@ -45,8 +45,8 @@ body, html {
 
 #left-controls {
     position: absolute;
-    top: 12px;
-    left: 15px;
+    top: 10px;
+    left: 12px;
     display: flex;
     gap: 6px;
     align-items: center;
@@ -56,10 +56,10 @@ body, html {
 
 #game-title {
     position: absolute;
-    top: 10px;
+    top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 32px;
+    font-size: 26px;
     color: var(--sbatuffo-blue);
     font-weight: 900;
     font-family: 'Grandstander', cursive;
@@ -71,8 +71,8 @@ body, html {
 
 #right-controls {
     position: absolute;
-    top: 12px;
-    right: 15px;
+    top: 10px;
+    right: 12px;
     display: flex;
     gap: 6px;
     align-items: center;
@@ -81,8 +81,8 @@ body, html {
 }
 
 .top-btn {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     color: white;
     font-weight: 900;
     border: 2px solid #333;
@@ -103,31 +103,31 @@ body, html {
     box-shadow: 0 0 0 #333;
 }
 
-#info-btn { background: #3742fa; font-size: 14px; font-style: italic; }
-#leaderboard-btn { background: #fbc531; font-size: 13px; }
-#pause-btn { background: #ffa502; font-size: 13px; }
-#close-btn { background: #ff4757; font-size: 14px; }
+#info-btn { background: #3742fa; font-size: 13px; font-style: italic; }
+#leaderboard-btn { background: #fbc531; font-size: 12px; }
+#pause-btn { background: #ffa502; font-size: 12px; }
+#close-btn { background: #ff4757; font-size: 13px; }
 
 #score-container {
     position: relative;
-    margin-top: 25px;
-    font-size: 13px;
+    margin-top: 12px;
+    font-size: 12px;
     color: #333;
     font-weight: 900;
     font-family: 'Grandstander', cursive;
     background: #f4f4f4;
-    padding: 6px 12px;
-    border-radius: 12px;
+    padding: 4px 10px;
+    border-radius: 10px;
     border: 2px solid var(--stroke);
     pointer-events: auto;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.15);
     text-align: center;
     z-index: 20;
     display: inline-block;
     transition: transform 0.2s ease, background-color 0.2s ease;
-    line-height: 1.3;
-    width: 82%;
-    max-width: 310px;
+    line-height: 1.2;
+    width: 85%;
+    max-width: 280px;
     box-sizing: border-box;
 }
 
@@ -148,36 +148,31 @@ body, html {
     transform: translate(-50%, -50%);
     text-align: center;
     background: linear-gradient(135deg, #ffffff 0%, #f7f9fa 100%);
-    padding: 25px 20px;
-    border-radius: 22px;
+    padding: 20px 15px;
+    border-radius: 20px;
     border: 4px solid #1a1a1a;
-    box-shadow: 0 10px 0 #1a1a1a;
+    box-shadow: 0 8px 0 #1a1a1a;
     display: none;
     pointer-events: auto;
     z-index: 60;
-    max-width: 320px;
+    max-width: 300px;
     width: 85%;
 }
 
-.modal h2 { margin: 0 0 10px; color: #3742fa; font-size: 22px; font-family: 'Grandstander', cursive; text-shadow: 1px 1px 0 #dff9fb; }
-.modal p { font-size: 14px; color: #555; line-height: 1.4; margin-bottom: 18px; font-weight: 600; font-family: 'Fredoka', sans-serif; text-align: left; }
+.modal h2 { margin: 0 0 8px; color: #3742fa; font-size: 20px; font-family: 'Grandstander', cursive; text-shadow: 1px 1px 0 #dff9fb; }
+.modal p { font-size: 13px; color: #555; line-height: 1.3; margin-bottom: 14px; font-weight: 600; font-family: 'Fredoka', sans-serif; text-align: left; }
 .modal input {
     width: 85%;
-    padding: 12px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 15px;
     font-family: 'Grandstander', cursive;
     border: 3px solid #333;
-    border-radius: 14px;
-    margin-bottom: 18px;
+    border-radius: 12px;
+    margin-bottom: 14px;
     text-align: center;
     outline: none;
     background: #fff;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-    transition: all 0.2s ease;
-}
-.modal input:focus {
-    border-color: #3742fa;
-    box-shadow: 0 0 8px rgba(55, 66, 250, 0.4), inset 0 2px 4px rgba(0,0,0,0.06);
 }
 
 #game-over {
@@ -187,25 +182,25 @@ body, html {
     transform: translate(-50%, -50%);
     text-align: center;
     background: white;
-    padding: 25px;
-    border-radius: 20px;
+    padding: 20px;
+    border-radius: 18px;
     border: 4px solid #1a1a1a;
-    box-shadow: 0 10px 0 #1a1a1a;
+    box-shadow: 0 8px 0 #1a1a1a;
     display: none;
     pointer-events: auto;
     z-index: 60;
-    max-width: 320px;
+    max-width: 300px;
     width: 85%;
 }
 
-#game-over h1 { margin: 0 0 15px; color: #ff4757; font-size: 26px; font-family: 'Grandstander', cursive; }
+#game-over h1 { margin: 0 0 10px; color: #ff4757; font-size: 24px; font-family: 'Grandstander', cursive; }
 
 #best-score-notice {
     color: #e67e22;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 900;
     display: none;
-    margin: 2px 0 16px 0;
+    margin: 2px 0 12px 0;
     text-shadow: 1px 1px 0 #ffeaa7;
     text-align: center;
     font-family: 'Grandstander', cursive;
@@ -215,15 +210,15 @@ body, html {
     background: #19af4e;
     color: white;
     border: 2px solid #1a1a1a;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 8px 16px;
+    font-size: 15px;
     font-family: 'Grandstander', cursive;
-    border-radius: 30px;
+    border-radius: 25px;
     cursor: pointer;
     box-shadow: 0 3px 0 #1a1a1a;
     text-decoration: none;
     display: inline-block;
-    margin: 4px;
+    margin: 3px;
 }
 
 .btn:active {
@@ -233,36 +228,35 @@ body, html {
 
 .game-container {
     width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     position: relative;
-    padding-top: 135px;
+    padding-top: 105px;
     box-sizing: border-box;
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 30px;
+    overflow: hidden;
 }
 
-/* --- TESTA DEL PANDA GRANDE --- */
+/* --- TESTA DEL PANDA COMPATTA --- */
 .panda-wrapper { 
     position: relative; 
-    max-width: 380px; 
-    margin: 25px auto 0 auto; 
+    max-width: 300px; 
+    margin: 15px auto 0 auto; 
     z-index: 5; 
-    width: 96%; 
+    width: 90%; 
 }
 .panda-head { 
     position: absolute; 
-    top: -85px; 
+    top: -68px; 
     left: 50%; 
     transform: translateX(-50%); 
-    width: 156px; 
-    height: 112px; 
+    width: 130px; 
+    height: 94px; 
     background: #fff; 
     border: 3px solid var(--stroke); 
-    border-radius: 54px 54px 46px 46px; 
+    border-radius: 45px 45px 38px 38px; 
     z-index: 10; 
     box-shadow: inset 0 -2px 0 rgba(0,0,0,0.05); 
     cursor: pointer;
@@ -270,40 +264,40 @@ body, html {
 }
 .panda-ear { 
     position: absolute; 
-    width: 38px; 
-    height: 38px; 
+    width: 32px; 
+    height: 32px; 
     background: #1c1c1c; 
     border: 3px solid var(--stroke); 
     border-radius: 50%; 
-    top: -10px; 
+    top: -8px; 
     z-index: -1; 
 }
-.panda-ear.left { left: -8px; } 
-.panda-ear.right { right: -8px; }
+.panda-ear.left { left: -6px; } 
+.panda-ear.right { right: -6px; }
 
 .panda-eye { 
     position: absolute; 
-    width: 32px; 
-    height: 40px; 
+    width: 27px; 
+    height: 34px; 
     background: #1c1c1c; 
     border-radius: 50%; 
-    top: 32px; 
+    top: 26px; 
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: visible;
 }
-.panda-eye.left { left: 20px; transform: rotate(-15deg); } 
-.panda-eye.right { right: 20px; transform: rotate(15deg); }
+.panda-eye.left { left: 16px; transform: rotate(-15deg); } 
+.panda-eye.right { right: 16px; transform: rotate(15deg); }
 
 .panda-eye-sparkle { 
     position: absolute; 
-    width: 7px; 
-    height: 7px; 
+    width: 6px; 
+    height: 6px; 
     background: #fff; 
     border-radius: 50%; 
-    top: 5px; 
-    right: 5px; 
+    top: 4px; 
+    right: 4px; 
     z-index: 1;
 }
 
@@ -312,11 +306,11 @@ body, html {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 38px;
+    font-size: 30px;
     z-index: 10;
     line-height: 1;
     text-align: center;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
 }
 
 .panda-heart {
@@ -324,7 +318,7 @@ body, html {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
-    font-size: 24px;
+    font-size: 20px;
     pointer-events: none;
     opacity: 0;
     z-index: 11;
@@ -342,127 +336,124 @@ body, html {
 
 .panda-nose { 
     position: absolute; 
-    width: 16px; 
-    height: 9px; 
+    width: 14px; 
+    height: 8px; 
     background: #1c1c1c; 
     border-radius: 50%; 
-    top: 70px; 
+    top: 58px; 
     left: 50%; 
     transform: translateX(-50%); 
 }
 
-/* --- BOCCA DEL PANDA SENZA LINEA VERTICALE --- */
 .panda-mouth { 
     position: absolute; 
-    width: 24px; 
-    height: 9px; 
-    border-bottom: 3.5px solid #1c1c1c; 
-    border-radius: 0 0 20px 20px; 
-    top: 86px; 
+    width: 20px; 
+    height: 8px; 
+    border-bottom: 3px solid #1c1c1c; 
+    border-radius: 0 0 16px 16px; 
+    top: 70px; 
     left: 50%; 
     transform: translateX(-50%); 
 }
 .panda-blush { 
     position: absolute; 
-    width: 16px; 
-    height: 10px; 
+    width: 14px; 
+    height: 8px; 
     background: #ffb3ba; 
     border-radius: 50%; 
-    top: 60px; 
+    top: 50px; 
     opacity: 0.6; 
     filter: blur(2px); 
 }
-.panda-blush.left { left: 8px; } 
-.panda-blush.right { right: 8px; }
+.panda-blush.left { left: 6px; } 
+.panda-blush.right { right: 6px; }
 
 /* --- ZAMPE SUPERIORI --- */
 .panda-paw-top {
     position: absolute;
-    width: 48px;
-    height: 38px;
+    width: 42px;
+    height: 33px;
     background: #1c1c1c;
     border: 3px solid var(--stroke);
     border-radius: 50%;
-    top: -16px;
+    top: -13px;
     z-index: 15;
     box-shadow: 0 3px 0 var(--stroke), inset 0 3px 0 rgba(255,255,255,0.25);
     cursor: pointer;
     pointer-events: auto;
 }
-.panda-paw-top.left { left: 8px; transform: rotate(-12deg); }
-.panda-paw-top.right { right: 8px; transform: rotate(12deg); }
+.panda-paw-top.left { left: 6px; transform: rotate(-12deg); }
+.panda-paw-top.right { right: 6px; transform: rotate(12deg); }
 
 .paw-main-pad {
     position: absolute;
-    width: 16px;
-    height: 12px;
+    width: 14px;
+    height: 10px;
     background: #ffb3ba;
     border-radius: 50%;
-    bottom: 5px;
+    bottom: 4px;
     left: 50%;
     transform: translateX(-50%);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
 }
 .paw-toe-1, .paw-toe-2, .paw-toe-3 {
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     background: #ffb3ba;
     border-radius: 50%;
-    bottom: 19px;
+    bottom: 16px;
 }
-.paw-toe-1 { left: 10px; }
+.paw-toe-1 { left: 8px; }
 .paw-toe-2 { left: 50%; transform: translateX(-50%); }
-.paw-toe-3 { right: 10px; }
+.paw-toe-3 { right: 8px; }
 
 /* --- ZAMPE INFERIORI --- */
 .panda-paw-bottom {
     position: absolute;
-    width: 58px;
-    height: 46px;
+    width: 50px;
+    height: 40px;
     background: #1c1c1c;
     border: 3px solid var(--stroke);
     border-radius: 40% 40% 50% 50%;
-    bottom: -22px;
+    bottom: -18px;
     z-index: 15;
     box-shadow: 0 4px 0 var(--stroke), inset 0 3px 0 rgba(255,255,255,0.25);
     cursor: pointer;
     pointer-events: auto;
 }
-.panda-paw-bottom.left { left: 10px; transform: rotate(-6deg); }
-.panda-paw-bottom.right { right: 10px; transform: rotate(6deg); }
+.panda-paw-bottom.left { left: 8px; transform: rotate(-6deg); }
+.panda-paw-bottom.right { right: 8px; transform: rotate(6deg); }
 
 .paw-main-pad-bottom {
     position: absolute;
-    width: 20px;
-    height: 15px;
+    width: 17px;
+    height: 13px;
     background: #ffb3ba;
     border-radius: 50%;
-    bottom: 6px;
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
 }
 .paw-toe-b1, .paw-toe-b2, .paw-toe-b3 {
     position: absolute;
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     background: #ffb3ba;
     border-radius: 50%;
-    bottom: 23px;
+    bottom: 20px;
 }
-.paw-toe-b1 { left: 12px; }
+.paw-toe-b1 { left: 10px; }
 .paw-toe-b2 { left: 50%; transform: translateX(-50%); }
-.paw-toe-b3 { right: 12px; }
+.paw-toe-b3 { right: 10px; }
 
-/* --- CORNICE DEL PANDA --- */
+/* --- CORNICE DEL PANDA OTTIMIZZATA --- */
 .lavagnetta-container { 
     position: relative; 
     background: #ff6b81; 
     border: 3px solid var(--stroke); 
-    border-radius: 16px; 
-    padding: 8px; 
-    box-shadow: 0 6px 20px rgba(255, 107, 129, 0.3), 4px 4px 0px var(--primary); 
+    border-radius: 14px; 
+    padding: 6px; 
+    box-shadow: 0 5px 15px rgba(255, 107, 129, 0.3), 3px 3px 0px var(--primary); 
     z-index: 5; 
     display: flex; 
     justify-content: center; 
@@ -471,11 +462,11 @@ body, html {
 
 .lavagnetta-screen {
     position: relative;
-    width: 300px;
-    height: 520px;
+    width: 240px;
+    height: 420px;
     background: #000000;
     border: 2px solid #1a1a1a;
-    border-radius: 6px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -511,22 +502,22 @@ canvas {
         <p>Inserisci il tuo nickname per iniziare l'avventura:</p>
         <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
         <br>
-        <button class="btn" id="save-nickname-btn" style="font-size: 15px; width: 160px; padding: 10px;">Inizia 🚀</button>
+        <button class="btn" id="save-nickname-btn" style="font-size: 14px; width: 140px; padding: 8px;">Inizia 🚀</button>
     </div>
 
     <div id="info-modal" class="modal">
         <h2>Come Giocare 🐼</h2>
         <p id="info-text">Caricamento...</p>
-        <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
+        <button class="btn" onclick="closeModal('info-modal')" style="font-size: 13px; width: 120px; padding: 6px;">Capito!</button>
     </div>
 
     <div id="leaderboard-modal" class="modal">
         <h2>Classifica 🏆</h2>
-        <p style="font-size: 12px; color: #777; margin-top: -5px; margin-bottom: 12px;">Miglior punteggio per giocatore</p>
-        <div id="leaderboard-list" style="font-size: 14px; color: #333; max-height: 150px; overflow-y: auto; margin-bottom: 15px; text-align: left; padding: 0 10px;">
+        <p style="font-size: 11px; color: #777; margin-top: -5px; margin-bottom: 10px;">Miglior punteggio per giocatore</p>
+        <div id="leaderboard-list" style="font-size: 13px; color: #333; max-height: 130px; overflow-y: auto; margin-bottom: 12px; text-align: left; padding: 0 5px;">
             Caricamento classifica...
         </div>
-        <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
+        <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 13px; width: 120px; padding: 6px;">Chiudi</button>
     </div>
 </div>
 
@@ -554,7 +545,7 @@ canvas {
 
         <div class="lavagnetta-container">
             <div class="lavagnetta-screen">
-                <canvas id="tetris" width="300" height="520"></canvas>
+                <canvas id="tetris" width="240" height="420"></canvas>
             </div>
         </div>
 
@@ -569,25 +560,25 @@ canvas {
     </div>
 
     <div id="score-container">
-        <div style="color: #0000ff; font-size: 12px;">Ciao, <span id="player-name">Panda</span>!</div>
+        <div style="color: #0000ff; font-size: 11px;">Ciao, <span id="player-name">Panda</span>!</div>
         Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
-        <span style="font-size: 10px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
+        <span style="font-size: 9px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
     </div>
 
     <div id="game-over">
         <h1>Ops! Perso!</h1>
-        <p style="margin-bottom: 6px;">Punteggio finale: <span id="final-score">0</span></p>
+        <p style="margin-bottom: 5px;">Punteggio finale: <span id="final-score">0</span></p>
         <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
-        <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
+        <button class="btn" onclick="resetGame()" style="font-size: 13px; width: 160px; padding: 7px;">Rigioca 🐼</button>
         <br><br>
-        <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:14px; width:180px; padding:8px; box-sizing:border-box;">Torna ai<br>Panda Games</a>
+        <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:12px; width:160px; padding:6px;">Torna ai<br>Panda Games</a>
     </div>
 </div>
 
 <script>
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
-context.scale(300 / 12, 520 / 21);
+context.scale(240 / 12, 420 / 21);
 
 const scoreElement = document.getElementById('score');
 const levelElement = document.getElementById('level');
@@ -656,7 +647,7 @@ if (nickname) {
 
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 if (isMobile) {
-    infoTextEl.innerText = "• Tap veloce o click sulla TESTA del panda per ruotare.\n• Scorri a destra/sinistra o usa le zampe per muovere i blocchi.\n• Occasionalmente possono apparire bombe e blocchi speciali tra i pezzi normali!";
+    infoTextEl.innerText = "• Tap veloce o click sulla TESTA del panda per ruotare.\n• Usa le ZAMPE per far scivolare i blocchi direttamente contro le cornici laterali!\n• Scorri in basso per scendere veloce.\n• Bombe e blocchi speciali appaiono occasionalmente!";
 } else {
     infoTextEl.innerText = "Usa i tasti freccia: Sinistra/Destra per muovere, Giù per scendere, Su o X per ruotare.\nLe bombe e gli eventi appaiono occasionalmente durante il gioco.";
 }
@@ -692,20 +683,20 @@ function loadLeaderboard() {
         })
         .then(data => {
             if (data.success && data.scores && data.scores.length > 0) {
-                let html = "<ol style='margin:0; padding-left:20px;'>";
+                let html = "<ol style='margin:0; padding-left:18px;'>";
                 data.scores.forEach(item => {
-                    html += `<li style='margin-bottom: 4px;'><b>${item.username}</b>: <span style='color:#e67e22;'>${item.score} pts</span></li>`;
+                    html += `<li style='margin-bottom: 3px;'><b>${item.username}</b>: <span style='color:#e67e22;'>${item.score} pts</span></li>`;
                 });
                 html += "</ol>";
                 leaderboardList.innerHTML = html;
             } else if (data.success === false) {
-                leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore API: ${data.error}</span>`;
+                leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:12px;'>Errore API: ${data.error}</span>`;
             } else {
                 leaderboardList.innerHTML = "Nessun punteggio in classifica.";
             }
         })
         .catch(err => {
-            leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore: ${err.message}</span>`;
+            leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:12px;'>Errore: ${err.message}</span>`;
             console.error("Dettaglio errore classifica:", err);
         });
 }
@@ -1006,6 +997,16 @@ function move(dir) {
     }
 }
 
+// Funzione corretta per traslare il blocchetto direttamente fino alla cornice tramite le zampe
+function slideToWall(dir) {
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
+    while (!collide(arena, player)) {
+        player.pos.x += dir;
+    }
+    player.pos.x -= dir;
+    draw();
+}
+
 function playerReset() {
     const rand = Math.random();
     let chosenType = 'T';
@@ -1063,7 +1064,7 @@ function updateInterval() {
     if (player.specialType === 'ICE') {
         dropInterval = baseInterval * 0.12;
     } else if (player.specialType === 'DARK') {
-        dropInterval = 850; // Velocità fissa equivalente al livello 2 (850ms)
+        dropInterval = 850;
     } else {
         dropInterval = baseInterval;
     }
@@ -1234,44 +1235,19 @@ pandaHeadEl.addEventListener('click', () => {
     playerRotate();
 });
 
-let pawInterval = null;
-
-function startPawHold(dir) {
-    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
-    if (pawInterval) clearInterval(pawInterval);
-    pawInterval = setInterval(() => {
-        move(dir);
-    }, 70);
-}
-
-function stopPawHold() {
-    if (pawInterval) {
-        clearInterval(pawInterval);
-        pawInterval = null;
-    }
-}
-
 const leftPaws = [document.querySelector('.panda-paw-top.left'), document.querySelector('.panda-paw-bottom.left')];
 const rightPaws = [document.querySelector('.panda-paw-top.right'), document.querySelector('.panda-paw-bottom.right')];
 
 leftPaws.forEach(paw => {
     if (!paw) return;
-    paw.addEventListener('touchstart', (e) => startPawHold(-1), {passive: true});
-    paw.addEventListener('touchend', stopPawHold, {passive: true});
-    paw.addEventListener('touchcancel', stopPawHold, {passive: true});
-    paw.addEventListener('mousedown', () => startPawHold(-1));
-    paw.addEventListener('mouseup', stopPawHold);
-    paw.addEventListener('mouseleave', stopPawHold);
+    paw.addEventListener('touchstart', (e) => { e.preventDefault(); slideToWall(-1); }, {passive: false});
+    paw.addEventListener('mousedown', () => slideToWall(-1));
 });
 
 rightPaws.forEach(paw => {
     if (!paw) return;
-    paw.addEventListener('touchstart', (e) => startPawHold(1), {passive: true});
-    paw.addEventListener('touchend', stopPawHold, {passive: true});
-    paw.addEventListener('touchcancel', stopPawHold, {passive: true});
-    paw.addEventListener('mousedown', () => startPawHold(1));
-    paw.addEventListener('mouseup', stopPawHold);
-    paw.addEventListener('mouseleave', stopPawHold);
+    paw.addEventListener('touchstart', (e) => { e.preventDefault(); slideToWall(1); }, {passive: false});
+    paw.addEventListener('mousedown', () => slideToWall(1));
 });
 
 window.addEventListener('keydown', event => {
