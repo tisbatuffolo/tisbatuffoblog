@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis';
 
-let redis; // L'istanza viene dichiarata globalmente, ma inizializzata nell'handler
+let redis;
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -9,18 +9,20 @@ export default async function handler(req, res) {
   const allowedGames = ['pandarun', 'pandatetris', 'pandapoops'];
 
   if (!game || !allowedGames.includes(game)) {
-    return res.status(400).json({ success: false, error: 'Specificare un gioco valido (es. ?game=pandapoops)' });
+    return res.status(400).json({ success: false, error: 'Specificare un gioco valido' });
   }
 
-  // Inizializzazione sicura per prevenire crash globali che generano errori HTML
   try {
     if (!redis) {
-      redis = Redis.fromEnv();
+      redis = new Redis({
+        url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
+      });
     }
   } catch (error) {
     return res.status(500).json({ 
       success: false, 
-      error: 'Variabili di ambiente UPSTASH_REDIS_REST mancanti su Vercel.' 
+      error: 'Variabili di ambiente Redis/KV mancanti su Vercel.' 
     });
   }
 
