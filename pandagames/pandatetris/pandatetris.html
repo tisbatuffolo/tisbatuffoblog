@@ -110,7 +110,7 @@ body, html {
 
 #score-container {
     position: relative;
-    margin-top: 14px;
+    margin-top: 25px;
     font-size: 13px;
     color: #333;
     font-weight: 900;
@@ -160,7 +160,7 @@ body, html {
 }
 
 .modal h2 { margin: 0 0 10px; color: #3742fa; font-size: 22px; font-family: 'Grandstander', cursive; text-shadow: 1px 1px 0 #dff9fb; }
-.modal p { font-size: 14px; color: #555; line-height: 1.4; margin-bottom: 18px; font-weight: 600; font-family: 'Fredoka', sans-serif; }
+.modal p { font-size: 14px; color: #555; line-height: 1.4; margin-bottom: 18px; font-weight: 600; font-family: 'Fredoka', sans-serif; text-align: left; }
 .modal input {
     width: 85%;
     padding: 12px;
@@ -238,64 +238,85 @@ body, html {
     align-items: center;
     justify-content: flex-start;
     position: relative;
-    padding-top: 105px;
+    padding-top: 135px;
     box-sizing: border-box;
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 20px;
+    padding-bottom: 30px;
 }
 
-/* --- PANDA CON LAVAGNETTA --- */
+/* --- TESTA DEL PANDA GRANDE --- */
 .panda-wrapper { 
     position: relative; 
     max-width: 380px; 
-    margin: 15px auto 0 auto; 
+    margin: 25px auto 0 auto; 
     z-index: 5; 
     width: 96%; 
 }
 .panda-head { 
     position: absolute; 
-    top: -55px; 
+    top: -85px; 
     left: 50%; 
     transform: translateX(-50%); 
-    width: 105px; 
-    height: 75px; 
+    width: 156px; 
+    height: 112px; 
     background: #fff; 
     border: 3px solid var(--stroke); 
-    border-radius: 38px 38px 32px 32px; 
+    border-radius: 54px 54px 46px 46px; 
     z-index: 10; 
     box-shadow: inset 0 -2px 0 rgba(0,0,0,0.05); 
+    cursor: pointer;
+    pointer-events: auto;
 }
 .panda-ear { 
     position: absolute; 
-    width: 28px; 
-    height: 28px; 
+    width: 38px; 
+    height: 38px; 
     background: #1c1c1c; 
     border: 3px solid var(--stroke); 
     border-radius: 50%; 
-    top: -5px; 
+    top: -10px; 
     z-index: -1; 
 }
-.panda-ear.left { left: -5px; } 
-.panda-ear.right { right: -5px; }
+.panda-ear.left { left: -8px; } 
+.panda-ear.right { right: -8px; }
+
 .panda-eye { 
     position: absolute; 
-    width: 23px; 
-    height: 28px; 
+    width: 32px; 
+    height: 40px; 
     background: #1c1c1c; 
     border-radius: 50%; 
-    top: 22px; 
+    top: 32px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
 }
-.panda-eye.left { left: 14px; transform: rotate(-20deg); } 
-.panda-eye.right { right: 14px; transform: rotate(20deg); }
+.panda-eye.left { left: 20px; transform: rotate(-15deg); } 
+.panda-eye.right { right: 20px; transform: rotate(15deg); }
+
 .panda-eye-sparkle { 
     position: absolute; 
-    width: 6px; 
-    height: 6px; 
+    width: 7px; 
+    height: 7px; 
     background: #fff; 
     border-radius: 50%; 
-    top: 4px; 
-    right: 4px; 
+    top: 5px; 
+    right: 5px; 
+    z-index: 1;
+}
+
+.panda-eye-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 38px;
+    z-index: 10;
+    line-height: 1;
+    text-align: center;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .panda-heart {
@@ -303,14 +324,15 @@ body, html {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
-    font-size: 13px;
+    font-size: 24px;
     pointer-events: none;
     opacity: 0;
+    z-index: 11;
 }
 
 @keyframes heartPulse {
     0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.6); opacity: 1; }
     100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
@@ -320,118 +342,127 @@ body, html {
 
 .panda-nose { 
     position: absolute; 
-    width: 12px; 
-    height: 7px; 
+    width: 16px; 
+    height: 9px; 
     background: #1c1c1c; 
     border-radius: 50%; 
-    top: 50px; 
+    top: 70px; 
     left: 50%; 
     transform: translateX(-50%); 
 }
+
+/* --- BOCCA DEL PANDA SENZA LINEA VERTICALE --- */
 .panda-mouth { 
     position: absolute; 
-    width: 15px; 
-    height: 5px; 
-    border-bottom: 3px solid #1c1c1c; 
-    border-radius: 0 0 25px 25px; 
-    top: 56px; 
+    width: 24px; 
+    height: 9px; 
+    border-bottom: 3.5px solid #1c1c1c; 
+    border-radius: 0 0 20px 20px; 
+    top: 86px; 
     left: 50%; 
     transform: translateX(-50%); 
 }
 .panda-blush { 
     position: absolute; 
-    width: 13px; 
-    height: 8px; 
+    width: 16px; 
+    height: 10px; 
     background: #ffb3ba; 
     border-radius: 50%; 
-    top: 43px; 
+    top: 60px; 
     opacity: 0.6; 
     filter: blur(2px); 
 }
-.panda-blush.left { left: 5px; } 
-.panda-blush.right { right: 5px; }
+.panda-blush.left { left: 8px; } 
+.panda-blush.right { right: 8px; }
 
+/* --- ZAMPE SUPERIORI --- */
 .panda-paw-top {
     position: absolute;
-    width: 42px;
-    height: 35px;
+    width: 48px;
+    height: 38px;
     background: #1c1c1c;
     border: 3px solid var(--stroke);
     border-radius: 50%;
-    top: -14px;
+    top: -16px;
     z-index: 15;
-    box-shadow: 0 2px 0 var(--stroke), inset 0 2px 0 rgba(255,255,255,0.2);
+    box-shadow: 0 3px 0 var(--stroke), inset 0 3px 0 rgba(255,255,255,0.25);
+    cursor: pointer;
+    pointer-events: auto;
 }
-.panda-paw-top.left { left: 16px; transform: rotate(-10deg); }
-.panda-paw-top.right { right: 16px; transform: rotate(10deg); }
+.panda-paw-top.left { left: 8px; transform: rotate(-12deg); }
+.panda-paw-top.right { right: 8px; transform: rotate(12deg); }
 
-.panda-paw-pad-top {
+.paw-main-pad {
     position: absolute;
     width: 16px;
-    height: 11px;
-    background: #747d8c;
-    border-radius: 50%;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.panda-paw-pad-top::before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 5px;
-    height: 5px;
-    background: #747d8c;
-    border-radius: 50%;
-    box-shadow: -6px 2px 0 -1px #747d8c, 6px 2px 0 -1px #747d8c;
-}
-
-.panda-paw-bottom {
-    position: absolute;
-    width: 52px;
-    height: 42px;
-    background: #1c1c1c;
-    border: 3px solid var(--stroke);
-    border-radius: 40% 40% 50% 50%;
-    bottom: -20px;
-    z-index: 15;
-    box-shadow: 0 3px 0 var(--stroke), inset 0 2px 0 rgba(255,255,255,0.2);
-}
-.panda-paw-bottom.left { left: 16px; transform: rotate(-5deg); }
-.panda-paw-bottom.right { right: 16px; transform: rotate(5deg); }
-
-.panda-paw-pad {
-    position: absolute;
-    width: 20px;
-    height: 14px;
-    background: #747d8c;
+    height: 12px;
+    background: #ffb3ba;
     border-radius: 50%;
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
 }
-.panda-paw-pad::before {
-    content: '';
+.paw-toe-1, .paw-toe-2, .paw-toe-3 {
     position: absolute;
-    top: -7px;
+    width: 6px;
+    height: 6px;
+    background: #ffb3ba;
+    border-radius: 50%;
+    bottom: 19px;
+}
+.paw-toe-1 { left: 10px; }
+.paw-toe-2 { left: 50%; transform: translateX(-50%); }
+.paw-toe-3 { right: 10px; }
+
+/* --- ZAMPE INFERIORI --- */
+.panda-paw-bottom {
+    position: absolute;
+    width: 58px;
+    height: 46px;
+    background: #1c1c1c;
+    border: 3px solid var(--stroke);
+    border-radius: 40% 40% 50% 50%;
+    bottom: -22px;
+    z-index: 15;
+    box-shadow: 0 4px 0 var(--stroke), inset 0 3px 0 rgba(255,255,255,0.25);
+    cursor: pointer;
+    pointer-events: auto;
+}
+.panda-paw-bottom.left { left: 10px; transform: rotate(-6deg); }
+.panda-paw-bottom.right { right: 10px; transform: rotate(6deg); }
+
+.paw-main-pad-bottom {
+    position: absolute;
+    width: 20px;
+    height: 15px;
+    background: #ffb3ba;
+    border-radius: 50%;
+    bottom: 6px;
     left: 50%;
     transform: translateX(-50%);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+}
+.paw-toe-b1, .paw-toe-b2, .paw-toe-b3 {
+    position: absolute;
     width: 7px;
     height: 7px;
-    background: #747d8c;
+    background: #ffb3ba;
     border-radius: 50%;
-    box-shadow: -9px 2px 0 -1px #747d8c, 9px 2px 0 -1px #747d8c;
+    bottom: 23px;
 }
+.paw-toe-b1 { left: 12px; }
+.paw-toe-b2 { left: 50%; transform: translateX(-50%); }
+.paw-toe-b3 { right: 12px; }
 
+/* --- CORNICE DEL PANDA --- */
 .lavagnetta-container { 
     position: relative; 
-    background: #8B5A2B; 
+    background: #ff6b81; 
     border: 3px solid var(--stroke); 
-    border-radius: 12px; 
-    padding: 6px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.12), 3px 3px 0px var(--primary); 
+    border-radius: 16px; 
+    padding: 8px; 
+    box-shadow: 0 6px 20px rgba(255, 107, 129, 0.3), 4px 4px 0px var(--primary); 
     z-index: 5; 
     display: flex; 
     justify-content: center; 
@@ -440,11 +471,11 @@ body, html {
 
 .lavagnetta-screen {
     position: relative;
-    width: 320px;
-    height: 360px;
+    width: 300px;
+    height: 520px;
     background: #000000;
     border: 2px solid #1a1a1a;
-    border-radius: 4px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -504,25 +535,37 @@ canvas {
         <div class="panda-head">
             <div class="panda-ear left"></div>
             <div class="panda-ear right"></div>
-            <div class="panda-eye left"><div class="panda-eye-sparkle"></div><span class="panda-heart">❤️</span></div>
-            <div class="panda-eye right"><div class="panda-eye-sparkle"></div><span class="panda-heart">❤️</span></div>
+            <div class="panda-eye left"><div class="panda-eye-sparkle"></div><span class="panda-eye-content"></span><span class="panda-heart">❤️</span></div>
+            <div class="panda-eye right"><div class="panda-eye-sparkle"></div><span class="panda-eye-content"></span><span class="panda-heart">❤️</span></div>
             <div class="panda-blush left"></div>
             <div class="panda-blush right"></div>
             <div class="panda-nose"></div>
             <div class="panda-mouth"></div>
         </div>
         
-        <div class="panda-paw-top left"><div class="panda-paw-pad-top"></div></div>
-        <div class="panda-paw-top right"><div class="panda-paw-pad-top"></div></div>
+        <div class="panda-paw-top left">
+            <div class="paw-toe-1"></div><div class="paw-toe-2"></div><div class="paw-toe-3"></div>
+            <div class="paw-main-pad"></div>
+        </div>
+        <div class="panda-paw-top right">
+            <div class="paw-toe-1"></div><div class="paw-toe-2"></div><div class="paw-toe-3"></div>
+            <div class="paw-main-pad"></div>
+        </div>
 
         <div class="lavagnetta-container">
             <div class="lavagnetta-screen">
-                <canvas id="tetris" width="320" height="360"></canvas>
+                <canvas id="tetris" width="300" height="520"></canvas>
             </div>
         </div>
 
-        <div class="panda-paw-bottom left"><div class="panda-paw-pad"></div></div>
-        <div class="panda-paw-bottom right"><div class="panda-paw-pad"></div></div>
+        <div class="panda-paw-bottom left">
+            <div class="paw-toe-b1"></div><div class="paw-toe-b2"></div><div class="paw-toe-b3"></div>
+            <div class="paw-main-pad-bottom"></div>
+        </div>
+        <div class="panda-paw-bottom right">
+            <div class="paw-toe-b1"></div><div class="paw-toe-b2"></div><div class="paw-toe-b3"></div>
+            <div class="paw-main-pad-bottom"></div>
+        </div>
     </div>
 
     <div id="score-container">
@@ -544,7 +587,7 @@ canvas {
 <script>
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
-context.scale(320 / 12, 360 / 17);
+context.scale(300 / 12, 520 / 21);
 
 const scoreElement = document.getElementById('score');
 const levelElement = document.getElementById('level');
@@ -613,9 +656,9 @@ if (nickname) {
 
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 if (isMobile) {
-    infoTextEl.innerText = "Fai tap sullo schermo per ruotare il pezzo, swipe a sinistra o destra per muoverlo, e tieni premuto o fai swipe in basso per farlo cadere!";
+    infoTextEl.innerText = "• Tap veloce o click sulla TESTA del panda per ruotare.\n• Scorri a destra/sinistra o usa le zampe per muovere i blocchi.\n• Occasionalmente possono apparire bombe e blocchi speciali tra i pezzi normali!";
 } else {
-    infoTextEl.innerText = "Usa i tasti freccia della tastiera: Freccia Sinistra/Destra per muovere, Freccia Giù per scendere, Freccia Su o tasto X per ruotare il pezzo!";
+    infoTextEl.innerText = "Usa i tasti freccia: Sinistra/Destra per muovere, Giù per scendere, Su o X per ruotare.\nLe bombe e gli eventi appaiono occasionalmente durante il gioco.";
 }
 
 function openModal(modal) {
@@ -667,25 +710,28 @@ function loadLeaderboard() {
         });
 }
 
-const arena = createMatrix(12, 17);
+const arena = createMatrix(12, 21);
 
 const player = {
     pos: {x: 0, y: 0},
     matrix: null,
     score: 0,
     level: 1,
-    lines: 0
+    lines: 0,
+    specialType: null
 };
 
 const colors = [
     null,
-    '#ff4757', // I
-    '#2ed573', // J
-    '#1e90ff', // L
-    '#ffa502', // O
-    '#9b59b6', // S
-    '#00d2d3', // T
-    '#ff6b81'  // Z
+    '#00f0f0', // 1: I (Cyan)
+    '#0000f0', // 2: J (Blue)
+    '#f0a000', // 3: L (Orange)
+    '#f0f000', // 4: O (Yellow)
+    '#00f000', // 5: S (Green)
+    '#a000f0', // 6: T (Purple)
+    '#f00000', // 7: Z (Red)
+    null,      // 8: Bomba
+    '#00d8d6'  // 9: Ghiaccio
 ];
 
 function createMatrix(w, h) {
@@ -696,49 +742,49 @@ function createMatrix(w, h) {
     return matrix;
 }
 
+function setPandaEyes(symbol) {
+    const eyeContents = document.querySelectorAll('.panda-eye-content');
+    const sparkles = document.querySelectorAll('.panda-eye-sparkle');
+    eyeContents.forEach(el => {
+        el.innerText = symbol;
+    });
+    sparkles.forEach(sp => {
+        sp.style.display = symbol ? 'none' : 'block';
+    });
+}
+
 function createPiece(type) {
     if (type === 'T') {
-        return [
-            [0, 0, 0],
-            [6, 6, 6],
-            [0, 6, 0],
-        ];
+        return [[0, 0, 0], [6, 6, 6], [0, 6, 0]];
     } else if (type === 'O') {
-        return [
-            [4, 4],
-            [4, 4],
-        ];
+        return [[4, 4], [4, 4]];
     } else if (type === 'L') {
-        return [
-            [0, 3, 0],
-            [0, 3, 0],
-            [0, 3, 3],
-        ];
+        return [[0, 3, 0], [0, 3, 0], [0, 3, 3]];
     } else if (type === 'J') {
-        return [
-            [0, 2, 0],
-            [0, 2, 0],
-            [2, 2, 0],
-        ];
+        return [[0, 2, 0], [0, 2, 0], [2, 2, 0]];
     } else if (type === 'I') {
-        return [
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-        ];
+        return [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]];
     } else if (type === 'S') {
-        return [
-            [0, 5, 5],
-            [5, 5, 0],
-            [0, 0, 0],
-        ];
+        return [[0, 5, 5], [5, 5, 0], [0, 0, 0]];
     } else if (type === 'Z') {
-        return [
-            [7, 7, 0],
-            [0, 7, 7],
-            [0, 0, 0],
-        ];
+        return [[7, 7, 0], [0, 7, 7], [0, 0, 0]];
+    } else if (type === 'BOMB') {
+        return [[8]];
+    } else if (type === 'ICE') {
+        return [[9, 9], [9, 9]];
+    }
+}
+
+let particles = [];
+function addParticles(type) {
+    if (type === 'ICE') {
+        if (Math.random() < 0.4) {
+            particles.push({x: Math.random() * 12, y: 0, vy: 0.2 + Math.random() * 0.15, type: 'snow'});
+        }
+    } else if (type === 'WIND') {
+        if (Math.random() < 0.4) {
+            particles.push({x: Math.random() > 0.5 ? 0 : 12, y: Math.random() * 21, vx: (Math.random() > 0.5 ? 1 : -1) * 0.3, type: 'wind'});
+        }
     }
 }
 
@@ -746,11 +792,26 @@ function drawMatrix(matrix, offset) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
-                context.fillStyle = colors[value];
-                context.fillRect(x + offset.x, y + offset.y, 1, 1);
-                context.strokeStyle = '#111';
-                context.lineWidth = 0.05;
-                context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+                if (value === 8) {
+                    context.font = '1px sans-serif';
+                    context.textAlign = 'center';
+                    context.textBaseline = 'middle';
+                    context.fillText('💣', x + offset.x + 0.5, y + offset.y + 0.5);
+                } else {
+                    context.fillStyle = (player.specialType === 'DARK') ? '#111111' : (colors[value] || '#fff');
+                    context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                    context.strokeStyle = (player.specialType === 'DARK') ? '#080808' : '#111';
+                    context.lineWidth = 0.05;
+                    context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+                    
+                    if (value === 9 && player.specialType !== 'DARK') {
+                        context.fillStyle = '#ffffff';
+                        context.font = '0.5px sans-serif';
+                        context.textAlign = 'center';
+                        context.textBaseline = 'middle';
+                        context.fillText('❄️', x + offset.x + 0.5, y + offset.y + 0.5);
+                    }
+                }
             }
         });
     });
@@ -763,38 +824,81 @@ function draw() {
     arena.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
-                context.fillStyle = colors[value];
-                context.fillRect(x, y, 1, 1);
-                context.strokeStyle = '#111';
-                context.lineWidth = 0.05;
-                context.strokeRect(x, y, 1, 1);
+                if (value === 8) {
+                    context.font = '1px sans-serif';
+                    context.textAlign = 'center';
+                    context.textBaseline = 'middle';
+                    context.fillText('💣', x + 0.5, y + 0.5);
+                } else {
+                    context.fillStyle = (player.specialType === 'DARK') ? '#111111' : (colors[value] || '#fff');
+                    context.fillRect(x, y, 1, 1);
+                    context.strokeStyle = (player.specialType === 'DARK') ? '#080808' : '#111';
+                    context.lineWidth = 0.05;
+                    context.strokeRect(x, y, 1, 1);
+                }
             }
         });
+    });
+
+    particles.forEach((p, idx) => {
+        if (p.type === 'snow') {
+            p.y += p.vy;
+            context.fillStyle = '#ffffff';
+            context.fillRect(p.x, p.y, 0.2, 0.2);
+            if (p.y > 21) particles.splice(idx, 1);
+        } else if (p.type === 'wind') {
+            p.x += p.vx;
+            context.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            context.lineWidth = 0.06;
+            context.beginPath();
+            context.moveTo(p.x, p.y);
+            context.lineTo(p.x + (p.vx > 0 ? 0.6 : -0.6), p.y);
+            context.stroke();
+            if (p.x < 0 || p.x > 12) particles.splice(idx, 1);
+        }
     });
 
     drawMatrix(player.matrix, player.pos);
+
+    if (player.specialType === 'DARK') {
+        context.fillStyle = 'rgba(0, 0, 0, 0.88)';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        drawMatrix(player.matrix, player.pos);
+    }
 }
 
 function merge(arena, player) {
-    player.matrix.forEach((row, y) => {
-        row.forEach((value, x) => {
-            if (value !== 0) {
-                arena[y + player.pos.y][x + player.pos.x] = value;
+    if (player.specialType === 'BOMB') {
+        const bx = player.pos.x + Math.floor(player.matrix[0].length / 2);
+        const by = player.pos.y + Math.floor(player.matrix.length / 2);
+        for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+                let ny = by + dy;
+                let nx = bx + dx;
+                if (ny >= 0 && ny < arena.length && nx >= 0 && nx < arena[0].length) {
+                    arena[ny][nx] = 0;
+                }
             }
+        }
+        context.fillStyle = 'rgba(255, 71, 87, 0.7)';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+        player.matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    if (y + player.pos.y >= 0 && y + player.pos.y < arena.length && x + player.pos.x >= 0 && x + player.pos.x < arena[0].length) {
+                        arena[y + player.pos.y][x + player.pos.x] = value;
+                    }
+                }
+            });
         });
-    });
+    }
 }
 
 function rotate(matrix, dir) {
     for (let y = 0; y < matrix.length; ++y) {
         for (let x = 0; x < y; ++x) {
-            [
-                matrix[x][y],
-                matrix[y][x],
-            ] = [
-                matrix[y][x],
-                matrix[x][y],
-            ];
+            [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
         }
     }
     if (dir > 0) {
@@ -824,9 +928,15 @@ function collide(arena, player) {
     const o = player.pos;
     for (let y = 0; y < m.length; ++y) {
         for (let x = 0; x < m[y].length; ++x) {
-            if (m[y][x] !== 0 &&
-               (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) {
-                return true;
+            if (m[y][x] !== 0) {
+                let nx = x + o.x;
+                let ny = y + o.y;
+                if (nx < 0 || nx >= arena[0].length || ny >= arena.length) {
+                    return true;
+                }
+                if (ny >= 0 && arena[ny][nx] !== 0) {
+                    return true;
+                }
             }
         }
     }
@@ -868,6 +978,15 @@ function arenaSweep() {
 
 function playerDrop() {
     player.pos.y++;
+    
+    if (player.specialType === 'WIND') {
+        let windDir = Math.random() > 0.5 ? 1 : -1;
+        player.pos.x += windDir;
+        if (collide(arena, player)) {
+            player.pos.x -= windDir;
+        }
+    }
+
     if (collide(arena, player)) {
         player.pos.y--;
         merge(arena, player);
@@ -888,10 +1007,44 @@ function move(dir) {
 }
 
 function playerReset() {
-    const pieces = 'TJLOSZI';
-    player.matrix = createPiece(pieces[Math.floor(Math.random() * pieces.length)]);
+    const rand = Math.random();
+    let chosenType = 'T';
+    let special = null;
+    let eyeSymbol = '';
+
+    if (rand < 0.06) {
+        special = 'BOMB';
+        chosenType = 'BOMB';
+        eyeSymbol = '💣';
+    } else if (rand < 0.12) {
+        special = 'ICE';
+        chosenType = 'ICE';
+        eyeSymbol = '❄️';
+    } else if (rand < 0.18) {
+        special = 'WIND';
+        const pieces = ['T', 'O', 'L', 'J', 'I'];
+        chosenType = pieces[Math.floor(Math.random() * pieces.length)];
+        eyeSymbol = '💨';
+    } else if (rand < 0.24) {
+        special = 'DARK';
+        const pieces = ['T', 'O', 'L', 'J', 'I', 'S', 'Z'];
+        chosenType = pieces[Math.floor(Math.random() * pieces.length)];
+        eyeSymbol = '🌑';
+    } else {
+        const pieces = 'TJLOSZI';
+        chosenType = pieces[Math.floor(Math.random() * pieces.length)];
+        special = null;
+        eyeSymbol = '';
+    }
+
+    player.specialType = special;
+    updateInterval();
+    player.matrix = createPiece(chosenType);
     player.pos.y = 0;
     player.pos.x = Math.floor((arena[0].length / 2) - (player.matrix[0].length / 2));
+
+    setPandaEyes(eyeSymbol);
+
     if (collide(arena, player)) {
         gameOver();
     }
@@ -899,13 +1052,21 @@ function playerReset() {
 
 let dropCounter = 0;
 let dropInterval = 1000;
+let baseInterval = 1000;
 let lastTime = 0;
 let isPaused = false;
 let isGameOver = false;
 let animationId = null;
 
 function updateInterval() {
-    dropInterval = Math.max(150, 1000 - (player.level - 1) * 150);
+    baseInterval = Math.max(150, 1000 - (player.level - 1) * 150);
+    if (player.specialType === 'ICE') {
+        dropInterval = baseInterval * 0.12;
+    } else if (player.specialType === 'DARK') {
+        dropInterval = 850; // Velocità fissa equivalente al livello 2 (850ms)
+    } else {
+        dropInterval = baseInterval;
+    }
 }
 
 function update(time = 0) {
@@ -913,6 +1074,9 @@ function update(time = 0) {
     const deltaTime = time - lastTime;
     lastTime = time;
     dropCounter += deltaTime;
+
+    addParticles(player.specialType);
+
     if (dropCounter > dropInterval) {
         playerDrop();
     }
@@ -977,9 +1141,11 @@ function gameOver() {
 
 function resetGame() {
     arena.forEach(row => row.fill(0));
+    particles = [];
     player.score = 0;
     player.lines = 0;
     player.level = 1;
+    player.specialType = null;
     updateInterval();
     scoreElement.innerText = player.score;
     levelElement.innerText = player.level;
@@ -988,6 +1154,7 @@ function resetGame() {
     isGameOver = false;
     isPaused = false;
     pauseBtn.innerText = '⏸';
+    setPandaEyes('');
     playerReset();
     lastTime = performance.now();
     cancelAnimationFrame(animationId);
@@ -997,24 +1164,27 @@ function resetGame() {
 let touchStartX = 0;
 let touchStartY = 0;
 let touchStartTime = 0;
-let longPressTimer = null;
-let isLongPressing = false;
-let holdDropInterval = null;
+let canvasHoldInterval = null;
 
 canvas.addEventListener('touchstart', (e) => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     const touch = e.touches[0];
+    
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
     touchStartTime = performance.now();
-    isLongPressing = false;
 
-    longPressTimer = setTimeout(() => {
-        isLongPressing = true;
-        holdDropInterval = setInterval(() => {
+    if (canvasHoldInterval) {
+        clearTimeout(canvasHoldInterval);
+        clearInterval(canvasHoldInterval);
+        canvasHoldInterval = null;
+    }
+
+    canvasHoldInterval = setTimeout(() => {
+        canvasHoldInterval = setInterval(() => {
             playerDrop();
         }, 80);
-    }, 350);
+    }, 300);
 }, {passive: true});
 
 canvas.addEventListener('touchmove', (e) => {
@@ -1024,23 +1194,21 @@ canvas.addEventListener('touchmove', (e) => {
     const dy = touch.clientY - touchStartY;
 
     if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
-        clearTimeout(longPressTimer);
-        if (holdDropInterval) {
-            clearInterval(holdDropInterval);
-            holdDropInterval = null;
+        if (canvasHoldInterval) {
+            clearTimeout(canvasHoldInterval);
+            clearInterval(canvasHoldInterval);
+            canvasHoldInterval = null;
         }
     }
 }, {passive: true});
 
 canvas.addEventListener('touchend', (e) => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
-    clearTimeout(longPressTimer);
-    if (holdDropInterval) {
-        clearInterval(holdDropInterval);
-        holdDropInterval = null;
+    if (canvasHoldInterval) {
+        clearTimeout(canvasHoldInterval);
+        clearInterval(canvasHoldInterval);
+        canvasHoldInterval = null;
     }
-
-    if (isLongPressing) return;
 
     const touch = e.changedTouches[0];
     const dx = touch.clientX - touchStartX;
@@ -1049,18 +1217,62 @@ canvas.addEventListener('touchend', (e) => {
 
     if (dt < 300 && Math.abs(dx) < 20 && Math.abs(dy) < 20) {
         playerRotate();
-    } else if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 30) {
+    } else if (dy > 30 && Math.abs(dy) > Math.abs(dx)) {
+        playerDrop();
+    } else if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) {
+        if (dx > 0) {
             move(1); 
-        } else if (dx < -30) {
+        } else {
             move(-1); 
-        }
-    } else {
-        if (dy > 30) {
-            playerDrop();
         }
     }
 }, {passive: true});
+
+const pandaHeadEl = document.querySelector('.panda-head');
+pandaHeadEl.addEventListener('click', () => {
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
+    playerRotate();
+});
+
+let pawInterval = null;
+
+function startPawHold(dir) {
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
+    if (pawInterval) clearInterval(pawInterval);
+    pawInterval = setInterval(() => {
+        move(dir);
+    }, 70);
+}
+
+function stopPawHold() {
+    if (pawInterval) {
+        clearInterval(pawInterval);
+        pawInterval = null;
+    }
+}
+
+const leftPaws = [document.querySelector('.panda-paw-top.left'), document.querySelector('.panda-paw-bottom.left')];
+const rightPaws = [document.querySelector('.panda-paw-top.right'), document.querySelector('.panda-paw-bottom.right')];
+
+leftPaws.forEach(paw => {
+    if (!paw) return;
+    paw.addEventListener('touchstart', (e) => startPawHold(-1), {passive: true});
+    paw.addEventListener('touchend', stopPawHold, {passive: true});
+    paw.addEventListener('touchcancel', stopPawHold, {passive: true});
+    paw.addEventListener('mousedown', () => startPawHold(-1));
+    paw.addEventListener('mouseup', stopPawHold);
+    paw.addEventListener('mouseleave', stopPawHold);
+});
+
+rightPaws.forEach(paw => {
+    if (!paw) return;
+    paw.addEventListener('touchstart', (e) => startPawHold(1), {passive: true});
+    paw.addEventListener('touchend', stopPawHold, {passive: true});
+    paw.addEventListener('touchcancel', stopPawHold, {passive: true});
+    paw.addEventListener('mousedown', () => startPawHold(1));
+    paw.addEventListener('mouseup', stopPawHold);
+    paw.addEventListener('mouseleave', stopPawHold);
+});
 
 window.addEventListener('keydown', event => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
