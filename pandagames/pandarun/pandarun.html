@@ -620,7 +620,7 @@
             } else if (this.id === 'bee_double_top_very_high') {
                 this.size = 35;
                 this.airOffset1 = 125;
-                this.airOffset2 = 180;
+                this.airOffset2 = 140;
                 this.type = 'air_double';
                 this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1;
                 this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2;
@@ -831,7 +831,7 @@
             const oLeft = obs.x + obs.hitbox.offset;
             const oRight = obs.x + obs.size - obs.hitbox.offset;
             const oTop = obs.y + obs.hitbox.offset;
-            const oBottom = obs.y + obs.hitbox.offset;
+            const oBottom = obs.y + obs.size - obs.hitbox.offset;
 
             if (pLeft < oRight && pRight > oLeft && pTop < oBottom && pBottom > oTop) {
                 return true;
@@ -859,11 +859,13 @@
             const lvl = getLevel();
             let baseMinDist = Math.max(380 - (lvl * 20), 280);
             let baseMaxDist = Math.max(600 - (lvl * 30), 450);
+            const jumpFlightFrames = Math.ceil((2 * Math.abs(panda.jumpPower)) / panda.gravity);
+            const safeMinDist = Math.max(baseMinDist, gameSpeed * jumpFlightFrames + 50);
 
             if (Math.random() < 0.3) {
                 nextObstacleDistance = baseMaxDist + 300 + Math.random() * 250;
             } else {
-                nextObstacleDistance = baseMinDist + Math.random() * (baseMaxDist - baseMinDist);
+                nextObstacleDistance = safeMinDist + Math.random() * Math.max(baseMaxDist - safeMinDist, 0);
             }
             
             distanceTraveled = 0;
@@ -910,7 +912,7 @@
                 }
             }
 
-            gameSpeed = 5 + (currentLevel - 1) * 0.9 + Math.floor(score / 50) * 0.2;
+            gameSpeed = Math.min(10.5, 5 + (currentLevel - 1) * 0.9 + Math.floor(score / 50) * 0.2);
         }
 
         animationId = requestAnimationFrame(gameLoop);

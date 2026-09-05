@@ -725,6 +725,18 @@
 
         let { leftLimit, rightLimit } = getPlayfieldLimits();
         let playfieldBottom = 135 + rows * bubbleRadius * Math.sqrt(3);
+        let dangerZoneTop = getBubbleCoords(rows - 2, 0).y - bubbleRadius;
+
+        ctx.fillStyle = 'rgba(186, 211, 228, 0.32)';
+        ctx.fillRect(0, dangerZoneTop, w, h - dangerZoneTop);
+        ctx.strokeStyle = 'rgba(93, 124, 148, 0.65)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([7, 6]);
+        ctx.beginPath();
+        ctx.moveTo(0, dangerZoneTop);
+        ctx.lineTo(w, dangerZoneTop);
+        ctx.stroke();
+        ctx.setLineDash([]);
 
         // Linee nere verticali laterali che partono dal soffitto abbassato (130) e terminano alla fine dell'area di gioco
         ctx.strokeStyle = '#2f3542';
@@ -868,6 +880,9 @@
         if (shotsSinceDrop >= shotsPerDrop) {
             dropCeiling();
             shotsSinceDrop = 0;
+            if (!isGameOver) {
+                removeFloatingBubbles();
+            }
         }
 
         if (score >= level * 150) {
