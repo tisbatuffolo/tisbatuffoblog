@@ -75,5 +75,9 @@ const dati_extra_mondo = [
     {
         "titolo": "Farfallina - Calamita",
         "immagine": "Farfallina - Calamita.jpg"
+    },
+    {
+        "titolo": "MelaCalamita",
+        "immagine": "MelaCalamita.jpg"
     }
 ];
