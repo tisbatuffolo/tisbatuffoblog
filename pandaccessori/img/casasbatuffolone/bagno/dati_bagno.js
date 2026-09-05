@@ -13,11 +13,6 @@ const dati_bagno = [
         "immagine": "DocciaTappeto.jpg"
     },
     {
-        "titolo": "EX Saponificatore Panda",
-        "immagine": "EX Saponificatore Panda.jpg",
-        "pandaforma": true
-    },
-    {
         "titolo": "Saponificatore Panda",
         "immagine": "Saponificatore Panda.jpg",
         "pandaforma": true
