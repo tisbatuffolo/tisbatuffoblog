@@ -63,5 +63,9 @@ const dati_extra_mondo = [
     {
         "titolo": "Vigoleno - Calamita",
         "immagine": "Vigoleno - Calamita.jpg"
+    },
+    {
+        "titolo": "Grado - Calamita",
+        "immagine": "Grado - Calamita.jpg"
     }
 ];
