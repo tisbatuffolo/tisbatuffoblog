@@ -17,8 +17,8 @@ const dati_extra_mondo = [
         "immagine": "Casa - Calamita.jpg"
     },
     {
-        "titolo": "Cuccinella - Calamita",
-        "immagine": "Cuccinella - Calamita.jpg"
+        "titolo": "Coccinella - Calamita",
+        "immagine": "Coccinella - Calamita.jpg"
     },
     {
         "titolo": "Livigno Calamita",
