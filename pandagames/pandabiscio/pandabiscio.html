@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -21,11 +20,11 @@
     #gameCanvas {
         position: absolute;
         top: 135px;
-        bottom: 190px;
+        bottom: 0;
         left: 0;
         right: 0;
         width: 100vw;
-        height: calc(100vh - 325px);
+        height: calc(100vh - 135px);
         display: block;
         background: #e8f8f5;
     }
@@ -133,42 +132,6 @@
     .level-flash {
         animation: levelFlash 0.6s ease;
     }
-
-    #dpad {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 160px;
-        height: 160px;
-        pointer-events: auto;
-        z-index: 15;
-        display: none;
-    }
-    .dpad-btn {
-        position: absolute;
-        background: rgba(25, 175, 78, 0.9);
-        border: 3px solid #1a1a1a;
-        color: white;
-        font-size: 22px;
-        font-weight: 900;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 0 #1a1a1a;
-        cursor: pointer;
-        user-select: none;
-    }
-    .dpad-btn:active {
-        transform: translateY(4px);
-        box-shadow: 0 0 0 #1a1a1a;
-        background: #128038;
-    }
-    #btn-up { top: 0; left: 55px; width: 50px; height: 50px; }
-    #btn-left { top: 55px; left: 0; width: 50px; height: 50px; }
-    #btn-right { top: 55px; right: 0; width: 50px; height: 50px; }
-    #btn-down { bottom: 0; left: 55px; width: 50px; height: 50px; }
 
     .modal {
         position: absolute;
@@ -280,13 +243,6 @@
         <span style="font-size: 12px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
     </div>
 
-    <div id="dpad">
-        <div id="btn-up" class="dpad-btn">▲</div>
-        <div id="btn-left" class="dpad-btn">◀</div>
-        <div id="btn-right" class="dpad-btn">▶</div>
-        <div id="btn-down" class="dpad-btn">▼</div>
-    </div>
-
     <div id="nickname-modal" class="modal">
         <h2>Benvenuto a PandaBiscio! 🐼🐍</h2>
         <p>Inserisci il tuo nickname per iniziare:</p>
@@ -297,7 +253,7 @@
 
     <div id="info-modal" class="modal">
         <h2>Come Giocare 🐼</h2>
-        <p id="info-text">Guida il serpente con la testa da panda raccogliendo cibo delizioso come bambù 🎋, torte 🍰 e frutta! Evita di colpire i bordi o la tua stessa coda.</p>
+        <p id="info-text">Guida il serpente con la testa da panda raccogliendo cibo delizioso come bambù 🎋, torte 🍰 e frutta! Fai swipe o tocca lo schermo per cambiare direzione. Evita di colpire i bordi o la tua stessa coda.</p>
         <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
     </div>
 
@@ -339,7 +295,6 @@
     const saveNicknameBtn = document.getElementById('save-nickname-btn');
     const leaderboardList = document.getElementById('leaderboard-list');
     const pauseBtn = document.getElementById('pause-btn');
-    const dpadEl = document.getElementById('dpad');
 
     let score = 0;
     let bestScore = parseInt(localStorage.getItem('pandabiscio_best_score')) || 0;
@@ -386,11 +341,6 @@
 
     if (nickname) {
         fetchBestScore();
-    }
-
-    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isMobile) {
-        dpadEl.style.display = 'block';
     }
 
     function openModal(modal) {
@@ -469,7 +419,7 @@
 
     function resize() {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight - 325;
+        canvas.height = window.innerHeight - 135;
         tileCountX = Math.floor(canvas.width / gridSize);
         tileCountY = Math.floor(canvas.height / gridSize);
     }
@@ -665,7 +615,7 @@
         startGame();
     }
 
-    // Input handlers (Keyboard & D-Pad & Click/Tap & Swipes)
+    // Input handlers (Keyboard & Click/Tap & Swipes)
     function changeDirection(newDx, newDy) {
         if (newDx !== -dx || newDy !== -dy) {
             nextDx = newDx;
@@ -680,11 +630,6 @@
         if (e.code === 'ArrowLeft' || e.code === 'KeyA') { changeDirection(-1, 0); e.preventDefault(); }
         if (e.code === 'ArrowRight' || e.code === 'KeyD') { changeDirection(1, 0); e.preventDefault(); }
     });
-
-    document.getElementById('btn-up').addEventListener('click', () => changeDirection(0, -1));
-    document.getElementById('btn-down').addEventListener('click', () => changeDirection(0, 1));
-    document.getElementById('btn-left').addEventListener('click', () => changeDirection(-1, 0));
-    document.getElementById('btn-right').addEventListener('click', () => changeDirection(1, 0));
 
     // Gestione TAP direzionale basata sulla posizione toccata rispetto alla testa del pandabiscio
     function handleDirectionTap(clickX, clickY) {
@@ -750,6 +695,3 @@
 </script>
 </body>
 </html>
-=======
-
->>>>>>> 6131786d51483a8952383bfce194f5ddf6e4c3a5
