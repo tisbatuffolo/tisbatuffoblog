@@ -17,8 +17,8 @@ const dati_extra_mondo = [
         "immagine": "Casa - Calamita.jpg"
     },
     {
-        "titolo": "Cuccinella - Calamita",
-        "immagine": "Cuccinella - Calamita.jpg"
+        "titolo": "Coccinella - Calamita",
+        "immagine": "Coccinella - Calamita.jpg"
     },
     {
         "titolo": "Livigno Calamita",
@@ -63,5 +63,21 @@ const dati_extra_mondo = [
     {
         "titolo": "Vigoleno - Calamita",
         "immagine": "Vigoleno - Calamita.jpg"
+    },
+    {
+        "titolo": "Grado - Calamita",
+        "immagine": "Grado - Calamita.jpg"
+    },
+    {
+        "titolo": "Amburgo - Calamita",
+        "immagine": "Amburgo - Calamita.jpg"
+    },
+    {
+        "titolo": "Farfallina - Calamita",
+        "immagine": "Farfallina - Calamita.jpg"
+    },
+    {
+        "titolo": "MelaCalamita",
+        "immagine": "MelaCalamita.jpg"
     }
 ];

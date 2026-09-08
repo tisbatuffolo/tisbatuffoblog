@@ -92,5 +92,10 @@ const dati_cucina = [
         "titolo": "Panda Spesa",
         "immagine": "Panda Spesa.jpg",
         "pandaforma": true
+    },
+    {
+        "titolo": "Dancing Panda",
+        "immagine": "Dancing Panda.jpg",
+        "pandaforma": true
     }
 ];
