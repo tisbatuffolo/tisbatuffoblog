@@ -1,4 +1,9 @@
 const GIRI = [
+    {
+    "titolo": "Lemperberg",
+    "link": "https://www.outdooractive.com/it/route/escursione/valsugana-lagorai-tesino/lemperperg/352141449/",
+    "img": "https://img.oastatic.com/img2/638271660/800x600/variant.webp?revbust=1a07755cfbe"
+  },
   {
     "titolo": "Forca Rossa",
     "link": "https://www.outdooractive.com/it/route/escursione/val-di-fassa/forca-rossa/350310622/",
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Tarzaning Dimaro",
     "link": "https://www.outdooractive.com/it/route/via-ferrata/val-di-sole-pejo-e-rabbi/tarzaning-dimaro/346849711/",
     "img": "https://img0.oastatic.com/img2/634223771/800x600/variant.webp"
-  },
-  {
-    "titolo": "Troi della Mariotta e Fuciade",
-    "link": "https://www.outdooractive.com/it/route/escursione/italy/troi-della-mariotta-e-fuciade/232614794/",
-    "img": "https://img.oastatic.com/img2/70956955/800x600/variant.jpg"
   }
 ]
