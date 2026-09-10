@@ -6,107 +6,336 @@
 <title>PandaRun</title>
 <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@900&display=swap" rel="stylesheet">
 <style>
-    body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #87CEEB; overflow: hidden; font-family: 'Grandstander', cursive; touch-action: none; }
-    #gameCanvas { display: block; width: 100%; height: 100%; }
-    #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-    #left-controls { position: absolute; top: 15px; left: 20px; display: flex; gap: 6px; align-items: center; z-index: 10; pointer-events: auto; }
-    #game-title { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); font-size: 30px; color: #0000ff; font-weight: 900; text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 #333; pointer-events: none; z-index: 10; white-space: nowrap; }
-    #right-controls { position: absolute; top: 15px; right: 20px; display: flex; gap: 6px; align-items: center; z-index: 10; pointer-events: auto; }
-    .top-btn { width: 30px; height: 30px; color: white; font-weight: 900; border: 2px solid #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 3px 0 #333; cursor: pointer; transition: transform 0.1s ease; font-family: 'Grandstander', cursive; background: #19af4e; }
-    .top-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #333; }
+    :root {
+        --sbatuffo-blue: #0000ff;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #111827;
+        overflow: hidden;
+        font-family: 'Grandstander', cursive;
+        touch-action: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Container di gioco responsive per desktop e mobile */
+    #game-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: 1150px;
+        max-height: 680px;
+        background-color: #87CEEB;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+    }
+
+    @media (max-width: 768px), (max-height: 500px) {
+        #game-container {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+        }
+    }
+
+    #gameCanvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    #ui-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    /* Titolo PandaRun in sbatuffo blue */
+    #game-title {
+        position: absolute;
+        top: 14px;
+        left: 20px;
+        font-size: 42px;
+        color: var(--sbatuffo-blue);
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-shadow: 
+            -2px -2px 0 #ffffff,  
+             2px -2px 0 #ffffff,
+            -2px  2px 0 #ffffff,
+             2px  2px 0 #ffffff,
+             4px  4px 0 #00263e,
+             6px  6px 10px rgba(0,0,0,0.4);
+        pointer-events: none;
+        z-index: 10;
+        white-space: nowrap;
+    }
+
+    #right-controls {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        z-index: 10;
+        pointer-events: auto;
+    }
+    .top-btn {
+        width: 32px;
+        height: 32px;
+        color: white;
+        font-weight: 900;
+        border: 2px solid #333;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 3px 0 #333;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        font-family: 'Grandstander', cursive;
+        background: #19af4e;
+    }
+    .top-btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 0 0 #333;
+    }
     #info-btn { background: #3742fa; font-size: 14px; font-style: italic; }
     #leaderboard-btn { background: #fbc531; font-size: 13px; }
-    #challenge-btn { background: #9b59b6; font-size: 13px; }
+    #challenge-btn { background: #8e44ad; font-size: 13px; }
     #pause-btn { background: #ffa502; font-size: 13px; }
     #close-btn { background: #ff4757; font-size: 14px; }
 
-    #score-container { position: absolute; top: 175px; left: 50%; transform: translateX(-50%); font-size: 15px; color: #333; font-weight: 900; background: rgba(255, 255, 255, 0.95); padding: 6px 14px; border-radius: 12px; border: 2px solid #333; pointer-events: auto; box-shadow: 0 3px 0 rgba(0,0,0,0.15); text-align: center; white-space: nowrap; transition: transform 0.2s ease, background-color 0.2s ease; z-index: 10; line-height: 1.3; }
-    @media (max-width: 480px) { #score-container { top: 165px; font-size: 13px; padding: 5px 10px; } }
-    @keyframes levelFlash { 0% { background: #ffeaa7; transform: translateX(-50%) scale(1.08); } 50% { background: #ff7675; transform: translateX(-50%) scale(1.15); color: white; } 100% { background: rgba(255, 255, 255, 0.95); transform: translateX(-50%) scale(1); color: #333; } }
-    .level-flash { animation: levelFlash 0.6s ease; }
+    #score-container {
+        position: absolute;
+        top: 175px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 15px;
+        color: #333;
+        font-weight: 900;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 6px 14px;
+        border-radius: 12px;
+        border: 2px solid #333;
+        pointer-events: auto;
+        box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+        text-align: center;
+        white-space: nowrap;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        z-index: 10;
+        line-height: 1.3;
+    }
 
-    .modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: linear-gradient(135deg, #ffffff 0%, #f7f9fa 100%); padding: 25px 20px; border-radius: 22px; border: 4px solid #1a1a1a; box-shadow: 0 10px 0 #1a1a1a; display: none; pointer-events: auto; z-index: 30; max-width: 320px; width: 85%; }
+    @media (max-width: 480px) {
+        #score-container {
+            top: 165px;
+            font-size: 13px;
+            padding: 5px 10px;
+        }
+        #game-title {
+            font-size: 26px;
+            top: 18px;
+            left: 15px;
+        }
+    }
+
+    @keyframes levelFlash {
+        0% { background: #ffeaa7; transform: translateX(-50%) scale(1.08); }
+        50% { background: #ff7675; transform: translateX(-50%) scale(1.15); color: white; }
+        100% { background: rgba(255, 255, 255, 0.95); transform: translateX(-50%) scale(1); color: #333; }
+    }
+    .level-flash {
+        animation: levelFlash 0.6s ease;
+    }
+
+    .modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fa 100%);
+        padding: 25px 20px;
+        border-radius: 22px;
+        border: 4px solid #1a1a1a;
+        box-shadow: 0 10px 0 #1a1a1a;
+        display: none;
+        pointer-events: auto;
+        z-index: 30;
+        max-width: 320px;
+        width: 85%;
+    }
     .modal h2 { margin: 0 0 10px; color: #3742fa; font-size: 22px; text-shadow: 1px 1px 0 #dff9fb; }
     .modal p { font-size: 14px; color: #555; line-height: 1.4; margin-bottom: 18px; font-weight: 600; }
-    .modal input { width: 85%; padding: 12px; font-size: 16px; font-family: 'Grandstander', cursive; border: 3px solid #333; border-radius: 14px; margin-bottom: 18px; text-align: center; outline: none; background: #fff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); transition: all 0.2s ease; }
-    .modal input:focus { border-color: #3742fa; box-shadow: 0 0 8px rgba(55, 66, 250, 0.4), inset 0 2px 4px rgba(0,0,0,0.06); }
+    .modal input {
+        width: 85%;
+        padding: 12px;
+        font-size: 16px;
+        font-family: 'Grandstander', cursive;
+        border: 3px solid #333;
+        border-radius: 14px;
+        margin-bottom: 18px;
+        text-align: center;
+        outline: none;
+        background: #fff;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+        transition: all 0.2s ease;
+    }
+    .modal input:focus {
+        border-color: #3742fa;
+        box-shadow: 0 0 8px rgba(55, 66, 250, 0.4), inset 0 2px 4px rgba(0,0,0,0.06);
+    }
 
-    #game-over { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: white; padding: 25px; border-radius: 20px; border: 4px solid #1a1a1a; box-shadow: 0 10px 0 #1a1a1a; display: none; pointer-events: auto; z-index: 20; }
+    #game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        border: 4px solid #1a1a1a;
+        box-shadow: 0 10px 0 #1a1a1a;
+        display: none;
+        pointer-events: auto;
+        z-index: 20;
+    }
     #game-over h1 { margin: 0 0 15px; color: #ff4757; font-size: 26px; }
-    #best-score-notice { color: #e67e22; font-size: 16px; font-weight: 900; display: none; margin: 2px 0 16px 0; text-shadow: 1px 1px 0 #ffeaa7; align-items: center; justify-content: center; gap: 6px; }
+    
+    #best-score-notice {
+        color: #e67e22;
+        font-size: 16px;
+        font-weight: 900;
+        display: none;
+        margin: 2px 0 16px 0;
+        text-shadow: 1px 1px 0 #ffeaa7;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
 
-    .btn { background: #19af4e; color: white; border: 2px solid #1a1a1a; padding: 10px 20px; font-size: 16px; font-family: 'Grandstander', cursive; border-radius: 30px; cursor: pointer; box-shadow: 0 3px 0 #1a1a1a; text-decoration: none; display: inline-block; margin: 4px; }
-    .btn:active { transform: translateY(3px); box-shadow: 0 0 0 #1a1a1a; }
-    .btn-whatsapp { background: #25D366; }
-    .btn-quit { background: #ff4757; }
+    .btn {
+        background: #19af4e;
+        color: white;
+        border: 2px solid #1a1a1a;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-family: 'Grandstander', cursive;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 3px 0 #1a1a1a;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px;
+    }
+    .btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 0 0 #1a1a1a;
+    }
 </style>
 </head>
 <body>
 
-<canvas id="gameCanvas"></canvas>
+<div id="game-container">
+    <canvas id="gameCanvas"></canvas>
 
-<div id="ui-layer">
-    <div id="left-controls">
-        <button id="info-btn" class="top-btn" title="Info">i</button>
-        <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
-        <button id="challenge-btn" class="top-btn" title="Sfida 1v1">⚔️</button>
-    </div>
-    
-    <div id="game-title">PandaRun</div>
-    
-    <div id="right-controls">
-        <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
-        <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
-    </div>
-
-    <div id="score-container">
-        <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name">Panda</span>!</div>
-        Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
-        <span style="font-size: 12px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
-    </div>
-
-    <!-- Modals standard -->
-    <div id="nickname-modal" class="modal">
-        <h2>Benvenuto a PandaRun! 🐼</h2>
-        <p>Inserisci il tuo nickname per iniziare:</p>
-        <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
-        <br><button class="btn" id="save-nickname-btn" style="font-size: 15px; width: 160px; padding: 10px;">Inizia 🚀</button>
-    </div>
-    <div id="info-modal" class="modal">
-        <h2>Come Giocare 🐼</h2><p id="info-text">Caricamento...</p>
-        <button class="btn" onclick="closeModal('info-modal')">Capito!</button>
-    </div>
-    <div id="leaderboard-modal" class="modal">
-        <h2>Classifica 🏆</h2>
-        <div id="leaderboard-list" style="font-size: 14px; max-height: 150px; overflow-y: auto; margin-bottom: 15px; text-align: left; padding: 0 10px;">Caricamento...</div>
-        <button class="btn" onclick="closeModal('leaderboard-modal')">Chiudi</button>
-    </div>
-
-    <!-- Modal Sfida -->
-    <div id="challenge-modal" class="modal">
-        <h2>Sfida 1v1 ⚔️</h2>
-        <div id="challenge-content">
-            <p>Sfida un amico! Chi fa più punti vince.</p>
-            <button class="btn" id="create-challenge-btn" style="font-size: 15px; width: 160px; padding: 10px;">Crea Sfida</button>
-            <br><br><button class="btn btn-quit" onclick="closeModal('challenge-modal')" style="font-size: 14px;">Annulla</button>
+    <div id="ui-layer">
+        <div id="game-title">PandaRun</div>
+        
+        <div id="right-controls">
+            <button id="info-btn" class="top-btn" title="Info">i</button>
+            <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
+            <button id="challenge-btn" class="top-btn" title="Modalità Sfida">⚔️</button>
+            <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
+            <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
         </div>
-    </div>
-    
-    <div id="game-over">
-        <h1 id="game-over-title">Ops! Perso!</h1>
-        <p style="margin-bottom: 6px;">Punteggio finale: <span id="final-score">0</span></p>
-        <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
-        <div id="game-over-buttons">
-            <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px;">Rigioca 🐼</button><br><br>
-            <a href="../pandagames.html" class="btn btn-quit" style="font-size:14px; width:180px;">Esci</a>
+
+        <div id="score-container">
+            <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name">Panda</span>!</div>
+            Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
+            <span style="font-size: 12px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
         </div>
-        <div id="challenge-status-ui" style="display:none; font-size: 14px; font-weight:bold; margin-top:10px;"></div>
+
+        <!-- Modale Nickname -->
+        <div id="nickname-modal" class="modal">
+            <h2>Benvenuto a PandaRun! 🐼</h2>
+            <p>Inserisci il tuo nickname per iniziare l'avventura:</p>
+            <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
+            <br>
+            <button class="btn" id="save-nickname-btn" style="font-size: 15px; width: 160px; padding: 10px;">Inizia 🚀</button>
+        </div>
+
+        <!-- Modale Info -->
+        <div id="info-modal" class="modal">
+            <h2>Come Giocare 🐼</h2>
+            <p id="info-text">Caricamento...</p>
+            <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
+        </div>
+
+        <!-- Modale Classifica -->
+        <div id="leaderboard-modal" class="modal">
+            <h2>Classifica 🏆</h2>
+            <p style="font-size: 12px; color: #777; margin-top: -5px; margin-bottom: 12px;">Miglior punteggio per giocatore</p>
+            <div id="leaderboard-list" style="font-size: 14px; color: #333; max-height: 150px; overflow-y: auto; margin-bottom: 15px; text-align: left; padding: 0 10px;">
+                Caricamento classifica...
+            </div>
+            <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
+        </div>
+
+        <!-- Modale Gestione Sfida 1v1 -->
+        <div id="challenge-modal" class="modal">
+            <h2>Sfida 1v1 ⚔️</h2>
+            <div id="challenge-menu-view">
+                <p>Sfida un amico in tempo reale inviandogli il codice stanza!</p>
+                <button class="btn" id="create-challenge-btn" style="background:#8e44ad; width:100%; margin-bottom:8px;">Crea Nuova Sfida 🎮</button>
+                <div style="margin: 10px 0; font-weight:bold; color:#777;">OPPURE</div>
+                <input type="text" id="room-input" placeholder="Codice Stanza (es. AB12CD)" maxlength="6" style="text-transform:uppercase; margin-bottom:10px;">
+                <button class="btn" id="join-challenge-btn" style="background:#2980b9; width:100%;">Entra nella Sfida 🚀</button>
+                <br><br>
+                <button class="btn" onclick="closeModal('challenge-modal')" style="background:#95a5a6; font-size:13px; width:120px; padding:6px;">Chiudi</button>
+            </div>
+            <div id="challenge-room-view" style="display:none;">
+                <p id="room-status-text">Stanza: <b id="room-code-display">------</b></p>
+                <div id="room-details" style="font-size:13px; color:#444; margin-bottom:15px; background:#f1f2f6; padding:10px; border-radius:10px;">
+                    In attesa dell'avversario...
+                </div>
+                <button class="btn" id="challenge-quit-btn" style="background:#ff4757; font-size:13px; width:140px; padding:6px;">Abbandona</button>
+            </div>
+        </div>
+        
+        <!-- Modale Fine Partita / Fine Sfida -->
+        <div id="game-over">
+            <h1>Ops! Perso!</h1>
+            <p style="margin-bottom: 6px;">Punteggio finale: <span id="final-score">0</span></p>
+            <div id="challenge-result-banner" style="display:none; font-weight:bold; color:#8e44ad; margin:8px 0; font-size:15px;"></div>
+            <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
+            <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
+            <br><br>
+            <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:14px; width:180px; padding:8px; box-sizing:border-box;">Torna ai<br>Panda Games</a>
+        </div>
     </div>
 </div>
 
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const container = document.getElementById('game-container');
     const scoreEl = document.getElementById('score');
     const levelEl = document.getElementById('level');
     const bestScoreEl = document.getElementById('best-score');
@@ -114,21 +343,22 @@
     const playerNameEl = document.getElementById('player-name');
     const scoreContainer = document.getElementById('score-container');
     const gameOverScreen = document.getElementById('game-over');
-    const gameOverTitle = document.getElementById('game-over-title');
-    const gameOverButtons = document.getElementById('game-over-buttons');
-    const challengeStatusUi = document.getElementById('challenge-status-ui');
     const finalScoreEl = document.getElementById('final-score');
     const bestScoreNotice = document.getElementById('best-score-notice');
     const infoModal = document.getElementById('info-modal');
     const leaderboardModal = document.getElementById('leaderboard-modal');
-    const nicknameModal = document.getElementById('nickname-modal');
     const challengeModal = document.getElementById('challenge-modal');
-    const challengeContent = document.getElementById('challenge-content');
+    const nicknameModal = document.getElementById('nickname-modal');
     const nicknameInput = document.getElementById('nickname-input');
     const saveNicknameBtn = document.getElementById('save-nickname-btn');
     const leaderboardList = document.getElementById('leaderboard-list');
     const infoTextEl = document.getElementById('info-text');
     const pauseBtn = document.getElementById('pause-btn');
+
+    // Variabili Sfida 1v1
+    let currentRoomId = null;
+    let challengePollInterval = null;
+    let isChallengeMode = false;
 
     let w, h, baseGroundY;
     let score = 0;
@@ -136,20 +366,12 @@
     let lastScore = parseInt(localStorage.getItem('pandarun_last_score')) || 0;
     let nickname = localStorage.getItem('pandarun_nickname') || '';
 
-    // CHALLENGE VARIABLES
-    const urlParams = new URLSearchParams(window.location.search);
-    let challengeId = urlParams.get('challenge');
-    let challengeState = null;
-    let challengePollTimer = null;
-    let isInChallenge = !!challengeId;
-
     bestScoreEl.innerText = bestScore;
     lastScoreEl.innerText = lastScore;
 
     if (nickname) {
         playerNameEl.innerText = nickname;
         nicknameModal.style.display = 'none';
-        initFlow();
     } else {
         nicknameModal.style.display = 'block';
     }
@@ -161,137 +383,12 @@
             localStorage.setItem('pandarun_nickname', nickname);
             playerNameEl.innerText = nickname;
             nicknameModal.style.display = 'none';
-            initFlow();
+            fetchBestScore();
+            gameLoop();
         } else {
             alert('Inserisci un nickname valido!');
         }
     });
-
-    function initFlow() {
-        fetchBestScore();
-        if (isInChallenge) {
-            joinChallenge();
-        } else {
-            gameLoop();
-        }
-    }
-
-    async function apiChallenge(action, extraParams = {}) {
-        try {
-            const res = await fetch('/api/games_challenge-UPVapi', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action, roomId: challengeId, username: nickname, ...extraParams })
-            });
-            return await res.json();
-        } catch (e) {
-            console.error("Errore API Sfida", e);
-            return { success: false };
-        }
-    }
-
-    document.getElementById('challenge-btn').addEventListener('click', () => {
-        if (isInChallenge) {
-            openModal(challengeModal);
-            renderChallengeLobby();
-        } else {
-            openModal(challengeModal);
-            challengeContent.innerHTML = `
-                <p>Sfida un amico! Chi fa più punti vince.</p>
-                <button class="btn" id="create-challenge-btn" style="font-size: 15px; width: 160px; padding: 10px;">Crea Sfida</button>
-                <br><br><button class="btn btn-quit" onclick="closeModal('challenge-modal')" style="font-size: 14px;">Annulla</button>
-            `;
-            document.getElementById('create-challenge-btn').addEventListener('click', createChallenge);
-        }
-    });
-
-    async function createChallenge() {
-        challengeContent.innerHTML = "<p>Creazione stanza...</p>";
-        const res = await apiChallenge('create');
-        if (res.success) {
-            challengeId = res.roomId;
-            isInChallenge = true;
-            challengeState = res.state;
-            const newUrl = window.location.origin + window.location.pathname + '?challenge=' + challengeId;
-            window.history.pushState({}, '', newUrl);
-            renderChallengeLobby();
-            startPolling();
-        } else {
-            challengeContent.innerHTML = `<p style="color:red;">Errore creazione.</p><button class="btn" onclick="closeModal('challenge-modal')">Chiudi</button>`;
-        }
-    }
-
-    async function joinChallenge() {
-        openModal(challengeModal);
-        challengeContent.innerHTML = "<p>Accesso alla sfida...</p>";
-        const res = await apiChallenge('join');
-        if (res.success) {
-            challengeState = res.state;
-            startPolling();
-            if (challengeState.status === 'playing') {
-                closeModal('challenge-modal');
-                resetGame();
-            } else {
-                renderChallengeLobby();
-            }
-        } else {
-            alert(res.error || "Impossibile unirsi");
-            window.location.href = window.location.pathname;
-        }
-    }
-
-    function renderChallengeLobby() {
-        if (!challengeState) return;
-        if (challengeState.status === 'waiting') {
-            const shareUrl = window.location.origin + window.location.pathname + '?challenge=' + challengeId;
-            const waText = encodeURIComponent(`Vieni a sfidarmi su PandaRun! 🐼 Clicca qui: ${shareUrl}`);
-            challengeContent.innerHTML = `
-                <p style="font-size:16px;">Stanza creata: <b>${challengeId}</b></p>
-                <p>In attesa dell'avversario...</p>
-                <a href="https://wa.me/?text=${waText}" target="_blank" class="btn btn-whatsapp">Condividi su WhatsApp</a>
-                <br><br><button class="btn btn-quit" onclick="quitChallenge()">Annulla Sfida</button>
-            `;
-        }
-    }
-
-    function startPolling() {
-        if (challengePollTimer) clearInterval(challengePollTimer);
-        challengePollTimer = setInterval(async () => {
-            if (!isInChallenge) return;
-            const res = await apiChallenge('status');
-            if (res.success) {
-                challengeState = res.state;
-                handleChallengeStateChange();
-            }
-        }, 2500);
-    }
-
-    function handleChallengeStateChange() {
-        if (challengeState.status === 'closed') {
-            alert("La stanza è stata chiusa.");
-            window.location.href = window.location.pathname;
-            return;
-        }
-        
-        if (challengeState.status === 'playing') {
-            if (challengeModal.style.display === 'block') closeModal('challenge-modal');
-            
-            if (isGameOver && gameOverScreen.style.display === 'block') {
-                resetGame(); 
-            } else if (!animationId && nicknameModal.style.display === 'none') {
-                gameLoop();
-            }
-        }
-
-        if (challengeState.status === 'finished' && isGameOver) {
-            renderChallengeResults();
-        }
-    }
-
-    async function quitChallenge() {
-        await apiChallenge('quit');
-        window.location.href = window.location.pathname;
-    }
 
     function fetchBestScore() {
         if (!nickname) return;
@@ -303,7 +400,12 @@
                     bestScoreEl.innerText = bestScore;
                     localStorage.setItem('pandarun_best_score', bestScore);
                 }
-            }).catch(err => console.error(err));
+            })
+            .catch(err => console.error(err));
+    }
+
+    if (nickname) {
+        fetchBestScore();
     }
 
     let gameSpeed = 5;
@@ -319,38 +421,181 @@
     let airplaneLevel3Triggered = false;
 
     const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    infoTextEl.innerText = isMobile ? "Fai tap o swipe sullo schermo per far saltare il panda ed evitare gli ostacoli!" : "Usa il tasto Spazio, la freccia su o clicca con il mouse per far saltare il panda ed evitare gli ostacoli!";
+    if (isMobile) {
+        infoTextEl.innerText = "Fai un TAP sullo schermo o fai uno SWIPE verso l'alto per far saltare il panda ed evitare gli ostacoli!";
+    } else {
+        infoTextEl.innerText = "Usa il tasto Spazio, la freccia su o clicca con il mouse per far saltare il panda ed evitare gli ostacoli!";
+    }
 
     function openModal(modal) {
-        if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') togglePause();
-        if (modal === leaderboardModal) loadLeaderboard();
-        modal.style.display = 'block';
-    }
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-        if (modalId === 'challenge-modal' && isInChallenge && challengeState?.status === 'waiting') {
-            // let it run in background
-        } else if (isPaused) {
+        if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
             togglePause();
         }
+        if (modal === leaderboardModal) {
+            loadLeaderboard();
+        }
+        modal.style.display = 'block';
     }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
     document.getElementById('info-btn').addEventListener('click', () => openModal(infoModal));
     document.getElementById('leaderboard-btn').addEventListener('click', () => openModal(leaderboardModal));
+    document.getElementById('challenge-btn').addEventListener('click', () => {
+        document.getElementById('challenge-menu-view').style.display = 'block';
+        document.getElementById('challenge-room-view').style.display = 'none';
+        openModal(challengeModal);
+    });
+
+    // Logica Challenge API (`games_challenge-UPVapi.js`)
+    document.getElementById('create-challenge-btn').addEventListener('click', () => {
+        if (!nickname) return;
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'create', username: nickname })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                currentRoomId = data.roomId;
+                isChallengeMode = true;
+                document.getElementById('challenge-menu-view').style.display = 'none';
+                document.getElementById('challenge-room-view').style.display = 'block';
+                document.getElementById('room-code-display').innerText = currentRoomId;
+                document.getElementById('room-details').innerHTML = `Stanza creata! In attesa di un avversario...<br>Codice: <b>${currentRoomId}</b>`;
+                startChallengePolling();
+            } else {
+                alert('Errore creazione sfida: ' + data.error);
+            }
+        })
+        .catch(err => alert('Errore di rete'));
+    });
+
+    document.getElementById('join-challenge-btn').addEventListener('click', () => {
+        let code = document.getElementById('room-input').value.trim().toUpperCase();
+        if (!code || code.length < 6) {
+            alert('Inserisci un codice stanza valido di 6 caratteri.');
+            return;
+        }
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'join', roomId: code, username: nickname })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                currentRoomId = code;
+                isChallengeMode = true;
+                document.getElementById('challenge-menu-view').style.display = 'none';
+                document.getElementById('challenge-room-view').style.display = 'block';
+                document.getElementById('room-code-display').innerText = currentRoomId;
+                updateRoomState(data.state);
+                startChallengePolling();
+            } else {
+                alert('Errore accesso stanza: ' + data.error);
+            }
+        })
+        .catch(err => alert('Errore di connessione'));
+    });
+
+    document.getElementById('challenge-quit-btn').addEventListener('click', () => {
+        if (currentRoomId) {
+            fetch('/api/games_challenge-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'quit', roomId: currentRoomId, username: nickname })
+            }).catch(() => {});
+        }
+        stopChallengePolling();
+        currentRoomId = null;
+        isChallengeMode = false;
+        closeModal('challenge-modal');
+    });
+
+    function startChallengePolling() {
+        if (challengePollInterval) clearInterval(challengePollInterval);
+        challengePollInterval = setInterval(() => {
+            if (!currentRoomId) return;
+            fetch('/api/games_challenge-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'status', roomId: currentRoomId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    updateRoomState(data.state);
+                }
+            })
+            .catch(err => console.error(err));
+        }, 2000);
+    }
+
+    function stopChallengePolling() {
+        if (challengePollInterval) {
+            clearInterval(challengePollInterval);
+            challengePollInterval = null;
+        }
+    }
+
+    function updateRoomState(state) {
+        let detailsEl = document.getElementById('room-details');
+        if (state.status === 'waiting') {
+            detailsEl.innerHTML = `Stanza: <b>${currentRoomId}</b><br>In attesa che un avversario si unisca...`;
+        } else if (state.status === 'playing') {
+            detailsEl.innerHTML = `Sfida in corso contro <b>${state.p1 === nickname ? state.p2 : state.p1}</b>! 🎮`;
+            if (challengeModal.style.display === 'block') {
+                closeModal('challenge-modal');
+                resetGame();
+            }
+        } else if (state.status === 'finished') {
+            let p1Score = state.p1_score !== null ? state.p1_score : 0;
+            let p2Score = state.p2_score !== null ? state.p2_score : 0;
+            let winnerText = "";
+            if (p1Score > p2Score) {
+                winnerText = state.p1 + " ha vinto!";
+            } else if (p2Score > p1Score) {
+                winnerText = state.p2 + " ha vinto!";
+            } else {
+                winnerText = "Pareggio!";
+            }
+            detailsEl.innerHTML = `<b>Sfida conclusa!</b><br>${state.p1}: ${p1Score} pts<br>${state.p2}: ${p2Score} pts<br><b>${winnerText}</b>`;
+        }
+    }
 
     function loadLeaderboard() {
         leaderboardList.innerHTML = "Caricamento...";
-        fetch('/api/games_leaderboard-UPVapi?game=pandarun&t=' + Date.now())
-            .then(res => res.json())
+        fetch('/api/games_leaderboard-UPVapi?t=' + Date.now())
+            .then(async res => {
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    return res.json();
+                } else {
+                    throw new Error(`Errore Server Vercel (Risposta non JSON)`);
+                }
+            })
             .then(data => {
                 if (data.success && data.scores && data.scores.length > 0) {
                     let html = "<ol style='margin:0; padding-left:20px;'>";
-                    data.scores.forEach(item => { html += `<li style='margin-bottom: 4px;'><b>${item.username}</b>: <span style='color:#e67e22;'>${item.score} pts</span></li>`; });
+                    data.scores.forEach(item => {
+                        html += `<li style='margin-bottom: 4px;'><b>${item.username}</b>: <span style='color:#e67e22;'>${item.score} pts</span></li>`;
+                    });
                     html += "</ol>";
                     leaderboardList.innerHTML = html;
+                } else if (data.success === false) {
+                    leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore API: ${data.error}</span>`;
                 } else {
-                    leaderboardList.innerHTML = "Nessun punteggio.";
+                    leaderboardList.innerHTML = "Nessun punteggio in classifica.";
                 }
-            }).catch(err => leaderboardList.innerHTML = "Errore caricamento.");
+            })
+            .catch(err => {
+                leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:13px;'>Errore: ${err.message}</span>`;
+                console.error("Dettaglio errore classifica:", err);
+            });
     }
 
     function togglePause() {
@@ -364,219 +609,663 @@
             gameLoop();
         }
     }
+
     pauseBtn.addEventListener('click', togglePause);
 
-    let airplane = { active: false, x: 0, y: 0, speed: 3.5, direction: 1, text: "ti sbatuffolo" };
+    let airplane = {
+        active: false,
+        x: 0,
+        y: 0,
+        speed: 3.5,
+        direction: 1,
+        text: "ti sbatuffolo"
+    };
 
-    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; baseGroundY = h - 60; }
-    window.addEventListener('resize', resize); resize();
+    function resize() {
+        w = canvas.width = container.clientWidth;
+        h = canvas.height = container.clientHeight;
+        baseGroundY = h - 60;
+    }
+    window.addEventListener('resize', resize);
+    resize();
 
     function getGroundY(screenX) {
         if (currentLevel < 5) return baseGroundY;
         let worldX = screenX + worldDistance;
         let cycle = worldX % 1200;
-        if (cycle < 300) return baseGroundY;
-        else if (cycle < 600) return baseGroundY - Math.sin(((cycle - 300) / 300) * Math.PI / 2) * 55;
-        else if (cycle < 900) return baseGroundY - 55 + Math.sin(((cycle - 600) / 300) * Math.PI / 2) * 55;
-        else return baseGroundY;
+        if (cycle < 300) {
+            return baseGroundY;
+        } else if (cycle < 600) {
+            let t = (cycle - 300) / 300;
+            return baseGroundY - Math.sin(t * Math.PI / 2) * 55;
+        } else if (cycle < 900) {
+            let t = (cycle - 600) / 300;
+            return baseGroundY - 55 + Math.sin(t * Math.PI / 2) * 55;
+        } else {
+            return baseGroundY;
+        }
     }
 
     const panda = {
-        x: 60, y: 0, width: 65, height: 60, vy: 0, gravity: 0.7, jumpPower: -15.5, isGrounded: false,
+        x: 60,
+        y: 0,
+        width: 65,
+        height: 60,
+        vy: 0,
+        gravity: 0.7,
+        jumpPower: -15.5,
+        isGrounded: false,
         draw() {
-            ctx.save(); ctx.translate(this.x, this.y);
+            ctx.save();
+            ctx.translate(this.x, this.y);
+
             if (isGameOver) {
-                ctx.fillStyle = '#b2bec3'; ctx.strokeStyle = '#2d3436'; ctx.lineWidth = 3; ctx.beginPath();
-                ctx.arc(this.width/2, 15, 20, Math.PI, 0, false); ctx.lineTo(this.width/2 + 20, this.height); ctx.lineTo(this.width/2 - 20, this.height); ctx.closePath(); ctx.fill(); ctx.stroke();
-                ctx.fillStyle = '#2d3436'; ctx.font = "bold 14px 'Grandstander', cursive"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("RIP", this.width/2, this.height/2 + 5);
+                ctx.fillStyle = '#b2bec3';
+                ctx.strokeStyle = '#2d3436';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(this.width/2, 15, 20, Math.PI, 0, false);
+                ctx.lineTo(this.width/2 + 20, this.height);
+                ctx.lineTo(this.width/2 - 20, this.height);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#2d3436';
+                ctx.font = "bold 14px 'Grandstander', cursive, Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("RIP", this.width/2, this.height/2 + 5);
             } else {
-                let tilt = this.isGrounded ? Math.sin(frames * 0.3) * 0.08 : -0.15; ctx.rotate(tilt);
-                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(this.width/2, this.height/2 + 2, this.width/2.2, this.height/2.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-                ctx.fillStyle = '#1a1a1a'; let legOffset = this.isGrounded ? Math.sin(frames * 0.4) * 8 : 6;
-                ctx.beginPath(); ctx.arc(16 + legOffset, this.height - 4, 7, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(this.width - 16 - legOffset, this.height - 4, 7, 0, Math.PI * 2); ctx.fill();
-                ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(this.width - 18, 16, 17, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-                ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.arc(this.width - 28, 4, 6.5, 0, Math.PI * 2); ctx.arc(this.width - 10, 5, 6.5, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.ellipse(this.width - 23, 15, 4.5, 3.5, -0.2, 0, Math.PI * 2); ctx.ellipse(this.width - 14, 15, 4.5, 3.5, 0.2, 0, Math.PI * 2); ctx.fill();
-                ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(this.width - 23, 15, 1.2, 0, Math.PI * 2); ctx.arc(this.width - 14, 15, 1.2, 0, Math.PI * 2); ctx.fill();
-                ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.arc(this.width - 18, 19, 2.2, 0, Math.PI * 2); ctx.fill();
+                let tilt = this.isGrounded ? Math.sin(frames * 0.3) * 0.08 : -0.15;
+                ctx.rotate(tilt);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#1a1a1a';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.ellipse(this.width/2, this.height/2 + 2, this.width/2.2, this.height/2.6, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#1a1a1a';
+                let legOffset = this.isGrounded ? Math.sin(frames * 0.4) * 8 : 6;
+                
+                ctx.beginPath();
+                ctx.arc(16 + legOffset, this.height - 4, 7, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(this.width - 16 - legOffset, this.height - 4, 7, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.width - 18, 16, 17, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#1a1a1a';
+                ctx.beginPath();
+                ctx.arc(this.width - 28, 4, 6.5, 0, Math.PI * 2);
+                ctx.arc(this.width - 10, 5, 6.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.ellipse(this.width - 23, 15, 4.5, 3.5, -0.2, 0, Math.PI * 2);
+                ctx.ellipse(this.width - 14, 15, 4.5, 3.5, 0.2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.width - 23, 15, 1.2, 0, Math.PI * 2);
+                ctx.arc(this.width - 14, 15, 1.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#1a1a1a';
+                ctx.beginPath();
+                ctx.arc(this.width - 18, 19, 2.2, 0, Math.PI * 2);
+                ctx.fill();
             }
+
             ctx.restore();
         },
         update() {
             let currentGroundY = getGroundY(this.x + this.width/2);
-            this.vy += this.gravity; this.y += this.vy;
-            if (this.y + this.height >= currentGroundY) { this.y = currentGroundY - this.height; this.vy = 0; this.isGrounded = true; }
+            this.vy += this.gravity;
+            this.y += this.vy;
+            if (this.y + this.height >= currentGroundY) {
+                this.y = currentGroundY - this.height;
+                this.vy = 0;
+                this.isGrounded = true;
+            }
         },
-        jump() { if (this.isGrounded) { this.vy = this.jumpPower; this.isGrounded = false; } }
+        jump() {
+            if (this.isGrounded) {
+                this.vy = this.jumpPower;
+                this.isGrounded = false;
+            }
+        }
     };
 
     let obstacles = [];
-    function getLevel() { if (score < 80) return 1; if (score < 180) return 2; if (score < 300) return 3; if (score < 450) return 4; return 5; }
+
+    function getLevel() {
+        if (score < 80) return 1;
+        if (score < 180) return 2;
+        if (score < 300) return 3;
+        if (score < 450) return 4;
+        return 5;
+    }
+
     function getAvailableObstacles() {
-        let pool = ['beer', 'cake']; const lvl = getLevel();
+        const lvl = getLevel();
+        let pool = ['beer', 'cake'];
         if (lvl >= 2) pool.push('pasta');
-        if (lvl >= 3) pool.push('bee_single_bottom', 'bee_single_top', 'bee_single_very_top', 'bee_double_bottom_top', 'bee_double_top_very_high');
-        if (lvl >= 4) pool.push('icecream', 'cat');
+        if (lvl >= 3) {
+            pool.push('bee_single_bottom', 'bee_single_top', 'bee_single_very_top', 'bee_double_bottom_top', 'bee_double_top_very_high');
+        }
+        if (lvl >= 4) {
+            pool.push('icecream', 'cat');
+        }
         return pool;
     }
 
     class Obstacle {
         constructor(typeId, customX) {
-            this.id = typeId; this.x = customX;
-            if (['beer', 'cake', 'pasta', 'icecream', 'cat'].includes(this.id)) {
-                this.size = 50; this.type = 'ground'; this.y = getGroundY(this.x + this.size/2) - this.size; this.hitbox = { offset: 8, size: this.size - 16 };
-            } else if (this.id === 'bee_single_bottom') { this.size = 40; this.airOffset = 75; this.type = 'air'; this.y = getGroundY(this.x + this.size/2) - this.airOffset; this.hitbox = { offset: 6, size: this.size - 12 }; }
-            else if (this.id === 'bee_single_top') { this.size = 40; this.airOffset = 125; this.type = 'air'; this.y = getGroundY(this.x + this.size/2) - this.airOffset; this.hitbox = { offset: 6, size: this.size - 12 }; }
-            else if (this.id === 'bee_single_very_top') { this.size = 40; this.airOffset = 170; this.type = 'air'; this.y = getGroundY(this.x + this.size/2) - this.airOffset; this.hitbox = { offset: 6, size: this.size - 12 }; }
-            else if (this.id === 'bee_double_bottom_top') { this.size = 35; this.airOffset1 = 75; this.airOffset2 = 135; this.type = 'air_double'; this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1; this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2; }
-            else if (this.id === 'bee_double_top_very_high') { this.size = 35; this.airOffset1 = 125; this.airOffset2 = 140; this.type = 'air_double'; this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1; this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2; }
+            this.id = typeId;
+            this.x = customX;
+
+            if (this.id === 'beer' || this.id === 'cake' || this.id === 'pasta' || this.id === 'icecream' || this.id === 'cat') {
+                this.size = 50;
+                this.type = 'ground';
+                this.y = getGroundY(this.x + this.size/2) - this.size;
+                this.hitbox = { offset: 8, size: this.size - 16 };
+            } else if (this.id === 'bee_single_bottom') {
+                this.size = 40;
+                this.airOffset = 75;
+                this.type = 'air';
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
+                this.hitbox = { offset: 6, size: this.size - 12 };
+            } else if (this.id === 'bee_single_top') {
+                this.size = 40;
+                this.airOffset = 135;
+                this.type = 'air';
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
+                this.hitbox = { offset: 6, size: this.size - 12 };
+            } else if (this.id === 'bee_single_very_top') {
+                this.size = 40;
+                this.airOffset = 175;
+                this.type = 'air';
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
+                this.hitbox = { offset: 6, size: this.size - 12 };
+            } else if (this.id === 'bee_double_bottom_top') {
+                this.size = 35;
+                this.airOffset1 = 75;
+                this.airOffset2 = 145;
+                this.type = 'air_double';
+                this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1;
+                this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2;
+            } else if (this.id === 'bee_double_top_very_high') {
+                this.size = 35;
+                this.airOffset1 = 135;
+                this.airOffset2 = 185;
+                this.type = 'air_double';
+                this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1;
+                this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2;
+            }
         }
         draw() {
-            ctx.font = this.size + "px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-            if (this.id.startsWith('bee_single')) ctx.fillText('🐝', this.x + this.size/2, this.y + this.size/2);
-            else if (this.id.startsWith('bee_double')) { ctx.fillText('🐝', this.x + this.size/2, this.y1 + this.size/2); ctx.fillText('🐝', this.x + this.size/2, this.y2 + this.size/2); }
-            else { let emojiMap = { beer: '🍺', cake: '🍰', pasta: '🍝', icecream: '🍦', cat: '🐈' }; ctx.fillText(emojiMap[this.id], this.x + this.size/2, this.y + this.size/2 + 5); }
+            if (this.id.startsWith('bee_single')) {
+                ctx.font = this.size + "px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText('🐝', this.x + this.size/2, this.y + this.size/2);
+            } else if (this.id.startsWith('bee_double')) {
+                ctx.font = this.size + "px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText('🐝', this.x + this.size/2, this.y1 + this.size/2);
+                ctx.fillText('🐝', this.x + this.size/2, this.y2 + this.size/2);
+            } else {
+                let emojiMap = { beer: '🍺', cake: '🍰', pasta: '🍝', icecream: '🍦', cat: '🐈' };
+                ctx.font = this.size + "px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(emojiMap[this.id], this.x + this.size/2, this.y + this.size/2 + 5);
+            }
         }
         update() {
             this.x -= gameSpeed;
-            if (this.type === 'ground') this.y = getGroundY(this.x + this.size/2) - this.size;
-            else if (this.type === 'air') this.y = getGroundY(this.x + this.size/2) - this.airOffset;
-            else if (this.type === 'air_double') { this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1; this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2; }
+            if (this.type === 'ground') {
+                this.y = getGroundY(this.x + this.size/2) - this.size;
+            } else if (this.type === 'air') {
+                this.y = getGroundY(this.x + this.size/2) - this.airOffset;
+            } else if (this.type === 'air_double') {
+                this.y1 = getGroundY(this.x + this.size/2) - this.airOffset1;
+                this.y2 = getGroundY(this.x + this.size/2) - this.airOffset2;
+            }
         }
     }
 
     function spawnObstaclePattern() {
-        const pool = getAvailableObstacles(); const chosenId = pool[Math.floor(Math.random() * pool.length)];
-        const isGround = ['beer', 'cake', 'pasta', 'icecream', 'cat'].includes(chosenId); const lvl = getLevel();
-        let doubleChance = lvl >= 3 ? 0.35 + ((lvl - 3) * 0.15) : 0; 
+        const lvl = getLevel();
+        const pool = getAvailableObstacles();
+        const chosenId = pool[Math.floor(Math.random() * pool.length)];
+
+        const isGround = ['beer', 'cake', 'pasta', 'icecream', 'cat'].includes(chosenId);
+        
+        let doubleChance = lvl >= 3 ? 0.30 + ((lvl - 3) * 0.10) : 0; 
         if (isGround && lvl >= 3 && Math.random() < doubleChance) {
             obstacles.push(new Obstacle(chosenId, w));
-            obstacles.push(new Obstacle(['beer', 'cake', 'pasta', 'icecream', 'cat'][Math.floor(Math.random() * 5)], w + 240));
-        } else obstacles.push(new Obstacle(chosenId, w));
+            const groundPool = ['beer', 'cake', 'pasta', 'icecream', 'cat'];
+            const secondId = groundPool[Math.floor(Math.random() * groundPool.length)];
+            const doubleGap = Math.max(390, gameSpeed * 43);
+            obstacles.push(new Obstacle(secondId, w + doubleGap));
+        } else {
+            obstacles.push(new Obstacle(chosenId, w));
+        }
     }
 
-    const clouds = [ { x: 50, y: 120, speed: 0.25, size: '60px' }, { x: 300, y: 160, speed: 0.18, size: '75px' }, { x: 600, y: 110, speed: 0.3, size: '65px' }, { x: 900, y: 170, speed: 0.22, size: '80px' }, { x: 1200, y: 130, speed: 0.2, size: '70px' } ];
+    const clouds = [
+        { x: 50, y: 120, speed: 0.25, size: '60px' },
+        { x: 300, y: 160, speed: 0.18, size: '75px' },
+        { x: 600, y: 110, speed: 0.3, size: '65px' },
+        { x: 900, y: 170, speed: 0.22, size: '80px' },
+        { x: 1200, y: 130, speed: 0.2, size: '70px' }
+    ];
+
     function drawBackground() {
-        let skyGrad = ctx.createLinearGradient(0, 0, 0, h); skyGrad.addColorStop(0, '#59c1ff'); skyGrad.addColorStop(0.7, '#a1e3ff'); skyGrad.addColorStop(1, '#e0f7ff'); ctx.fillStyle = skyGrad; ctx.fillRect(0, 0, w, h);
-        ctx.font = "65px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("☀️", w / 2, 140);
-        ctx.globalAlpha = 1.0; clouds.forEach(c => { ctx.font = c.size + " Arial"; ctx.fillText("☁️", c.x, c.y); c.x -= c.speed; if (c.x < -120) c.x = w + 100; });
+        let skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+        skyGrad.addColorStop(0, '#59c1ff');
+        skyGrad.addColorStop(0.7, '#a1e3ff');
+        skyGrad.addColorStop(1, '#e0f7ff');
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.font = "65px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("☀️", w / 2, 140);
+
+        ctx.globalAlpha = 1.0;
+        clouds.forEach(c => {
+            ctx.font = c.size + " Arial";
+            ctx.fillText("☁️", c.x, c.y);
+            c.x -= c.speed;
+            if (c.x < -120) c.x = w + 100;
+        });
+
         if (airplane.active) {
-            airplane.x += airplane.speed * airplane.direction; ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
-            let bx = airplane.x - (airplane.direction === 1 ? 130 : -130); let by = airplane.y;
-            ctx.strokeStyle = "#333"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(airplane.x, airplane.y); ctx.lineTo(bx, by); ctx.stroke();
-            ctx.fillStyle = "#ffffff"; ctx.strokeStyle = "#1a1a1a"; ctx.lineWidth = 2; ctx.fillRect(bx - 95, by - 18, 190, 36); ctx.strokeRect(bx - 95, by - 18, 190, 36);
-            ctx.fillStyle = "#ff4757"; ctx.font = "bold 15px 'Grandstander', cursive"; ctx.fillText(airplane.text, bx, by);
-            ctx.font = "32px Arial"; ctx.save(); ctx.translate(airplane.x, airplane.y); if (airplane.direction === -1) ctx.scale(-1, 1); ctx.fillText("✈️", 0, 0); ctx.restore(); ctx.restore();
-            if ((airplane.direction === 1 && airplane.x > w + 600) || (airplane.direction === -1 && airplane.x < -600)) airplane.active = false;
+            airplane.x += airplane.speed * airplane.direction;
+            ctx.save();
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            
+            let bannerWidth = 190;
+            let bannerHeight = 36;
+            let bx = airplane.x - (airplane.direction === 1 ? 130 : -130);
+            let by = airplane.y;
+            
+            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(airplane.x, airplane.y);
+            ctx.lineTo(bx, by);
+            ctx.stroke();
+            
+            ctx.fillStyle = "#ffffff";
+            ctx.strokeStyle = "#1a1a1a";
+            ctx.lineWidth = 2;
+            ctx.fillRect(bx - bannerWidth/2, by - bannerHeight/2, bannerWidth, bannerHeight);
+            ctx.strokeRect(bx - bannerWidth/2, by - bannerHeight/2, bannerWidth, bannerHeight);
+            
+            ctx.fillStyle = "#ff4757";
+            ctx.font = "bold 15px 'Grandstander', cursive, Arial";
+            ctx.fillText(airplane.text, bx, by);
+            
+            ctx.font = "32px Arial";
+            ctx.save();
+            ctx.translate(airplane.x, airplane.y);
+            if (airplane.direction === -1) {
+                ctx.scale(-1, 1);
+            }
+            ctx.fillText("✈️", 0, 0);
+            ctx.restore();
+            
+            ctx.restore();
+
+            if ((airplane.direction === 1 && airplane.x > w + 600) || (airplane.direction === -1 && airplane.x < -600)) {
+                airplane.active = false;
+            }
         }
-        ctx.fillStyle = '#6b8292'; ctx.beginPath(); ctx.moveTo(0, baseGroundY); let mSpacing1 = Math.max(w / 3, 300); for (let i = 0; i <= w + mSpacing1; i += mSpacing1) { ctx.lineTo(i - mSpacing1 * 0.5, baseGroundY - 180); ctx.lineTo(i, baseGroundY); } ctx.lineTo(w, baseGroundY); ctx.closePath(); ctx.fill();
-        ctx.fillStyle = '#526675'; ctx.beginPath(); ctx.moveTo(0, baseGroundY); let mSpacing2 = Math.max(w / 4, 220); for (let i = 0; i <= w + mSpacing2; i += mSpacing2) { ctx.lineTo(i - mSpacing2 * 0.5, baseGroundY - 110); ctx.lineTo(i, baseGroundY); } ctx.lineTo(w, baseGroundY); ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#8B4513"; ctx.beginPath(); ctx.moveTo(0, h); for (let x = 0; x <= w; x += 10) ctx.lineTo(x, getGroundY(x)); ctx.lineTo(w, h); ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#2ecc71"; ctx.beginPath(); for (let x = 0; x <= w; x += 10) { let gy = getGroundY(x); if (x === 0) ctx.moveTo(x, gy); else ctx.lineTo(x, gy); } for (let x = w; x >= 0; x -= 10) ctx.lineTo(x, getGroundY(x) + 18); ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#27ae60"; for(let gx = 0; gx < w; gx += 20) ctx.fillRect(gx, getGroundY(gx), 10, 6);
+
+        ctx.fillStyle = '#6b8292';
+        ctx.beginPath();
+        ctx.moveTo(0, baseGroundY);
+        let mountainSpacing = Math.max(w / 3, 300);
+        for (let i = 0; i <= w + mountainSpacing; i += mountainSpacing) {
+            ctx.lineTo(i - mountainSpacing * 0.5, baseGroundY - 180);
+            ctx.lineTo(i, baseGroundY);
+        }
+        ctx.lineTo(w, baseGroundY);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#526675';
+        ctx.beginPath();
+        ctx.moveTo(0, baseGroundY);
+        let mSpacing2 = Math.max(w / 4, 220);
+        for (let i = 0; i <= w + mSpacing2; i += mSpacing2) {
+            ctx.lineTo(i - mSpacing2 * 0.5, baseGroundY - 110);
+            ctx.lineTo(i, baseGroundY);
+        }
+        ctx.lineTo(w, baseGroundY);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = "#8B4513";
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        for (let x = 0; x <= w; x += 10) {
+            ctx.lineTo(x, getGroundY(x));
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = "#2ecc71";
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 10) {
+            let gy = getGroundY(x);
+            if (x === 0) ctx.moveTo(x, gy);
+            else ctx.lineTo(x, gy);
+        }
+        for (let x = w; x >= 0; x -= 10) {
+            let gy = getGroundY(x);
+            ctx.lineTo(x, gy + 18);
+        }
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.fillStyle = "#27ae60";
+        for(let gx = 0; gx < w; gx += 20) {
+            let gy = getGroundY(gx);
+            ctx.fillRect(gx, gy, 10, 6);
+        }
     }
 
     function checkCollision(obs) {
-        const pL = panda.x + 8, pR = panda.x + panda.width - 8, pT = panda.y + 8, pB = panda.y + panda.height - 8;
+        const pLeft = panda.x + 8;
+        const pRight = panda.x + panda.width - 8;
+        const pTop = panda.y + 8;
+        const pBottom = panda.y + panda.height - 8;
+
         if (obs.type === 'air_double') {
-            return (pL < obs.x + obs.size - 4 && pR > obs.x + 4 && pT < obs.y1 + obs.size - 4 && pB > obs.y1 + 4) ||
-                   (pL < obs.x + obs.size - 4 && pR > obs.x + 4 && pT < obs.y2 + obs.size - 4 && pB > obs.y2 + 4);
+            const oLeft1 = obs.x + 4;
+            const oRight1 = obs.x + obs.size - 4;
+            const oTop1 = obs.y1 + 4;
+            const oBottom1 = obs.y1 + obs.size - 4;
+
+            const oLeft2 = obs.x + 4;
+            const oRight2 = obs.x + obs.size - 4;
+            const oTop2 = obs.y2 + 4;
+            const oBottom2 = obs.y2 + obs.size - 4;
+
+            if ((pLeft < oRight1 && pRight > oLeft1 && pTop < oBottom1 && pBottom > oTop1) ||
+                (pLeft < oRight2 && pRight > oLeft2 && pTop < oBottom2 && pBottom > oTop2)) {
+                return true;
+            }
+            return false;
         } else {
-            return (pL < obs.x + obs.size - obs.hitbox.offset && pR > obs.x + obs.hitbox.offset && pT < obs.y + obs.size - obs.hitbox.offset && pB > obs.y + obs.hitbox.offset);
+            const oLeft = obs.x + obs.hitbox.offset;
+            const oRight = obs.x + obs.size - obs.hitbox.offset;
+            const oTop = obs.y + obs.hitbox.offset;
+            const oBottom = obs.y + obs.size - obs.hitbox.offset;
+
+            if (pLeft < oRight && pRight > oLeft && pTop < oBottom && pBottom > oTop) {
+                return true;
+            }
+            return false;
         }
     }
 
     function gameLoop() {
         if (isGameOver || isPaused || nicknameModal.style.display === 'block') return;
-        ctx.clearRect(0, 0, w, h); worldDistance += gameSpeed; drawBackground();
-        panda.update(); panda.draw(); distanceTraveled += gameSpeed;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        worldDistance += gameSpeed;
+
+        drawBackground();
+
+        panda.update();
+        panda.draw();
+
+        distanceTraveled += gameSpeed;
         if (distanceTraveled >= nextObstacleDistance) {
             spawnObstaclePattern();
-            const lvl = getLevel(); let baseMinDist = Math.max(380 - (lvl * 20), 280); let baseMaxDist = Math.max(600 - (lvl * 30), 450);
-            const safeMinDist = Math.max(baseMinDist, gameSpeed * Math.ceil((2 * Math.abs(panda.jumpPower)) / panda.gravity) + 50);
-            nextObstacleDistance = Math.random() < 0.3 ? baseMaxDist + 300 + Math.random() * 250 : safeMinDist + Math.random() * Math.max(baseMaxDist - safeMinDist, 0);
+            
+            const lvl = getLevel();
+            const jumpFlightFrames = Math.ceil((2 * Math.abs(panda.jumpPower)) / panda.gravity);
+            const flightDistance = gameSpeed * jumpFlightFrames;
+            
+            const safeMinDist = flightDistance + 130; 
+            const baseMaxDist = safeMinDist + 220;
+
+            if (Math.random() < 0.25) {
+                nextObstacleDistance = baseMaxDist + 250 + Math.random() * 200;
+            } else {
+                nextObstacleDistance = safeMinDist + Math.random() * (baseMaxDist - safeMinDist);
+            }
+            
             distanceTraveled = 0;
         }
-        for (let i = 0; i < obstacles.length; i++) { let obs = obstacles[i]; obs.update(); obs.draw(); if (checkCollision(obs)) gameOver(); }
-        obstacles = obstacles.filter(obs => obs.x + obs.size > 0); frames++;
-        if (frames % 10 === 0) {
-            score++; scoreEl.innerText = score; currentLevel = getLevel(); levelEl.innerText = currentLevel;
-            if (currentLevel > lastLevel) {
-                lastLevel = currentLevel; scoreContainer.classList.add('level-flash'); setTimeout(() => scoreContainer.classList.remove('level-flash'), 600);
-                let triggerAirplane = (currentLevel === 3 && !airplaneLevel3Triggered) ? (airplaneLevel3Triggered = true) : (currentLevel > 3 && Math.random() < 0.65);
-                if (triggerAirplane && !airplane.active) { airplane.direction = Math.random() < 0.5 ? 1 : -1; airplane.y = (h * 0.42) + Math.random() * (h * 0.1); airplane.x = airplane.direction === 1 ? -450 : w + 450; airplane.active = true; }
+
+        for (let i = 0; i < obstacles.length; i++) {
+            let obs = obstacles[i];
+            obs.update();
+            obs.draw();
+
+            if (checkCollision(obs)) {
+                gameOver();
             }
+        }
+
+        obstacles = obstacles.filter(obs => obs.x + obs.size > 0);
+
+        frames++;
+        if (frames % 10 === 0) {
+            score++;
+            scoreEl.innerText = score;
+            
+            currentLevel = getLevel();
+            levelEl.innerText = currentLevel;
+
+            if (currentLevel > lastLevel) {
+                lastLevel = currentLevel;
+                scoreContainer.classList.add('level-flash');
+                setTimeout(() => scoreContainer.classList.remove('level-flash'), 600);
+
+                let triggerAirplane = false;
+                if (currentLevel === 3 && !airplaneLevel3Triggered) {
+                    triggerAirplane = true;
+                    airplaneLevel3Triggered = true;
+                } else if (currentLevel > 3 && Math.random() < 0.65) {
+                    triggerAirplane = true;
+                }
+
+                if (triggerAirplane && !airplane.active) {
+                    airplane.direction = Math.random() < 0.5 ? 1 : -1;
+                    airplane.y = (h * 0.42) + Math.random() * (h * 0.1);
+                    airplane.x = airplane.direction === 1 ? -450 : w + 450;
+                    airplane.active = true;
+                }
+            }
+
             gameSpeed = Math.min(10.5, 5 + (currentLevel - 1) * 0.9 + Math.floor(score / 50) * 0.2);
         }
+
         animationId = requestAnimationFrame(gameLoop);
     }
 
-    async function gameOver() {
-        isGameOver = true; finalScoreEl.innerText = score;
-        lastScore = score; lastScoreEl.innerText = lastScore; localStorage.setItem('pandarun_last_score', lastScore);
-        if (score > bestScore) { bestScore = score; bestScoreEl.innerText = bestScore; localStorage.setItem('pandarun_best_score', bestScore); bestScoreNotice.style.display = 'flex'; } else bestScoreNotice.style.display = 'none';
+    function gameOver() {
+        isGameOver = true;
+        finalScoreEl.innerText = score;
+
+        let challengeBanner = document.getElementById('challenge-result-banner');
+        if (isChallengeMode && currentRoomId) {
+            fetch('/api/games_challenge-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'submit', roomId: currentRoomId, username: nickname, score: score })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.state.status === 'finished') {
+                    let st = data.state;
+                    let p1Score = st.p1_score !== null ? st.p1_score : 0;
+                    let p2Score = st.p2_score !== null ? st.p2_score : 0;
+                    let resText = "";
+                    if (p1Score > p2Score) resText = (st.p1 === nickname) ? "Hai vinto la sfida! 🎉" : (st.p1 + " ha vinto!");
+                    else if (p2Score > p1Score) resText = (st.p2 === nickname) ? "Hai vinto la sfida! 🎉" : (st.p2 + " ha vinto!");
+                    else resText = "La sfida è un pareggio! 🤝";
+                    challengeBanner.style.display = 'block';
+                    challengeBanner.innerText = `[Sfida] ${st.p1}: ${p1Score} | ${st.p2}: ${p2Score} — ${resText}`;
+                } else {
+                    challengeBanner.style.display = 'block';
+                    challengeBanner.innerText = "Punteggio inviato! In attesa dell'avversario...";
+                }
+            })
+            .catch(err => console.error(err));
+        } else {
+            challengeBanner.style.display = 'none';
+        }
+
+        let isNewRecord = score > bestScore;
+        if (isNewRecord && score > 0) {
+            bestScoreNotice.style.display = 'flex';
+        } else {
+            bestScoreNotice.style.display = 'none';
+        }
+
+        lastScore = score;
+        lastScoreEl.innerText = lastScore;
+        localStorage.setItem('pandarun_last_score', lastScore);
+
+        if (score > bestScore) {
+            bestScore = score;
+            bestScoreEl.innerText = bestScore;
+            localStorage.setItem('pandarun_best_score', bestScore);
+        }
 
         if (nickname) {
-            fetch('/api/games_leaderboard-UPVapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ game: 'pandarun', username: nickname, score: score }) });
+            fetch('/api/games_leaderboard-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ game: 'pandarun', username: nickname, score: score })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.bestScore > bestScore) {
+                        bestScore = data.bestScore;
+                        bestScoreEl.innerText = bestScore;
+                        localStorage.setItem('pandarun_best_score', bestScore);
+                    }
+                }
+            })
+            .catch(err => console.error(err));
         }
 
         gameOverScreen.style.display = 'block';
-        ctx.clearRect(0, 0, w, h); drawBackground(); panda.draw(); obstacles.forEach(obs => obs.draw());
-
-        if (isInChallenge) {
-            gameOverButtons.style.display = 'none';
-            challengeStatusUi.style.display = 'block';
-            challengeStatusUi.innerHTML = "📝 Punteggio inviato... in attesa dell'avversario ⏳";
-            await apiChallenge('submit', { score: score });
-        } else {
-            gameOverButtons.style.display = 'block';
-            challengeStatusUi.style.display = 'none';
-        }
-    }
-
-    function renderChallengeResults() {
-        if (!challengeState || challengeState.status !== 'finished') return;
         
-        let p1Score = challengeState.p1_score || 0;
-        let p2Score = challengeState.p2_score || 0;
-        let myScore = nickname === challengeState.p1 ? p1Score : p2Score;
-        let oppScore = nickname === challengeState.p1 ? p2Score : p1Score;
-        let oppName = nickname === challengeState.p1 ? challengeState.p2 : challengeState.p1;
-
-        let resText = myScore > oppScore ? "🏆 HAI VINTO! 🎉" : myScore < oppScore ? "💀 HAI PERSO!" : "🤝 PAREGGIO!";
-        
-        challengeStatusUi.innerHTML = `
-            <div style="font-size:18px; margin: 10px 0;">${resText}</div>
-            <div style="color:#555;">Tu: <b>${myScore}</b> | ${oppName}: <b>${oppScore}</b></div>
-            <br>
-            <button class="btn" onclick="requestRematch()" style="font-size: 14px; width: 140px;">Nuova Sfida</button>
-            <button class="btn btn-quit" onclick="quitChallenge()" style="font-size: 14px; width: 140px;">Esci</button>
-        `;
-    }
-
-    async function requestRematch() {
-        challengeStatusUi.innerHTML = "⏳ In attesa che l'avversario accetti...";
-        await apiChallenge('rematch');
+        ctx.clearRect(0, 0, w, h);
+        drawBackground();
+        panda.draw();
+        obstacles.forEach(obs => obs.draw());
     }
 
     function resetGame() {
-        isGameOver = false; isPaused = false; pauseBtn.innerText = '⏸'; score = 0; currentLevel = 1; lastLevel = 1; gameSpeed = 5; frames = 0; distanceTraveled = 0; worldDistance = 0; nextObstacleDistance = 350; obstacles = []; airplane.active = false; airplaneLevel3Triggered = false; bestScoreNotice.style.display = 'none';
-        panda.y = baseGroundY - panda.height; scoreEl.innerText = score; levelEl.innerText = currentLevel; gameOverScreen.style.display = 'none';
+        isGameOver = false;
+        isPaused = false;
+        pauseBtn.innerText = '⏸';
+        score = 0;
+        currentLevel = 1;
+        lastLevel = 1;
+        gameSpeed = 5;
+        frames = 0;
+        distanceTraveled = 0;
+        worldDistance = 0;
+        nextObstacleDistance = 350;
+        obstacles = [];
+        airplane.active = false;
+        airplaneLevel3Triggered = false;
+        bestScoreNotice.style.display = 'none';
+        document.getElementById('challenge-result-banner').style.display = 'none';
+        panda.y = baseGroundY - panda.height;
+        scoreEl.innerText = score;
+        levelEl.innerText = currentLevel;
+        gameOverScreen.style.display = 'none';
         gameLoop();
+    }
+
+    // Gestione unificata dei controlli Touch (Tap + Swipe in Su) e Tastiera/Mouse
+    let touchStartY = 0;
+    let touchHandled = false;
+
+    function handleTouchStart(e) {
+        if (nicknameModal.style.display === 'block') return;
+        if (e.target.closest('#right-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+
+        touchStartY = e.touches[0].clientY;
+        touchHandled = false;
+
+        // Salto immediato al tap
+        if (!isGameOver && !isPaused) {
+            panda.jump();
+            touchHandled = true;
+            if (e.cancelable) e.preventDefault();
+        }
+    }
+
+    function handleTouchMove(e) {
+        if (nicknameModal.style.display === 'block') return;
+        if (e.target.closest('#right-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+
+        let touchCurrentY = e.touches[0].clientY;
+        let deltaY = touchCurrentY - touchStartY;
+
+        // Gestione Swipe verso l'alto (movimento di almeno 20px verso l'alto)
+        if (deltaY < -20 && !touchHandled) {
+            if (!isGameOver && !isPaused) {
+                panda.jump();
+                touchHandled = true;
+                if (e.cancelable) e.preventDefault();
+            }
+        }
     }
 
     function handleInput(e) {
         if (nicknameModal.style.display === 'block') return;
-        if (e.type === 'touchstart' || e.type === 'mousedown' || (e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp'))) {
-            if (e.target.closest('#right-controls') || e.target.closest('#left-controls') || e.target.closest('.modal') || e.target.closest('#game-over') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
-            if (!isGameOver && !isPaused) { panda.jump(); if(e.cancelable) e.preventDefault(); }
+        if (e.type === 'mousedown' || (e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp'))) {
+            if (e.target.closest('#right-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+            if (!isGameOver && !isPaused) {
+                panda.jump();
+                if (e.cancelable) e.preventDefault();
+            }
         }
     }
 
-    window.addEventListener('touchstart', handleInput, {passive: false});
-    window.addEventListener('mousedown', handleInput); window.addEventListener('keydown', handleInput);
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('mousedown', handleInput);
+    window.addEventListener('keydown', handleInput);
+
     panda.y = baseGroundY - panda.height;
+    if (nickname) {
+        gameLoop();
+    }
 </script>
 </body>
 </html>
