@@ -65,9 +65,10 @@
     /* Titolo PandaRun in sbatuffo blue */
     #game-title {
         position: absolute;
-        top: 14px;
-        left: 20px;
-        font-size: 42px;
+        top: 10px;
+        left: 18px;
+        font-size: 54px;
+        line-height: 1;
         color: var(--sbatuffo-blue);
         font-weight: 900;
         letter-spacing: 2px;
@@ -81,12 +82,15 @@
         pointer-events: none;
         z-index: 10;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        height: 38px;
     }
 
     #right-controls {
         position: absolute;
         top: 15px;
-        right: 20px;
+        right: 16px;
         display: flex;
         gap: 6px;
         align-items: center;
@@ -94,8 +98,8 @@
         pointer-events: auto;
     }
     .top-btn {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         color: white;
         font-weight: 900;
         border: 2px solid #333;
@@ -109,16 +113,64 @@
         transition: transform 0.1s ease;
         font-family: 'Grandstander', cursive;
         background: #19af4e;
+        font-size: 11px;
+        line-height: 1;
     }
     .top-btn:active {
         transform: translateY(3px);
         box-shadow: 0 0 0 #333;
     }
-    #info-btn { background: #3742fa; font-size: 14px; font-style: italic; }
-    #leaderboard-btn { background: #fbc531; font-size: 13px; }
-    #challenge-btn { background: #8e44ad; font-size: 13px; }
-    #pause-btn { background: #ffa502; font-size: 13px; }
-    #close-btn { background: #ff4757; font-size: 14px; }
+    #info-btn { background: #3742fa; font-size: 11px; font-style: italic; }
+    #leaderboard-btn { background: #fbc531; font-size: 10px; }
+    #challenge-btn { background: #8e44ad; font-size: 10px; }
+    #pause-btn { background: #ffa502; font-size: 10px; }
+    #close-btn { background: #ff4757; font-size: 11px; }
+
+    @media (max-width: 768px) {
+        #game-title {
+            font-size: 38px;
+            top: 14px;
+            left: 14px;
+            height: 30px;
+            letter-spacing: 1px;
+        }
+
+        #right-controls {
+            top: 13px;
+            right: 12px;
+            gap: 4px;
+        }
+
+        .top-btn {
+            width: 24px;
+            height: 24px;
+            border-width: 1.5px;
+            box-shadow: 0 2px 0 #333;
+            font-size: 9px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #game-title {
+            font-size: 28px;
+            top: 15px;
+            left: 12px;
+            height: 26px;
+        }
+
+        #right-controls {
+            top: 14px;
+            right: 10px;
+            gap: 3px;
+        }
+
+        .top-btn {
+            width: 22px;
+            height: 22px;
+            font-size: 8px;
+            border-width: 1.5px;
+        }
+    }
 
     #score-container {
         position: absolute;
