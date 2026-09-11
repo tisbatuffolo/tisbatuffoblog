@@ -6,6 +6,10 @@
 <title>PandaBiscio</title>
 <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@900&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+    :root {
+        --sbatuffo-blue: #0000ff;
+    }
+
     body, html {
         margin: 0;
         padding: 0;
@@ -50,21 +54,31 @@
     }
     #game-title {
         position: absolute;
-        top: 15px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 30px;
-        color: #0000ff;
+        top: 10px;
+        left: 18px;
+        font-size: 54px;
+        line-height: 1;
+        color: var(--sbatuffo-blue);
         font-weight: 900;
-        text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 #333;
+        letter-spacing: 2px;
+        text-shadow: 
+            -2px -2px 0 #ffffff,  
+             2px -2px 0 #ffffff,
+            -2px  2px 0 #ffffff,
+             2px  2px 0 #ffffff,
+             4px  4px 0 #00263e,
+             6px  6px 10px rgba(0,0,0,0.4);
         pointer-events: none;
         z-index: 10;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        height: 38px;
     }
     #right-controls {
         position: absolute;
         top: 15px;
-        right: 20px;
+        right: 16px;
         display: flex;
         gap: 6px;
         align-items: center;
@@ -72,8 +86,8 @@
         pointer-events: auto;
     }
     .top-btn {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
         color: white;
         font-weight: 900;
         border: 2px solid #333;
@@ -87,15 +101,64 @@
         transition: transform 0.1s ease;
         font-family: 'Grandstander', cursive;
         background: #19af4e;
+        font-size: 11px;
+        line-height: 1;
     }
     .top-btn:active {
         transform: translateY(3px);
         box-shadow: 0 0 0 #333;
     }
-    #info-btn { background: #3742fa; font-size: 14px; font-style: italic; }
-    #leaderboard-btn { background: #fbc531; font-size: 13px; }
-    #pause-btn { background: #ffa502; font-size: 13px; }
-    #close-btn { background: #ff4757; font-size: 14px; }
+    #info-btn { background: #3742fa; font-size: 11px; font-style: italic; }
+    #leaderboard-btn { background: #fbc531; font-size: 10px; }
+    #challenge-btn { background: #8e44ad; font-size: 10px; }
+    #pause-btn { background: #ffa502; font-size: 10px; }
+    #close-btn { background: #ff4757; font-size: 11px; }
+
+    @media (max-width: 768px) {
+        #game-title {
+            font-size: 38px;
+            top: 14px;
+            left: 14px;
+            height: 30px;
+            letter-spacing: 1px;
+        }
+
+        #right-controls {
+            top: 13px;
+            right: 12px;
+            gap: 4px;
+        }
+
+        .top-btn {
+            width: 24px;
+            height: 24px;
+            border-width: 1.5px;
+            box-shadow: 0 2px 0 #333;
+            font-size: 9px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #game-title {
+            font-size: 26px;
+            top: 18px;
+            left: 15px;
+            height: 26px;
+        }
+
+        #right-controls {
+            top: 14px;
+            right: 10px;
+            gap: 3px;
+        }
+
+        .top-btn {
+            width: 22px;
+            height: 22px;
+            font-size: 8px;
+            border-width: 1.5px;
+        }
+    }
 
     #score-container {
         position: absolute;
@@ -186,15 +249,17 @@
         display: none;
         pointer-events: auto;
         z-index: 20;
+        max-width: 310px;
+        width: 85%;
     }
-    #game-over h1 { margin: 0 0 15px; color: #ff4757; font-size: 26px; }
+    #game-over h1 { margin: 0 0 10px; color: #ff4757; font-size: 26px; }
     
     #best-score-notice {
         color: #e67e22;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 900;
         display: none;
-        margin: 2px 0 16px 0;
+        margin: 4px 0 12px 0;
         text-shadow: 1px 1px 0 #ffeaa7;
         align-items: center;
         justify-content: center;
@@ -205,8 +270,8 @@
         background: #19af4e;
         color: white;
         border: 2px solid #1a1a1a;
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 10px 16px;
+        font-size: 14px;
         font-family: 'Grandstander', cursive;
         border-radius: 30px;
         cursor: pointer;
@@ -214,10 +279,16 @@
         text-decoration: none;
         display: inline-block;
         margin: 4px;
+        transition: transform 0.1s ease, background 0.2s ease;
     }
     .btn:active {
         transform: translateY(3px);
         box-shadow: 0 0 0 #1a1a1a;
+    }
+    .btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none !important;
     }
 </style>
 </head>
@@ -228,12 +299,13 @@
 <div id="ui-layer">
     <div id="left-controls">
         <button id="info-btn" class="top-btn" title="Info">i</button>
-        <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
     </div>
     
     <div id="game-title">PandaBiscio</div>
     
     <div id="right-controls">
+        <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
+        <button id="challenge-btn" class="top-btn" title="Modalità Sfida">⚔️</button>
         <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
         <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
     </div>
@@ -266,14 +338,44 @@
         </div>
         <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
     </div>
+
+    <!-- Modale Gestione Sfida 1v1 -->
+    <div id="challenge-modal" class="modal">
+        <h2>Sfida 1v1 ⚔️</h2>
+        <div id="challenge-menu-view">
+            <p>Sfida un amico in tempo reale inviandogli il codice stanza!</p>
+            <button class="btn" id="create-challenge-btn" style="background:#8e44ad; width:100%; margin-bottom:8px;">Crea Nuova Sfida 🎮</button>
+            <div style="margin: 8px 0; font-weight:bold; color:#777; font-size:12px;">OPPURE</div>
+            <input type="text" id="room-input" placeholder="Codice Stanza (es. AB12CD)" maxlength="6" style="text-transform:uppercase; margin-bottom:10px;">
+            <button class="btn" id="join-challenge-btn" style="background:#2980b9; width:100%;">Entra nella Sfida 🚀</button>
+            <br><br>
+            <button class="btn" onclick="closeModal('challenge-modal')" style="background:#95a5a6; font-size:13px; width:120px; padding:6px;">Chiudi</button>
+        </div>
+        <div id="challenge-room-view" style="display:none;">
+            <p id="room-status-text" style="margin: 5px 0 10px; font-size: 15px;">
+                Codice Stanza: <b id="room-code-display" style="color: #8e44ad; font-size: 20px; letter-spacing: 2px;">------</b>
+            </p>
+            <div id="room-details" style="font-size:13px; color:#444; margin-bottom:12px; background:#f1f2f6; padding:12px; border-radius:12px; line-height: 1.4;">
+                In attesa dell'avversario...
+            </div>
+            <div style="display: flex; gap: 6px; justify-content: center; align-items: center; margin-top: 10px;">
+                <button class="btn" id="challenge-invite-btn" style="background:#25D366; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Invita 💬</button>
+                <button class="btn" id="challenge-copy-btn" style="background:#e67e22; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Copia 📋</button>
+                <button class="btn" id="challenge-quit-btn" style="background:#ff4757; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Abbandona 🚪</button>
+            </div>
+        </div>
+    </div>
     
     <div id="game-over">
         <h1>Ops! Hai perso!</h1>
-        <p style="margin-bottom: 6px;">Punteggio finale: <span id="final-score">0</span></p>
+        <p style="margin-bottom: 4px;">Punteggio finale: <span id="final-score">0</span></p>
+        <div id="challenge-result-banner" style="display:none; margin:8px 0;"></div>
         <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
-        <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
-        <br><br>
-        <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:14px; width:180px; padding:8px; box-sizing:border-box;">Torna ai<br>Panda Games</a>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 10px;">
+            <button class="btn" id="play-again-btn" style="font-size: 14px; width: 210px; padding: 8px; box-sizing: border-box;" onclick="resetGame()">Rigioca 🐼</button>
+            <button class="btn" id="quit-challenge-btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
+            <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
+        </div>
     </div>
 </div>
 
@@ -291,11 +393,19 @@
     const bestScoreNotice = document.getElementById('best-score-notice');
     const infoModal = document.getElementById('info-modal');
     const leaderboardModal = document.getElementById('leaderboard-modal');
+    const challengeModal = document.getElementById('challenge-modal');
     const nicknameModal = document.getElementById('nickname-modal');
     const nicknameInput = document.getElementById('nickname-input');
     const saveNicknameBtn = document.getElementById('save-nickname-btn');
     const leaderboardList = document.getElementById('leaderboard-list');
     const pauseBtn = document.getElementById('pause-btn');
+
+    let currentRoomId = null;
+    let challengePollInterval = null;
+    let isChallengeMode = false;
+    let hasSubmittedScore = false;
+    let myRematchRequested = false;
+    let lastKnownStatus = null;
 
     let score = 0;
     let bestScore = parseInt(localStorage.getItem('pandabiscio_best_score')) || 0;
@@ -360,6 +470,320 @@
 
     document.getElementById('info-btn').addEventListener('click', () => openModal(infoModal));
     document.getElementById('leaderboard-btn').addEventListener('click', () => openModal(leaderboardModal));
+    document.getElementById('challenge-btn').addEventListener('click', () => {
+        document.getElementById('challenge-menu-view').style.display = 'block';
+        document.getElementById('challenge-room-view').style.display = 'none';
+        openModal(challengeModal);
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomParam = urlParams.get('room') || urlParams.get('code');
+    if (roomParam) {
+        document.getElementById('room-input').value = roomParam.toUpperCase();
+        if (nickname) {
+            openModal(challengeModal);
+        }
+    }
+
+    document.getElementById('create-challenge-btn').addEventListener('click', () => {
+        if (!nickname) return;
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'create', username: nickname })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                currentRoomId = data.roomId;
+                isChallengeMode = true;
+                hasSubmittedScore = false;
+                myRematchRequested = false;
+                lastKnownStatus = 'waiting';
+
+                document.getElementById('challenge-menu-view').style.display = 'none';
+                document.getElementById('challenge-room-view').style.display = 'block';
+                document.getElementById('room-code-display').innerText = currentRoomId;
+                document.getElementById('room-details').innerHTML = `Stanza creata con successo! 🎮<br>Condividi il codice con il tuo avversario per iniziare.`;
+                startChallengePolling();
+            } else {
+                alert('Errore creazione sfida: ' + data.error);
+            }
+        })
+        .catch(err => alert('Errore di rete'));
+    });
+
+    document.getElementById('join-challenge-btn').addEventListener('click', () => {
+        let code = document.getElementById('room-input').value.trim().toUpperCase();
+        if (!code || code.length < 6) {
+            alert('Inserisci un codice stanza valido di 6 caratteri.');
+            return;
+        }
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'join', roomId: code, username: nickname })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                currentRoomId = code;
+                isChallengeMode = true;
+                hasSubmittedScore = false;
+                myRematchRequested = false;
+                lastKnownStatus = data.state.status;
+
+                document.getElementById('challenge-menu-view').style.display = 'none';
+                document.getElementById('challenge-room-view').style.display = 'block';
+                document.getElementById('room-code-display').innerText = currentRoomId;
+                updateChallengeUI(data.state);
+                startChallengePolling();
+            } else {
+                alert('Errore accesso stanza: ' + data.error);
+            }
+        })
+        .catch(err => alert('Errore di connessione'));
+    });
+
+    document.getElementById('challenge-invite-btn').addEventListener('click', () => {
+        if (!currentRoomId) return;
+        const gameUrl = `${window.location.origin}${window.location.pathname}?room=${currentRoomId}`;
+        const text = `Sfidami a PandaBiscio! 🐼🐍\nCodice Stanza: *${currentRoomId}*\nClicca sul link per giocare: ${gameUrl}`;
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        window.open(waUrl, '_blank');
+    });
+
+    document.getElementById('challenge-copy-btn').addEventListener('click', () => {
+        if (!currentRoomId) return;
+        const btn = document.getElementById('challenge-copy-btn');
+        const textToCopy = currentRoomId;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textToCopy).then(showCopied).catch(() => fallbackCopy(textToCopy));
+        } else {
+            fallbackCopy(textToCopy);
+        }
+
+        function showCopied() {
+            const oldText = btn.innerHTML;
+            btn.innerHTML = 'Copiato! ✅';
+            setTimeout(() => { btn.innerHTML = oldText; }, 2000);
+        }
+
+        function fallbackCopy(str) {
+            const el = document.createElement('textarea');
+            el.value = str;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showCopied();
+        }
+    });
+
+    function quitChallenge() {
+        if (currentRoomId) {
+            fetch('/api/games_challenge-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'quit', roomId: currentRoomId, username: nickname })
+            }).catch(() => {});
+        }
+        stopChallengePolling();
+        currentRoomId = null;
+        isChallengeMode = false;
+        hasSubmittedScore = false;
+        myRematchRequested = false;
+        lastKnownStatus = null;
+        
+        document.getElementById('challenge-result-banner').style.display = 'none';
+        document.getElementById('challenge-result-banner').innerHTML = '';
+        document.getElementById('quit-challenge-btn').style.display = 'none';
+        
+        const playBtn = document.getElementById('play-again-btn');
+        playBtn.innerText = 'Rigioca 🐼';
+        playBtn.style.background = '#19af4e';
+        playBtn.disabled = false;
+        playBtn.onclick = resetGame;
+
+        closeModal('challenge-modal');
+    }
+
+    document.getElementById('challenge-quit-btn').addEventListener('click', quitChallenge);
+    document.getElementById('quit-challenge-btn').addEventListener('click', () => {
+        quitChallenge();
+        if (isGameOver) resetGame();
+    });
+
+    function startChallengePolling() {
+        if (challengePollInterval) clearInterval(challengePollInterval);
+        challengePollInterval = setInterval(() => {
+            if (!currentRoomId) return;
+            fetch('/api/games_challenge-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'status', roomId: currentRoomId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.state) {
+                    updateChallengeUI(data.state);
+                }
+            })
+            .catch(err => console.error(err));
+        }, 1500);
+    }
+
+    function stopChallengePolling() {
+        if (challengePollInterval) {
+            clearInterval(challengePollInterval);
+            challengePollInterval = null;
+        }
+    }
+
+    function updateChallengeUI(state) {
+        if (!isChallengeMode) return;
+
+        const detailsEl = document.getElementById('room-details');
+        const bannerEl = document.getElementById('challenge-result-banner');
+        const playBtn = document.getElementById('play-again-btn');
+        const quitBtn = document.getElementById('quit-challenge-btn');
+
+        const iAmP1 = (nickname === state.p1);
+        const oppName = iAmP1 ? (state.p2 || 'Avversario') : state.p1;
+        const myScore = iAmP1 ? state.p1_score : state.p2_score;
+        const oppScore = iAmP1 ? state.p2_score : state.p1_score;
+        const myRematch = iAmP1 ? state.p1_rematch : state.p2_rematch;
+        const oppRematch = iAmP1 ? state.p2_rematch : state.p1_rematch;
+
+        if (state.status === 'closed') {
+            stopChallengePolling();
+            alert("L'avversario ha abbandonato la sfida.");
+            quitChallenge();
+            return;
+        }
+
+        if (state.status === 'waiting') {
+            detailsEl.innerHTML = `Stanza: <b>${currentRoomId}</b><br>In attesa che <b>${oppName}</b> si unisca...`;
+        }
+
+        if (state.status === 'playing') {
+            detailsEl.innerHTML = `Sfida in corso contro <b>${oppName}</b>! 🎮`;
+            
+            if (challengeModal.style.display === 'block' || isGameOver || lastKnownStatus === 'finished' || lastKnownStatus === 'waiting') {
+                closeModal('challenge-modal');
+                hasSubmittedScore = false;
+                myRematchRequested = false;
+                bannerEl.style.display = 'none';
+                bannerEl.innerHTML = '';
+                quitBtn.style.display = 'none';
+                lastKnownStatus = 'playing';
+                resetGame();
+                return;
+            }
+        }
+
+        if (isGameOver && hasSubmittedScore && state.status !== 'finished') {
+            bannerEl.style.display = 'block';
+            bannerEl.innerHTML = `
+                <div style="background: rgba(41, 128, 185, 0.1); border: 2px dashed #2980b9; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
+                    <div style="font-size: 14px; font-weight: 900; color: #2980b9;">📤 Punteggio inviato: ${score} pts</div>
+                    <div style="font-size: 12px; color: #555; margin-top: 4px; font-weight: 600;">⏳ In attesa che <b>${oppName}</b> finisca la partita...</div>
+                </div>
+            `;
+            playBtn.style.display = 'none';
+            quitBtn.style.display = 'inline-block';
+        }
+
+        if (state.status === 'finished') {
+            lastKnownStatus = 'finished';
+            
+            let p1S = state.p1_score !== null ? state.p1_score : 0;
+            let p2S = state.p2_score !== null ? state.p2_score : 0;
+            let myS = iAmP1 ? p1S : p2S;
+            let oppS = iAmP1 ? p2S : p1S;
+
+            let resultTitle = "";
+            let resultColor = "";
+
+            if (myS > oppS) {
+                resultTitle = "🎉 VITTORIA! 🎉";
+                resultColor = "#19af4e";
+            } else if (oppS > myS) {
+                resultTitle = "💔 SCONFITTA!";
+                resultColor = "#ff4757";
+            } else {
+                resultTitle = "🤝 PAREGGIO!";
+                resultColor = "#f39c12";
+            }
+
+            let rematchStatusText = "";
+            if (oppRematch && !myRematch) {
+                rematchStatusText = `<div style="margin-top: 6px; color: #8e44ad; font-weight: 900; font-size: 13px;">🎮 ${oppName} ti ha invitato a una rivincita!</div>`;
+            } else if (myRematch && !oppRematch) {
+                rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 13px;">⏳ Richiesta inviata! In attesa che ${oppName} accetti...</div>`;
+            }
+
+            if (isGameOver) {
+                bannerEl.style.display = 'block';
+                bannerEl.innerHTML = `
+                    <div style="background: rgba(142, 68, 173, 0.08); border: 2px solid ${resultColor}; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
+                        <div style="font-size: 17px; font-weight: 900; color: ${resultColor}; margin-bottom: 4px;">${resultTitle}</div>
+                        <div style="font-size: 13px; color: #2c3e50; font-weight: 700;">
+                            Tu (<b>${nickname}</b>): <span style="color:#27ae60;">${myS} pts</span> &nbsp;|&nbsp; 
+                            <b>${oppName}</b>: <span style="color:#e74c3c;">${oppS} pts</span>
+                        </div>
+                        ${rematchStatusText}
+                    </div>
+                `;
+
+                playBtn.style.display = 'inline-block';
+                quitBtn.style.display = 'inline-block';
+                playBtn.style.background = '#8e44ad';
+
+                if (oppRematch && !myRematch) {
+                    playBtn.innerText = "Accetta Rivincita ⚔️";
+                    playBtn.disabled = false;
+                    playBtn.onclick = requestRematch;
+                } else if (myRematch && !oppRematch) {
+                    playBtn.innerText = "In attesa... ⏳";
+                    playBtn.disabled = true;
+                } else {
+                    playBtn.innerText = "Rivincita ⚔️";
+                    playBtn.disabled = false;
+                    playBtn.onclick = requestRematch;
+                }
+            }
+
+            detailsEl.innerHTML = `
+                <b>Sfida conclusa!</b><br>
+                ${nickname}: ${myS} pts | ${oppName}: ${oppS} pts<br>
+                <b style="color:${resultColor};">${resultTitle}</b>
+            `;
+        }
+    }
+
+    function requestRematch() {
+        if (!currentRoomId || !nickname) return;
+        
+        myRematchRequested = true;
+        const playBtn = document.getElementById('play-again-btn');
+        playBtn.innerText = "In attesa... ⏳";
+        playBtn.disabled = true;
+
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'rematch', roomId: currentRoomId, username: nickname })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.state) {
+                updateChallengeUI(data.state);
+            }
+        })
+        .catch(err => console.error(err));
+    }
 
     function loadLeaderboard() {
         leaderboardList.innerHTML = "Caricamento...";
@@ -403,7 +827,6 @@
     }
     pauseBtn.addEventListener('click', togglePause);
 
-    // --- SNAKE GAME CONFIG & STATE ---
     const gridSize = 20;
     let tileCountX, tileCountY;
     let snake = [];
@@ -465,6 +888,23 @@
         levelEl.innerText = currentLevel;
         isGameOver = false;
         gameOverScreen.style.display = 'none';
+        
+        hasSubmittedScore = false;
+        myRematchRequested = false;
+
+        document.getElementById('challenge-result-banner').style.display = 'none';
+        document.getElementById('challenge-result-banner').innerHTML = '';
+
+        const playBtn = document.getElementById('play-again-btn');
+        playBtn.disabled = false;
+
+        if (!isChallengeMode) {
+            playBtn.innerText = 'Rigioca 🐼';
+            playBtn.style.background = '#19af4e';
+            playBtn.onclick = resetGame;
+            document.getElementById('quit-challenge-btn').style.display = 'none';
+        }
+
         spawnFood();
         
         if (gameInterval) clearInterval(gameInterval);
@@ -479,13 +919,11 @@
 
         const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
-        // Collision Check (Walls)
         if (head.x < 0 || head.x >= tileCountX || head.y < 0 || head.y >= tileCountY) {
             gameOver();
             return;
         }
 
-        // Collision Check (Self)
         for (let part of snake) {
             if (head.x === part.x && head.y === part.y) {
                 gameOver();
@@ -495,7 +933,6 @@
 
         snake.unshift(head);
 
-        // Check Food Eaten
         if (head.x === food.x && head.y === food.y) {
             score += 10;
             scoreEl.innerText = score;
@@ -523,12 +960,10 @@
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // --- DISEGNO DEI CONFINI DELL'AREA DI GIOCO ---
         ctx.strokeStyle = '#c0392b';
         ctx.lineWidth = 6;
         ctx.strokeRect(3, 3, canvas.width - 6, canvas.height - 6);
 
-        // Draw grid pattern softly
         ctx.strokeStyle = 'rgba(0, 0, 0, 0.04)';
         ctx.lineWidth = 1;
         for (let x = gridSize; x < canvas.width; x += gridSize) {
@@ -544,13 +979,11 @@
             ctx.stroke();
         }
 
-        // Draw Food
         ctx.font = `${gridSize * 1.2}px Arial`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(food.type, (food.x + 0.5) * gridSize, (food.y + 0.5) * gridSize + 2);
 
-        // Draw Snake Body & Panda Head
         for (let i = snake.length - 1; i >= 0; i--) {
             let part = snake[i];
             let px = part.x * gridSize;
@@ -578,6 +1011,36 @@
         clearInterval(gameInterval);
         finalScoreEl.innerText = score;
 
+        const playBtn = document.getElementById('play-again-btn');
+        const quitBtn = document.getElementById('quit-challenge-btn');
+
+        if (isChallengeMode && currentRoomId && !hasSubmittedScore) {
+            hasSubmittedScore = true;
+            playBtn.style.display = 'none';
+            quitBtn.style.display = 'inline-block';
+
+            fetch('/api/games_challenge-UPVapi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'submit', roomId: currentRoomId, username: nickname, score: score })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.state) {
+                    updateChallengeUI(data.state);
+                }
+            })
+            .catch(err => console.error(err));
+        } else if (!isChallengeMode) {
+            document.getElementById('challenge-result-banner').style.display = 'none';
+            quitBtn.style.display = 'none';
+            playBtn.style.display = 'inline-block';
+            playBtn.innerText = 'Rigioca 🐼';
+            playBtn.style.background = '#19af4e';
+            playBtn.disabled = false;
+            playBtn.onclick = resetGame;
+        }
+
         let isNewRecord = score > bestScore;
         if (isNewRecord && score > 0) {
             bestScoreNotice.style.display = 'flex';
@@ -592,7 +1055,6 @@
         if (score > bestScore) {
             bestScore = score;
             bestScoreEl.innerText = bestScore;
-            localStorage.setItem('pandabiscio_last_score', bestScore);
             localStorage.setItem('pandabiscio_best_score', bestScore);
         }
 
@@ -620,7 +1082,6 @@
         startGame();
     }
 
-    // Input handlers (Keyboard & Click/Tap & Swipes)
     function changeDirection(newDx, newDy) {
         if (newDx !== -dx || newDy !== -dy) {
             nextDx = newDx;
@@ -636,7 +1097,6 @@
         if (e.code === 'ArrowRight' || e.code === 'KeyD') { changeDirection(1, 0); e.preventDefault(); }
     });
 
-    // Gestione TAP direzionale basata sulla posizione toccata rispetto alla testa del pandabiscio
     function handleDirectionTap(clickX, clickY) {
         if (nicknameModal.style.display === 'block' || isGameOver || isPaused || snake.length === 0) return;
         
@@ -664,6 +1124,7 @@
     let touchStartTime = 0;
 
     window.addEventListener('touchstart', e => {
+        if (e.target.closest('#right-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
         touchStartTime = Date.now();
@@ -671,6 +1132,8 @@
 
     window.addEventListener('touchend', e => {
         if (nicknameModal.style.display === 'block') return;
+        if (e.target.closest('#right-controls') || e.target.closest('.modal') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+        
         let deltaX = e.changedTouches[0].clientX - touchStartX;
         let deltaY = e.changedTouches[0].clientY - touchStartY;
         let deltaTime = Date.now() - touchStartTime;
