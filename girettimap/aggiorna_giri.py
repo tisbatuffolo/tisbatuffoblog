@@ -21,9 +21,9 @@ gestendo l'infinite scroll, e produce:
         ID  = id numerico del percorso ricavato dall'URL del giro
 
 Uso:
-    python girettimap_scraper.py
-    python girettimap_scraper.py --debug       # salva screenshot/html di debug
-    python girettimap_scraper.py --headless    # esegue senza finestra visibile
+    python aggiorna_giri.py
+    python aggiorna_giri.py --debug       # salva screenshot/html di debug
+    python aggiorna_giri.py --headless    # esegue senza finestra visibile
 
 Dipendenze:
     pip install undetected-chromedriver selenium requests pillow
@@ -65,6 +65,7 @@ import logging
 import os
 import random
 import re
+import shutil
 import sys
 import time
 from typing import List, Optional
@@ -220,7 +221,7 @@ def _new_chrome_options(headless: bool) -> "uc.ChromeOptions":
     return options
 
 
-def build_driver(headless: bool = False, chrome_major: Optional[int] = None) -> "uc.Chrome":
+def build_driver(headless: bool = True, chrome_major: Optional[int] = None) -> "uc.Chrome":
     log.info(
         "Avvio Chrome in modalità %s.",
         "HEADLESS (nessuna finestra visibile)" if headless else "con finestra visibile",
@@ -669,6 +670,30 @@ def page_looks_blocked(driver) -> bool:
     return False
 
 
+def cleanup_output_artifacts(output_js_path: str, img_dir: str) -> None:
+    """Rimuove i file di output precedenti prima di rigenerare i dati.
+
+    Serve a evitare di lasciare immagini o file vecchi che non appartengono
+    più all'ultimo aggiornamento, garantendo una produzione pulita.
+    """
+    os.makedirs(img_dir, exist_ok=True)
+
+    if os.path.exists(output_js_path):
+        os.remove(output_js_path)
+        log.info("Rimosso file precedente: %s", output_js_path)
+
+    for name in os.listdir(img_dir):
+        full_path = os.path.join(img_dir, name)
+        try:
+            if os.path.isdir(full_path) and not os.path.islink(full_path):
+                shutil.rmtree(full_path)
+            else:
+                os.remove(full_path)
+            log.info("Rimosso artefatto precedente: %s", full_path)
+        except OSError as exc:
+            log.warning("Impossibile rimuovere %s: %s", full_path, exc)
+
+
 def load_list_page(driver) -> bool:
     """Carica la pagina della lista con un 'riscaldamento' della sessione:
     passa prima dalla home page (come farebbe un utente reale che arriva
@@ -720,7 +745,19 @@ def load_list_page(driver) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Scarica gli ultimi 9 giri da GirettiMap.")
-    parser.add_argument("--headless", action="store_true", help="esegue il browser senza finestra")
+    parser.add_argument(
+        "--headless",
+        dest="headless",
+        action="store_true",
+        default=True,
+        help="esegue il browser in background senza finestra (default)",
+    )
+    parser.add_argument(
+        "--visible",
+        dest="headless",
+        action="store_false",
+        help="apre la finestra del browser e lo esegue in modalità visibile",
+    )
     parser.add_argument("--debug", action="store_true", help="salva screenshot/html per debug")
     parser.add_argument(
         "--chrome-major", type=int, default=None,
@@ -729,6 +766,7 @@ def main() -> int:
     args = parser.parse_args()
 
     os.makedirs(IMG_DIR, exist_ok=True)
+    cleanup_output_artifacts(OUTPUT_JS, IMG_DIR)
 
     driver = build_driver(headless=args.headless, chrome_major=args.chrome_major)
     try:
