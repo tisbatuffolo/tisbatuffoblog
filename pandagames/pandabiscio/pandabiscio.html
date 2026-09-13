@@ -353,7 +353,11 @@
 
     <div id="score-container">
         <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name" style="color: var(--sbatuffo-blue);">Panda</span>!</div>
-        Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
+        <!-- 1) Badge evidenza modalità sfida -->
+        <div id="challenge-badge" style="display:none; background: #8e44ad; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin: 3px 0; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+            ⚔️ SFIDA: vs <span id="challenge-opp-name">--</span>
+        </div>
+        <div>Punti: <span id="score">0</span> | Livello: <span id="level">1</span></div>
         <span style="font-size: 12px; color: #666;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
     </div>
 
@@ -367,7 +371,7 @@
 
     <div id="info-modal" class="modal">
         <h2>Come Giocare</h2>
-        <p id="info-text">Il pandabiscio si sente triste e sole e ha bisogno di affetto! Guidalo a raccogliere le coccolosità nel suo diario del cuore! Cambia direzione con swipe o tocchi sullo schermo. Evita i bordi del diario o la tua stessa coda.</p>
+        <p id="info-text">Il pandabiscio si sente triste e solo e ha bisogno di affetto! Guidalo a raccogliere le coccolosità nel suo diario del cuore! Cambia direzione con swipe o tocchi sullo schermo. Evita i bordi del diario o la tua stessa coda.</p>
         <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
     </div>
 
@@ -646,14 +650,6 @@
         .catch(err => alert('Errore di connessione'));
     });
 
-    // Se arrivato tramite link WhatsApp ed è già presente il nickname, gestiamo l'apertura del modale
-    if (roomParam && nickname) {
-        document.getElementById('room-input').value = roomParam.toUpperCase();
-        document.getElementById('challenge-menu-view').style.display = 'block';
-        document.getElementById('challenge-room-view').style.display = 'none';
-        openModal(challengeModal);
-    }
-
     document.getElementById('challenge-invite-btn').addEventListener('click', () => {
         if (!currentRoomId) return;
         const gameUrl = `${window.location.origin}${window.location.pathname}?room=${currentRoomId}`;
@@ -706,6 +702,7 @@
         lastKnownStatus = null;
         pauseBtn.style.display = 'flex';
         
+        document.getElementById('challenge-badge').style.display = 'none';
         document.getElementById('challenge-result-banner').style.display = 'none';
         document.getElementById('challenge-result-banner').innerHTML = '';
         document.getElementById('quit-challenge-btn').style.display = 'none';
@@ -758,6 +755,8 @@
         const bannerEl = document.getElementById('challenge-result-banner');
         const playBtn = document.getElementById('play-again-btn');
         const quitBtn = document.getElementById('quit-challenge-btn');
+        const challengeBadge = document.getElementById('challenge-badge');
+        const challengeOppName = document.getElementById('challenge-opp-name');
 
         const iAmP1 = (nickname === state.p1);
         const oppName = iAmP1 ? (state.p2 || 'Avversario') : state.p1;
@@ -765,6 +764,12 @@
         const oppScore = iAmP1 ? state.p2_score : state.p1_score;
         const myRematch = iAmP1 ? state.p1_rematch : state.p2_rematch;
         const oppRematch = iAmP1 ? state.p2_rematch : state.p1_rematch;
+
+        // 1) Evidenza che si è in sfida
+        if (challengeBadge && challengeOppName) {
+            challengeBadge.style.display = 'inline-block';
+            challengeOppName.innerText = oppName;
+        }
 
         if (state.status === 'closed') {
             stopChallengePolling();
@@ -780,7 +785,8 @@
         if (state.status === 'playing') {
             detailsEl.innerHTML = `Sfida in corso contro <b>${oppName}</b>! 🎮`;
             
-            if (challengeModal.style.display === 'block' || isGameOver || lastKnownStatus === 'finished' || lastKnownStatus === 'waiting') {
+            // 3) Avvia nuova partita SOLO al passaggio da attesa/fine partita ad un nuovo round 'playing'
+            if (lastKnownStatus === 'waiting' || lastKnownStatus === 'finished' || challengeModal.style.display === 'block') {
                 closeModal('challenge-modal');
                 hasSubmittedScore = false;
                 myRematchRequested = false;
@@ -791,20 +797,25 @@
                 resetGame();
                 return;
             }
+
+            // 2) Se io perdo ed il mio punteggio è stato inviato ma l'altro sta ancora giocando
+            if (isGameOver && hasSubmittedScore) {
+                bannerEl.style.display = 'block';
+                bannerEl.innerHTML = `
+                    <div style="background: rgba(255, 107, 129, 0.12); border: 2px dashed #ff6b81; border-radius: 12px; padding: 12px; margin: 8px 0; text-align: center;">
+                        <div style="font-size: 15px; font-weight: 900; color: #ff4757;">📤 Punteggio inviato: ${score} pts</div>
+                        <div style="font-size: 13px; color: #444; margin-top: 6px; font-weight: 700; font-family: 'Fredoka', sans-serif;">
+                            ⏳ <b>${oppName}</b> sta ancora giocando...<br>
+                            <span style="font-size: 11px; color: #777; font-weight: normal;">In attesa del verdetto finale!</span>
+                        </div>
+                    </div>
+                `;
+                playBtn.style.display = 'none';
+                quitBtn.style.display = 'inline-block';
+            }
         }
 
-        if (isGameOver && hasSubmittedScore && state.status !== 'finished') {
-            bannerEl.style.display = 'block';
-            bannerEl.innerHTML = `
-                <div style="background: rgba(255, 107, 129, 0.1); border: 2px dashed #ff6b81; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
-                    <div style="font-size: 14px; font-weight: 900; color: #ff4757;">📤 Punteggio inviato: ${score} pts</div>
-                    <div style="font-size: 12px; color: #555; margin-top: 4px; font-weight: 600;">⏳ <b>${oppName}</b> sta ancora giocando...</div>
-                </div>
-            `;
-            playBtn.style.display = 'none';
-            quitBtn.style.display = 'inline-block';
-        }
-
+        // 4) Verdetto di sfida dato SOLO dopo che entrambi i player hanno terminato
         if (state.status === 'finished') {
             lastKnownStatus = 'finished';
             
@@ -827,11 +838,14 @@
                 resultColor = "#f39c12";
             }
 
+            // 3) Gestione stato rivincita
             let rematchStatusText = "";
             if (oppRematch && !myRematch) {
                 rematchStatusText = `<div style="margin-top: 6px; color: #8e44ad; font-weight: 900; font-size: 13px;">🎮 ${oppName} ti ha invitato a una rivincita!</div>`;
             } else if (myRematch && !oppRematch) {
                 rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 13px;">⏳ Richiesta inviata! In attesa che ${oppName} accetti...</div>`;
+            } else if (myRematch && oppRematch) {
+                rematchStatusText = `<div style="margin-top: 6px; color: #27ae60; font-weight: bold; font-size: 13px;">🚀 Entrambi pronti! Avvio rivincita...</div>`;
             }
 
             if (isGameOver) {
@@ -851,6 +865,7 @@
                 quitBtn.style.display = 'inline-block';
                 playBtn.style.background = '#8e44ad';
 
+                // Impostazione corretta pulsante di rivincita per evitare avvii singoli
                 if (oppRematch && !myRematch) {
                     playBtn.innerText = "Accetta Rivincita ⚔️";
                     playBtn.disabled = false;
@@ -858,6 +873,7 @@
                 } else if (myRematch && !oppRematch) {
                     playBtn.innerText = "In attesa... ⏳";
                     playBtn.disabled = true;
+                    playBtn.onclick = null;
                 } else {
                     playBtn.innerText = "Rivincita ⚔️";
                     playBtn.disabled = false;
@@ -1015,6 +1031,7 @@
             playBtn.style.background = '#19af4e';
             playBtn.onclick = resetGame;
             document.getElementById('quit-challenge-btn').style.display = 'none';
+            document.getElementById('challenge-badge').style.display = 'none';
         }
 
         spawnFood();

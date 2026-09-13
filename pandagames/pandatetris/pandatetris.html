@@ -31,6 +31,8 @@ body, html {
     justify-content: flex-start;
     align-items: center;
     position: relative;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #ui-layer {
@@ -156,9 +158,24 @@ body, html {
     }
 }
 
+#challenge-badge {
+    display: none;
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    color: white;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 4px;
+    border: 1.5px solid #1a1a1a;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 #score-container {
     position: relative;
-    margin-top: 15px;
+    margin-top: 12px;
     font-size: 12px;
     color: #333;
     font-weight: 900;
@@ -171,7 +188,9 @@ body, html {
     box-shadow: 0 3px 0 rgba(0,0,0,0.15);
     text-align: center;
     z-index: 20;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     transition: transform 0.2s ease, background-color 0.2s ease;
     line-height: 1.3;
     width: 85%;
@@ -356,6 +375,7 @@ body, html {
     box-shadow: inset 0 -2px 0 rgba(0,0,0,0.05); 
     cursor: pointer;
     pointer-events: auto;
+    touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
 }
 .panda-ear { 
@@ -477,6 +497,7 @@ body, html {
     box-shadow: 0 3px 0 var(--stroke), inset 0 3px 0 rgba(255,255,255,0.25);
     cursor: pointer;
     pointer-events: auto;
+    touch-action: none;
 }
 .panda-paw-top.left { left: 6px; transform: rotate(-12deg); }
 .panda-paw-top.right { right: 6px; transform: rotate(12deg); }
@@ -516,6 +537,7 @@ body, html {
     box-shadow: 0 4px 0 var(--stroke), inset 0 3px 0 rgba(255,255,255,0.25);
     cursor: pointer;
     pointer-events: auto;
+    touch-action: none;
 }
 .panda-paw-bottom.left { left: 8px; transform: rotate(-6deg); }
 .panda-paw-bottom.right { right: 8px; transform: rotate(6deg); }
@@ -555,57 +577,8 @@ body, html {
     display: flex; 
     flex-direction: column;
     align-items: center; 
+    touch-action: none;
 }
-
-.lavagnetta-container::before {
-    content: "📐";
-    position: absolute;
-    top: 2px;
-    left: 6px;
-    font-size: 10px;
-    opacity: 0.7;
-    z-index: 25;
-}
-.lavagnetta-container::after {
-    content: "✏️";
-    position: absolute;
-    top: 2px;
-    right: 6px;
-    font-size: 10px;
-    opacity: 0.7;
-    z-index: 25;
-}
-
-.frame-nail {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: #d7b06b;
-    border: 1px solid #6d4c41;
-    border-radius: 50%;
-    box-shadow: inset 1px 1px 1px rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.45);
-    z-index: 26;
-    pointer-events: none;
-}
-
-.frame-nail.top-left { top: 5px; left: 5px; }
-.frame-nail.top-right { top: 5px; right: 5px; }
-.frame-nail.bottom-left { bottom: 5px; left: 5px; }
-.frame-nail.bottom-right { bottom: 5px; right: 5px; }
-
-.frame-mark {
-    position: absolute;
-    top: 50%;
-    color: #feca57;
-    font-size: 9px;
-    opacity: 0.55;
-    transform: translateY(-50%);
-    z-index: 26;
-    pointer-events: none;
-}
-
-.frame-mark.left { left: 2px; }
-.frame-mark.right { right: 2px; }
 
 .lavagnetta-screen {
     position: relative;
@@ -619,6 +592,7 @@ body, html {
     justify-content: center;
     overflow: hidden;
     margin: 0 auto;
+    touch-action: none;
 }
 
 .chalk-tray {
@@ -642,8 +616,6 @@ body, html {
     height: 4px;
     border-radius: 2px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.3);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
 }
 .chalk-stick.pink { background: #ff9ff3; }
 .chalk-stick.yellow { background: #feca57; }
@@ -665,6 +637,7 @@ canvas {
     height: 100%;
     background: #000000;
     display: block;
+    touch-action: none;
 }
 
 @media (max-width: 600px) {
@@ -683,7 +656,7 @@ canvas {
     }
 
     #score-container {
-        margin-top: 18px;
+        margin-top: 14px;
     }
 }
 </style>
@@ -754,16 +727,23 @@ canvas {
         </div>
     </div>
 
+    <!-- Modale Avviso Abbandono -->
+    <div id="abandon-modal" class="modal">
+        <h2 style="color:#ff4757;">Sfida Interrotta 🚪</h2>
+        <p id="abandon-text" style="text-align:center;">L'avversario ha abbandonato la sfida.</p>
+        <button class="btn" id="abandon-ok-btn" style="font-size: 13px; width: 140px; padding: 8px; background:#8e44ad;">OK 🎮</button>
+    </div>
+
     <!-- Modale Fine Partita / Fine Sfida -->
     <div id="game-over">
-        <h1>Ops! Perso!</h1>
+        <h1 id="game-over-title">Ops! Perso!</h1>
         <p style="margin-bottom: 6px; font-family: 'Fredoka', sans-serif; font-size: 14px; color: #555; font-weight: 600;">Punteggio finale: <span id="final-score">0</span></p>
         <div id="challenge-result-banner" style="display:none; margin:8px 0;"></div>
         <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 10px;">
-            <button class="btn" id="play-again-btn" onclick="resetGame()" style="font-size: 14px; width: 200px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
-            <button class="btn" id="quit-challenge-btn" style="background:#ff4757; font-size:12px; width:200px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
-            <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:12px; width:200px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
+            <button class="btn" id="play-again-btn" onclick="resetGame()" style="font-size: 14px; width: 220px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
+            <button class="btn" id="quit-challenge-btn" style="background:#ff4757; font-size:12px; width:220px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
+            <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:12px; width:220px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
         </div>
     </div>
 
@@ -798,12 +778,6 @@ canvas {
         </div>
 
         <div class="lavagnetta-container">
-            <span class="frame-nail top-left"></span>
-            <span class="frame-nail top-right"></span>
-            <span class="frame-nail bottom-left"></span>
-            <span class="frame-nail bottom-right"></span>
-            <span class="frame-mark left">✦</span>
-            <span class="frame-mark right">✦</span>
             <div class="chalk-tray">
                 <div class="chalk-stick pink"></div>
                 <div class="chalk-stick yellow"></div>
@@ -827,17 +801,18 @@ canvas {
 
     <!-- Box dei punteggi sotto alla lavagna -->
     <div id="score-container">
+        <div id="challenge-badge">⚔️ SFIDA IN CORSO vs <span id="opp-badge-name">...</span></div>
         <div id="normal-score-mode">
             <span id="player-name">Player</span> | Score: <span id="score">0</span> | Level: <span id="level">1</span><br>
             <span style="font-size: 10px; color: #666; font-weight: 600;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
         </div>
-        <div id="challenge-score-mode" style="display: none;">
-            <div style="display: flex; justify-content: space-around; gap: 8px; font-size: 12px; align-items: center;">
-                <div style="text-align: center;">
+        <div id="challenge-score-mode" style="display: none; width: 100%;">
+            <div style="display: flex; justify-content: space-around; gap: 8px; font-size: 12px; align-items: center; width: 100%;">
+                <div style="text-align: center; flex:1;">
                     <b style="color: #3742fa;"><span id="chal-box-my-name">Player</span></b><br>
                     <span id="chal-box-my-score" style="color: #333; font-weight: 900;">0 pts</span>
                 </div>
-                <div style="border-left: 2px solid #ddd; padding-left: 8px; text-align: center;">
+                <div style="border-left: 2px solid #ddd; padding-left: 8px; text-align: center; flex:1;">
                     <b style="color: #8e44ad;"><span id="chal-box-opp-name">Avversario</span></b><br>
                     <span id="chal-box-opp-status" style="color: #e67e22; font-weight: 700; font-size: 11px;">sta giocando</span>
                 </div>
@@ -866,6 +841,7 @@ const resumeBtn = document.getElementById('resume-btn');
 const infoModal = document.getElementById('info-modal');
 const leaderboardModal = document.getElementById('leaderboard-modal');
 const challengeModal = document.getElementById('challenge-modal');
+const abandonModal = document.getElementById('abandon-modal');
 const nicknameModal = document.getElementById('nickname-modal');
 const nicknameInput = document.getElementById('nickname-input');
 const saveNicknameBtn = document.getElementById('save-nickname-btn');
@@ -953,7 +929,7 @@ function closeModal(modal) {
 }
 
 document.getElementById('info-btn').addEventListener('click', () => {
-    infoTextEl.innerHTML = "Ruota i pezzi con TAP sullo schermo o cliccando la faccia del panda, spostali con gli SWPIPE o con le zampe del panda. Tieni premuto per accelerare la discesa. Attento agli effetti speciali!";
+    infoTextEl.innerHTML = "• <b>TAP / Clicca sulla testa:</b> Ruota il pezzo.<br>• <b>SWIPE Sinistra/Destra o Zampe:</b> Sposta il pezzo.<br>• <b>SWIPE Giù:</b> Discesa rapida.<br>• <b>TIENI PREMUTO:</b> Hard Drop immediato.";
     openModal(infoModal);
 });
 
@@ -968,15 +944,21 @@ document.getElementById('challenge-btn').addEventListener('click', () => {
     openModal(challengeModal);
 });
 
-// Controllo automatico parametro URL per invito WhatsApp (?room=XXXXXX)
+// Controllo parametro URL per invito (?room=XXXXXX)
 const urlParams = new URLSearchParams(window.location.search);
 const roomParam = urlParams.get('room') || urlParams.get('code');
 if (roomParam) {
     document.getElementById('room-input').value = roomParam.toUpperCase();
+    document.getElementById('challenge-menu-view').style.display = 'block';
+    document.getElementById('challenge-room-view').style.display = 'none';
+    openModal(challengeModal);
+
     if (nickname) {
-        document.getElementById('challenge-menu-view').style.display = 'block';
-        document.getElementById('challenge-room-view').style.display = 'none';
-        openModal(challengeModal);
+        setTimeout(() => {
+            const input = document.getElementById('room-input');
+            input.value = roomParam.toUpperCase();
+            document.getElementById('join-challenge-btn').click();
+        }, 500);
     }
 }
 
@@ -1041,14 +1023,6 @@ document.getElementById('join-challenge-btn').addEventListener('click', () => {
     .catch(err => alert('Errore di connessione'));
 });
 
-// Se è arrivato il parametro stanza via URL e il nickname è inserito, unisciti automaticamente o mostra la stanza
-if (roomParam && nickname) {
-    setTimeout(() => {
-        document.getElementById('room-input').value = roomParam.toUpperCase();
-        document.getElementById('join-challenge-btn').click();
-    }, 500);
-}
-
 // Invita via WhatsApp
 document.getElementById('challenge-invite-btn').addEventListener('click', () => {
     if (!currentRoomId) return;
@@ -1087,8 +1061,8 @@ document.getElementById('challenge-copy-btn').addEventListener('click', () => {
     }
 });
 
-function quitChallenge() {
-    if (currentRoomId) {
+function quitChallenge(notifyServer = true) {
+    if (currentRoomId && notifyServer) {
         fetch('/api/games_challenge-UPVapi', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1102,6 +1076,7 @@ function quitChallenge() {
     myRematchRequested = false;
     lastKnownStatus = null;
     
+    document.getElementById('challenge-badge').style.display = 'none';
     document.getElementById('challenge-result-banner').style.display = 'none';
     document.getElementById('challenge-result-banner').innerHTML = '';
     document.getElementById('quit-challenge-btn').style.display = 'none';
@@ -1116,11 +1091,17 @@ function quitChallenge() {
     playBtn.onclick = resetGame;
 
     closeModal(challengeModal);
+    closeModal(abandonModal);
 }
 
-document.getElementById('challenge-quit-btn').addEventListener('click', quitChallenge);
+document.getElementById('challenge-quit-btn').addEventListener('click', () => quitChallenge(true));
 document.getElementById('quit-challenge-btn').addEventListener('click', () => {
-    quitChallenge();
+    quitChallenge(true);
+    if (isGameOver) resetGame();
+});
+
+document.getElementById('abandon-ok-btn').addEventListener('click', () => {
+    quitChallenge(false);
     if (isGameOver) resetGame();
 });
 
@@ -1137,6 +1118,8 @@ function startChallengePolling() {
         .then(data => {
             if (data.success && data.state) {
                 updateChallengeUI(data.state);
+            } else if (data.error && (data.error.includes('non trovata') || data.error.includes('chiusa'))) {
+                handleOpponentAbandoned();
             }
         })
         .catch(err => console.error(err));
@@ -1150,15 +1133,19 @@ function stopChallengePolling() {
     }
 }
 
+function handleOpponentAbandoned() {
+    stopChallengePolling();
+    document.getElementById('abandon-text').innerHTML = `L'avversario ha abbandonato o chiuso la sfida.`;
+    openModal(abandonModal);
+}
+
 function updateChallengeUI(state) {
     if (!isChallengeMode) {
+        document.getElementById('challenge-badge').style.display = 'none';
         document.getElementById('normal-score-mode').style.display = 'block';
         document.getElementById('challenge-score-mode').style.display = 'none';
         return;
     }
-
-    document.getElementById('normal-score-mode').style.display = 'none';
-    document.getElementById('challenge-score-mode').style.display = 'block';
 
     const detailsEl = document.getElementById('room-details');
     const bannerEl = document.getElementById('challenge-result-banner');
@@ -1172,13 +1159,20 @@ function updateChallengeUI(state) {
     const myRematch = iAmP1 ? state.p1_rematch : state.p2_rematch;
     const oppRematch = iAmP1 ? state.p2_rematch : state.p1_rematch;
 
+    // Evidenza visiva della sfida in corso
+    document.getElementById('challenge-badge').style.display = 'inline-block';
+    document.getElementById('opp-badge-name').innerText = oppName;
+
+    document.getElementById('normal-score-mode').style.display = 'none';
+    document.getElementById('challenge-score-mode').style.display = 'block';
+
     // Aggiorna lo score box in tempo reale
     document.getElementById('chal-box-my-name').innerText = nickname;
     document.getElementById('chal-box-my-score').innerText = (myScore !== null ? myScore : player.score) + ' pts';
     document.getElementById('chal-box-opp-name').innerText = oppName;
 
     if (oppScore !== null) {
-        document.getElementById('chal-box-opp-status').innerText = oppScore + ' pts';
+        document.getElementById('chal-box-opp-status').innerText = oppScore + ' pts (finito)';
         document.getElementById('chal-box-opp-status').style.color = '#27ae60';
     } else {
         document.getElementById('chal-box-opp-status').innerText = 'sta giocando';
@@ -1186,9 +1180,7 @@ function updateChallengeUI(state) {
     }
 
     if (state.status === 'closed') {
-        stopChallengePolling();
-        alert("L'avversario è uscito dalla sfida o dalla modalità sfida.");
-        quitChallenge();
+        handleOpponentAbandoned();
         return;
     }
 
@@ -1196,6 +1188,7 @@ function updateChallengeUI(state) {
         detailsEl.innerHTML = `Stanza: <b>${currentRoomId}</b><br>In attesa che <b>${oppName}</b> si unisca...`;
     }
 
+    // Inizia la partita o la rivincita SOLO se lo stato è 'playing'
     if (state.status === 'playing') {
         detailsEl.innerHTML = `Sfida in corso contro <b>${oppName}</b>! 🎮`;
         
@@ -1212,20 +1205,24 @@ function updateChallengeUI(state) {
         }
     }
 
+    // Se HO PERSO io, MA l'avversario sta ancora giocando -> NON dare verdetto!
     if (isGameOver && hasSubmittedScore && state.status !== 'finished') {
         bannerEl.style.display = 'block';
         bannerEl.innerHTML = `
             <div style="background: rgba(41, 128, 185, 0.1); border: 2px dashed #2980b9; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
                 <div style="font-size: 13px; font-weight: 900; color: #2980b9;">📤 Punteggio inviato: ${player.score} pts</div>
-                <div style="font-size: 11px; color: #555; margin-top: 4px; font-weight: 600;">⏳ Il player sta ancora giocando...</div>
+                <div style="font-size: 12px; color: #555; margin-top: 4px; font-weight: 700;">⏳ In attesa che <b>${oppName}</b> finisca la sua partita...</div>
             </div>
         `;
+        document.getElementById('game-over-title').innerText = "Attesa Avversario...";
         playBtn.style.display = 'none';
         quitBtn.style.display = 'inline-block';
     }
 
+    // VERDETTO FINALE: Solo dopo che entrambi hanno perso/finito
     if (state.status === 'finished') {
         lastKnownStatus = 'finished';
+        document.getElementById('game-over-title').innerText = "Sfida Conclusa!";
         
         let p1S = state.p1_score !== null ? state.p1_score : 0;
         let p2S = state.p2_score !== null ? state.p2_score : 0;
@@ -1250,7 +1247,7 @@ function updateChallengeUI(state) {
         if (oppRematch && !myRematch) {
             rematchStatusText = `<div style="margin-top: 6px; color: #8e44ad; font-weight: 900; font-size: 12px;">🎮 ${oppName} ti ha invitato alla rivincita!</div>`;
         } else if (myRematch && !oppRematch) {
-            rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 12px;">⏳ Richiesta inviata! In attesa che ${oppName} clicchi rivincita...</div>`;
+            rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 12px;">⏳ Richiesta inviata! In attesa che ${oppName} accetti...</div>`;
         }
 
         if (isGameOver) {
@@ -1278,7 +1275,7 @@ function updateChallengeUI(state) {
                 playBtn.innerText = "In attesa dell'altro player... ⏳";
                 playBtn.disabled = true;
             } else {
-                playBtn.innerText = "Rivincita ⚔️";
+                playBtn.innerText = "Chiedi Rivincita ⚔️";
                 playBtn.disabled = false;
                 playBtn.onclick = requestRematch;
             }
@@ -1322,7 +1319,7 @@ function loadLeaderboard() {
         if (contentType && contentType.includes("application/json")) {
             return res.json();
         } else {
-            throw new Error(`Errore Server Vercel (Risposta non JSON)`);
+            throw new Error(`Errore Server (Risposta non JSON)`);
         }
     })
     .then(data => {
@@ -1341,7 +1338,6 @@ function loadLeaderboard() {
     })
     .catch(err => {
         leaderboardList.innerHTML = `<span style='color:#e74c3c; font-size:12px;'>Errore: ${err.message}</span>`;
-        console.error("Dettaglio errore classifica:", err);
     });
 }
 
@@ -1648,7 +1644,6 @@ function stopPawMovement() {
 
 function startPawMovement(dir) {
     stopPawMovement();
-
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
 
     move(dir);
@@ -1762,6 +1757,7 @@ function gameOver() {
     isGameOver = true;
     finalScoreElement.innerText = player.score;
 
+    document.getElementById('game-over-title').innerText = "Ops! Perso!";
     const playBtn = document.getElementById('play-again-btn');
     const quitBtn = document.getElementById('quit-challenge-btn');
 
@@ -1873,65 +1869,116 @@ function resetGame() {
     update();
 }
 
+// --- GESTIONE AVANZATA DELLE GESTURES E TOUCH ---
 let touchStartX = 0;
 let touchStartY = 0;
+let lastTouchX = 0;
 let touchStartTime = 0;
-let canvasHoldInterval = null;
+let canvasHoldTimeout = null;
+let isSwiping = false;
 
-canvas.addEventListener('touchstart', (e) => {
+canvas.addEventListener('pointerdown', (e) => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
-    const touch = e.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
+    try { canvas.setPointerCapture(e.pointerId); } catch(err){}
+    
+    touchStartX = e.clientX;
+    touchStartY = e.clientY;
+    lastTouchX = e.clientX;
     touchStartTime = performance.now();
+    isSwiping = false;
 
-    canvasHoldInterval = setTimeout(() => {
-        if (canvasHoldInterval) {
+    if (canvasHoldTimeout) clearTimeout(canvasHoldTimeout);
+    canvasHoldTimeout = setTimeout(() => {
+        if (!isSwiping && !isPaused && !isGameOver) {
             hardDrop();
-            canvasHoldInterval = null;
+            if (navigator.vibrate) navigator.vibrate(40);
+            canvasHoldTimeout = null;
         }
-    }, 250);
-}, {passive: true});
+    }, 300);
+});
 
-canvas.addEventListener('touchmove', (e) => {
+canvas.addEventListener('pointermove', (e) => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
-    const touch = e.touches[0];
-    const dx = touch.clientX - touchStartX;
-    const dy = touch.clientY - touchStartY;
-    if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
-        if (canvasHoldInterval) {
-            clearTimeout(canvasHoldInterval);
-            canvasHoldInterval = null;
+    const totalDx = e.clientX - touchStartX;
+    const totalDy = e.clientY - touchStartY;
+
+    if (Math.abs(totalDx) > 10 || Math.abs(totalDy) > 10) {
+        isSwiping = true;
+        if (canvasHoldTimeout) {
+            clearTimeout(canvasHoldTimeout);
+            canvasHoldTimeout = null;
         }
     }
-}, {passive: true});
 
-canvas.addEventListener('touchend', (e) => {
-    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
-    if (canvasHoldInterval) {
-        clearTimeout(canvasHoldInterval);
-        canvasHoldInterval = null;
-        const touchDuration = performance.now() - touchStartTime;
-        const touch = e.changedTouches[0];
-        const dx = touch.clientX - touchStartX;
-        const dy = touch.clientY - touchStartY;
-        if (touchDuration < 250 && Math.abs(dx) < 10 && Math.abs(dy) < 10) {
-            playerRotate();
-        }
+    // Trascinamento orizzontale continuo (step-by-step)
+    const dxFromLast = e.clientX - lastTouchX;
+    const stepThreshold = 20; 
+    if (Math.abs(dxFromLast) >= stepThreshold) {
+        const steps = Math.trunc(dxFromLast / stepThreshold);
+        move(steps);
+        lastTouchX += steps * stepThreshold;
+        draw();
     }
 });
 
-document.querySelector('.panda-head').addEventListener('click', () => {
+canvas.addEventListener('pointerup', (e) => {
+    if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
+    try { canvas.releasePointerCapture(e.pointerId); } catch(err){}
+
+    if (canvasHoldTimeout) {
+        clearTimeout(canvasHoldTimeout);
+        canvasHoldTimeout = null;
+    }
+
+    const duration = performance.now() - touchStartTime;
+    const totalDx = e.clientX - touchStartX;
+    const totalDy = e.clientY - touchStartY;
+
+    // TAP Rapido (<250ms e pochi px di movimento) -> RUOTA
+    if (duration < 250 && Math.abs(totalDx) < 12 && Math.abs(totalDy) < 12) {
+        playerRotate();
+        draw();
+        return;
+    }
+
+    // SWIPE Verticale in Basso -> DISCESA RAPIDA
+    if (Math.abs(totalDy) > Math.abs(totalDx) && totalDy > 30) {
+        playerDrop();
+    }
+});
+
+canvas.addEventListener('pointercancel', (e) => {
+    if (canvasHoldTimeout) {
+        clearTimeout(canvasHoldTimeout);
+        canvasHoldTimeout = null;
+    }
+});
+
+// Click o TAP sulla testa del Panda per ruotare
+document.querySelector('.panda-head').addEventListener('pointerdown', (e) => {
+    e.preventDefault();
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     playerRotate();
     draw();
 });
 
-document.querySelector('.panda-paw-top.left').addEventListener('mousedown', () => startPawMovement(-1));
-document.querySelector('.panda-paw-top.left').addEventListener('mouseup', stopPawMovement);
-document.querySelector('.panda-paw-top.right').addEventListener('mousedown', () => startPawMovement(1));
-document.querySelector('.panda-paw-top.right').addEventListener('mouseup', stopPawMovement);
+// BIND ZAMPE PANDA (Touch/Mouse Unificati tramite Pointer Events)
+function bindPawControls(element, dir) {
+    element.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        startPawMovement(dir);
+    });
+    element.addEventListener('pointerup', stopPawMovement);
+    element.addEventListener('pointercancel', stopPawMovement);
+    element.addEventListener('pointerleave', stopPawMovement);
+}
 
+bindPawControls(document.querySelector('.panda-paw-top.left'), -1);
+bindPawControls(document.querySelector('.panda-paw-top.right'), 1);
+bindPawControls(document.querySelector('.panda-paw-bottom.left'), -1);
+bindPawControls(document.querySelector('.panda-paw-bottom.right'), 1);
+
+// Controlli da Tastiera
 window.addEventListener('keydown', event => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     if (event.key === 'ArrowLeft') {
