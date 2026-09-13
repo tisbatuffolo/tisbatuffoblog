@@ -681,7 +681,7 @@
             bannerEl.innerHTML = `
                 <div style="background: rgba(41, 128, 185, 0.1); border: 2px dashed #2980b9; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
                     <div style="font-size: 14px; font-weight: 900; color: #2980b9;">📤 Punteggio inviato: ${score} pts</div>
-                    <div style="font-size: 12px; color: #555; margin-top: 4px; font-weight: 600;">⏳ In attesa che <b>${oppName}</b> finisca la partida...</div>
+                    <div style="font-size: 12px; color: #555; margin-top: 4px; font-weight: 600;">⏳ In attesa che <b>${oppName}</b> finisca la partita...</div>
                 </div>
             `;
             playBtn.style.display = 'none';
@@ -1289,8 +1289,10 @@
             });
             score += matches.length * 10;
             scoreEl.innerText = score;
-            removeFloatingBubbles(matches);
         }
+
+        // Controllo e rimozione cacche fluttuanti/staccate dal soffitto
+        removeFloatingBubbles();
 
         shotsSinceDrop++;
         if (shotsSinceDrop >= shotsPerDrop) {
@@ -1355,56 +1357,35 @@
         return neighbors;
     }
 
-    function removeFloatingBubbles(matchCells) {
+    function removeFloatingBubbles() {
         let supportVisited = Array(rows).fill(0).map(() => Array(cols).fill(false));
         let supportQueue = [];
 
+        // Partiamo da tutte le bolle presenti nella prima riga (soffitto)
         for (let c = 0; c < cols; c++) {
-            if (grid[0][c] !== null) {
+            if (grid[0][c] !== null && grid[0][c] !== undefined) {
                 supportVisited[0][c] = true;
                 supportQueue.push({ r: 0, c });
             }
         }
 
+        // BFS per marcare tutte le bolle collegate (direttamente o indirettamente) al soffitto
         while (supportQueue.length > 0) {
             let curr = supportQueue.shift();
             let neighbors = getNeighbors(curr.r, curr.c);
             for (let n of neighbors) {
-                if (!supportVisited[n.r][n.c] && grid[n.r][n.c] !== null) {
+                if (!supportVisited[n.r][n.c] && grid[n.r][n.c] !== null && grid[n.r][n.c] !== undefined) {
                     supportVisited[n.r][n.c] = true;
                     supportQueue.push(n);
                 }
             }
         }
 
-        let candidateVisited = Array(rows).fill(0).map(() => Array(cols).fill(false));
-        let candidateQueue = [];
-
-        for (let match of matchCells) {
-            let neighbors = getNeighbors(match.r, match.c);
-            for (let n of neighbors) {
-                if (n.r >= 0 && n.r < rows && n.c >= 0 && n.c < cols && grid[n.r][n.c] !== null && !candidateVisited[n.r][n.c]) {
-                    candidateVisited[n.r][n.c] = true;
-                    candidateQueue.push({ r: n.r, c: n.c });
-                }
-            }
-        }
-
-        while (candidateQueue.length > 0) {
-            let curr = candidateQueue.shift();
-            let neighbors = getNeighbors(curr.r, curr.c);
-            for (let n of neighbors) {
-                if (n.r >= 0 && n.r < rows && n.c >= 0 && n.c < cols && grid[n.r][n.c] !== null && !candidateVisited[n.r][n.c]) {
-                    candidateVisited[n.r][n.c] = true;
-                    candidateQueue.push({ r: n.r, c: n.c });
-                }
-            }
-        }
-
+        // Qualsiasi bolla non raggiunta dal percorso partendo dal soffitto è fluttuante e deve cadere
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 if (r % 2 === 1 && c === cols - 1) continue;
-                if (grid[r][c] !== null && candidateVisited[r][c] && !supportVisited[r][c]) {
+                if (grid[r][c] !== null && grid[r][c] !== undefined && !supportVisited[r][c]) {
                     let coords = getBubbleCoords(r, c);
                     fallingBubbles.push({
                         x: coords.x,
