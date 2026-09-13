@@ -364,9 +364,23 @@
         </div>
 
         <div id="score-container">
-            <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name">Panda</span>!</div>
-            Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
-            <span style="font-size: 12px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
+            <div id="normal-score-mode">
+                <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name">Panda</span>!</div>
+                Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
+                <span style="font-size: 12px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
+            </div>
+            <div id="challenge-score-mode" style="display: none;">
+                <div style="display: flex; justify-content: space-around; gap: 12px; font-size: 13px; align-items: center;">
+                    <div style="text-align: center;">
+                        <b style="color: #3742fa;"><span id="chal-box-my-name">Panda</span></b><br>
+                        <span id="chal-box-my-score" style="color: #333; font-weight: 900;">0 pts</span>
+                    </div>
+                    <div style="border-left: 2px solid #ddd; padding-left: 12px; text-align: center;">
+                        <b style="color: #8e44ad;"><span id="chal-box-opp-name">Avversario</span></b><br>
+                        <span id="chal-box-opp-status" style="color: #e67e22; font-weight: 700; font-size: 12px;">sta giocando</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Modale Nickname -->
@@ -545,6 +559,20 @@
     }
 
     function openModal(modal) {
+        if (modal === challengeModal) {
+            if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
+                isPaused = true;
+                pauseBtn.innerText = '▶';
+                pauseOverlay.style.display = 'none';
+                if (animationId) cancelAnimationFrame(animationId);
+            }
+            if (modal === leaderboardModal) {
+                loadLeaderboard();
+            }
+            modal.style.display = 'block';
+            return;
+        }
+
         if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
             togglePause();
         }
@@ -556,6 +584,9 @@
 
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = 'none';
+        if (modalId === 'challenge-modal' && isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
+            pauseOverlay.style.display = 'none';
+        }
     }
 
     document.getElementById('info-btn').addEventListener('click', () => openModal(infoModal));
@@ -694,6 +725,9 @@
         document.getElementById('challenge-result-banner').innerHTML = '';
         document.getElementById('quit-challenge-btn').style.display = 'none';
         
+        document.getElementById('normal-score-mode').style.display = 'block';
+        document.getElementById('challenge-score-mode').style.display = 'none';
+
         const playBtn = document.getElementById('play-again-btn');
         playBtn.innerText = 'Rigioca 🐼';
         playBtn.style.background = '#19af4e';
@@ -736,7 +770,14 @@
     }
 
     function updateChallengeUI(state) {
-        if (!isChallengeMode) return;
+        if (!isChallengeMode) {
+            document.getElementById('normal-score-mode').style.display = 'block';
+            document.getElementById('challenge-score-mode').style.display = 'none';
+            return;
+        }
+
+        document.getElementById('normal-score-mode').style.display = 'none';
+        document.getElementById('challenge-score-mode').style.display = 'block';
 
         const detailsEl = document.getElementById('room-details');
         const bannerEl = document.getElementById('challenge-result-banner');
@@ -749,6 +790,19 @@
         const oppScore = iAmP1 ? state.p2_score : state.p1_score;
         const myRematch = iAmP1 ? state.p1_rematch : state.p2_rematch;
         const oppRematch = iAmP1 ? state.p2_rematch : state.p1_rematch;
+
+        // Aggiorna lo score box
+        document.getElementById('chal-box-my-name').innerText = nickname;
+        document.getElementById('chal-box-my-score').innerText = (myScore !== null ? myScore : score) + ' pts';
+        document.getElementById('chal-box-opp-name').innerText = oppName;
+
+        if (oppScore !== null) {
+            document.getElementById('chal-box-opp-status').innerText = oppScore + ' pts';
+            document.getElementById('chal-box-opp-status').style.color = '#27ae60';
+        } else {
+            document.getElementById('chal-box-opp-status').innerText = 'sta giocando';
+            document.getElementById('chal-box-opp-status').style.color = '#e67e22';
+        }
 
         // Gestione Stanza Chiusa
         if (state.status === 'closed') {
@@ -767,7 +821,6 @@
         if (state.status === 'playing') {
             detailsEl.innerHTML = `Sfida in corso contro <b>${oppName}</b>! 🎮`;
             
-            // Se eravamo nel modale o a game-over o eravamo in attesa della rivincita -> AVVIA IL GIOCO
             if (challengeModal.style.display === 'block' || isGameOver || lastKnownStatus === 'finished' || lastKnownStatus === 'waiting') {
                 closeModal('challenge-modal');
                 hasSubmittedScore = false;
@@ -824,7 +877,6 @@
                 rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 13px;">⏳ Richiesta inviata! In attesa che ${oppName} accetti...</div>`;
             }
 
-            // Aggiorna banner nel modale GameOver
             if (isGameOver) {
                 bannerEl.style.display = 'block';
                 bannerEl.innerHTML = `

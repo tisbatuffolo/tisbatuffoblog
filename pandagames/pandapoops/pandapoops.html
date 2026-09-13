@@ -15,10 +15,36 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        background-color: #f0f3f6;
+        background-color: #111827;
         overflow: hidden;
         font-family: 'Grandstander', cursive;
         touch-action: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #game-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: 1150px;
+        max-height: 680px;
+        background-color: #f0f3f6;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+    }
+
+    @media (max-width: 768px), (max-height: 500px) {
+        #game-container {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+        }
     }
 
     #gameCanvas {
@@ -308,95 +334,97 @@
 </head>
 <body>
 
-<canvas id="gameCanvas"></canvas>
+<div id="game-container">
+    <canvas id="gameCanvas"></canvas>
 
-<div id="ui-layer">
-    <div id="game-title">PandaPoops</div>
-    
-    <div id="right-controls">
-        <button id="info-btn" class="top-btn" title="Info">i</button>
-        <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
-        <button id="challenge-btn" class="top-btn" title="Modalità Sfida">⚔️</button>
-        <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
-        <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
-    </div>
-
-    <div id="score-container">
-        <div style="color: #3742fa; font-size: 13px;">Ciao, <span id="player-name">Panda</span>!</div>
-        Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
-        <span style="font-size: 11px; color: #57606f;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
-    </div>
-
-    <!-- Modale Nickname -->
-    <div id="nickname-modal" class="modal">
-        <h2>Benvenuto a PandaPoops! 🐼</h2>
-        <p>Inserisci il tuo nickname per iniziare a giocare:</p>
-        <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
-        <br>
-        <button class="btn" id="save-nickname-btn" style="font-size: 15px; width: 160px; padding: 10px;">Inizia 🚀</button>
-    </div>
-
-    <!-- Modale Info -->
-    <div id="info-modal" class="modal">
-        <h2>Come Giocare 🐼</h2>
-        <p>Il panda ha mangiato pesante e ha cagato cacche colorate! Attento che nel corso del gioco le cacche si moltiplicano e vengono aggiunti nuovi colori! Spara le chacche creando mucchi colorati per farle cadere!</p>
-        <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
-    </div>
-
-    <!-- Modale Classifica -->
-    <div id="leaderboard-modal" class="modal">
-        <h2>Classifica 🏆</h2>
-        <p style="font-size: 12px; color: #777; margin-top: -5px; margin-bottom: 12px;">Miglior punteggio per giocatore</p>
-        <div id="leaderboard-list" style="font-size: 14px; color: #333; max-height: 150px; overflow-y: auto; margin-bottom: 15px; text-align: left; padding: 0 10px;">
-            Caricamento classifica...
+    <div id="ui-layer">
+        <div id="game-title">PandaPoops</div>
+        
+        <div id="right-controls">
+            <button id="info-btn" class="top-btn" title="Info">i</button>
+            <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
+            <button id="challenge-btn" class="top-btn" title="Modalità Sfida">⚔️</button>
+            <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
+            <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
         </div>
-        <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
-    </div>
 
-    <!-- Modale Gestione Sfida 1v1 con Stanze (Uguale a PandaRun) -->
-    <div id="challenge-modal" class="modal">
-        <h2>Sfida 1v1 ⚔️</h2>
-        <div id="challenge-menu-view">
-            <p>Sfida un amico in tempo reale inviandogli il codice stanza!</p>
-            <button class="btn" id="create-challenge-btn" style="background:#8e44ad; width:100%; margin-bottom:8px;">Crea Nuova Sfida 🎮</button>
-            <div style="margin: 8px 0; font-weight:bold; color:#777; font-size:12px;">OPPURE</div>
-            <input type="text" id="room-input" placeholder="Codice Stanza (es. AB12CD)" maxlength="6" style="text-transform:uppercase; margin-bottom:10px;">
-            <button class="btn" id="join-challenge-btn" style="background:#2980b9; width:100%;">Entra nella Sfida 🚀</button>
-            <br><br>
-            <button class="btn" onclick="closeModal('challenge-modal')" style="background:#95a5a6; font-size:13px; width:120px; padding:6px;">Chiudi</button>
+        <div id="score-container">
+            <div style="color: #3742fa; font-size: 13px;">Ciao, <span id="player-name">Panda</span>!</div>
+            Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
+            <span style="font-size: 11px; color: #57606f;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
         </div>
-        <div id="challenge-room-view" style="display:none;">
-            <p id="room-status-text" style="margin: 5px 0 10px; font-size: 15px;">
-                Codice Stanza: <b id="room-code-display" style="color: #8e44ad; font-size: 20px; letter-spacing: 2px;">------</b>
-            </p>
-            <div id="room-details" style="font-size:13px; color:#444; margin-bottom:12px; background:#f1f2f6; padding:12px; border-radius:12px; line-height: 1.4;">
-                In attesa dell'avversario...
+
+        <!-- Modale Nickname -->
+        <div id="nickname-modal" class="modal">
+            <h2>Benvenuto a PandaPoops! 🐼</h2>
+            <p>Inserisci il tuo nickname per iniziare a giocare:</p>
+            <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
+            <br>
+            <button class="btn" id="save-nickname-btn" style="font-size: 15px; width: 160px; padding: 10px;">Inizia 🚀</button>
+        </div>
+
+        <!-- Modale Info -->
+        <div id="info-modal" class="modal">
+            <h2>Come Giocare 🐼</h2>
+            <p>Il panda ha mangiato pesante e ha cagato cacche colorate! Attento che nel corso del gioco le cacche si moltiplicano e vengono aggiunti nuovi colori! Spara le chacche creando mucchi colorati per farle cadere!</p>
+            <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
+        </div>
+
+        <!-- Modale Classifica -->
+        <div id="leaderboard-modal" class="modal">
+            <h2>Classifica 🏆</h2>
+            <p style="font-size: 12px; color: #777; margin-top: -5px; margin-bottom: 12px;">Miglior punteggio per giocatore</p>
+            <div id="leaderboard-list" style="font-size: 14px; color: #333; max-height: 150px; overflow-y: auto; margin-bottom: 15px; text-align: left; padding: 0 10px;">
+                Caricamento classifica...
             </div>
-            <div style="display: flex; gap: 6px; justify-content: center; align-items: center; margin-top: 10px;">
-                <button class="btn" id="challenge-invite-btn" style="background:#25D366; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Invita 💬</button>
-                <button class="btn" id="challenge-copy-btn" style="background:#e67e22; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Copia 📋</button>
-                <button class="btn" id="challenge-quit-btn" style="background:#ff4757; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Abbandona 🚪</button>
+            <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Chiudi</button>
+        </div>
+
+        <!-- Modale Gestione Sfida 1v1 con Stanze (Uguale a PandaRun) -->
+        <div id="challenge-modal" class="modal">
+            <h2>Sfida 1v1 ⚔️</h2>
+            <div id="challenge-menu-view">
+                <p>Sfida un amico in tempo reale inviandogli il codice stanza!</p>
+                <button class="btn" id="create-challenge-btn" style="background:#8e44ad; width:100%; margin-bottom:8px;">Crea Nuova Sfida 🎮</button>
+                <div style="margin: 8px 0; font-weight:bold; color:#777; font-size:12px;">OPPURE</div>
+                <input type="text" id="room-input" placeholder="Codice Stanza (es. AB12CD)" maxlength="6" style="text-transform:uppercase; margin-bottom:10px;">
+                <button class="btn" id="join-challenge-btn" style="background:#2980b9; width:100%;">Entra nella Sfida 🚀</button>
+                <br><br>
+                <button class="btn" onclick="closeModal('challenge-modal')" style="background:#95a5a6; font-size:13px; width:120px; padding:6px;">Chiudi</button>
+            </div>
+            <div id="challenge-room-view" style="display:none;">
+                <p id="room-status-text" style="margin: 5px 0 10px; font-size: 15px;">
+                    Codice Stanza: <b id="room-code-display" style="color: #8e44ad; font-size: 20px; letter-spacing: 2px;">------</b>
+                </p>
+                <div id="room-details" style="font-size:13px; color:#444; margin-bottom:12px; background:#f1f2f6; padding:12px; border-radius:12px; line-height: 1.4;">
+                    In attesa dell'avversario...
+                </div>
+                <div style="display: flex; gap: 6px; justify-content: center; align-items: center; margin-top: 10px;">
+                    <button class="btn" id="challenge-invite-btn" style="background:#25D366; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Invita 💬</button>
+                    <button class="btn" id="challenge-copy-btn" style="background:#e67e22; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Copia 📋</button>
+                    <button class="btn" id="challenge-quit-btn" style="background:#ff4757; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Abbandona 🚪</button>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Modale Fine Partita / Fine Sfida -->
-    <div id="game-over">
-        <h1>Ops! Perso!</h1>
-        <p style="margin-bottom: 4px;">Punteggio finale: <span id="final-score">0</span></p>
-        <div id="challenge-result-banner" style="display:none; margin:8px 0;"></div>
-        <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 10px;">
-            <button class="btn" id="play-again-btn" style="font-size: 14px; width: 210px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
-            <button class="btn" id="quit-challenge-btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
-            <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
+        
+        <!-- Modale Fine Partita / Fine Sfida -->
+        <div id="game-over">
+            <h1>Ops! Perso!</h1>
+            <p style="margin-bottom: 4px;">Punteggio finale: <span id="final-score">0</span></p>
+            <div id="challenge-result-banner" style="display:none; margin:8px 0;"></div>
+            <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 10px;">
+                <button class="btn" id="play-again-btn" style="font-size: 14px; width: 210px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
+                <button class="btn" id="quit-challenge-btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
+                <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
+            </div>
         </div>
-    </div>
 
-    <div id="pause-overlay" class="pause-overlay" aria-live="polite">
-        <div class="pause-panel">
-            <h3>Gioco in pausa.</h3>
-            <button id="resume-btn" class="btn resume-btn">Riparti</button>
+        <div id="pause-overlay" class="pause-overlay" aria-live="polite">
+            <div class="pause-panel">
+                <h3>Gioco in pausa.</h3>
+                <button id="resume-btn" class="btn resume-btn">Riparti</button>
+            </div>
         </div>
     </div>
 </div>
@@ -404,6 +432,7 @@
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const container = document.getElementById('game-container');
     const scoreEl = document.getElementById('score');
     const levelEl = document.getElementById('level');
     const bestScoreEl = document.getElementById('best-score');
@@ -488,6 +517,12 @@
     let animationId = null;
 
     function openModal(modal) {
+        if (modal === challengeModal) {
+            pauseOverlay.style.display = 'none';
+            modal.style.display = 'block';
+            return;
+        }
+
         if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
             togglePause();
         }
@@ -808,6 +843,7 @@
     function requestRematch() {
         if (!currentRoomId || !nickname) return;
         
+        pauseOverlay.style.display = 'none';
         myRematchRequested = true;
         const playBtn = document.getElementById('play-again-btn');
         playBtn.innerText = "In attesa... ⏳";
@@ -865,8 +901,8 @@
     resumeBtn.addEventListener('click', togglePause);
 
     function resize() {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
+        w = canvas.width = container.clientWidth;
+        h = canvas.height = container.clientHeight;
     }
     window.addEventListener('resize', resize);
     resize();
@@ -1341,7 +1377,6 @@
             scoreEl.innerText = score;
         }
 
-        // Controllo e rimozione cacche fluttuanti/staccate dal soffitto
         removeFloatingBubbles();
 
         shotsSinceDrop++;
@@ -1411,7 +1446,6 @@
         let supportVisited = Array(rows).fill(0).map(() => Array(cols).fill(false));
         let supportQueue = [];
 
-        // Partiamo da tutte le bolle presenti nella prima riga (soffitto)
         for (let c = 0; c < cols; c++) {
             if (grid[0][c] !== null && grid[0][c] !== undefined) {
                 supportVisited[0][c] = true;
@@ -1419,7 +1453,6 @@
             }
         }
 
-        // BFS per marcare tutte le bolle collegate (direttamente o indirettamente) al soffitto
         while (supportQueue.length > 0) {
             let curr = supportQueue.shift();
             let neighbors = getNeighbors(curr.r, curr.c);
@@ -1431,7 +1464,6 @@
             }
         }
 
-        // Qualsiasi bolla non raggiunta dal percorso partendo dal soffitto è fluttuante e deve cadere
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 if (r % 2 === 1 && c === cols - 1) continue;
@@ -1589,10 +1621,14 @@
         let clientY = e.clientY || (e.touches && e.touches[0].clientY);
         if (clientX === undefined) return;
 
+        let rect = canvas.getBoundingClientRect();
+        let x = clientX - rect.left;
+        let y = clientY - rect.top;
+
         let shooterX = w / 2;
         let shooterY = h - 75;
-        let dx = clientX - shooterX;
-        let dy = clientY - shooterY;
+        let dx = x - shooterX;
+        let dy = y - shooterY;
         aimAngle = Math.atan2(dy, dx);
         
         if (aimAngle > -0.1) aimAngle = -0.1;

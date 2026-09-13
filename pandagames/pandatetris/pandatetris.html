@@ -827,8 +827,22 @@ canvas {
 
     <!-- Box dei punteggi sotto alla lavagna -->
     <div id="score-container">
-        <span id="player-name">Player</span> | Score: <span id="score">0</span> | Level: <span id="level">1</span><br>
-        <span style="font-size: 10px; color: #666; font-weight: 600;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
+        <div id="normal-score-mode">
+            <span id="player-name">Player</span> | Score: <span id="score">0</span> | Level: <span id="level">1</span><br>
+            <span style="font-size: 10px; color: #666; font-weight: 600;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
+        </div>
+        <div id="challenge-score-mode" style="display: none;">
+            <div style="display: flex; justify-content: space-around; gap: 8px; font-size: 12px; align-items: center;">
+                <div style="text-align: center;">
+                    <b style="color: #3742fa;"><span id="chal-box-my-name">Player</span></b><br>
+                    <span id="chal-box-my-score" style="color: #333; font-weight: 900;">0 pts</span>
+                </div>
+                <div style="border-left: 2px solid #ddd; padding-left: 8px; text-align: center;">
+                    <b style="color: #8e44ad;"><span id="chal-box-opp-name">Avversario</span></b><br>
+                    <span id="chal-box-opp-status" style="color: #e67e22; font-weight: 700; font-size: 11px;">sta giocando</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -913,6 +927,16 @@ if (nickname) {
 }
 
 function openModal(modal) {
+    if (modal === challengeModal) {
+        if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
+            isPaused = true;
+            pauseBtn.innerText = '▶';
+            pauseOverlay.style.display = 'none';
+            if (animationId) cancelAnimationFrame(animationId);
+        }
+        modal.style.display = 'block';
+        return;
+    }
     modal.style.display = 'block';
     if (!isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
         togglePause();
@@ -921,7 +945,9 @@ function openModal(modal) {
 
 function closeModal(modal) {
     modal.style.display = 'none';
-    if (isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
+    if (modal === challengeModal && isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
+        pauseOverlay.style.display = 'none';
+    } else if (isPaused && !isGameOver && nicknameModal.style.display !== 'block') {
         togglePause();
     }
 }
@@ -948,6 +974,8 @@ const roomParam = urlParams.get('room') || urlParams.get('code');
 if (roomParam) {
     document.getElementById('room-input').value = roomParam.toUpperCase();
     if (nickname) {
+        document.getElementById('challenge-menu-view').style.display = 'block';
+        document.getElementById('challenge-room-view').style.display = 'none';
         openModal(challengeModal);
     }
 }
@@ -1013,6 +1041,14 @@ document.getElementById('join-challenge-btn').addEventListener('click', () => {
     .catch(err => alert('Errore di connessione'));
 });
 
+// Se è arrivato il parametro stanza via URL e il nickname è inserito, unisciti automaticamente o mostra la stanza
+if (roomParam && nickname) {
+    setTimeout(() => {
+        document.getElementById('room-input').value = roomParam.toUpperCase();
+        document.getElementById('join-challenge-btn').click();
+    }, 500);
+}
+
 // Invita via WhatsApp
 document.getElementById('challenge-invite-btn').addEventListener('click', () => {
     if (!currentRoomId) return;
@@ -1070,6 +1106,9 @@ function quitChallenge() {
     document.getElementById('challenge-result-banner').innerHTML = '';
     document.getElementById('quit-challenge-btn').style.display = 'none';
     
+    document.getElementById('normal-score-mode').style.display = 'block';
+    document.getElementById('challenge-score-mode').style.display = 'none';
+
     const playBtn = document.getElementById('play-again-btn');
     playBtn.innerText = 'Rigioca 🐼';
     playBtn.style.background = '#19af4e';
@@ -1112,7 +1151,14 @@ function stopChallengePolling() {
 }
 
 function updateChallengeUI(state) {
-    if (!isChallengeMode) return;
+    if (!isChallengeMode) {
+        document.getElementById('normal-score-mode').style.display = 'block';
+        document.getElementById('challenge-score-mode').style.display = 'none';
+        return;
+    }
+
+    document.getElementById('normal-score-mode').style.display = 'none';
+    document.getElementById('challenge-score-mode').style.display = 'block';
 
     const detailsEl = document.getElementById('room-details');
     const bannerEl = document.getElementById('challenge-result-banner');
@@ -1126,9 +1172,22 @@ function updateChallengeUI(state) {
     const myRematch = iAmP1 ? state.p1_rematch : state.p2_rematch;
     const oppRematch = iAmP1 ? state.p2_rematch : state.p1_rematch;
 
+    // Aggiorna lo score box in tempo reale
+    document.getElementById('chal-box-my-name').innerText = nickname;
+    document.getElementById('chal-box-my-score').innerText = (myScore !== null ? myScore : player.score) + ' pts';
+    document.getElementById('chal-box-opp-name').innerText = oppName;
+
+    if (oppScore !== null) {
+        document.getElementById('chal-box-opp-status').innerText = oppScore + ' pts';
+        document.getElementById('chal-box-opp-status').style.color = '#27ae60';
+    } else {
+        document.getElementById('chal-box-opp-status').innerText = 'sta giocando';
+        document.getElementById('chal-box-opp-status').style.color = '#e67e22';
+    }
+
     if (state.status === 'closed') {
         stopChallengePolling();
-        alert("L'avversario ha abbandonato la sfida.");
+        alert("L'avversario è uscito dalla sfida o dalla modalità sfida.");
         quitChallenge();
         return;
     }
@@ -1158,7 +1217,7 @@ function updateChallengeUI(state) {
         bannerEl.innerHTML = `
             <div style="background: rgba(41, 128, 185, 0.1); border: 2px dashed #2980b9; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
                 <div style="font-size: 13px; font-weight: 900; color: #2980b9;">📤 Punteggio inviato: ${player.score} pts</div>
-                <div style="font-size: 11px; color: #555; margin-top: 4px; font-weight: 600;">⏳ In attesa che <b>${oppName}</b> finisca la partita...</div>
+                <div style="font-size: 11px; color: #555; margin-top: 4px; font-weight: 600;">⏳ Il player sta ancora giocando...</div>
             </div>
         `;
         playBtn.style.display = 'none';
@@ -1189,9 +1248,9 @@ function updateChallengeUI(state) {
 
         let rematchStatusText = "";
         if (oppRematch && !myRematch) {
-            rematchStatusText = `<div style="margin-top: 6px; color: #8e44ad; font-weight: 900; font-size: 12px;">🎮 ${oppName} ti ha invitato a una rivincita!</div>`;
+            rematchStatusText = `<div style="margin-top: 6px; color: #8e44ad; font-weight: 900; font-size: 12px;">🎮 ${oppName} ti ha invitato alla rivincita!</div>`;
         } else if (myRematch && !oppRematch) {
-            rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 12px;">⏳ Richiesta inviata! In attesa che ${oppName} accetti...</div>`;
+            rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 12px;">⏳ Richiesta inviata! In attesa che ${oppName} clicchi rivincita...</div>`;
         }
 
         if (isGameOver) {
@@ -1216,7 +1275,7 @@ function updateChallengeUI(state) {
                 playBtn.disabled = false;
                 playBtn.onclick = requestRematch;
             } else if (myRematch && !oppRematch) {
-                playBtn.innerText = "In attesa... ⏳";
+                playBtn.innerText = "In attesa dell'altro player... ⏳";
                 playBtn.disabled = true;
             } else {
                 playBtn.innerText = "Rivincita ⚔️";
@@ -1238,7 +1297,7 @@ function requestRematch() {
     
     myRematchRequested = true;
     const playBtn = document.getElementById('play-again-btn');
-    playBtn.innerText = "In attesa... ⏳";
+    playBtn.innerText = "In attesa dell'altro player... ⏳";
     playBtn.disabled = true;
 
     fetch('/api/games_challenge-UPVapi', {
@@ -1539,6 +1598,9 @@ function arenaSweep() {
     }
     scoreElement.innerText = player.score;
     levelElement.innerText = player.level;
+    if (isChallengeMode) {
+        document.getElementById('chal-box-my-score').innerText = player.score + ' pts';
+    }
 }
 
 function playerDrop() {
@@ -1681,7 +1743,7 @@ function update(time = 0) {
 }
 
 function togglePause() {
-    if (isGameOver || nicknameModal.style.display === 'block') return;
+    if (isGameOver || nicknameModal.style.display === 'block' || isChallengeMode) return;
     isPaused = !isPaused;
     pauseBtn.innerText = isPaused ? '▶' : '⏸';
     pauseOverlay.style.display = isPaused ? 'flex' : 'none';
