@@ -43,36 +43,35 @@ body, html {
     z-index: 50;
 }
 
-#left-controls {
-    position: absolute;
-    top: 15px;
-    left: 12px;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    z-index: 10;
-    pointer-events: auto;
-}
-
 #game-title {
     position: absolute;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 30px;
+    top: 10px;
+    left: 18px;
+    font-size: 54px;
+    line-height: 1;
     color: var(--sbatuffo-blue);
     font-weight: 900;
+    letter-spacing: 2px;
     font-family: 'Grandstander', cursive;
-    text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 #333;
+    text-shadow: 
+        -2px -2px 0 #ffffff,  
+         2px -2px 0 #ffffff,
+        -2px  2px 0 #ffffff,
+         2px  2px 0 #ffffff,
+         4px  4px 0 #00263e,
+         6px  6px 10px rgba(0,0,0,0.4);
     pointer-events: none;
     z-index: 10;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    height: 38px;
 }
 
 #right-controls {
     position: absolute;
     top: 15px;
-    right: 12px;
+    right: 16px;
     display: flex;
     gap: 6px;
     align-items: center;
@@ -81,8 +80,8 @@ body, html {
 }
 
 .top-btn {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     color: white;
     font-weight: 900;
     border: 2px solid #333;
@@ -96,6 +95,8 @@ body, html {
     transition: transform 0.1s ease;
     font-family: 'Grandstander', cursive;
     background: #19af4e;
+    font-size: 11px;
+    line-height: 1;
 }
 
 .top-btn:active {
@@ -103,10 +104,57 @@ body, html {
     box-shadow: 0 0 0 #333;
 }
 
-#info-btn { background: #3742fa; font-size: 13px; font-style: italic; }
-#leaderboard-btn { background: #fbc531; font-size: 12px; }
-#pause-btn { background: #ffa502; font-size: 12px; }
-#close-btn { background: #ff4757; font-size: 13px; }
+#info-btn { background: #3742fa; font-size: 11px; font-style: italic; }
+#leaderboard-btn { background: #fbc531; font-size: 10px; }
+#challenge-btn { background: #8e44ad; font-size: 10px; }
+#pause-btn { background: #ffa502; font-size: 10px; }
+#close-btn { background: #ff4757; font-size: 11px; }
+
+@media (max-width: 768px) {
+    #game-title {
+        font-size: 38px;
+        top: 14px;
+        left: 14px;
+        height: 30px;
+        letter-spacing: 1px;
+    }
+
+    #right-controls {
+        top: 13px;
+        right: 12px;
+        gap: 4px;
+    }
+
+    .top-btn {
+        width: 24px;
+        height: 24px;
+        border-width: 1.5px;
+        box-shadow: 0 2px 0 #333;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    #game-title {
+        font-size: 28px;
+        top: 15px;
+        left: 12px;
+        height: 26px;
+    }
+
+    #right-controls {
+        top: 14px;
+        right: 10px;
+        gap: 3px;
+    }
+
+    .top-btn {
+        width: 22px;
+        height: 22px;
+        font-size: 8px;
+        border-width: 1.5px;
+    }
+}
 
 #score-container {
     position: relative;
@@ -227,6 +275,11 @@ body, html {
 .btn:active {
     transform: translateY(3px);
     box-shadow: 0 0 0 #1a1a1a;
+}
+.btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 .game-container {
@@ -599,18 +652,17 @@ canvas {
 <body>
 
 <div id="ui-layer">
-    <div id="left-controls">
-        <button id="info-btn" class="top-btn" title="Info">i</button>
-        <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
-    </div>
-    
     <div id="game-title">PandaTetris</div>
     
     <div id="right-controls">
+        <button id="info-btn" class="top-btn" title="Info">i</button>
+        <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
+        <button id="challenge-btn" class="top-btn" title="Modalità Sfida">⚔️</button>
         <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
         <a href="../pandagames.html" id="close-btn" class="top-btn" title="Esci">✕</a>
     </div>
 
+    <!-- Modale Nickname -->
     <div id="nickname-modal" class="modal">
         <h2>Benvenuto a PandaTetris! 🐼</h2>
         <p>Inserisci il tuo nickname per iniziare l'avventura:</p>
@@ -619,28 +671,61 @@ canvas {
         <button class="btn" id="save-nickname-btn" style="font-size: 14px; width: 140px; padding: 8px;">Inizia 🚀</button>
     </div>
 
+    <!-- Modale Info -->
     <div id="info-modal" class="modal">
         <h2>Come Giocare 🐼</h2>
         <p id="info-text">Caricamento...</p>
-        <button class="btn" onclick="closeModal('info-modal')" style="font-size: 13px; width: 120px; padding: 6px;">Capito!</button>
+        <button class="btn" onclick="closeModal(infoModal)" style="font-size: 13px; width: 120px; padding: 6px;">Capito!</button>
     </div>
 
+    <!-- Modale Classifica -->
     <div id="leaderboard-modal" class="modal">
         <h2>Classifica 🏆</h2>
         <p style="font-size: 11px; color: #777; margin-top: -5px; margin-bottom: 10px;">Miglior punteggio per giocatore</p>
         <div id="leaderboard-list" style="font-size: 13px; color: #333; max-height: 130px; overflow-y: auto; margin-bottom: 12px; text-align: left; padding: 0 5px;">
             Caricamento classifica...
         </div>
-        <button class="btn" onclick="closeModal('leaderboard-modal')" style="font-size: 13px; width: 120px; padding: 6px;">Chiudi</button>
+        <button class="btn" onclick="closeModal(leaderboardModal)" style="font-size: 13px; width: 120px; padding: 6px;">Chiudi</button>
     </div>
 
+    <!-- Modale Gestione Sfida 1v1 -->
+    <div id="challenge-modal" class="modal">
+        <h2>Sfida 1v1 ⚔️</h2>
+        <div id="challenge-menu-view">
+            <p>Sfida un amico in tempo reale inviandogli il codice stanza!</p>
+            <button class="btn" id="create-challenge-btn" style="background:#8e44ad; width:100%; margin-bottom:8px;">Crea Nuova Sfida 🎮</button>
+            <div style="margin: 8px 0; font-weight:bold; color:#777; font-size:12px;">OPPURE</div>
+            <input type="text" id="room-input" placeholder="Codice Stanza (es. AB12CD)" maxlength="6" style="text-transform:uppercase; margin-bottom:10px;">
+            <button class="btn" id="join-challenge-btn" style="background:#2980b9; width:100%;">Entra nella Sfida 🚀</button>
+            <br><br>
+            <button class="btn" onclick="closeModal(challengeModal)" style="background:#95a5a6; font-size:13px; width:120px; padding:6px;">Chiudi</button>
+        </div>
+        <div id="challenge-room-view" style="display:none;">
+            <p id="room-status-text" style="margin: 5px 0 10px; font-size: 14px;">
+                Codice Stanza: <b id="room-code-display" style="color: #8e44ad; font-size: 18px; letter-spacing: 2px;">------</b>
+            </p>
+            <div id="room-details" style="font-size:12px; color:#444; margin-bottom:12px; background:#f1f2f6; padding:10px; border-radius:10px; line-height: 1.4; text-align: left;">
+                In attesa dell'avversario...
+            </div>
+            <div style="display: flex; gap: 4px; justify-content: center; align-items: center; margin-top: 8px;">
+                <button class="btn" id="challenge-invite-btn" style="background:#25D366; font-size:11px; padding:6px 4px; margin:0; flex:1; white-space:nowrap;">Invita 💬</button>
+                <button class="btn" id="challenge-copy-btn" style="background:#e67e22; font-size:11px; padding:6px 4px; margin:0; flex:1; white-space:nowrap;">Copia 📋</button>
+                <button class="btn" id="challenge-quit-btn" style="background:#ff4757; font-size:11px; padding:6px 4px; margin:0; flex:1; white-space:nowrap;">Abbandona 🚪</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale Fine Partita / Fine Sfida -->
     <div id="game-over">
         <h1>Ops! Perso!</h1>
         <p style="margin-bottom: 6px; font-family: 'Fredoka', sans-serif; font-size: 14px; color: #555; font-weight: 600;">Punteggio finale: <span id="final-score">0</span></p>
+        <div id="challenge-result-banner" style="display:none; margin:8px 0;"></div>
         <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
-        <button class="btn" onclick="resetGame()" style="font-size: 14px; width: 180px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
-        <br><br>
-        <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:14px; width:180px; padding:8px; box-sizing:border-box;">Torna ai<br>Panda Games</a>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 10px;">
+            <button class="btn" id="play-again-btn" onclick="resetGame()" style="font-size: 14px; width: 200px; padding: 8px; box-sizing: border-box;">Rigioca 🐼</button>
+            <button class="btn" id="quit-challenge-btn" style="background:#ff4757; font-size:12px; width:200px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
+            <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:12px; width:200px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
+        </div>
     </div>
 </div>
 
@@ -694,7 +779,7 @@ canvas {
         </div>
     </div>
 
-    <!-- Box dei punteggi ripristinato sotto alla lavagna -->
+    <!-- Box dei punteggi sotto alla lavagna -->
     <div id="score-container">
         <span id="player-name">Player</span> | Score: <span id="score">0</span> | Level: <span id="level">1</span><br>
         <span style="font-size: 10px; color: #666; font-weight: 600;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
@@ -718,11 +803,20 @@ const gameOverScreen = document.getElementById('game-over');
 const pauseBtn = document.getElementById('pause-btn');
 const infoModal = document.getElementById('info-modal');
 const leaderboardModal = document.getElementById('leaderboard-modal');
+const challengeModal = document.getElementById('challenge-modal');
 const nicknameModal = document.getElementById('nickname-modal');
 const nicknameInput = document.getElementById('nickname-input');
 const saveNicknameBtn = document.getElementById('save-nickname-btn');
 const leaderboardList = document.getElementById('leaderboard-list');
 const infoTextEl = document.getElementById('info-text');
+
+// Variabili Sfida 1v1
+let currentRoomId = null;
+let challengePollInterval = null;
+let isChallengeMode = false;
+let hasSubmittedScore = false;
+let myRematchRequested = false;
+let lastKnownStatus = null;
 
 let bestScore = parseInt(localStorage.getItem('pandatetris_best_score')) || 0;
 let lastScore = parseInt(localStorage.getItem('pandatetris_last_score')) || 0;
@@ -745,9 +839,30 @@ saveNicknameBtn.addEventListener('click', () => {
         localStorage.setItem('pandatetris_nickname', nickname);
         playerNameEl.innerText = nickname;
         nicknameModal.style.display = 'none';
+        fetchBestScore();
         if (isPaused && !isGameOver) togglePause();
+    } else {
+        alert('Inserisci un nickname valido!');
     }
 });
+
+function fetchBestScore() {
+    if (!nickname) return;
+    fetch(`/api/games_leaderboard-UPVapi?game=pandatetris&username=${encodeURIComponent(nickname)}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.bestScore > bestScore) {
+                bestScore = data.bestScore;
+                bestScoreEl.innerText = bestScore;
+                localStorage.setItem('pandatetris_best_score', bestScore);
+            }
+        })
+        .catch(err => console.error(err));
+}
+
+if (nickname) {
+    fetchBestScore();
+}
 
 function openModal(modal) {
     modal.style.display = 'block';
@@ -772,6 +887,325 @@ document.getElementById('leaderboard-btn').addEventListener('click', () => {
     openModal(leaderboardModal);
     loadLeaderboard();
 });
+
+document.getElementById('challenge-btn').addEventListener('click', () => {
+    document.getElementById('challenge-menu-view').style.display = 'block';
+    document.getElementById('challenge-room-view').style.display = 'none';
+    openModal(challengeModal);
+});
+
+// Controllo automatico parametro URL per invito WhatsApp (?room=XXXXXX)
+const urlParams = new URLSearchParams(window.location.search);
+const roomParam = urlParams.get('room') || urlParams.get('code');
+if (roomParam) {
+    document.getElementById('room-input').value = roomParam.toUpperCase();
+    if (nickname) {
+        openModal(challengeModal);
+    }
+}
+
+// --- LOGICA SFIDA 1v1 ---
+document.getElementById('create-challenge-btn').addEventListener('click', () => {
+    if (!nickname) return;
+    fetch('/api/games_challenge-UPVapi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', username: nickname })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            currentRoomId = data.roomId;
+            isChallengeMode = true;
+            hasSubmittedScore = false;
+            myRematchRequested = false;
+            lastKnownStatus = 'waiting';
+
+            document.getElementById('challenge-menu-view').style.display = 'none';
+            document.getElementById('challenge-room-view').style.display = 'block';
+            document.getElementById('room-code-display').innerText = currentRoomId;
+            document.getElementById('room-details').innerHTML = `Stanza creata con successo! 🎮<br>Condividi il codice con il tuo avversario per iniziare.`;
+            startChallengePolling();
+        } else {
+            alert('Errore creazione sfida: ' + data.error);
+        }
+    })
+    .catch(err => alert('Errore di rete'));
+});
+
+document.getElementById('join-challenge-btn').addEventListener('click', () => {
+    let code = document.getElementById('room-input').value.trim().toUpperCase();
+    if (!code || code.length < 6) {
+        alert('Inserisci un codice stanza valido di 6 caratteri.');
+        return;
+    }
+    fetch('/api/games_challenge-UPVapi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'join', roomId: code, username: nickname })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            currentRoomId = code;
+            isChallengeMode = true;
+            hasSubmittedScore = false;
+            myRematchRequested = false;
+            lastKnownStatus = data.state.status;
+
+            document.getElementById('challenge-menu-view').style.display = 'none';
+            document.getElementById('challenge-room-view').style.display = 'block';
+            document.getElementById('room-code-display').innerText = currentRoomId;
+            updateChallengeUI(data.state);
+            startChallengePolling();
+        } else {
+            alert('Errore accesso stanza: ' + data.error);
+        }
+    })
+    .catch(err => alert('Errore di connessione'));
+});
+
+// Invita via WhatsApp
+document.getElementById('challenge-invite-btn').addEventListener('click', () => {
+    if (!currentRoomId) return;
+    const gameUrl = `${window.location.origin}${window.location.pathname}?room=${currentRoomId}`;
+    const text = `Sfidami a PandaTetris! 🐼🧱\nCodice Stanza: *${currentRoomId}*\nClicca sul link per giocare: ${gameUrl}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
+});
+
+// Copia Codice Stanza
+document.getElementById('challenge-copy-btn').addEventListener('click', () => {
+    if (!currentRoomId) return;
+    const btn = document.getElementById('challenge-copy-btn');
+    const textToCopy = currentRoomId;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(showCopied).catch(() => fallbackCopy(textToCopy));
+    } else {
+        fallbackCopy(textToCopy);
+    }
+
+    function showCopied() {
+        const oldText = btn.innerHTML;
+        btn.innerHTML = 'Copiato! ✅';
+        setTimeout(() => { btn.innerHTML = oldText; }, 2000);
+    }
+
+    function fallbackCopy(str) {
+        const el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        showCopied();
+    }
+});
+
+function quitChallenge() {
+    if (currentRoomId) {
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'quit', roomId: currentRoomId, username: nickname })
+        }).catch(() => {});
+    }
+    stopChallengePolling();
+    currentRoomId = null;
+    isChallengeMode = false;
+    hasSubmittedScore = false;
+    myRematchRequested = false;
+    lastKnownStatus = null;
+    
+    document.getElementById('challenge-result-banner').style.display = 'none';
+    document.getElementById('challenge-result-banner').innerHTML = '';
+    document.getElementById('quit-challenge-btn').style.display = 'none';
+    
+    const playBtn = document.getElementById('play-again-btn');
+    playBtn.innerText = 'Rigioca 🐼';
+    playBtn.style.background = '#19af4e';
+    playBtn.disabled = false;
+    playBtn.onclick = resetGame;
+
+    closeModal(challengeModal);
+}
+
+document.getElementById('challenge-quit-btn').addEventListener('click', quitChallenge);
+document.getElementById('quit-challenge-btn').addEventListener('click', () => {
+    quitChallenge();
+    if (isGameOver) resetGame();
+});
+
+function startChallengePolling() {
+    if (challengePollInterval) clearInterval(challengePollInterval);
+    challengePollInterval = setInterval(() => {
+        if (!currentRoomId) return;
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'status', roomId: currentRoomId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.state) {
+                updateChallengeUI(data.state);
+            }
+        })
+        .catch(err => console.error(err));
+    }, 1500);
+}
+
+function stopChallengePolling() {
+    if (challengePollInterval) {
+        clearInterval(challengePollInterval);
+        challengePollInterval = null;
+    }
+}
+
+function updateChallengeUI(state) {
+    if (!isChallengeMode) return;
+
+    const detailsEl = document.getElementById('room-details');
+    const bannerEl = document.getElementById('challenge-result-banner');
+    const playBtn = document.getElementById('play-again-btn');
+    const quitBtn = document.getElementById('quit-challenge-btn');
+
+    const iAmP1 = (nickname === state.p1);
+    const oppName = iAmP1 ? (state.p2 || 'Avversario') : state.p1;
+    const myScore = iAmP1 ? state.p1_score : state.p2_score;
+    const oppScore = iAmP1 ? state.p2_score : state.p1_score;
+    const myRematch = iAmP1 ? state.p1_rematch : state.p2_rematch;
+    const oppRematch = iAmP1 ? state.p2_rematch : state.p1_rematch;
+
+    if (state.status === 'closed') {
+        stopChallengePolling();
+        alert("L'avversario ha abbandonato la sfida.");
+        quitChallenge();
+        return;
+    }
+
+    if (state.status === 'waiting') {
+        detailsEl.innerHTML = `Stanza: <b>${currentRoomId}</b><br>In attesa che <b>${oppName}</b> si unisca...`;
+    }
+
+    if (state.status === 'playing') {
+        detailsEl.innerHTML = `Sfida in corso contro <b>${oppName}</b>! 🎮`;
+        
+        if (challengeModal.style.display === 'block' || isGameOver || lastKnownStatus === 'finished' || lastKnownStatus === 'waiting') {
+            closeModal(challengeModal);
+            hasSubmittedScore = false;
+            myRematchRequested = false;
+            bannerEl.style.display = 'none';
+            bannerEl.innerHTML = '';
+            quitBtn.style.display = 'none';
+            lastKnownStatus = 'playing';
+            resetGame();
+            return;
+        }
+    }
+
+    if (isGameOver && hasSubmittedScore && state.status !== 'finished') {
+        bannerEl.style.display = 'block';
+        bannerEl.innerHTML = `
+            <div style="background: rgba(41, 128, 185, 0.1); border: 2px dashed #2980b9; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
+                <div style="font-size: 13px; font-weight: 900; color: #2980b9;">📤 Punteggio inviato: ${player.score} pts</div>
+                <div style="font-size: 11px; color: #555; margin-top: 4px; font-weight: 600;">⏳ In attesa che <b>${oppName}</b> finisca la partita...</div>
+            </div>
+        `;
+        playBtn.style.display = 'none';
+        quitBtn.style.display = 'inline-block';
+    }
+
+    if (state.status === 'finished') {
+        lastKnownStatus = 'finished';
+        
+        let p1S = state.p1_score !== null ? state.p1_score : 0;
+        let p2S = state.p2_score !== null ? state.p2_score : 0;
+        let myS = iAmP1 ? p1S : p2S;
+        let oppS = iAmP1 ? p2S : p1S;
+
+        let resultTitle = "";
+        let resultColor = "";
+
+        if (myS > oppS) {
+            resultTitle = "🎉 VITTORIA! 🎉";
+            resultColor = "#19af4e";
+        } else if (oppS > myS) {
+            resultTitle = "💔 SCONFITTA!";
+            resultColor = "#ff4757";
+        } else {
+            resultTitle = "🤝 PAREGGIO!";
+            resultColor = "#f39c12";
+        }
+
+        let rematchStatusText = "";
+        if (oppRematch && !myRematch) {
+            rematchStatusText = `<div style="margin-top: 6px; color: #8e44ad; font-weight: 900; font-size: 12px;">🎮 ${oppName} ti ha invitato a una rivincita!</div>`;
+        } else if (myRematch && !oppRematch) {
+            rematchStatusText = `<div style="margin-top: 6px; color: #e67e22; font-weight: bold; font-size: 12px;">⏳ Richiesta inviata! In attesa che ${oppName} accetti...</div>`;
+        }
+
+        if (isGameOver) {
+            bannerEl.style.display = 'block';
+            bannerEl.innerHTML = `
+                <div style="background: rgba(142, 68, 173, 0.08); border: 2px solid ${resultColor}; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
+                    <div style="font-size: 16px; font-weight: 900; color: ${resultColor}; margin-bottom: 4px;">${resultTitle}</div>
+                    <div style="font-size: 12px; color: #2c3e50; font-weight: 700;">
+                        Tu (<b>${nickname}</b>): <span style="color:#27ae60;">${myS} pts</span> &nbsp;|&nbsp; 
+                        <b>${oppName}</b>: <span style="color:#e74c3c;">${oppS} pts</span>
+                    </div>
+                    ${rematchStatusText}
+                </div>
+            `;
+
+            playBtn.style.display = 'inline-block';
+            quitBtn.style.display = 'inline-block';
+            playBtn.style.background = '#8e44ad';
+
+            if (oppRematch && !myRematch) {
+                playBtn.innerText = "Accetta Rivincita ⚔️";
+                playBtn.disabled = false;
+                playBtn.onclick = requestRematch;
+            } else if (myRematch && !oppRematch) {
+                playBtn.innerText = "In attesa... ⏳";
+                playBtn.disabled = true;
+            } else {
+                playBtn.innerText = "Rivincita ⚔️";
+                playBtn.disabled = false;
+                playBtn.onclick = requestRematch;
+            }
+        }
+
+        detailsEl.innerHTML = `
+            <b>Sfida conclusa!</b><br>
+            ${nickname}: ${myS} pts | ${oppName}: ${oppS} pts<br>
+            <b style="color:${resultColor};">${resultTitle}</b>
+        `;
+    }
+}
+
+function requestRematch() {
+    if (!currentRoomId || !nickname) return;
+    
+    myRematchRequested = true;
+    const playBtn = document.getElementById('play-again-btn');
+    playBtn.innerText = "In attesa... ⏳";
+    playBtn.disabled = true;
+
+    fetch('/api/games_challenge-UPVapi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'rematch', roomId: currentRoomId, username: nickname })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && data.state) {
+            updateChallengeUI(data.state);
+        }
+    })
+    .catch(err => console.error(err));
+}
 
 function loadLeaderboard() {
     leaderboardList.innerHTML = "Caricamento...";
@@ -1215,6 +1649,36 @@ function gameOver() {
     isGameOver = true;
     finalScoreElement.innerText = player.score;
 
+    const playBtn = document.getElementById('play-again-btn');
+    const quitBtn = document.getElementById('quit-challenge-btn');
+
+    if (isChallengeMode && currentRoomId && !hasSubmittedScore) {
+        hasSubmittedScore = true;
+        playBtn.style.display = 'none';
+        quitBtn.style.display = 'inline-block';
+
+        fetch('/api/games_challenge-UPVapi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'submit', roomId: currentRoomId, username: nickname, score: player.score })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.state) {
+                updateChallengeUI(data.state);
+            }
+        })
+        .catch(err => console.error(err));
+    } else if (!isChallengeMode) {
+        document.getElementById('challenge-result-banner').style.display = 'none';
+        quitBtn.style.display = 'none';
+        playBtn.style.display = 'inline-block';
+        playBtn.innerText = 'Rigioca 🐼';
+        playBtn.style.background = '#19af4e';
+        playBtn.disabled = false;
+        playBtn.onclick = resetGame;
+    }
+
     let isNewRecord = player.score > bestScore;
     if (isNewRecord && player.score > 0) {
         bestScoreNotice.style.display = 'block';
@@ -1273,6 +1737,23 @@ function resetGame() {
     isGameOver = false;
     isPaused = false;
     pauseBtn.innerText = '⏸';
+
+    hasSubmittedScore = false;
+    myRematchRequested = false;
+
+    document.getElementById('challenge-result-banner').style.display = 'none';
+    document.getElementById('challenge-result-banner').innerHTML = '';
+
+    const playBtn = document.getElementById('play-again-btn');
+    playBtn.disabled = false;
+
+    if (!isChallengeMode) {
+        playBtn.innerText = 'Rigioca 🐼';
+        playBtn.style.background = '#19af4e';
+        playBtn.onclick = resetGame;
+        document.getElementById('quit-challenge-btn').style.display = 'none';
+    }
+
     playerReset();
     lastTime = performance.now();
     if (animationId) cancelAnimationFrame(animationId);
@@ -1307,7 +1788,6 @@ canvas.addEventListener('touchmove', (e) => {
     if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
         if (canvasHoldInterval) {
             clearTimeout(canvasHoldInterval);
-            clearInterval(canvasHoldInterval);
             canvasHoldInterval = null;
         }
     }
@@ -1317,57 +1797,27 @@ canvas.addEventListener('touchend', (e) => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     if (canvasHoldInterval) {
         clearTimeout(canvasHoldInterval);
-        clearInterval(canvasHoldInterval);
         canvasHoldInterval = null;
-    }
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - touchStartX;
-    const dy = touch.clientY - touchStartY;
-    const dt = performance.now() - touchStartTime;
-
-    if (dt < 300 && Math.abs(dx) < 20 && Math.abs(dy) < 20) {
-        playerRotate();
-    } else if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 30) {
-            move(1);
-        } else if (dx < -30) {
-            move(-1); 
+        const touchDuration = performance.now() - touchStartTime;
+        const touch = e.changedTouches[0];
+        const dx = touch.clientX - touchStartX;
+        const dy = touch.clientY - touchStartY;
+        if (touchDuration < 250 && Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+            playerRotate();
         }
     }
-}, {passive: true});
+});
 
-const pandaHeadEl = document.querySelector('.panda-head');
-pandaHeadEl.addEventListener('click', () => {
+document.querySelector('.panda-head').addEventListener('click', () => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
     playerRotate();
+    draw();
 });
 
-const leftPaws = [document.querySelector('.panda-paw-top.left'), document.querySelector('.panda-paw-bottom.left')];
-const rightPaws = [document.querySelector('.panda-paw-top.right'), document.querySelector('.panda-paw-bottom.right')];
-
-leftPaws.forEach(paw => {
-    if (!paw) return;
-    paw.addEventListener('touchstart', (e) => { e.preventDefault(); startPawMovement(-1); }, {passive: false});
-    paw.addEventListener('touchend', stopPawMovement);
-    paw.addEventListener('touchcancel', stopPawMovement);
-    paw.addEventListener('mousedown', () => startPawMovement(-1));
-    paw.addEventListener('mouseup', stopPawMovement);
-    paw.addEventListener('mouseleave', stopPawMovement);
-});
-
-rightPaws.forEach(paw => {
-    if (!paw) return;
-    paw.addEventListener('touchstart', (e) => { e.preventDefault(); startPawMovement(1); }, {passive: false});
-    paw.addEventListener('touchend', stopPawMovement);
-    paw.addEventListener('touchcancel', stopPawMovement);
-    paw.addEventListener('mousedown', () => startPawMovement(1));
-    paw.addEventListener('mouseup', stopPawMovement);
-    paw.addEventListener('mouseleave', stopPawMovement);
-});
-
-document.querySelectorAll('.chalk-stick').forEach(chalkStick => {
-    chalkStick.addEventListener('click', hardDrop);
-});
+document.querySelector('.panda-paw-top.left').addEventListener('mousedown', () => startPawMovement(-1));
+document.querySelector('.panda-paw-top.left').addEventListener('mouseup', stopPawMovement);
+document.querySelector('.panda-paw-top.right').addEventListener('mousedown', () => startPawMovement(1));
+document.querySelector('.panda-paw-top.right').addEventListener('mouseup', stopPawMovement);
 
 window.addEventListener('keydown', event => {
     if (isPaused || isGameOver || nicknameModal.style.display === 'block') return;
@@ -1379,17 +1829,13 @@ window.addEventListener('keydown', event => {
         playerDrop();
     } else if (event.key === 'ArrowUp') {
         playerRotate();
-    } else if (event.key === ' ') {
+    } else if (event.code === 'Space') {
         hardDrop();
-        event.preventDefault();
     }
 });
 
-if (!nickname) {
-    nicknameModal.style.display = 'block';
-} else {
+if (nickname) {
     playerReset();
-    lastTime = performance.now();
     update();
 }
 </script>

@@ -914,7 +914,7 @@
         if (r % 2 === 1) {
             x += bubbleRadius;
         }
-        let y = 135 + r * (bubbleRadius * Math.sqrt(3));
+        let y = 150 + r * (bubbleRadius * Math.sqrt(3));
         return { x, y };
     }
 
@@ -1127,13 +1127,13 @@
         ctx.clearRect(0, 0, w, h);
 
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, w, 130);
+        ctx.fillRect(0, 0, w, 150);
         ctx.strokeStyle = '#2f3542';
         ctx.lineWidth = 3;
-        ctx.strokeRect(0, 0, w, 130);
+        ctx.strokeRect(0, 0, w, 150);
 
         let { leftLimit, rightLimit } = getPlayfieldLimits();
-        let playfieldBottom = 135 + rows * bubbleRadius * Math.sqrt(3);
+        let playfieldBottom = 150 + rows * bubbleRadius * Math.sqrt(3);
         let dangerZoneTop = getBubbleCoords(rows - 2, 0).y - bubbleRadius;
 
         ctx.fillStyle = 'rgba(186, 211, 228, 0.32)';
@@ -1150,9 +1150,9 @@
         ctx.strokeStyle = '#2f3542';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(leftLimit, 130);
+        ctx.moveTo(leftLimit, 150);
         ctx.lineTo(leftLimit, playfieldBottom);
-        ctx.moveTo(rightLimit, 130);
+        ctx.moveTo(rightLimit, 150);
         ctx.lineTo(rightLimit, playfieldBottom);
         ctx.stroke();
 
@@ -1204,7 +1204,7 @@
                 currentBubble.vx *= -1;
             }
 
-            if (currentBubble.y - bubbleRadius <= 130) {
+            if (currentBubble.y - bubbleRadius <= 150) {
                 snapBubble();
                 return;
             }
@@ -1238,9 +1238,20 @@
         for (let c = 0; c < cols; c++) {
             newRow.push(Math.random() < 0.75 ? Math.floor(Math.random() * activeColorsCount) : null);
         }
-        
-        grid.pop();
-        grid.unshift(newRow);
+
+        let shiftedGrid = [];
+        for (let r = 0; r < rows; r++) {
+            shiftedGrid[r] = [];
+            for (let c = 0; c < cols; c++) {
+                if (r === 0) {
+                    shiftedGrid[r][c] = newRow[c];
+                } else {
+                    shiftedGrid[r][c] = grid[r - 1][c];
+                }
+            }
+        }
+
+        grid = shiftedGrid;
 
         for (let r = 0; r < rows; r++) {
             if (r % 2 === 1) {
@@ -1278,7 +1289,7 @@
             });
             score += matches.length * 10;
             scoreEl.innerText = score;
-            removeFloatingBubbles();
+            removeFloatingBubbles(matches);
         }
 
         shotsSinceDrop++;
@@ -1344,25 +1355,48 @@
         return neighbors;
     }
 
-    function removeFloatingBubbles() {
-        let visited = Array(rows).fill(0).map(() => Array(cols).fill(false));
-        let queue = [];
+    function removeFloatingBubbles(matchCells) {
+        let supportVisited = Array(rows).fill(0).map(() => Array(cols).fill(false));
+        let supportQueue = [];
 
         for (let c = 0; c < cols; c++) {
-            if (0 % 2 === 1 && c === cols - 1) continue;
             if (grid[0][c] !== null) {
-                visited[0][c] = true;
-                queue.push({ r: 0, c });
+                supportVisited[0][c] = true;
+                supportQueue.push({ r: 0, c });
             }
         }
 
-        while (queue.length > 0) {
-            let curr = queue.shift();
+        while (supportQueue.length > 0) {
+            let curr = supportQueue.shift();
             let neighbors = getNeighbors(curr.r, curr.c);
             for (let n of neighbors) {
-                if (!visited[n.r][n.c] && grid[n.r][n.c] !== null) {
-                    visited[n.r][n.c] = true;
-                    queue.push(n);
+                if (!supportVisited[n.r][n.c] && grid[n.r][n.c] !== null) {
+                    supportVisited[n.r][n.c] = true;
+                    supportQueue.push(n);
+                }
+            }
+        }
+
+        let candidateVisited = Array(rows).fill(0).map(() => Array(cols).fill(false));
+        let candidateQueue = [];
+
+        for (let match of matchCells) {
+            let neighbors = getNeighbors(match.r, match.c);
+            for (let n of neighbors) {
+                if (n.r >= 0 && n.r < rows && n.c >= 0 && n.c < cols && grid[n.r][n.c] !== null && !candidateVisited[n.r][n.c]) {
+                    candidateVisited[n.r][n.c] = true;
+                    candidateQueue.push({ r: n.r, c: n.c });
+                }
+            }
+        }
+
+        while (candidateQueue.length > 0) {
+            let curr = candidateQueue.shift();
+            let neighbors = getNeighbors(curr.r, curr.c);
+            for (let n of neighbors) {
+                if (n.r >= 0 && n.r < rows && n.c >= 0 && n.c < cols && grid[n.r][n.c] !== null && !candidateVisited[n.r][n.c]) {
+                    candidateVisited[n.r][n.c] = true;
+                    candidateQueue.push({ r: n.r, c: n.c });
                 }
             }
         }
@@ -1370,7 +1404,7 @@
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 if (r % 2 === 1 && c === cols - 1) continue;
-                if (grid[r][c] !== null && !visited[r][c]) {
+                if (grid[r][c] !== null && candidateVisited[r][c] && !supportVisited[r][c]) {
                     let coords = getBubbleCoords(r, c);
                     fallingBubbles.push({
                         x: coords.x,

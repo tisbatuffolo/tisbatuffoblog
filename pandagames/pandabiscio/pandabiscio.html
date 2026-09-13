@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PandaBiscio</title>
-<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@900&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<title>PandaBiscio - Love Diary Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
         --sbatuffo-blue: #0000ff;
+        --diary-bg: #fffbf7;
+        --diary-line: rgba(174, 219, 242, 0.45);
+        --diary-margin: rgba(255, 107, 129, 0.4);
     }
 
     body, html {
@@ -16,7 +19,7 @@
         width: 100%;
         height: 100%;
         height: 100dvh;
-        background-color: #ffffff;
+        background-color: #ffeef2;
         overflow: hidden;
         font-family: 'Grandstander', cursive;
         touch-action: none;
@@ -31,7 +34,7 @@
         width: 100vw;
         height: calc(100dvh - 135px);
         display: block;
-        background: #e8f8f5;
+        background: var(--diary-bg);
     }
 
     #ui-layer {
@@ -116,7 +119,7 @@
 
     @media (max-width: 768px) {
         #game-title {
-            font-size: 38px;
+            font-size: 36px;
             top: 14px;
             left: 14px;
             height: 30px;
@@ -140,7 +143,7 @@
 
     @media (max-width: 480px) {
         #game-title {
-            font-size: 26px;
+            font-size: 25px;
             top: 18px;
             left: 15px;
             height: 26px;
@@ -166,14 +169,14 @@
         left: 50%;
         transform: translateX(-50%);
         font-size: 15px;
-        color: #333;
+        color: #444;
         font-weight: 900;
         background: rgba(255, 255, 255, 0.95);
         padding: 6px 14px;
-        border-radius: 12px;
-        border: 2px solid #333;
+        border-radius: 14px;
+        border: 2px solid #ff6b81;
         pointer-events: auto;
-        box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+        box-shadow: 0 3px 0 rgba(255, 107, 129, 0.3);
         text-align: center;
         white-space: nowrap;
         transition: transform 0.2s ease, background-color 0.2s ease;
@@ -191,7 +194,7 @@
     @keyframes levelFlash {
         0% { background: #ffeaa7; transform: translateX(-50%) scale(1.08); }
         50% { background: #ff7675; transform: translateX(-50%) scale(1.15); color: white; }
-        100% { background: rgba(255, 255, 255, 0.95); transform: translateX(-50%) scale(1); color: #333; }
+        100% { background: rgba(255, 255, 255, 0.95); transform: translateX(-50%) scale(1); color: #444; }
     }
     .level-flash {
         animation: levelFlash 0.6s ease;
@@ -252,7 +255,7 @@
         max-width: 310px;
         width: 85%;
     }
-    #game-over h1 { margin: 0 0 10px; color: #ff4757; font-size: 26px; }
+    #game-over h1 { margin: 0 0 10px; color: #ff4757; font-size: 26px; font-family: 'Grandstander', cursive; }
     
     #best-score-notice {
         color: #e67e22;
@@ -264,6 +267,7 @@
         align-items: center;
         justify-content: center;
         gap: 6px;
+        font-family: 'Grandstander', cursive;
     }
 
     .btn {
@@ -297,13 +301,10 @@
 <canvas id="gameCanvas"></canvas>
 
 <div id="ui-layer">
-    <div id="left-controls">
-        <button id="info-btn" class="top-btn" title="Info">i</button>
-    </div>
-    
     <div id="game-title">PandaBiscio</div>
     
     <div id="right-controls">
+        <button id="info-btn" class="top-btn" title="Info">i</button>
         <button id="leaderboard-btn" class="top-btn" title="Classifica">🏆</button>
         <button id="challenge-btn" class="top-btn" title="Modalità Sfida">⚔️</button>
         <button id="pause-btn" class="top-btn" title="Pausa">⏸</button>
@@ -311,13 +312,13 @@
     </div>
 
     <div id="score-container">
-        <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name">Panda</span>!</div>
+        <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name" style="color: var(--sbatuffo-blue);">Panda</span>! 💕</div>
         Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
-        <span style="font-size: 12px; color: #555;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
+        <span style="font-size: 12px; color: #666;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
     </div>
 
     <div id="nickname-modal" class="modal">
-        <h2>Benvenuto a PandaBiscio! 🐼🐍</h2>
+        <h2>Benvenuto a PandaBiscio! 🐼💖</h2>
         <p>Inserisci il tuo nickname per iniziare:</p>
         <input type="text" id="nickname-input" placeholder="Il tuo nickname..." maxlength="15" autocomplete="off">
         <br>
@@ -325,8 +326,8 @@
     </div>
 
     <div id="info-modal" class="modal">
-        <h2>Come Giocare 🐼</h2>
-        <p id="info-text">Guida il serpente con la testa da panda raccogliendo cibo delizioso come birra 🍺, spaghetti 🍝 e carne 🥩! Fai swipe o tocca lo schermo per cambiare direzione. Evita di colpire i bordi o la tua stessa coda.</p>
+        <h2>Come Giocare 🐼💌</h2>
+        <p id="info-text">Guida il serpente con la testa da panda raccogliendo dolcezze come cuori 💖, baci 💋 e abbracci! Cambia direzione con swipe o tocchi sullo schermo. Evita i bordi del diario o la tua stessa coda.</p>
         <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
     </div>
 
@@ -344,12 +345,12 @@
         <h2>Sfida 1v1 ⚔️</h2>
         <div id="challenge-menu-view">
             <p>Sfida un amico in tempo reale inviandogli il codice stanza!</p>
-            <button class="btn" id="create-challenge-btn" style="background:#8e44ad; width:100%; margin-bottom:8px;">Crea Nuova Sfida 🎮</button>
+            <button class="btn" id="create-challenge-btn" style="background:#8e44ad; border-color:#6c3483; width:100%; margin-bottom:8px;">Crea Nuova Sfida 🎮</button>
             <div style="margin: 8px 0; font-weight:bold; color:#777; font-size:12px;">OPPURE</div>
             <input type="text" id="room-input" placeholder="Codice Stanza (es. AB12CD)" maxlength="6" style="text-transform:uppercase; margin-bottom:10px;">
-            <button class="btn" id="join-challenge-btn" style="background:#2980b9; width:100%;">Entra nella Sfida 🚀</button>
+            <button class="btn" id="join-challenge-btn" style="background:#2980b9; border-color:#1f618d; width:100%;">Entra nella Sfida 🚀</button>
             <br><br>
-            <button class="btn" onclick="closeModal('challenge-modal')" style="background:#95a5a6; font-size:13px; width:120px; padding:6px;">Chiudi</button>
+            <button class="btn" onclick="closeModal('challenge-modal')" style="background:#95a5a6; border-color:#7f8c8d; font-size:13px; width:120px; padding:6px;">Chiudi</button>
         </div>
         <div id="challenge-room-view" style="display:none;">
             <p id="room-status-text" style="margin: 5px 0 10px; font-size: 15px;">
@@ -359,22 +360,22 @@
                 In attesa dell'avversario...
             </div>
             <div style="display: flex; gap: 6px; justify-content: center; align-items: center; margin-top: 10px;">
-                <button class="btn" id="challenge-invite-btn" style="background:#25D366; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Invita 💬</button>
-                <button class="btn" id="challenge-copy-btn" style="background:#e67e22; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Copia 📋</button>
-                <button class="btn" id="challenge-quit-btn" style="background:#ff4757; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Abbandona 🚪</button>
+                <button class="btn" id="challenge-invite-btn" style="background:#25D366; border-color:#1EBE5D; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Invita 💬</button>
+                <button class="btn" id="challenge-copy-btn" style="background:#e67e22; border-color:#d35400; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Copia 📋</button>
+                <button class="btn" id="challenge-quit-btn" style="background:#ff4757; border-color:#c0392b; font-size:12px; padding:8px 6px; margin:0; flex:1; white-space:nowrap;">Abbandona 🚪</button>
             </div>
         </div>
     </div>
     
     <div id="game-over">
         <h1>Ops! Hai perso!</h1>
-        <p style="margin-bottom: 4px;">Punteggio finale: <span id="final-score">0</span></p>
+        <p style="margin-bottom: 4px; font-family: 'Grandstander', cursive; font-size: 14px; color: #555; font-weight: 600;">Punteggio finale: <span id="final-score">0</span></p>
         <div id="challenge-result-banner" style="display:none; margin:8px 0;"></div>
         <div id="best-score-notice">🏆 Miglior punteggio! 🎉</div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 10px;">
-            <button class="btn" id="play-again-btn" style="font-size: 14px; width: 210px; padding: 8px; box-sizing: border-box;" onclick="resetGame()">Rigioca 🐼</button>
-            <button class="btn" id="quit-challenge-btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
-            <a href="../pandagames.html" class="btn" style="background:#ff4757; font-size:13px; width:210px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
+            <button class="btn" id="play-again-btn" style="background:#19af4e; border-color:#1a1a1a; font-size:14px; width:210px; padding:8px; box-sizing:border-box;" onclick="resetGame()">Rigioca 🐼</button>
+            <button class="btn" id="quit-challenge-btn" style="background:#ff4757; border-color:#c0392b; font-size:13px; width:210px; padding:8px; box-sizing:border-box; display:none;">Abbandona Sfida 🚪</button>
+            <a href="../pandagames.html" class="btn" style="background:#ff4757; border-color:#c0392b; font-size:13px; width:210px; padding:8px; box-sizing:border-box;">Torna ai Panda Games</a>
         </div>
     </div>
 </div>
@@ -411,6 +412,39 @@
     let bestScore = parseInt(localStorage.getItem('pandabiscio_best_score')) || 0;
     let lastScore = parseInt(localStorage.getItem('pandabiscio_last_score')) || 0;
     let nickname = localStorage.getItem('pandabiscio_nickname') || '';
+
+    // Frasi coccolose in sottofondo per la pagina di diario
+    const diaryPhrasesList = [
+        "ti sbatuffolo",
+        "io e te",
+        "insieme",
+        "ti lovvo",
+        "sei il mio panda",
+        "lo sbatuffolino è il vero pandabiscio"
+    ];
+    let backgroundPhrases = [];
+
+    function generateBackgroundPhrases() {
+        backgroundPhrases = [];
+        const count = 9;
+        for (let i = 0; i < count; i++) {
+            const phrase = diaryPhrasesList[Math.floor(Math.random() * diaryPhrasesList.length)];
+            // Genera posizioni casuali all'interno dell'area di gioco
+            const x = Math.random() * (canvas.width - 220) + 110;
+            const y = Math.random() * (canvas.height - 80) + 40;
+            const rotation = (Math.random() * 0.45) - 0.225; // Rotazione leggera in radianti (~ -13° a +13°)
+            const fontSize = Math.floor(Math.random() * 5) + 15; // 15px a 19px
+            const colors = [
+                'rgba(255, 107, 129, 0.22)', 
+                'rgba(142, 68, 173, 0.2)', 
+                'rgba(52, 152, 219, 0.18)', 
+                'rgba(230, 126, 34, 0.18)',
+                'rgba(233, 30, 99, 0.2)'
+            ];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            backgroundPhrases.push({ phrase, x, y, rotation, fontSize, color });
+        }
+    }
 
     bestScoreEl.innerText = bestScore;
     lastScoreEl.innerText = lastScore;
@@ -548,7 +582,7 @@
     document.getElementById('challenge-invite-btn').addEventListener('click', () => {
         if (!currentRoomId) return;
         const gameUrl = `${window.location.origin}${window.location.pathname}?room=${currentRoomId}`;
-        const text = `Sfidami a PandaBiscio! 🐼🐍\nCodice Stanza: *${currentRoomId}*\nClicca sul link per giocare: ${gameUrl}`;
+        const text = `Sfidami a PandaBiscio! 🐼💖\nCodice Stanza: *${currentRoomId}*\nClicca sul link per giocare: ${gameUrl}`;
         const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
         window.open(waUrl, '_blank');
     });
@@ -686,8 +720,8 @@
         if (isGameOver && hasSubmittedScore && state.status !== 'finished') {
             bannerEl.style.display = 'block';
             bannerEl.innerHTML = `
-                <div style="background: rgba(41, 128, 185, 0.1); border: 2px dashed #2980b9; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
-                    <div style="font-size: 14px; font-weight: 900; color: #2980b9;">📤 Punteggio inviato: ${score} pts</div>
+                <div style="background: rgba(255, 107, 129, 0.1); border: 2px dashed #ff6b81; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
+                    <div style="font-size: 14px; font-weight: 900; color: #ff4757;">📤 Punteggio inviato: ${score} pts</div>
                     <div style="font-size: 12px; color: #555; margin-top: 4px; font-weight: 600;">⏳ In attesa che <b>${oppName}</b> finisca la partita...</div>
                 </div>
             `;
@@ -707,13 +741,13 @@
             let resultColor = "";
 
             if (myS > oppS) {
-                resultTitle = "🎉 VITTORIA! 🎉";
-                resultColor = "#19af4e";
+                resultTitle = "🎉 VITTORIA! 💖";
+                resultColor = "#27ae60";
             } else if (oppS > myS) {
                 resultTitle = "💔 SCONFITTA!";
                 resultColor = "#ff4757";
             } else {
-                resultTitle = "🤝 PAREGGIO!";
+                resultTitle = "🤝 PAREGGIO! 🥰";
                 resultColor = "#f39c12";
             }
 
@@ -730,7 +764,7 @@
                     <div style="background: rgba(142, 68, 173, 0.08); border: 2px solid ${resultColor}; border-radius: 12px; padding: 10px; margin: 6px 0; text-align: center;">
                         <div style="font-size: 17px; font-weight: 900; color: ${resultColor}; margin-bottom: 4px;">${resultTitle}</div>
                         <div style="font-size: 13px; color: #2c3e50; font-weight: 700;">
-                            Tu (<b>${nickname}</b>): <span style="color:#27ae60;">${myS} pts</span> &nbsp;|&nbsp; 
+                            Tu (<b style="color: var(--sbatuffo-blue);">${nickname}</b>): <span style="color:#27ae60;">${myS} pts</span> &nbsp;|&nbsp; 
                             <b>${oppName}</b>: <span style="color:#e74c3c;">${oppS} pts</span>
                         </div>
                         ${rematchStatusText}
@@ -800,7 +834,7 @@
                 if (data.success && data.scores && data.scores.length > 0) {
                     let html = "<ol style='margin:0; padding-left:20px;'>";
                     data.scores.forEach(item => {
-                        html += `<li style='margin-bottom: 4px;'><b>${item.username}</b>: <span style='color:#e67e22;'>${item.score} pts</span></li>`;
+                        html += `<li style='margin-bottom: 4px;'><b>${item.username}</b>: <span style='color:#ff4757;'>${item.score} pts</span></li>`;
                     });
                     html += "</ol>";
                     leaderboardList.innerHTML = html;
@@ -834,8 +868,11 @@
     let dy = 0;
     let nextDx = 1;
     let nextDy = 0;
-    let food = { x: 5, y: 5, type: '🍺' };
-    const foodTypes = ['🍺', '🍝', '🥩', '🍰', '🍕', '🍌', '🍦'];
+    let food = { x: 5, y: 5, type: '💖' };
+    
+    // Elementi a tema LOVE (cuori, cupidi, baci, abbracci, lettere d'amore, ecc.)
+    const foodTypes = ['💖', '💘', '💋', '🧸', '🥰', '💌', '🌹', '🎀'];
+    
     let gameInterval = null;
     let gameSpeedMs = 130;
     let isGameOver = false;
@@ -847,6 +884,7 @@
         canvas.height = currentHeight - 135;
         tileCountX = Math.floor(canvas.width / gridSize);
         tileCountY = Math.floor(canvas.height / gridSize);
+        generateBackgroundPhrases();
     }
     window.addEventListener('resize', resize);
     if (window.visualViewport) {
@@ -872,6 +910,7 @@
     }
 
     function startGame() {
+        generateBackgroundPhrases(); // Genera una nuova composizione randomica di frasi ad ogni avvio!
         snake = [
             { x: Math.floor(tileCountX / 2), y: Math.floor(tileCountY / 2) },
             { x: Math.floor(tileCountX / 2) - 1, y: Math.floor(tileCountY / 2) },
@@ -960,18 +999,13 @@
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle = '#c0392b';
-        ctx.lineWidth = 6;
-        ctx.strokeRect(3, 3, canvas.width - 6, canvas.height - 6);
+        // 1. Rendering Sfondo Pagina di Diario (Righe e Margine)
+        ctx.fillStyle = '#fffbf7';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.04)';
+        // Linee orizzontali del quaderno / diario
+        ctx.strokeStyle = 'rgba(174, 219, 242, 0.45)';
         ctx.lineWidth = 1;
-        for (let x = gridSize; x < canvas.width; x += gridSize) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
-        }
         for (let y = gridSize; y < canvas.height; y += gridSize) {
             ctx.beginPath();
             ctx.moveTo(0, y);
@@ -979,24 +1013,54 @@
             ctx.stroke();
         }
 
+        // Linea verticale di margine del diario (stile quaderno)
+        ctx.strokeStyle = 'rgba(51, 51, 51, 0.55)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(35, 0);
+        ctx.lineTo(35, canvas.height);
+        ctx.stroke();
+
+        // Bordo esterno del diario
+        ctx.strokeStyle = '#2f3640';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(2, 2, canvas.width - 4, canvas.height - 4);
+
+        // 2. Disegno Frasi Coccolose in Sfondo (corsive, posizionate casualmente)
+        backgroundPhrases.forEach(item => {
+            ctx.save();
+            ctx.translate(item.x, item.y);
+            ctx.rotate(item.rotation);
+            ctx.font = `italic 700 ${item.fontSize}px 'Grandstander', cursive`;
+            ctx.fillStyle = item.color;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item.phrase, 0, 0);
+            ctx.restore();
+        });
+
+        // 3. Elemento Love (Cibo)
         ctx.font = `${gridSize * 1.2}px Arial`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(food.type, (food.x + 0.5) * gridSize, (food.y + 0.5) * gridSize + 2);
 
+        // 4. Pandabiscio (Corpo e Testa)
         for (let i = snake.length - 1; i >= 0; i--) {
             let part = snake[i];
             let px = part.x * gridSize;
             let py = part.y * gridSize;
 
             if (i === 0) {
+                // Testa Panda
                 ctx.font = `${gridSize * 1.4}px Arial`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('🐼', px + gridSize / 2, py + gridSize / 2 + 2);
             } else {
-                ctx.fillStyle = i % 2 === 0 ? '#19af4e' : '#2ecc71';
-                ctx.strokeStyle = '#1a1a1a';
+                // Corpo del serpente in tonalità rosa/pastello carine e curate
+                ctx.fillStyle = i % 2 === 0 ? '#ff6b81' : '#ff9ff3';
+                ctx.strokeStyle = '#c0392b';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.roundRect(px + 2, py + 2, gridSize - 4, gridSize - 4, 6);

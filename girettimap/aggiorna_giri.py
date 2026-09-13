@@ -196,27 +196,17 @@ _VERSION_MISMATCH_RE = re.compile(
 
 
 def _new_chrome_options(headless: bool) -> "uc.ChromeOptions":
-    """Crea un oggetto ChromeOptions NUOVO. undetected-chromedriver
-    consuma/invalida l'oggetto ChromeOptions dopo il primo utilizzo, quindi
-    ad ogni tentativo di avvio del driver serve un'istanza fresca (non
-    riutilizzabile tra un tentativo e l'altro)."""
     options = uc.ChromeOptions()
     options.add_argument("--lang=it-IT")
-    # Nessun --user-agent forzato: usiamo quello reale del browser installato
-    # (vedi nota su USER_AGENT più sopra).
     options.add_argument("--disable-blink-features=AutomationControlled")
+    
+    # AGGIUNGI QUESTE RIGHE PER FAR FUNZIONARE CHROME SU GITHUB ACTIONS:
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
     if headless:
-        # In modalità headless serve una dimensione esplicita del
-        # "viewport" (non c'è una finestra reale da massimizzare).
         options.add_argument("--window-size=1440,2200")
     else:
-        # Finestra visibile: la apriamo massimizzata invece di usare una
-        # window-size fissa, così è sempre ben visibile qualunque sia la
-        # risoluzione dello schermo. NON aggiungiamo qui nessun flag
-        # "--headless": l'attivazione della modalità headless è delegata
-        # esclusivamente al parametro `headless=` passato a uc.Chrome()
-        # in build_driver(), che gestisce le patch anti-detection in modo
-        # più affidabile rispetto ad aggiungere il flag manualmente.
         options.add_argument("--start-maximized")
     return options
 

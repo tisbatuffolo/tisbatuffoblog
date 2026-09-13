@@ -92,41 +92,60 @@ header {
 
 .game-title {
     font-family: 'Grandstander', cursive;
-    font-size: 2.2rem;
+    font-size: clamp(2rem, 5vw, 2.8rem);
     font-weight: 900;
     color: var(--text);
     margin-bottom: 15px;
+    line-height: 1.1;
 }
 
 .game-card {
     background: #ffffff;
-    border: 3px solid var(--stroke);
-    border-radius: 20px;
-    padding: 20px;
-    max-width: 320px;
+    border: 8px solid var(--stroke);
+    border-radius: 28px;
+    padding: 0;
+    max-width: 360px;
     margin: 0 auto;
-    box-shadow: 0 8px 0px var(--stroke);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 0 var(--stroke);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
 }
 
 .game-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 0px var(--stroke);
+    transform: translateY(-4px) rotate(0.5deg);
+    box-shadow: 0 14px 0 var(--stroke);
+}
+
+.game-preview-link {
+    display: block;
+    width: 100%;
+    background: #f2f2f2;
+    text-decoration: none;
+    border-bottom: 4px solid var(--stroke);
+    cursor: pointer;
 }
 
 .game-preview {
+    display: block;
     width: 100%;
-    height: 180px;
+    height: 220px;
     background: #eee;
-    border-radius: 12px;
     object-fit: cover;
-    margin-bottom: 15px;
-    border: 2px solid var(--stroke);
+    transition: transform 0.25s ease;
+}
+
+.game-preview-link:hover .game-preview {
+    transform: scale(1.02);
+}
+
+.game-card-actions {
+    padding: 18px 20px 20px;
+    text-align: center;
 }
 
 .play-btn {
     display: inline-block;
-    background: var(--accent);
+    background: var(--primary);
     color: #fff;
     font-family: 'Grandstander', cursive;
     font-size: 1.4rem;
@@ -198,8 +217,12 @@ footer {
   <!-- GIOCO 1: PANDARUN -->
   <div class="game-title">PandaRun</div>
   <div class="game-card">
-    <img src="img/pandarun-prev.png" alt="Anteprima Pandarun" class="game-preview">
-    <a href="pandarun/pandarun.html" class="play-btn">PLAY!</a>
+    <a href="pandarun/pandarun.html" class="game-preview-link" aria-label="Gioca a PandaRun">
+      <img src="img/pandarun-prev.png" alt="Anteprima Pandarun" class="game-preview">
+    </a>
+    <div class="game-card-actions">
+      <a href="pandarun/pandarun.html" class="play-btn">PLAY!</a>
+    </div>
   </div>
 
   <div class="section-divider"></div>
@@ -207,8 +230,12 @@ footer {
   <!-- GIOCO 2: PANDATETRIS -->
   <div class="game-title">PandaTetris</div>
   <div class="game-card">
-    <img src="img/pandatetris-prev.png" alt="Anteprima Pandatetris" class="game-preview">
-    <a href="pandatetris/pandatetris.html" class="play-btn">PLAY!</a>
+    <a href="pandatetris/pandatetris.html" class="game-preview-link" aria-label="Gioca a PandaTetris">
+      <img src="img/pandatetris-prev.png" alt="Anteprima Pandatetris" class="game-preview">
+    </a>
+    <div class="game-card-actions">
+      <a href="pandatetris/pandatetris.html" class="play-btn">PLAY!</a>
+    </div>
   </div>
 
   <div class="section-divider"></div>
@@ -216,8 +243,12 @@ footer {
   <!-- GIOCO 3: PANDAPOOPS -->
   <div class="game-title">PandaPoops</div>
   <div class="game-card">
-    <img src="img/pandapoops-prev.png" alt="Anteprima PandaPoops" class="game-preview">
-    <a href="pandapoops/pandapoops.html" class="play-btn">PLAY!</a>
+    <a href="pandapoops/pandapoops.html" class="game-preview-link" aria-label="Gioca a PandaPoops">
+      <img src="img/pandapoops-prev.png" alt="Anteprima PandaPoops" class="game-preview">
+    </a>
+    <div class="game-card-actions">
+      <a href="pandapoops/pandapoops.html" class="play-btn">PLAY!</a>
+    </div>
   </div>
 
   <div class="section-divider"></div>
@@ -225,8 +256,12 @@ footer {
   <!-- GIOCO 4: PANDABISCIO -->
   <div class="game-title">PandaBiscio</div>
   <div class="game-card">
-    <img src="img/pandabiscio-prev.png" alt="Anteprima Pandabiscio" class="game-preview">
-    <a href="pandabiscio/pandabiscio.html" class="play-btn">PLAY!</a>
+    <a href="pandabiscio/pandabiscio.html" class="game-preview-link" aria-label="Gioca a PandaBiscio">
+      <img src="img/pandabiscio-prev.png" alt="Anteprima Pandabiscio" class="game-preview">
+    </a>
+    <div class="game-card-actions">
+      <a href="pandabiscio/pandabiscio.html" class="play-btn">PLAY!</a>
+    </div>
   </div>
 
 </main>

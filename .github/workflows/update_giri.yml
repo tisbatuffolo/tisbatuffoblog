@@ -4,7 +4,7 @@ on:
   schedule:
     # Esegue l'azione 2 volte al giorno (alle 08:00 e alle 20:00 UTC)
     - cron: '0 0,12 * * *'
-  # Permette di lanciare l'azione anche manualmente dalla scheda "Actions" di GitHub
+  # Permette di lanciare l'azione manualmente dalla scheda "Actions" di GitHub
   workflow_dispatch:
 
 permissions:
@@ -13,9 +13,6 @@ permissions:
 jobs:
   aggiorna-giri:
     runs-on: ubuntu-latest
-
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # 1. Scarica il codice del repository
@@ -28,32 +25,27 @@ jobs:
         with:
           python-version: '3.10'
 
-      # 3. Installa le dipendenze e i browser di Playwright necessari allo script
+      # 3. Installa le dipendenze corrette richieste da aggiorna_giri.py
       - name: Install dependencies
         working-directory: girettimap
         run: |
           python -m pip install --upgrade pip
-          pip install playwright requests pillow
-          playwright install chromium
+          pip install undetected-chromedriver selenium requests pillow
 
       # 4. Esegue lo script Python dentro la cartella girettimap
-      - name: Run script aggiorna-giri.py
+      - name: Run script aggiorna_giri.py
         working-directory: girettimap
         run: |
-          python3 aggiorna-giri.py
+          python3 aggiorna_giri.py
 
-      # 5. Effettua il commit e il push dei file modificati (giri.js e img_giri/)
-      # in teoria funziona con user github-actions e action github-actions@github.com. In caso sostituire con credenziali bot commentate
+      # 5. Effettua il commit e il push dei file modificati specificando il branch main
       - name: Commit e push dei file aggiornati
         working-directory: girettimap
         run: |
-         # git config user.name "github-actions[bot]"
-         # git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
           git add giri.js img_giri/
           
           git commit -m "Aggiornamento automatico giri.js e anteprime [skip ci]" || echo "Nessuna modifica da committare"
-          git push
+          git push origin HEAD:main
