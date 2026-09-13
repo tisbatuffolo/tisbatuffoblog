@@ -312,7 +312,7 @@
     </div>
 
     <div id="score-container">
-        <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name" style="color: var(--sbatuffo-blue);">Panda</span>! 💕</div>
+        <div style="color: #3742fa; font-size: 14px;">Ciao, <span id="player-name" style="color: var(--sbatuffo-blue);">Panda</span>!</div>
         Punti: <span id="score">0</span> | Livello: <span id="level">1</span><br>
         <span style="font-size: 12px; color: #666;">Best: <span id="best-score">0</span> | Last: <span id="last-score">0</span></span>
     </div>
@@ -326,8 +326,8 @@
     </div>
 
     <div id="info-modal" class="modal">
-        <h2>Come Giocare 🐼💌</h2>
-        <p id="info-text">Guida il serpente con la testa da panda raccogliendo dolcezze come cuori 💖, baci 💋 e abbracci! Cambia direzione con swipe o tocchi sullo schermo. Evita i bordi del diario o la tua stessa coda.</p>
+        <h2>Come Giocare</h2>
+        <p id="info-text">Il pandabiscio si sente triste e sole e ha bisogno di affetto! Guidalo a raccogliere le coccolosità nel suo diario del cuore! Cambia direzione con swipe o tocchi sullo schermo. Evita i bordi del diario o la tua stessa coda.</p>
         <button class="btn" onclick="closeModal('info-modal')" style="font-size: 14px; width: 140px; padding: 8px;">Capito!</button>
     </div>
 
@@ -871,7 +871,7 @@
     let food = { x: 5, y: 5, type: '💖' };
     
     // Elementi a tema LOVE (cuori, cupidi, baci, abbracci, lettere d'amore, ecc.)
-    const foodTypes = ['💖', '💘', '💋', '🧸', '🥰', '💌', '🌹', '🎀'];
+    const goalTypes = ['💖', '💘', '💋', '🧸', '🥰', '💌', '🌹', '🎀', '🐛', '😍', '🤗'];
     
     let gameInterval = null;
     let gameSpeedMs = 130;
@@ -897,7 +897,7 @@
         while (!valid) {
             food.x = Math.floor(Math.random() * (tileCountX - 2)) + 1;
             food.y = Math.floor(Math.random() * (tileCountY - 2)) + 1;
-            food.type = foodTypes[Math.floor(Math.random() * foodTypes.length)];
+            food.type = goalTypes[Math.floor(Math.random() * goalTypes.length)];
             
             valid = true;
             for (let part of snake) {

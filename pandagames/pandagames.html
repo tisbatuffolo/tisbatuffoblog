@@ -82,7 +82,7 @@ header {
   font-size: 1.5rem;
 }
 
-/* --- CONTENT & GAME CARDS --- */
+/* --- CONTENT & CONSOLE GAME CARDS --- */
 .content {
     margin: 0 auto; 
     padding: 0 20px;
@@ -100,47 +100,154 @@ header {
 }
 
 .game-card {
-    background: #ffffff;
+    background: #181a20;
     border: 8px solid var(--stroke);
-    border-radius: 28px;
-    padding: 0;
-    max-width: 360px;
+    border-radius: 36px;
+    padding: 16px 10px;
+    max-width: 440px;
     margin: 0 auto;
-    box-shadow: 0 10px 0 var(--stroke);
+    box-shadow: 0 12px 0 var(--stroke);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    position: relative;
     overflow: hidden;
 }
 
 .game-card:hover {
     transform: translateY(-4px) rotate(0.5deg);
-    box-shadow: 0 14px 0 var(--stroke);
+    box-shadow: 0 16px 0 var(--stroke);
+}
+
+/* Joy-Con Styles */
+.joycon {
+    width: 60px;
+    height: 100%;
+    min-height: 280px;
+    border-radius: 18px;
+    border: 4px solid var(--stroke);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 4px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.left-jc {
+    background: var(--sbatuffo-blue); /* Joy-Con Sbatuffo Blue */
+}
+
+.right-jc {
+    background: #ff334b; /* Joy-Con Rosso */
+}
+
+/* Thumbstick (Levetta) */
+.thumbstick {
+    width: 32px;
+    height: 32px;
+    background: #111;
+    border: 3px solid var(--stroke);
+    border-radius: 50%;
+    box-shadow: inset 0 3px 0 rgba(255,255,255,0.2), 0 3px 0 var(--stroke);
+    position: relative;
+}
+.thumbstick::after {
+    content: "";
+    position: absolute;
+    top: 6px; left: 6px;
+    width: 14px; height: 14px;
+    background: #333;
+    border-radius: 50%;
+}
+
+/* D-Pad (Croce Direzionale) */
+.dpad {
+    width: 36px;
+    height: 36px;
+    background: #111;
+    border: 3px solid var(--stroke);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 3px 0 var(--stroke);
+}
+.dpad::before, .dpad::after {
+    content: "";
+    position: absolute;
+    background: #222;
+}
+.dpad::before {
+    top: 4px; left: 11px; width: 10px; height: 20px;
+}
+.dpad::after {
+    top: 11px; left: 4px; width: 20px; height: 10px;
+}
+
+/* ABXY Buttons */
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    justify-items: center;
+    align-items: center;
+}
+
+.btn-xyab {
+    width: 16px;
+    height: 16px;
+    background: #111;
+    border: 2px solid var(--stroke);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 0 var(--stroke);
+}
+
+/* Screen Container */
+.console-screen-container {
+    flex: 1;
+    background: #000;
+    border: 5px solid var(--stroke);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .game-preview-link {
     display: block;
     width: 100%;
-    background: #f2f2f2;
+    background: #111;
     text-decoration: none;
-    border-bottom: 4px solid var(--stroke);
     cursor: pointer;
 }
 
 .game-preview {
     display: block;
     width: 100%;
-    height: 220px;
-    background: #eee;
+    height: 190px;
     object-fit: cover;
     transition: transform 0.25s ease;
 }
 
 .game-preview-link:hover .game-preview {
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
 .game-card-actions {
-    padding: 18px 20px 20px;
+    padding: 12px;
     text-align: center;
+    background: #fff;
+    border-top: 4px solid var(--stroke);
 }
 
 .play-btn {
@@ -148,10 +255,10 @@ header {
     background: var(--primary);
     color: #fff;
     font-family: 'Grandstander', cursive;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 900;
     text-decoration: none;
-    padding: 10px 30px;
+    padding: 8px 24px;
     border-radius: 50px;
     border: 2px solid var(--stroke);
     box-shadow: 0 4px 0px var(--stroke);
@@ -161,6 +268,32 @@ header {
 .play-btn:active {
     transform: translateY(4px);
     box-shadow: 0 0px 0px var(--stroke);
+}
+
+@media (max-width: 460px) {
+    .game-card {
+        max-width: 320px;
+        padding: 10px 6px;
+    }
+    .joycon {
+        width: 48px;
+        padding: 10px 2px;
+    }
+    .thumbstick {
+        width: 26px; height: 26px;
+    }
+    .dpad {
+        width: 28px; height: 28px;
+    }
+    .action-buttons {
+        width: 30px; height: 30px;
+    }
+    .btn-xyab {
+        width: 13px; height: 13px; font-size: 6px;
+    }
+    .game-preview {
+        height: 160px;
+    }
 }
 
 /* --- FOOTER --- */
@@ -217,11 +350,26 @@ footer {
   <!-- GIOCO 1: PANDARUN -->
   <div class="game-title">PandaRun</div>
   <div class="game-card">
-    <a href="pandarun/pandarun.html" class="game-preview-link" aria-label="Gioca a PandaRun">
-      <img src="img/pandarun-prev.png" alt="Anteprima Pandarun" class="game-preview">
-    </a>
-    <div class="game-card-actions">
-      <a href="pandarun/pandarun.html" class="play-btn">PLAY!</a>
+    <div class="joycon left-jc">
+      <div class="thumbstick"></div>
+      <div class="dpad"></div>
+    </div>
+    <div class="console-screen-container">
+      <a href="pandarun/pandarun.html" class="game-preview-link" aria-label="Gioca a PandaRun">
+        <img src="img/pandarun-prev.png" alt="Anteprima Pandarun" class="game-preview">
+      </a>
+      <div class="game-card-actions">
+        <a href="pandarun/pandarun.html" class="play-btn">PLAY!</a>
+      </div>
+    </div>
+    <div class="joycon right-jc">
+      <div class="action-buttons">
+        <span class="btn-xyab">X</span>
+        <span class="btn-xyab">Y</span>
+        <span class="btn-xyab">A</span>
+        <span class="btn-xyab">B</span>
+      </div>
+      <div class="thumbstick"></div>
     </div>
   </div>
 
@@ -230,11 +378,26 @@ footer {
   <!-- GIOCO 2: PANDATETRIS -->
   <div class="game-title">PandaTetris</div>
   <div class="game-card">
-    <a href="pandatetris/pandatetris.html" class="game-preview-link" aria-label="Gioca a PandaTetris">
-      <img src="img/pandatetris-prev.png" alt="Anteprima Pandatetris" class="game-preview">
-    </a>
-    <div class="game-card-actions">
-      <a href="pandatetris/pandatetris.html" class="play-btn">PLAY!</a>
+    <div class="joycon left-jc">
+      <div class="thumbstick"></div>
+      <div class="dpad"></div>
+    </div>
+    <div class="console-screen-container">
+      <a href="pandatetris/pandatetris.html" class="game-preview-link" aria-label="Gioca a PandaTetris">
+        <img src="img/pandatetris-prev.png" alt="Anteprima Pandatetris" class="game-preview">
+      </a>
+      <div class="game-card-actions">
+        <a href="pandatetris/pandatetris.html" class="play-btn">PLAY!</a>
+      </div>
+    </div>
+    <div class="joycon right-jc">
+      <div class="action-buttons">
+        <span class="btn-xyab">X</span>
+        <span class="btn-xyab">Y</span>
+        <span class="btn-xyab">A</span>
+        <span class="btn-xyab">B</span>
+      </div>
+      <div class="thumbstick"></div>
     </div>
   </div>
 
@@ -243,11 +406,26 @@ footer {
   <!-- GIOCO 3: PANDAPOOPS -->
   <div class="game-title">PandaPoops</div>
   <div class="game-card">
-    <a href="pandapoops/pandapoops.html" class="game-preview-link" aria-label="Gioca a PandaPoops">
-      <img src="img/pandapoops-prev.png" alt="Anteprima PandaPoops" class="game-preview">
-    </a>
-    <div class="game-card-actions">
-      <a href="pandapoops/pandapoops.html" class="play-btn">PLAY!</a>
+    <div class="joycon left-jc">
+      <div class="thumbstick"></div>
+      <div class="dpad"></div>
+    </div>
+    <div class="console-screen-container">
+      <a href="pandapoops/pandapoops.html" class="game-preview-link" aria-label="Gioca a PandaPoops">
+        <img src="img/pandapoops-prev.png" alt="Anteprima PandaPoops" class="game-preview">
+      </a>
+      <div class="game-card-actions">
+        <a href="pandapoops/pandapoops.html" class="play-btn">PLAY!</a>
+      </div>
+    </div>
+    <div class="joycon right-jc">
+      <div class="action-buttons">
+        <span class="btn-xyab">X</span>
+        <span class="btn-xyab">Y</span>
+        <span class="btn-xyab">A</span>
+        <span class="btn-xyab">B</span>
+      </div>
+      <div class="thumbstick"></div>
     </div>
   </div>
 
@@ -256,11 +434,26 @@ footer {
   <!-- GIOCO 4: PANDABISCIO -->
   <div class="game-title">PandaBiscio</div>
   <div class="game-card">
-    <a href="pandabiscio/pandabiscio.html" class="game-preview-link" aria-label="Gioca a PandaBiscio">
-      <img src="img/pandabiscio-prev.png" alt="Anteprima Pandabiscio" class="game-preview">
-    </a>
-    <div class="game-card-actions">
-      <a href="pandabiscio/pandabiscio.html" class="play-btn">PLAY!</a>
+    <div class="joycon left-jc">
+      <div class="thumbstick"></div>
+      <div class="dpad"></div>
+    </div>
+    <div class="console-screen-container">
+      <a href="pandabiscio/pandabiscio.html" class="game-preview-link" aria-label="Gioca a Pandabiscio">
+        <img src="img/pandabiscio-prev.png" alt="Anteprima Pandabiscio" class="game-preview">
+      </a>
+      <div class="game-card-actions">
+        <a href="pandabiscio/pandabiscio.html" class="play-btn">PLAY!</a>
+      </div>
+    </div>
+    <div class="joycon right-jc">
+      <div class="action-buttons">
+        <span class="btn-xyab">X</span>
+        <span class="btn-xyab">Y</span>
+        <span class="btn-xyab">A</span>
+        <span class="btn-xyab">B</span>
+      </div>
+      <div class="thumbstick"></div>
     </div>
   </div>
 

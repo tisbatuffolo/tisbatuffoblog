@@ -673,7 +673,7 @@ canvas {
 
     <!-- Modale Info -->
     <div id="info-modal" class="modal">
-        <h2>Come Giocare 🐼</h2>
+        <h2>Come Giocare</h2>
         <p id="info-text">Caricamento...</p>
         <button class="btn" onclick="closeModal(infoModal)" style="font-size: 13px; width: 120px; padding: 6px;">Capito!</button>
     </div>
@@ -879,7 +879,7 @@ function closeModal(modal) {
 }
 
 document.getElementById('info-btn').addEventListener('click', () => {
-    infoTextEl.innerHTML = "<b>Come si gioca:</b><br>• Usa le frecce ◀ ▶ per muovere i pezzi.<br>• Tieni premute le zampe del panda per spostare gradualmente i pezzi a destra o a sinistra.<br>• Tocca la testa del panda per ruotare il pezzo.<br>• Completa le linee per fare punti e salire di livello!<br>• Attenzione ai pezzi speciali (Bombe 💣, Ghiaccio ❄️, Vento 💨, Buio 🌑)!";
+    infoTextEl.innerHTML = "<b>Come si gioca:</b><br>Muovi i pezzi con i tasti freccia da desktop oppure, da mobile, fai swipe verso sinistra o destra per spostarli. Tocca la testa del panda o tap per ruotarli. Tieni il tap o clicca i pulsanti inferiori per accelerare la discesa. Completa le righe per guadagnare punti ma attento agli effetti speciali!";
     openModal(infoModal);
 });
 
