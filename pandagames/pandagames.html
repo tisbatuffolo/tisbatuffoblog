@@ -109,7 +109,7 @@ header {
     box-shadow: 0 12px 0 var(--stroke);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 10px;
     position: relative;
@@ -124,8 +124,8 @@ header {
 /* Joy-Con Styles */
 .joycon {
     width: 60px;
-    height: 100%;
-    min-height: 280px;
+    height: 190px;
+    min-height: 0;
     border-radius: 18px;
     border: 4px solid var(--stroke);
     display: flex;
@@ -216,19 +216,23 @@ header {
 .console-screen-container {
     flex: 1;
     background: #000;
-    border: 5px solid var(--stroke);
+    border: 4px solid var(--stroke);
     border-radius: 16px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    min-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .game-preview-link {
     display: block;
     width: 100%;
-    background: #111;
+    background: #000;
     text-decoration: none;
     cursor: pointer;
+    line-height: 0;
 }
 
 .game-preview {
@@ -237,6 +241,7 @@ header {
     height: 190px;
     object-fit: cover;
     transition: transform 0.25s ease;
+    background: #000;
 }
 
 .game-preview-link:hover .game-preview {
@@ -244,38 +249,33 @@ header {
 }
 
 .game-card-actions {
-    padding: 12px;
+    padding: 0;
     text-align: center;
-    background: #fff;
-    border-top: 4px solid var(--stroke);
+    background: #000;
+    border-top: 0;
+    width: 100%;
 }
 
 .play-btn {
-    display: inline-block;
+    display: block;
+    width: 100%;
     background: var(--primary);
     color: #fff;
     font-family: 'Grandstander', cursive;
     font-size: 1.3rem;
     font-weight: 900;
     text-decoration: none;
-    padding: 8px 24px;
-    border-radius: 50px;
-    border: 2px solid var(--stroke);
-    box-shadow: 0 4px 0px var(--stroke);
+    padding: 10px 16px;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
     transition: all 0.1s ease;
+    box-sizing: border-box;
 }
 
 .play-btn:active {
-    transform: translateY(4px);
-    box-shadow: 0 0px 0px var(--stroke);
-}
-
-@media (max-width: 460px) {
-    .game-card {
-        max-width: 320px;
-        padding: 10px 6px;
-    }
-    .joycon {
+    transform: translateY(2px);
+    box-shadow: none;
         width: 48px;
         padding: 10px 2px;
     }
@@ -291,8 +291,16 @@ header {
     .btn-xyab {
         width: 13px; height: 13px; font-size: 6px;
     }
+    .console-screen-container {
+        border-width: 4px;
+    }
     .game-preview {
-        height: 160px;
+        height: 152px;
+        aspect-ratio: 16 / 10;
+    }
+    .play-btn {
+        font-size: 1.05rem;
+        padding: 10px 12px;
     }
 }
 
