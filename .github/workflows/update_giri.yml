@@ -4,7 +4,7 @@ on:
   schedule:
     # Esegue l'azione 2 volte al giorno (alle 08:00 e alle 20:00 UTC)
     - cron: '0 0,12 * * *'
-  # Permette di lanciare l'azione manualmente dalla scheda "Actions" di GitHub
+  # Permette di lanciare l'azione manualmente
   workflow_dispatch:
 
 permissions:
@@ -34,34 +34,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install undetected-chromedriver selenium requests pillow
 
-      # 4. Esegue lo script tramite xvfb-run aggiungendo il flag --visible
+      # 4. Esegue lo script in ambiente grafico virtuale (Xvfb)
       - name: Run script aggiorna_giri.py
-        id: run_script
         working-directory: girettimap
-        continue-on-error: true
         run: |
-          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" python3 aggiorna_giri.py --debug --visible
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" python3 aggiorna_giri.py --visible
 
-      # 5. Salva SEMPRE screenshot e HTML (successo o fallimento)
-      - name: Upload Debug Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-logs
-          path: |
-            girettimap/debug_*.png
-            girettimap/debug_*.html
-          if-no-files-found: ignore
-          retention-days: 7
-
-      # 6. Se lo script è fallito, interrompiamo qui il job
-      - name: Interrompi il job se lo script è fallito
-        if: steps.run_script.outcome == 'failure'
-        run: |
-          echo "Lo script aggiorna_giri.py è fallito. Controlla l'artifact 'debug-logs' per capire il motivo."
-          exit 1
-
-      # 7. Effettua il commit e il push dei file modificati
+      # 5. Effettua il commit e il push dei file modificati
       - name: Commit e push dei file aggiornati
         working-directory: girettimap
         run: |
