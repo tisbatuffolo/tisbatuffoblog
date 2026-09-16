@@ -25,27 +25,24 @@ jobs:
         with:
           python-version: '3.10'
 
-      # 3. Installa le dipendenze corrette richieste da aggiorna_giri.py
+      # 3. Installa Xvfb per lo schermo virtuale e le dipendenze Python
       - name: Install dependencies
         working-directory: girettimap
         run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
           python -m pip install --upgrade pip
           pip install undetected-chromedriver selenium requests pillow
 
-      # 4. Esegue lo script Python dentro la cartella girettimap con il debug attivo.
-      #    "continue-on-error" ci permette di arrivare comunque allo step 5 e caricare
-      #    screenshot/HTML anche quando lo script fallisce, invece di perderli.
+      # 4. Esegue lo script tramite xvfb-run aggiungendo il flag --visible
       - name: Run script aggiorna_giri.py
         id: run_script
         working-directory: girettimap
         continue-on-error: true
         run: |
-          python3 aggiorna_giri.py --debug
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" python3 aggiorna_giri.py --debug --visible
 
-      # 5. Salva SEMPRE screenshot e HTML (successo o fallimento) per capire cosa ha
-      #    effettivamente visto il browser: pagina bloccata, captcha, contenuto normale, ecc.
-      #    NB: prima veniva caricato solo il .png, il .html (il più utile per capire un
-      #    blocco anti-bot) non finiva mai negli artifact.
+      # 5. Salva SEMPRE screenshot e HTML (successo o fallimento)
       - name: Upload Debug Artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -57,15 +54,14 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-      # 6. Se lo script è fallito, interrompiamo qui il job (niente commit/push),
-      #    ma solo DOPO aver salvato i file di debug allo step precedente.
+      # 6. Se lo script è fallito, interrompiamo qui il job
       - name: Interrompi il job se lo script è fallito
         if: steps.run_script.outcome == 'failure'
         run: |
           echo "Lo script aggiorna_giri.py è fallito. Controlla l'artifact 'debug-logs' per capire il motivo."
           exit 1
 
-      # 7. Effettua il commit e il push dei file modificati specificando il branch main
+      # 7. Effettua il commit e il push dei file modificati
       - name: Commit e push dei file aggiornati
         working-directory: girettimap
         run: |
