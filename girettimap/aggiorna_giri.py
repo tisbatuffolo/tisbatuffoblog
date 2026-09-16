@@ -19,41 +19,6 @@ gestendo l'infinite scroll, e produce:
         Immagine di copertina (variante 800x600) di ciascun giro.
         N   = posizione 1..9 nello stesso ordine di giri.js
         ID  = id numerico del percorso ricavato dall'URL del giro
-
-Uso:
-    python aggiorna_giri.py
-    python aggiorna_giri.py --debug       # salva screenshot/html di debug
-    python aggiorna_giri.py --headless    # esegue senza finestra visibile
-
-Dipendenze:
-    pip install undetected-chromedriver selenium requests pillow
-
-Requisiti di sistema:
-    - Google Chrome installato (undetected-chromedriver ne rileva la versione
-      e scarica automaticamente il driver corrispondente).
-
-Note anti-bot:
-  - Usiamo undetected-chromedriver al posto del Selenium "nudo": rimuove le
-    tracce più comuni di automazione (navigator.webdriver, fingerprint CDP,
-    ecc.) che i sistemi anti-bot controllano per primi.
-  - User-Agent e lingua "it-IT" realistici, come un utente italiano.
-  - Scroll incrementale con pause casuali ("umano"), invece di un salto
-    diretto in fondo alla pagina, per non attivare rate-limiting.
-  - Chiusura automatica del banner cookie/GDPR (necessario per interagire
-    con la pagina sul dominio .it).
-  - Le immagini vengono scaricate riusando i cookie di sessione del browser.
-  - Se il sito dovesse comunque bloccare l'accesso: riprova con --headless
-    disattivo (finestra visibile), rallenta ulteriormente SCROLL_PAUSE_RANGE,
-    oppure esegui da una rete/IP residenziale.
-
-IMPORTANTE:
-    La struttura HTML di Outdooractive non è nota a priori con certezza al
-    100% (il sito è renderizzato via JavaScript). Lo script usa selettori
-    "robusti" basati sul pattern degli URL (/route/.../<ID>/) piuttosto che
-    su classi CSS, proprio per resistere a piccole variazioni di markup.
-    Se qualche campo (titolo o immagine) non dovesse essere trovato, esegui
-    con --debug e ispeziona debug_page.html per adattare i selettori nelle
-    funzioni extract_title() / extract_image_url().
 """
 
 from __future__ import annotations
@@ -86,12 +51,6 @@ try:
     import undetected_chromedriver as uc
     _MISSING_DEPS: Optional[str] = None
 except ImportError as _imp_exc:  # noqa: N816
-    # Import "morbido": non falliamo subito all'avvio del modulo, così
-    # `python scarica_giri.py --selftest` funziona anche su una macchina
-    # dove le dipendenze del browser non sono ancora installate (il
-    # selftest verifica solo la logica di parsing, senza aprire Chrome).
-    # Il vero comando di scraping controlla _MISSING_DEPS in main() e
-    # si ferma con un messaggio chiaro se qualcosa manca.
     _MISSING_DEPS = str(_imp_exc)
 
     class WebDriverException(Exception):  # type: ignore[no-redef]
@@ -110,73 +69,36 @@ except ImportError as _imp_exc:  # noqa: N816
 LIST_URL = "https://www.outdooractive.com/it/list/girettimap/240115709/"
 HOME_URL = "https://www.outdooractive.com/it/"
 
-# Percorsi ASSOLUTI, ancorati alla cartella in cui si trova lo script
-# (non alla cartella corrente da cui viene lanciato il comando "python").
-# Senza questo, "giri.js" e "img_giri" finirebbero nella cartella di
-# lavoro di PowerShell/CMD al momento del lancio, che può essere diversa
-# dalla cartella dello script (è la causa più comune di "il file non
-# viene creato" quando in realtà viene creato altrove).
+# VARIABILE PER LA VISUALIZZAZIONE DEL BROWSER:
+# True  = Browser disattivato/nascosto (Headless) -> Consigliato per GitHub Actions / Server
+# False = Browser visivo (Apre la finestra sul desktop) -> Utile per test in locale
+HEADLESS_DEFAULT = True
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_JS = os.path.join(SCRIPT_DIR, "giri.js")
 IMG_DIR = os.path.join(SCRIPT_DIR, "img_giri")
 
 NUM_ITEMS = 9
 
-MAX_SCROLL_ATTEMPTS = 80          # limite di sicurezza sui tentativi di scroll
-STALL_LIMIT = 5                   # scroll consecutivi senza nuovi elementi -> stop
-SCROLL_PAUSE_RANGE = (1.0, 2.2)   # pausa (sec) tra uno scroll e l'altro
-INITIAL_WAIT = 15                 # attesa massima caricamento iniziale (sec)
-MAX_PAGE_RETRIES = 3              # tentativi di ricaricare la pagina se torna un 404/blocco
+MAX_SCROLL_ATTEMPTS = 80          
+STALL_LIMIT = 5                   
+SCROLL_PAUSE_RANGE = (1.0, 2.2)   
+INITIAL_WAIT = 15                 
+MAX_PAGE_RETRIES = 3              
 
-# Riconosce un link a un singolo percorso, es:
-# https://www.outdooractive.com/it/route/escursione/val-di-fassa/forca-rossa/350310622/
 ROUTE_HREF_RE = re.compile(r"/route/.+/(\d+)/?(?:[?#].*)?$")
 
-# Riconosce l'URL REALE di una foto di copertina Outdooractive, es:
-# https://img2.oastatic.com/img2/636743303/800x600/variant.webp?revbust=1a01a98661b
-# https://img1.oastatic.com/foto/12345/1200x900/cover.jpg
-#
-# NB: il dominio (img1/img2/img3.oastatic.com...) è assegnato dal
-# bilanciatore di carico del sito ed è indipendente dal contenuto del
-# path: il numero dopo "img" nel sottodominio NON è detto corrisponda al
-# primo segmento del path (che a sua volta può non esistere affatto o
-# chiamarsi diversamente). Una versione precedente di questa regex
-# richiedeva il segmento letterale "/img2/" nel path: quando il sito
-# assegnava un dominio diverso da "img2", *nessuna* immagine veniva mai
-# trovata (bug: 100% delle foto mancanti, non solo alcune). Qui il primo
-# segmento di path è quindi generico e facoltativo: contano solo (a) il
-# dominio oastatic.com e (b) la cartella "<W>x<H>" seguita dal file
-# immagine. Le iconcine (tipo attività, avatar profilo) vivono su
-# domini/percorsi diversi (es. res*.oastatic.com/icons/...) e restano
-# comunque escluse perché non hanno mai un'estensione immagine valida in
-# quella posizione o non seguono questo pattern.
 COVER_IMG_RE = re.compile(
     r"(?:https?:)?//[\w-]+\.oastatic\.com/[\w\-/]*?/(\d+)x(\d+)/[\w.\-]+"
     r"\.(?:webp|jpe?g|png|avif)(?:\?[^\s\"'<>]*)?",
     re.IGNORECASE,
 )
 
-# Fallback "generico": qualunque immagine oastatic.com con estensione
-# nota, indipendentemente dal pattern <W>x<H> nel path. Usato SOLO come
-# ultima spiaggia se COVER_IMG_RE non trova nulla su nessun livello di
-# contenitore attorno al link del giro (copre un eventuale cambio di
-# struttura URL da parte del sito che rimuova del tutto le dimensioni
-# dal path, es. spostandole in querystring).
 GENERIC_OASTATIC_IMG_RE = re.compile(
     r"(?:https?:)?//[\w-]+\.oastatic\.com/[^\s\"'<>]+\.(?:webp|jpe?g|png|avif)"
     r"(?:\?[^\s\"'<>]*)?",
     re.IGNORECASE,
 )
-
-# NB: NIENTE User-Agent finto/hardcoded qui. Impostare uno User-Agent
-# manuale (es. una vecchia versione di Chrome) mentre il browser reale
-# installato è più recente crea un disallineamento tra lo user-agent
-# dichiarato e l'impronta reale (Client Hints "sec-ch-ua", TLS/JS
-# fingerprint): è uno dei segnali più usati dai sistemi anti-bot per
-# bloccare il traffico automatizzato (nel nostro caso probabilmente la
-# causa del "404" restituito da Outdooractive). Lasciamo quindi che sia
-# Chrome a dichiarare il proprio User-Agent reale, e lo leggiamo dal
-# browser stesso dopo l'avvio (vedi main()).
 
 logging.basicConfig(
     level=logging.INFO,
@@ -187,7 +109,7 @@ log = logging.getLogger("girettimap")
 
 
 # --------------------------------------------------------------------------
-# Setup del browser (anti-bot)
+# Setup del browser (anti-bot + compatibilità GitHub Actions / Linux)
 # --------------------------------------------------------------------------
 
 _VERSION_MISMATCH_RE = re.compile(
@@ -200,9 +122,10 @@ def _new_chrome_options(headless: bool) -> "uc.ChromeOptions":
     options.add_argument("--lang=it-IT")
     options.add_argument("--disable-blink-features=AutomationControlled")
     
-    # AGGIUNGI QUESTE RIGHE PER FAR FUNZIONARE CHROME SU GITHUB ACTIONS:
+    # Parametri obbligatori per eseguire Chrome in ambienti Linux / GitHub Actions senza interfaccia
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
 
     if headless:
         options.add_argument("--window-size=1440,2200")
@@ -226,22 +149,14 @@ def build_driver(headless: bool = True, chrome_major: Optional[int] = None) -> "
     try:
         driver = uc.Chrome(options=_new_chrome_options(headless), **kwargs)
     except SessionNotCreatedException as exc:
-        # Caso tipico: undetected-chromedriver ha scaricato un driver per
-        # una versione di Chrome diversa da quella installata sul PC
-        # (es. "This version of ChromeDriver only supports Chrome version
-        # 153. Current browser version is 152.0.7977.83"). Rileviamo la
-        # versione REALMENTE installata dal messaggio d'errore e riproviamo
-        # forzando quella, con un oggetto ChromeOptions NUOVO (quello
-        # precedente non è più riutilizzabile), così undetected-chromedriver
-        # scarica il driver corretto.
         if chrome_major:
-            raise  # l'utente ha già forzato una versione: non ritentare
+            raise
         match = _VERSION_MISMATCH_RE.search(str(exc))
         if not match:
             raise
         detected = int(match.group(1))
         log.warning(
-            "ChromeDriver non compatibile con la Chrome installata: "
+            "ChromeDriver non compatibile con il Chrome installato: "
             "rilevata versione %d, riprovo forzando version_main=%d...",
             detected, detected,
         )
@@ -249,7 +164,6 @@ def build_driver(headless: bool = True, chrome_major: Optional[int] = None) -> "
 
     driver.set_page_load_timeout(60)
 
-    # Maschera ulteriori proprietà tipiche dei browser automatizzati
     try:
         driver.execute_cdp_cmd(
             "Page.addScriptToEvaluateOnNewDocument",
@@ -267,11 +181,6 @@ def build_driver(headless: bool = True, chrome_major: Optional[int] = None) -> "
     return driver
 
 
-# Parole chiave dei pulsanti di consenso cookie/GDPR più comuni sui siti
-# italiani/EU (diverse piattaforme — Sourcepoint, Quantcast, OneTrust,
-# Cookiebot, ecc. — usano etichette diverse, a volte anche sulla stessa
-# pagina in punti diversi, es. "Accetta" sulla home ma "Acconsento" sulla
-# pagina di una raccolta).
 CONSENT_KEYWORDS = [
     "acconsento", "accetto", "accetta tutt", "accetta", "consenti tutt",
     "consenti", "accept all", "i agree", "agree", "ho capito", "d'accordo",
@@ -279,9 +188,6 @@ CONSENT_KEYWORDS = [
 
 
 def _click_consent_button_in_current_context(driver) -> bool:
-    """Cerca, nel documento/frame correntemente attivo, un pulsante che
-    contenga una delle CONSENT_KEYWORDS e lo clicca. Ritorna True se
-    trovato e cliccato con successo."""
     try:
         elements = driver.find_elements(
             By.CSS_SELECTOR,
@@ -309,11 +215,6 @@ def _click_consent_button_in_current_context(driver) -> bool:
 
 
 def dismiss_cookie_banner(driver, timeout: float = 10.0) -> None:
-    """Chiude eventuali banner/modali di consenso cookie/GDPR, riprovando
-    per qualche secondo (spesso compaiono con un piccolo ritardo dopo il
-    caricamento della pagina) e cercando anche dentro eventuali iframe
-    (molte piattaforme di consenso li renderizzano in un iframe dedicato,
-    invisibile a una semplice ricerca nel documento principale)."""
     deadline = time.time() + timeout
     closed_any = False
 
@@ -353,18 +254,12 @@ def dismiss_cookie_banner(driver, timeout: float = 10.0) -> None:
             break
         time.sleep(0.5)
 
-    if not closed_any:
-        log.info("Nessun banner di consenso rilevato (o già chiuso).")
-
 
 # --------------------------------------------------------------------------
-# Infinite scroll
+# Infinite scroll & parsing
 # --------------------------------------------------------------------------
 
 def collect_route_anchors(driver) -> List:
-    """Ritorna la lista di elementi <a> che puntano a un percorso, in
-    ordine di apparizione nel DOM (= ordine cronologico di caricamento),
-    senza duplicati."""
     anchors = driver.find_elements(By.CSS_SELECTOR, "a[href*='/route/']")
     seen = set()
     unique = []
@@ -377,9 +272,6 @@ def collect_route_anchors(driver) -> List:
 
 
 def scroll_to_load_all(driver, min_items: int = NUM_ITEMS) -> List:
-    """Scrolla la pagina in modo incrementale finché il numero di 'giri'
-    caricati smette di crescere (fine infinite scroll) o si raggiunge il
-    limite di sicurezza."""
     stall = 0
     last_count = 0
 
@@ -396,31 +288,22 @@ def scroll_to_load_all(driver, min_items: int = NUM_ITEMS) -> List:
             log.info("Nessun nuovo elemento dopo %d scroll: fine infinite scroll.", stall)
             break
 
-        # scroll incrementale "umano" invece di un salto secco in fondo
         driver.execute_script(
             "window.scrollBy(0, Math.floor(window.innerHeight * 0.85));"
         )
         time.sleep(random.uniform(*SCROLL_PAUSE_RANGE))
 
-        # ogni tanto forziamo uno scroll fino in fondo per attivare il trigger
         if attempt % 4 == 0:
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(random.uniform(*SCROLL_PAUSE_RANGE))
 
-    # scroll finale + pausa per dare tempo alle ultime immagini (lazy-load)
-    # di comparire prima di leggerne gli attributi
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(2)
 
     return collect_route_anchors(driver)
 
 
-# --------------------------------------------------------------------------
-# Estrazione dati di un giro
-# --------------------------------------------------------------------------
-
 def extract_title(driver, anchor) -> str:
-    """Ricava il titolo del giro provando più strategie in cascata."""
     try:
         el = driver.execute_script(
             "return arguments[0].querySelector('strong, b, h2, h3');", anchor
@@ -442,19 +325,10 @@ def extract_title(driver, anchor) -> str:
 
 
 def _normalize_protocol_relative(url: str) -> str:
-    """Antepone 'https:' agli URL protocol-relative (//dominio/...), che
-    alcuni componenti usano in srcset/style invece dell'URL assoluto."""
     return "https:" + url if url.startswith("//") else url
 
 
 def pick_cover_image_from_html(html: str) -> Optional[str]:
-    """Cerca nel frammento HTML fornito l'URL della foto di copertina,
-    preferendo la variante 800x600 e altrimenti la variante con
-    dimensioni più vicine (che viene poi "aggiornata" a 800x600 nel
-    path). Funzione pura (nessuna dipendenza da Selenium/browser): è
-    quindi testabile in isolamento, vedi `python scarica_giri.py
-    --selftest`.
-    """
     if not html or "oastatic.com" not in html:
         return None
 
@@ -476,10 +350,6 @@ def pick_cover_image_from_html(html: str) -> Optional[str]:
 
 
 def pick_cover_image_generic(html: str) -> Optional[str]:
-    """Fallback meno preciso di `pick_cover_image_from_html`: prende la
-    prima immagine oastatic.com nel blocco, qualunque sia il pattern del
-    path. Usato solo se la funzione precisa non trova nulla su nessun
-    livello di contenitore."""
     if not html or "oastatic.com" not in html:
         return None
     m = GENERIC_OASTATIC_IMG_RE.search(html)
@@ -487,12 +357,6 @@ def pick_cover_image_generic(html: str) -> Optional[str]:
 
 
 def _gather_ancestor_htmls(driver, anchor, max_levels: int = 6) -> List[str]:
-    """Porta l'anchor in vista (per forzare eventuale lazy-load basato su
-    IntersectionObserver o su evento scroll) e poi raccoglie l'outerHTML
-    dell'anchor stesso e dei suoi genitori, fino a `max_levels` livelli
-    in su. Le foto di copertina vengono cercate su più livelli perché a
-    seconda del componente possono trovarsi nell'anchor stesso o in un
-    contenitore genitore (card/wrapper)."""
     try:
         driver.execute_script(
             "arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});",
@@ -502,9 +366,6 @@ def _gather_ancestor_htmls(driver, anchor, max_levels: int = 6) -> List[str]:
         pass
     time.sleep(0.35)
     try:
-        # Piccolo "nudge" di scroll: alcuni loader lazy più datati si
-        # agganciano all'evento scroll invece che a un IntersectionObserver
-        # e non si attivano con scrollIntoView da solo.
         driver.execute_script("window.scrollBy(0, 2); window.scrollBy(0, -2);")
     except WebDriverException:
         pass
@@ -528,27 +389,12 @@ def _gather_ancestor_htmls(driver, anchor, max_levels: int = 6) -> List[str]:
 
 
 def extract_image_url(driver, anchor) -> Optional[str]:
-    """Trova l'URL reale della foto di copertina del giro.
-
-    Non ci basiamo su un attributo img/srcset specifico: il sito carica le
-    foto in lazy-loading e, finché non sono nel viewport, l'<img> mostra
-    solo un placeholder, mentre l'URL vero può stare in vari attributi a
-    seconda del componente. Invece cerchiamo direttamente, nel codice
-    HTML del blocco che contiene il link, un URL che rispetti il pattern
-    noto delle foto di copertina di Outdooractive — funziona
-    indipendentemente da quale attributo lo contiene.
-    """
     htmls = _gather_ancestor_htmls(driver, anchor)
-
-    # Strategia 1 (precisa): pattern con dimensioni <W>x<H> nel path,
-    # su ciascun livello di contenitore.
     for html in htmls:
         found = pick_cover_image_from_html(html)
         if found:
             return found
 
-    # Strategia 2 (fallback): qualunque immagine oastatic.com nel blocco,
-    # usata solo se la strategia 1 non ha trovato nulla su nessun livello.
     for html in htmls:
         found = pick_cover_image_generic(html)
         if found:
@@ -562,14 +408,7 @@ def extract_route_id(href: str) -> str:
     return m.group(1) if m else "unknown"
 
 
-# --------------------------------------------------------------------------
-# Download immagini
-# --------------------------------------------------------------------------
-
 def build_requests_session(driver, user_agent: str) -> requests.Session:
-    """Sessione requests che riusa i cookie del browser, così le richieste
-    alle immagini arrivano con la stessa 'identità' (user-agent + cookie)
-    della pagina appena visitata."""
     session = requests.Session()
     session.headers.update(
         {
@@ -581,14 +420,12 @@ def build_requests_session(driver, user_agent: str) -> requests.Session:
     for cookie in driver.get_cookies():
         try:
             session.cookies.set(cookie["name"], cookie["value"], domain=cookie.get("domain"))
-        except Exception:  # noqa: BLE001
+        except Exception:
             continue
     return session
 
 
 def download_and_save_webp(session: requests.Session, url: str, dest_path: str) -> bool:
-    """Scarica l'immagine e la salva SEMPRE come .webp valido (convertendo
-    se necessario), verificando che il file scritto sia integro."""
     try:
         resp = session.get(url, timeout=20)
         resp.raise_for_status()
@@ -601,51 +438,14 @@ def download_and_save_webp(session: requests.Session, url: str, dest_path: str) 
         img.load()
         img = img.convert("RGBA") if img.mode in ("RGBA", "P", "LA") else img.convert("RGB")
         img.save(dest_path, "WEBP", quality=90)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         log.error("Impossibile convertire/salvare l'immagine %s: %s", url, exc)
         return False
 
-    ok = os.path.isfile(dest_path) and os.path.getsize(dest_path) > 0
-    if ok:
-        log.info("Immagine salvata: %s (%d KB)", dest_path, os.path.getsize(dest_path) // 1024)
-    else:
-        log.error("File immagine non scritto correttamente: %s", dest_path)
-    return ok
-
-
-def dump_debug_card(driver, anchor, idx: int) -> None:
-    """Salva (solo in modalità --debug) l'HTML dei livelli di contenitore
-    attorno all'anchor di un giro, per capire perché non vi si è trovata
-    l'immagine di copertina."""
-    js = """
-    const a = arguments[0];
-    let node = a;
-    const htmls = [];
-    for (let i = 0; i < 6 && node; i++) {
-        htmls.push(node.outerHTML || '');
-        node = node.parentElement;
-    }
-    return htmls;
-    """
-    try:
-        htmls = driver.execute_script(js, anchor) or []
-    except WebDriverException:
-        htmls = []
-
-    path = os.path.join(SCRIPT_DIR, f"debug_card_{idx}.html")
-    try:
-        with open(path, "w", encoding="utf-8") as f:
-            for level, html in enumerate(htmls):
-                f.write(f"<!-- ===== livello {level} ===== -->\n{html}\n\n")
-        log.info("Salvato %s per capire perché manca l'immagine.", path)
-    except OSError as exc:
-        log.warning("Impossibile salvare %s: %s", path, exc)
+    return os.path.isfile(dest_path) and os.path.getsize(dest_path) > 0
 
 
 def page_looks_blocked(driver) -> bool:
-    """Rileva se la pagina caricata è in realtà un blocco anti-bot
-    travestito da 404 (pattern osservato: titolo/contenuto '404 Not
-    Found' servito da nginx invece della pagina reale della raccolta)."""
     try:
         title = (driver.title or "").lower()
         if "404" in title:
@@ -661,17 +461,9 @@ def page_looks_blocked(driver) -> bool:
 
 
 def cleanup_output_artifacts(output_js_path: str, img_dir: str) -> None:
-    """Rimuove i file di output precedenti prima di rigenerare i dati.
-
-    Serve a evitare di lasciare immagini o file vecchi che non appartengono
-    più all'ultimo aggiornamento, garantendo una produzione pulita.
-    """
     os.makedirs(img_dir, exist_ok=True)
-
     if os.path.exists(output_js_path):
         os.remove(output_js_path)
-        log.info("Rimosso file precedente: %s", output_js_path)
-
     for name in os.listdir(img_dir):
         full_path = os.path.join(img_dir, name)
         try:
@@ -679,16 +471,11 @@ def cleanup_output_artifacts(output_js_path: str, img_dir: str) -> None:
                 shutil.rmtree(full_path)
             else:
                 os.remove(full_path)
-            log.info("Rimosso artefatto precedente: %s", full_path)
-        except OSError as exc:
-            log.warning("Impossibile rimuovere %s: %s", full_path, exc)
+        except OSError:
+            pass
 
 
 def load_list_page(driver) -> bool:
-    """Carica la pagina della lista con un 'riscaldamento' della sessione:
-    passa prima dalla home page (come farebbe un utente reale che arriva
-    da Google/homepage, non un link diretto) e ritenta con pause
-    crescenti se la pagina torna bloccata (404 sospetto)."""
     for attempt in range(1, MAX_PAGE_RETRIES + 1):
         if attempt == 1:
             log.info("Riscaldo la sessione: apro prima %s", HOME_URL)
@@ -697,8 +484,8 @@ def load_list_page(driver) -> bool:
                 time.sleep(random.uniform(2.5, 4.0))
                 dismiss_cookie_banner(driver)
                 time.sleep(random.uniform(1.0, 2.0))
-            except WebDriverException as exc:
-                log.warning("Riscaldamento fallito (%s), procedo comunque.", exc)
+            except WebDriverException:
+                pass
 
         log.info("Tentativo %d/%d — apro %s", attempt, MAX_PAGE_RETRIES, LIST_URL)
         driver.get(LIST_URL)
@@ -708,17 +495,13 @@ def load_list_page(driver) -> bool:
                 EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='/route/'], body"))
             )
         except TimeoutException:
-            log.warning("Timeout in attesa del primo caricamento.")
+            pass
 
         if not page_looks_blocked(driver):
             return True
 
         wait_s = 5 * attempt
-        log.warning(
-            "La pagina sembra bloccata (404 sospetto) al tentativo %d/%d. "
-            "Riprovo tra %d secondi (passando di nuovo dalla home)...",
-            attempt, MAX_PAGE_RETRIES, wait_s,
-        )
+        log.warning("La pagina sembra bloccata. Riprovo tra %d secondi...", wait_s)
         time.sleep(wait_s)
         try:
             driver.get(HOME_URL)
@@ -739,8 +522,8 @@ def main() -> int:
         "--headless",
         dest="headless",
         action="store_true",
-        default=True,
-        help="esegue il browser in background senza finestra (default)",
+        default=HEADLESS_DEFAULT,
+        help="esegue il browser in background senza finestra",
     )
     parser.add_argument(
         "--visible",
@@ -749,10 +532,7 @@ def main() -> int:
         help="apre la finestra del browser e lo esegue in modalità visibile",
     )
     parser.add_argument("--debug", action="store_true", help="salva screenshot/html per debug")
-    parser.add_argument(
-        "--chrome-major", type=int, default=None,
-        help="forza la versione major di Chrome (es. 152) se l'auto-rilevamento fallisce",
-    )
+    parser.add_argument("--chrome-major", type=int, default=None)
     args = parser.parse_args()
 
     os.makedirs(IMG_DIR, exist_ok=True)
@@ -764,13 +544,7 @@ def main() -> int:
         log.info("User-Agent reale del browser: %s", real_ua)
 
         if not load_list_page(driver):
-            log.error(
-                "La pagina risulta bloccata (404 sospetto) dopo %d tentativi. "
-                "Probabile blocco anti-bot lato Outdooractive. Prova a: "
-                "attendere qualche minuto, eseguire SENZA --headless, oppure "
-                "cambiare rete/IP.",
-                MAX_PAGE_RETRIES,
-            )
+            log.error("La pagina risulta bloccata (404/anti-bot) dopo %d tentativi.", MAX_PAGE_RETRIES)
             if args.debug:
                 driver.save_screenshot(os.path.join(SCRIPT_DIR, "debug_screenshot.png"))
                 with open(os.path.join(SCRIPT_DIR, "debug_page.html"), "w", encoding="utf-8") as f:
@@ -790,24 +564,10 @@ def main() -> int:
             log.info("Salvati debug_screenshot.png e debug_page.html")
 
         if not anchors:
-            log.error(
-                "Nessun giro trovato. Il markup del sito potrebbe essere "
-                "cambiato oppure la pagina è stata bloccata: esegui con "
-                "--debug e ispeziona debug_page.html / debug_screenshot.png."
-            )
+            log.error("Nessun giro trovato.")
             return 1
 
-        if len(anchors) < NUM_ITEMS:
-            log.warning(
-                "Trovati solo %d giri (< %d richiesti): uso quelli disponibili.",
-                len(anchors), NUM_ITEMS,
-            )
-
-        # ultimi N elementi nell'ordine del DOM (dall'alto verso il basso)
         last_n = anchors[-NUM_ITEMS:]
-
-        # l'ultimissimo elemento in fondo alla pagina deve diventare il
-        # PRIMO elemento dell'array in giri.js -> invertiamo l'ordine
         ordered = list(reversed(last_n))
 
         session = build_requests_session(driver, real_ua)
@@ -821,11 +581,7 @@ def main() -> int:
 
             log.info("[%d/%d] %s (id=%s)", idx, len(ordered), title, route_id)
 
-            if not img_url:
-                log.error("Nessuna immagine trovata per '%s' — salto il download.", title)
-                if args.debug:
-                    dump_debug_card(driver, anchor, idx)
-            else:
+            if img_url:
                 filename = f"giro{idx}_{route_id}.webp"
                 dest_path = os.path.join(IMG_DIR, filename)
                 download_and_save_webp(session, img_url, dest_path)
@@ -838,38 +594,23 @@ def main() -> int:
                 }
             )
 
-        # ------------------------------------------------------------
-        # Scrittura di giri.js
-        # ------------------------------------------------------------
         js_body = json.dumps(giri_data, indent=2, ensure_ascii=False)
         js_content = f"const GIRI = {js_body}\n"
 
         with open(OUTPUT_JS, "w", encoding="utf-8") as f:
             f.write(js_content)
 
-        # verifica integrità del file appena scritto
-        with open(OUTPUT_JS, "r", encoding="utf-8") as f:
-            written = f.read()
-        if written != js_content:
-            log.error("Il contenuto scritto su %s non corrisponde a quello atteso!", OUTPUT_JS)
-            return 1
-
         log.info("File %s scritto correttamente (%d giri).", OUTPUT_JS, len(giri_data))
         return 0
 
     except WebDriverException as exc:
-        log.error(
-            "Il browser si è chiuso o non risponde più (%s). Se hai chiuso "
-            "manualmente la finestra di Chrome, rilancia lo script e lasciala "
-            "aperta fino alla fine.",
-            exc.__class__.__name__,
-        )
+        log.error("Il browser si è chiuso o non risponde più (%s).", exc.__class__.__name__)
         return 1
 
     finally:
         try:
             driver.quit()
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
 

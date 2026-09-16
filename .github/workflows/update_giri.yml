@@ -32,13 +32,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install undetected-chromedriver selenium requests pillow
 
-      # 4. Esegue lo script Python dentro la cartella girettimap
+      # 4. Esegue lo script Python dentro la cartella girettimap con il debug attivo
       - name: Run script aggiorna_giri.py
         working-directory: girettimap
         run: |
-          python3 aggiorna_giri.py
+          python3 aggiorna_giri.py --debug
 
-      # 5. Effettua il commit e il push dei file modificati specificando il branch main
+      # 5. Salva screenshot e HTML in caso di fallimento per capire eventuali blocchi anti-bot
+      - name: Upload Debug Artifacts on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-logs
+          path: girettimap/debug_*.png
+
+      # 6. Effettua il commit e il push dei file modificati specificando il branch main
       - name: Commit e push dei file aggiornati
         working-directory: girettimap
         run: |
