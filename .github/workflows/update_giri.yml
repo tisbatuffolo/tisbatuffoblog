@@ -32,21 +32,40 @@ jobs:
           python -m pip install --upgrade pip
           pip install undetected-chromedriver selenium requests pillow
 
-      # 4. Esegue lo script Python dentro la cartella girettimap con il debug attivo
+      # 4. Esegue lo script Python dentro la cartella girettimap con il debug attivo.
+      #    "continue-on-error" ci permette di arrivare comunque allo step 5 e caricare
+      #    screenshot/HTML anche quando lo script fallisce, invece di perderli.
       - name: Run script aggiorna_giri.py
+        id: run_script
         working-directory: girettimap
+        continue-on-error: true
         run: |
           python3 aggiorna_giri.py --debug
 
-      # 5. Salva screenshot e HTML in caso di fallimento per capire eventuali blocchi anti-bot
-      - name: Upload Debug Artifacts on Failure
-        if: failure()
+      # 5. Salva SEMPRE screenshot e HTML (successo o fallimento) per capire cosa ha
+      #    effettivamente visto il browser: pagina bloccata, captcha, contenuto normale, ecc.
+      #    NB: prima veniva caricato solo il .png, il .html (il più utile per capire un
+      #    blocco anti-bot) non finiva mai negli artifact.
+      - name: Upload Debug Artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: debug-logs
-          path: girettimap/debug_*.png
+          path: |
+            girettimap/debug_*.png
+            girettimap/debug_*.html
+          if-no-files-found: ignore
+          retention-days: 7
 
-      # 6. Effettua il commit e il push dei file modificati specificando il branch main
+      # 6. Se lo script è fallito, interrompiamo qui il job (niente commit/push),
+      #    ma solo DOPO aver salvato i file di debug allo step precedente.
+      - name: Interrompi il job se lo script è fallito
+        if: steps.run_script.outcome == 'failure'
+        run: |
+          echo "Lo script aggiorna_giri.py è fallito. Controlla l'artifact 'debug-logs' per capire il motivo."
+          exit 1
+
+      # 7. Effettua il commit e il push dei file modificati specificando il branch main
       - name: Commit e push dei file aggiornati
         working-directory: girettimap
         run: |
@@ -54,6 +73,6 @@ jobs:
           git config user.email "github-actions@github.com"
 
           git add giri.js img_giri/
-          
+
           git commit -m "Aggiornamento automatico giri.js e anteprime [skip ci]" || echo "Nessuna modifica da committare"
           git push origin HEAD:main
