@@ -17,7 +17,7 @@ const GIRI = [
   {
     "titolo": "Forca Rossa",
     "link": "https://www.outdooractive.com/it/route/escursione/val-di-fassa/forca-rossa/350310622/",
-    "img": "https://img2.oastatic.com/img2/636743303/420x237r/variant.webp?revbust=1a01a98661b"
+    "img": "https://img2.oastatic.com/img2/636743303/420x237r/variant.webp"
   },
   {
     "titolo": "Lago di Cavedine",
