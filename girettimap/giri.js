@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Bormio e Valtellina",
+    "link": "https://www.outdooractive.com/it/route/strada-panoramica/sondrio/bormio-e-valtellina/353333045/",
+    "img": "https://img.oastatic.com/img2/639367295/420x237r/variant.webp?revbust=1a0bddb96f7"
+  },
+  {
     "titolo": "Parco delle Pozze di Sardagna",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/trento-monte-bondone-valle-dell-adige/parco-delle-pozze-di-sardagna/352313865/",
     "img": "https://img0.oastatic.com/img2/638480016/420x237r/variant.webp?revbust=1a0820e1731"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Openair art Drena",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/garda-trentino/openair-art-drena/347766896/",
     "img": "https://img2.oastatic.com/img2/634841673/420x237r/variant.webp"
-  },
-  {
-    "titolo": "Madonna di Drena",
-    "link": "https://www.outdooractive.com/it/route/escursione/garda-trentino/madonna-di-drena/347735769/",
-    "img": "https://img0.oastatic.com/img2/634841681/420x237r/variant.webp"
   }
 ]
