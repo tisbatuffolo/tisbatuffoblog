@@ -256,5 +256,12 @@
       "tipo": "evento",
       "ricorrenza": "singola"
     }
+  ],
+  "2026-12-11": [
+    {
+      "nome": "Concerto Nomadi Santa Chiara",
+      "tipo": "",
+      "ricorrenza": "singola"
+    }
   ]
 }
