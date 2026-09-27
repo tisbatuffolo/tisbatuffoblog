@@ -48,5 +48,15 @@
       "classe": "cover-random1",
       "color": "#043669"
     }
+  },
+  {
+    "nome": "ScroccaCibo",
+    "descrizione": "Canzoni da festa",
+    "linkSpotify": "https://open.spotify.com/playlist/1V0oJNF5cQl6VFSbEmfaH6?si=0VXhaXw-T9GcXwp_ydeOqw&utm_source=copy-link&pi=9yHP3pI4RJCYO&sci=spotify%3Acard-config%3A76kwTMJjduaTVSblQmel6S",
+    "uriSpotify": "spotify:playlist:1V0oJNF5cQl6VFSbEmfaH6",
+    "stile": {
+      "classe": "cover-random3",
+      "color": "#16d2d9"
+    }
   }
 ]
