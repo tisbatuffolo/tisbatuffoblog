@@ -1071,8 +1071,12 @@
     const album = albums.find(a => a.id === albumId);
     if(!album || !album.videoPath) return;
     
+    albumVideo.pause();
+    albumAudio.pause();
+    
     albumVideo.src = album.videoPath;
     albumVideo.muted = true; 
+    albumVideo.load();
     
     isAudioMuted = false;
     albumAudio.muted = false;
@@ -1122,14 +1126,34 @@
       }
     }
     
-    Promise.all([
-      albumVideo.play().catch(() => {}),
-      albumAudio.src ? albumAudio.play().catch(() => {}) : Promise.resolve()
-    ]).then(() => {
-      if (albumAudio.src) {
-        albumAudio.currentTime = albumVideo.currentTime;
+    // Funzione ottimizzata per avviare la riproduzione in modo stabile su Samsung e Realme
+    const executePlay = async () => {
+      try {
+        await albumVideo.play();
+        if (albumAudio.src) {
+          albumAudio.currentTime = albumVideo.currentTime;
+          await albumAudio.play();
+        }
+      } catch (err) {
+        console.warn("Errore di riproduzione:", err);
       }
-    });
+    };
+
+    // Attende che il video sia pronto per evitare lo schermo nero sui dispositivi aggiornati
+    if (albumVideo.readyState >= 3) {
+      executePlay();
+    } else {
+      albumVideo.oncanplay = () => {
+        albumVideo.oncanplay = null;
+        executePlay();
+      };
+      // Fallback di sicurezza in caso di ritardi dell'evento
+      setTimeout(() => {
+        if (albumVideo.paused) {
+          executePlay();
+        }
+      }, 350);
+    }
 
     startVideoControlsTimeout();
   }
@@ -1200,7 +1224,7 @@
           if (videoLightbox.requestFullscreen) {
             await videoLightbox.requestFullscreen();
           } else if (videoLightbox.webkitRequestFullscreen) {
-            videoLightbox.webkitRequestFullscreen();
+            await videoLightbox.webkitRequestFullscreen();
           } else {
             throw new Error('Fullscreen non supportato');
           }
