@@ -165,7 +165,7 @@ td { height: 65px; vertical-align: top; border-radius: 10px; border: 2px solid #
   color: var(--primary);
 }
 
-/* Attività Cards Ottimizzate[cite: 2] */
+/* Attività Cards Ottimizzate */
 .activity-card {
   background: #fff; border: 2.5px solid var(--stroke); 
   border-radius: 20px; margin-bottom: 15px; position: relative;
@@ -310,7 +310,7 @@ footer { background: #fff; padding: 20px 10px 40px; border-top: 1px solid #eee;}
     </table>
   </div>
 
-  <button id="save-github">Salva la PandAgenda 🚀</button>
+  <button id="save-github">Esporta la Pandagenda 📅</button>
   
   <div class="section-title">Prossime attività</div>
   <div id="act-list"></div>
@@ -520,7 +520,7 @@ function openModal(dateStr, idx = null, targetDate = null) {
   modal.style.display = "block";
 }
 
-document.getElementById("btn-confirm").onclick = () => {
+document.getElementById("btn-confirm").onclick = async () => {
   const name = document.getElementById("in-name").value.trim();
   const type = document.getElementById("in-type").value;
   const rec = document.getElementById("in-recurrence").value;
@@ -538,21 +538,83 @@ document.getElementById("btn-confirm").onclick = () => {
   
   modal.style.display = "none";
   render();
+
+  // Invocazione automatica dell'API di aggiornamento agenda
+  try {
+      const res = await fetch("https://tisbatuffoblog.vercel.app/api/update_agendaAPI", { 
+          method: "POST", 
+          headers: { "Content-Type": "application/json" }, 
+          body: JSON.stringify(events) 
+      });
+      if (!res.ok) throw new Error();
+  } catch(e) { 
+      alert("Errore durante il salvataggio automatico sul server."); 
+  }
+};
+
+// Funzione di esportazione file .ics (dal giorno corrente fino al 31 dicembre)
+function escapeIcsText(str) {
+    if (!str) return '';
+    return str.replace(/[\\;,]/g, match => '\\' + match).replace(/\n/g, '\\n');
+}
+
+document.getElementById("save-github").onclick = () => {
+  let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SbatuffoBlog//PandAgenda//IT\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n";
+  
+  const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endDate = new Date(today.getFullYear(), 11, 31); // 31 dicembre dell'anno corrente
+  
+  let curr = new Date(startDate);
+  let exportedUids = new Set();
+  
+  while (curr <= endDate) {
+      const y = curr.getFullYear();
+      const m = String(curr.getMonth() + 1).padStart(2, '0');
+      const d = String(curr.getDate()).padStart(2, '0');
+      const dateKey = `${y}-${m}-${d}`;
+      
+      const dayEvents = getEventsForDate(dateKey);
+      dayEvents.forEach(item => {
+          const uid = `${item.origKey}-${item.idx}-${dateKey}`;
+          if (!exportedUids.has(uid)) {
+              exportedUids.add(uid);
+              const dateStrICS = `${y}${m}${d}`;
+              const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+              
+              icsContent += "BEGIN:VEVENT\n";
+              icsContent += `UID:pandagenda-${item.origKey}-${item.idx}-${dateStrICS}@sbatuffoblog\n`;
+              icsContent += `DTSTAMP:${timestamp}\n`;
+              icsContent += `DTSTART;VALUE=DATE:${dateStrICS}\n`;
+              icsContent += `DTEND;VALUE=DATE:${dateStrICS}\n`;
+              icsContent += `SUMMARY:${escapeIcsText(item.ev.nome)}\n`;
+              if (item.ev.tipo) {
+                  icsContent += `DESCRIPTION:Tipo: ${escapeIcsText(item.ev.tipo)}\n`;
+              }
+              if (item.ev.ricorrenza === "annuale") {
+                  icsContent += `RRULE:FREQ=YEARLY\n`;
+              }
+              icsContent += "END:VEVENT\n";
+          }
+      });
+      
+      curr.setDate(curr.getDate() + 1);
+  }
+  
+  icsContent += "END:VCALENDAR";
+  
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.setAttribute('download', 'pandagenda.ics');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 
 document.getElementById("in-type").onchange = (e) => document.getElementById("modal-img").src = imgMap[e.target.value];
 document.getElementById("btn-close-x").onclick = () => modal.style.display = "none";
 document.getElementById("prev-m").onclick = () => { month--; if(month<0){month=11;year--;} render(); };
 document.getElementById("next-m").onclick = () => { month++; if(month>11){month=0;year++;} render(); };
-
-document.getElementById("save-github").onclick = async () => {
-  const btn = document.getElementById("save-github"); btn.disabled = true; btn.innerHTML = "⏳ Salvataggio...";
-  try {
-      const res = await fetch("https://tisbatuffoblog.vercel.app/api/update_agendaAPI", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(events) });
-      if (res.ok) alert("PandAgenda salvata! 🐼"); else throw new Error();
-  } catch(e) { alert("Errore salvataggio."); }
-  finally { btn.disabled = false; btn.innerHTML = "Salva la PandAgenda 🚀"; }
-};
 
 init();
 </script>
