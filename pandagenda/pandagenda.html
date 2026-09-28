@@ -262,8 +262,10 @@ td { height: 65px; vertical-align: top; border-radius: 10px; border: 2px solid #
 .modal-btns button { 
     flex: 1; padding: 15px; border-radius: 15px; font-weight: 600; 
     border: 3px solid var(--stroke); cursor: pointer; font-family: 'Fredoka', sans-serif; font-size: 1rem;
+    box-shadow: 4px 4px 0 var(--stroke);
 }
-#btn-confirm { background: var(--primary); color: white; box-shadow: 4px 4px 0 var(--stroke); } 
+#btn-confirm { background: var(--primary); color: white; } 
+#btn-export-single { background: var(--accent); color: white; }
 
 /* FOOTER */
 footer { background: #fff; padding: 20px 10px 40px; border-top: 1px solid #eee;}
@@ -362,6 +364,7 @@ footer { background: #fff; padding: 20px 10px 40px; border-top: 1px solid #eee;}
         </div>
         <div class="modal-btns">
           <button id="btn-confirm">💾 SALVA</button>
+          <button id="btn-export-single">📅 ESPORTA</button>
         </div>
     </div>
   </div>
@@ -539,7 +542,6 @@ document.getElementById("btn-confirm").onclick = async () => {
   modal.style.display = "none";
   render();
 
-  // Invocazione automatica dell'API di aggiornamento agenda
   try {
       const res = await fetch("https://tisbatuffoblog.vercel.app/api/update_agendaAPI", { 
           method: "POST", 
@@ -552,17 +554,56 @@ document.getElementById("btn-confirm").onclick = async () => {
   }
 };
 
-// Funzione di esportazione file .ics (dal giorno corrente fino al 31 dicembre)
 function escapeIcsText(str) {
     if (!str) return '';
     return str.replace(/[\\;,]/g, match => '\\' + match).replace(/\n/g, '\\n');
 }
 
+// Esportazione del singolo evento dalla modale
+document.getElementById("btn-export-single").onclick = () => {
+  const name = document.getElementById("in-name").value.trim();
+  if (!name) {
+      alert("Inserisci un nome per l'attività prima di esportarla!");
+      return;
+  }
+  const type = document.getElementById("in-type").value;
+  const rec = document.getElementById("in-recurrence").value;
+
+  const [y, m, d] = selectedDateStr.split("-");
+  const dateStrICS = `${y}${m}${d}`;
+  const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+  let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SbatuffoBlog//PandAgenda//IT\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n";
+  icsContent += "BEGIN:VEVENT\n";
+  icsContent += `UID:pandagenda-single-${selectedDateStr}@sbatuffoblog\n`;
+  icsContent += `DTSTAMP:${timestamp}\n`;
+  icsContent += `DTSTART;VALUE=DATE:${dateStrICS}\n`;
+  icsContent += `DTEND;VALUE=DATE:${dateStrICS}\n`;
+  icsContent += `SUMMARY:${escapeIcsText(name)}\n`;
+  if (type) {
+      icsContent += `DESCRIPTION:Tipo: ${escapeIcsText(type)}\n`;
+  }
+  if (rec === "annuale") {
+      icsContent += `RRULE:FREQ=YEARLY\n`;
+  }
+  icsContent += "END:VEVENT\n";
+  icsContent += "END:VCALENDAR";
+
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.setAttribute('download', `${name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+// Esportazione dell'intera PandAgenda (da oggi a fine anno)
 document.getElementById("save-github").onclick = () => {
   let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SbatuffoBlog//PandAgenda//IT\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n";
   
   const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const endDate = new Date(today.getFullYear(), 11, 31); // 31 dicembre dell'anno corrente
+  const endDate = new Date(today.getFullYear(), 11, 31);
   
   let curr = new Date(startDate);
   let exportedUids = new Set();
