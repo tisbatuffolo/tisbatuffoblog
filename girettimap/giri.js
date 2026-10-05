@@ -17,7 +17,7 @@ const GIRI = [
   {
     "titolo": "Direttissima Sardagna",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/trento-monte-bondone-valle-dell-adige/direttissima-sardagna/351832885/",
-    "img": "https://img3.oastatic.com/img2/638012989/420x237r/variant.webp?revbust=1a0684bc8ae"
+    "img": "https://img3.oastatic.com/img2/638012989/420x237r/variant.webp"
   },
   {
     "titolo": "Forca Rossa",
