@@ -12,7 +12,7 @@ const GIRI = [
   {
     "titolo": "Lemperperg",
     "link": "https://www.outdooractive.com/it/route/escursione/valsugana-lagorai-tesino/lemperperg/352141449/",
-    "img": "https://img.oastatic.com/img2/638271660/420x237r/variant.webp?revbust=1a07755cfbe"
+    "img": "https://img.oastatic.com/img2/638271660/420x237r/variant.webp"
   },
   {
     "titolo": "Direttissima Sardagna",
