@@ -7,7 +7,7 @@ const GIRI = [
   {
     "titolo": "Parco delle Pozze di Sardagna",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/trento-monte-bondone-valle-dell-adige/parco-delle-pozze-di-sardagna/352313865/",
-    "img": "https://img0.oastatic.com/img2/638480016/420x237r/variant.webp?revbust=1a0820e1731"
+    "img": "https://img0.oastatic.com/img2/638480016/420x237r/variant.webp"
   },
   {
     "titolo": "Lemperperg",
