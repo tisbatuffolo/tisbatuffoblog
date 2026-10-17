@@ -25,10 +25,6 @@ const dati_extra_pandabox = [
         "immagine": "Passacavi.jpg"
     },
     {
-        "titolo": "Baby Portachiavi",
-        "immagine": "Baby Portachiavi.jpg"
-    },
-    {
         "titolo": "Profumatori Auto",
         "immagine": "Profumatori Auto.jpg"
     },
