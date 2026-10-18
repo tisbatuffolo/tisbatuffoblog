@@ -43,5 +43,9 @@ const dati_extra_pandabox = [
     {
         "titolo": "Portachiavi",
         "immagine": "Portachiavi.jpg"
+    },
+    {
+        "titolo": "Stickers Halloween",
+        "immagine": "Stickers Halloween.jpg"
     }
 ];
