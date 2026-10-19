@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Pomaria20",
+    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/pomaria20/355529029/",
+    "img": "https://img1.oastatic.com/img2/641414127/420x237r/variant.webp?revbust=1a152c46f24"
+  },
+  {
     "titolo": "Vidor al Piave",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/treviso/vidor-al-piave/355155430/",
     "img": "https://img1.oastatic.com/img2/640948287/420x237r/variant.webp?revbust=1a136a3c553"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Leone Alato di Resine",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/treviso/leone-alato-di-resine/355107465/",
     "img": "https://img1.oastatic.com/img2/640901967/420x237r/variant.webp?revbust=1a131d93458"
-  },
-  {
-    "titolo": "Castelbrando",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/treviso/castelbrando/355107812/",
-    "img": "https://img0.oastatic.com/img2/640902036/420x237r/variant.webp?revbust=1a131e91d8e"
   }
 ]
