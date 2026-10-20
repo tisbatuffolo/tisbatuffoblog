@@ -2,7 +2,7 @@ const GIRI = [
   {
     "titolo": "Pomaria20",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/pomaria20/355529029/",
-    "img": "https://img1.oastatic.com/img2/641414127/420x237r/variant.webp?revbust=1a152c46f24"
+    "img": "https://img3.oastatic.com/img2/641414124/420x237r/variant.webp?revbust=1a152c45b51"
   },
   {
     "titolo": "Vidor al Piave",
