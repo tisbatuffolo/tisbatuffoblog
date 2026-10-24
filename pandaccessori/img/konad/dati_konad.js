@@ -14,5 +14,10 @@ const dati_konad = [
         "titolo": "PandMan",
         "immagine": "PandMan.jpg",
         "pandaforma": true
+    },
+    {
+        "titolo": "Panda chiavi konad",
+        "immagine": "Panda chiavi konad.jpg",
+        "pandaforma": true
     }
 ];

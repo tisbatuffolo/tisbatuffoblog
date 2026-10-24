@@ -25,10 +25,6 @@ const dati_extra_pandabox = [
         "immagine": "Passacavi.jpg"
     },
     {
-        "titolo": "Baby Portachiavi",
-        "immagine": "Baby Portachiavi.jpg"
-    },
-    {
         "titolo": "Profumatori Auto",
         "immagine": "Profumatori Auto.jpg"
     },
@@ -43,5 +39,13 @@ const dati_extra_pandabox = [
     {
         "titolo": "Targhetta viaggio",
         "immagine": "Targhetta viaggio.jpg"
+    },
+    {
+        "titolo": "Portachiavi",
+        "immagine": "Portachiavi.jpg"
+    },
+    {
+        "titolo": "Stickers Halloween",
+        "immagine": "Stickers Halloween.jpg"
     }
 ];
