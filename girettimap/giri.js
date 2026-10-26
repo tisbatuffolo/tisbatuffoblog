@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Terre Sospese Lisignago",
+    "link": "https://www.outdooractive.com/it/route/escursione/trentino/terre-sospese-lisignago/355804935/",
+    "img": "https://img.oastatic.com/img2/641917555/420x237r/variant.webp?revbust=1a1741b6160"
+  },
+  {
     "titolo": "Pomaria20",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/val-di-non/pomaria20/355529029/",
     "img": "https://img3.oastatic.com/img2/641414124/420x237r/variant.webp?revbust=1a152c45b51"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Leone Alato di Resine",
     "link": "https://www.outdooractive.com/it/route/sentiero-tematico/treviso/leone-alato-di-resine/355107465/",
     "img": "https://img1.oastatic.com/img2/640901967/420x237r/variant.webp?revbust=1a131d93458"
-  },
-  {
-    "titolo": "Castelbrando",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/treviso/castelbrando/355107812/",
-    "img": "https://img0.oastatic.com/img2/640902036/420x237r/variant.webp?revbust=1a131e91d8e"
   }
 ]
