@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Ciclabile dei Laghi",
+    "link": "https://www.outdooractive.com/it/route/bicicletta/trentino/ciclabile-dei-laghi/356178346/",
+    "img": "https://img0.oastatic.com/img2/642359316/420x237r/variant.webp?revbust=1a192dc6e34"
+  },
+  {
     "titolo": "Terre Sospese Lisignago",
     "link": "https://www.outdooractive.com/it/route/escursione/trentino/terre-sospese-lisignago/355804935/",
     "img": "https://img.oastatic.com/img2/641917555/420x237r/variant.webp?revbust=1a1741b6160"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Vittorio Veneto",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/vittorio-veneto/355108274/",
     "img": "https://img3.oastatic.com/img2/640902109/420x237r/variant.webp?revbust=1a13200ba66"
-  },
-  {
-    "titolo": "Leone Alato di Resine",
-    "link": "https://www.outdooractive.com/it/route/sentiero-tematico/treviso/leone-alato-di-resine/355107465/",
-    "img": "https://img1.oastatic.com/img2/640901967/420x237r/variant.webp?revbust=1a131d93458"
   }
 ]
