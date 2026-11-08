@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Salto",
+    "link": "https://www.outdooractive.com/it/route/escursione/bozen-umgebung/salto/356604688/",
+    "img": "https://img.oastatic.com/img2/642761370/420x237r/variant.webp?revbust=1a1bbad2336"
+  },
+  {
     "titolo": "Ciclabile dei Laghi",
     "link": "https://www.outdooractive.com/it/route/bicicletta/trentino/ciclabile-dei-laghi/356178346/",
     "img": "https://img0.oastatic.com/img2/642359316/420x237r/variant.webp?revbust=1a192dc6e34"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Ponzano",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/ponzano/355154882/",
     "img": "https://img0.oastatic.com/img2/640948186/420x237r/variant.webp?revbust=1a1369cb8bc"
-  },
-  {
-    "titolo": "Vittorio Veneto",
-    "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/vittorio-veneto/355108274/",
-    "img": "https://img3.oastatic.com/img2/640902109/420x237r/variant.webp?revbust=1a13200ba66"
   }
 ]
