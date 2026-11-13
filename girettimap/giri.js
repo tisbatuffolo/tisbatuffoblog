@@ -22,26 +22,26 @@ const GIRI = [
   {
     "titolo": "Montebelluna",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/montebelluna/355155076/",
-    "img": "https://img3.oastatic.com/img2/640948254/420x237r/variant.webp?revbust=1a1369fd842"
+    "img": "https://img3.oastatic.com/img2/640948254/420x237r/variant.webp"
   },
   {
     "titolo": "Nervesa della Battaglia",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/nervesa-della-battaglia/355153915/",
-    "img": "https://img0.oastatic.com/img2/640948091/420x237r/variant.webp?revbust=1a1368d70a4"
+    "img": "https://img0.oastatic.com/img2/640948091/420x237r/variant.webp"
   },
   {
     "titolo": "Treviso",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/treviso/355153553/",
-    "img": "https://img3.oastatic.com/img2/640948054/420x237r/variant.webp?revbust=1a13687ba84"
+    "img": "https://img3.oastatic.com/img2/640948054/420x237r/variant.webp"
   },
   {
     "titolo": "Quinto di Treviso",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/quinto-di-treviso/355154706/",
-    "img": "https://img3.oastatic.com/img2/640948114/420x237r/variant.webp?revbust=1a13691cf7b"
+    "img": "https://img3.oastatic.com/img2/640948114/420x237r/variant.webp"
   },
   {
     "titolo": "Ponzano",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/ponzano/355154882/",
-    "img": "https://img0.oastatic.com/img2/640948186/420x237r/variant.webp?revbust=1a1369cb8bc"
+    "img": "https://img0.oastatic.com/img2/640948186/420x237r/variant.webp"
   }
 ]
