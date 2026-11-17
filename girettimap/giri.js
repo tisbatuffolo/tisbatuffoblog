@@ -1,5 +1,10 @@
 const GIRI = [
   {
+    "titolo": "Castel Corno Patone",
+    "link": "https://www.outdooractive.com/it/route/escursione/trentino/castel-corno-patone/356948500/",
+    "img": "https://img3.oastatic.com/img2/643167974/420x237r/variant.webp?revbust=1a1e8cffe63"
+  },
+  {
     "titolo": "Salto",
     "link": "https://www.outdooractive.com/it/route/escursione/bozen-umgebung/salto/356604688/",
     "img": "https://img.oastatic.com/img2/642761370/420x237r/variant.webp?revbust=1a1bbad2336"
@@ -38,10 +43,5 @@ const GIRI = [
     "titolo": "Quinto di Treviso",
     "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/quinto-di-treviso/355154706/",
     "img": "https://img3.oastatic.com/img2/640948114/420x237r/variant.webp"
-  },
-  {
-    "titolo": "Ponzano",
-    "link": "https://www.outdooractive.com/it/route/percorso-urbano/treviso/ponzano/355154882/",
-    "img": "https://img0.oastatic.com/img2/640948186/420x237r/variant.webp"
   }
 ]
