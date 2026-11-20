@@ -264,5 +264,33 @@
       "ricorrenza": "singola"
     }
   ],
-  "2026-09-24": []
+  "2026-09-24": [],
+  "2027-01-23": [
+    {
+      "nome": "Bucarest",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2027-01-24": [
+    {
+      "nome": "Bucarest",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2027-01-25": [
+    {
+      "nome": "Bucarest",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ],
+  "2027-01-26": [
+    {
+      "nome": "Bucarest",
+      "tipo": "girolungo",
+      "ricorrenza": "singola"
+    }
+  ]
 }
