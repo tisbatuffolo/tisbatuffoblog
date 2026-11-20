@@ -1,0 +1,6 @@
+{
+  "git": {
+    "deploymentEnabled": true
+  },
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':!girettimap/giri.js' ':!girettimap/img_giri'"
+}

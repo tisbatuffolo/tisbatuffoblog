@@ -819,7 +819,9 @@
   </div>
 </footer>
 
-<script src="giri.js"></script>
+<!--tentativo di non committare vercel -->
+<!-- <script src="giri.js"></script> -->
+<script src="https://tisbatuffolo.github.io/tisbatuffoblog/girettimap/giri.js"></script>
 
 <!-- SCRIPT 1: GESTIONE OUTDOORACTIVE -->
 <script>
@@ -846,7 +848,9 @@
 
             // Generiamo il nome del file locale corretto: giro1_..., giro2_..., ecc.
             const nGiro = index + 1;
-            const localImg = linkId ? `img_giri/giro${nGiro}_${linkId}.webp` : giro.img;
+            // tentativo di eliminare committ vercel
+            // const localImg = linkId ? `img_giri/giro${nGiro}_${linkId}.webp` : giro.img;
+            const localImg = linkId ? `https://tisbatuffolo.github.io/tisbatuffoblog/girettimap/img_giri/giro${nGiro}_${linkId}.webp` : giro.img;
             const fallbackImg = "img/pandamappa.png";
 
             card.innerHTML = `
