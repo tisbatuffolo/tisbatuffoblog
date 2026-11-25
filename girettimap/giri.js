@@ -17,7 +17,7 @@ const GIRI = [
   {
     "titolo": "Terre Sospese Lisignago",
     "link": "https://www.outdooractive.com/it/route/escursione/trentino/terre-sospese-lisignago/355804935/",
-    "img": "https://img.oastatic.com/img2/641917555/420x237r/variant.webp?revbust=1a1741b6160"
+    "img": "https://img.oastatic.com/img2/641917555/420x237r/variant.webp"
   },
   {
     "titolo": "Pomaria20",
